@@ -26,10 +26,15 @@ Private WithEvents tmrFadeIn As cTimer
 Attribute tmrFadeIn.VB_VarHelpID = -1
 Private WithEvents tmrFadeOut As cTimer
 Attribute tmrFadeOut.VB_VarHelpID = -1
-Private mOpacity As Double
-Private mShow As Boolean
+
 Private aboutxo As Integer
 Private aboutyo As Integer
+
+Private mOpacity As Double
+Private mShow As Boolean
+
+'property opacity is a property that populates mOpacity used by RenderSurfaceContent
+'property show is a property that populates mShow that triggers a fade in timer
 
 '---------------------------------------------------------------------------------------
 ' Procedure : Class_Initialize
@@ -91,7 +96,7 @@ End Sub
 Public Property Let opacity(ByVal newValue As Double)
    On Error GoTo opacityLet_Error
 
-  If mOpacity <> newValue Then mOpacity = newValue Else Exit Property
+   If mOpacity <> newValue Then mOpacity = newValue Else Exit Property
 
    On Error GoTo 0
    Exit Property
@@ -110,7 +115,7 @@ End Property
 Public Property Get opacity() As Double
    On Error GoTo opacityGet_Error
 
-  opacity = mOpacity
+   opacity = mOpacity
 
    On Error GoTo 0
    Exit Property
@@ -256,6 +261,7 @@ Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Sing
     W.FontName = PzGPrefsFont
     W.ForeColor = vbBlack
     W.SelectFontSettingsInto CC
+    W.Refresh
     
     CC.DrawText 0, 0, dx + 350, dy - 390, "                                                                                                                            version " & App.Major & "." & App.Minor & "." & App.Revision & vbNullString, , , 2, True, , mOpacity
 

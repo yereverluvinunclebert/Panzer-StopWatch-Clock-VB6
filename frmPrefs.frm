@@ -1,8 +1,8 @@
 VERSION 5.00
 Object = "{BCE37951-37DF-4D69-A8A3-2CFABEE7B3CC}#1.0#0"; "CCRSlider.ocx"
-Begin VB.Form panzerEarthPrefs 
+Begin VB.Form panzerPrefs 
    AutoRedraw      =   -1  'True
-   Caption         =   "Panzer Earth Preferences"
+   Caption         =   "Panzer Stop Watch Preferences"
    ClientHeight    =   10650
    ClientLeft      =   60
    ClientTop       =   345
@@ -1743,14 +1743,14 @@ Begin VB.Form panzerEarthPrefs
       End
    End
 End
-Attribute VB_Name = "panzerEarthPrefs"
+Attribute VB_Name = "panzerPrefs"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
 '---------------------------------------------------------------------------------------
-' Module    : panzerEarthPrefs
+' Module    : panzerPrefs
 ' Author    : beededea
 ' Date      : 17/08/2022
 ' Purpose   : VB6 standard form to display the prefs
@@ -1812,7 +1812,7 @@ Private Sub chkShowTaskbar_Click()
 
 chkShowTaskbar_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkShowTaskbar_Click of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkShowTaskbar_Click of Form panzerPrefs"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -1864,7 +1864,7 @@ Private Sub Form_Load()
 
 Form_Load_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Form_Load of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Form_Load of Form panzerPrefs"
 
 End Sub
 
@@ -1892,7 +1892,7 @@ Private Sub btnAboutDebugInfo_Click()
 
 btnAboutDebugInfo_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnAboutDebugInfo_Click of form PanzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnAboutDebugInfo_Click of form panzerPrefs"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -1912,7 +1912,7 @@ Private Sub btnDonate_Click()
 
 btnDonate_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnDonate_Click of Form PanzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnDonate_Click of Form panzerPrefs"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -1934,7 +1934,7 @@ Private Sub btnFacebook_Click()
 
 btnFacebook_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnFacebook_Click of Form PanzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnFacebook_Click of Form panzerPrefs"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -1978,7 +1978,7 @@ btnOpenFile_Click_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnOpenFile_Click of Form panzerEarthPrefs"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnOpenFile_Click of Form panzerPrefs"
             Resume Next
           End If
     End With
@@ -2003,7 +2003,7 @@ Private Sub btnUpdate_Click()
 
 btnUpdate_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnUpdate_Click of Form PanzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnUpdate_Click of Form panzerPrefs"
 End Sub
 
 Private Sub chkGaugeFunctions_Click()
@@ -2058,7 +2058,7 @@ btnDefaultEditor_Click_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnDefaultEditor_Click of Form panzerEarthPrefs"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnDefaultEditor_Click of Form panzerPrefs"
             Resume Next
           End If
     End With
@@ -2087,7 +2087,7 @@ Private Sub chkEnableBalloonTooltips_Click()
 
 chkEnableBalloonTooltips_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkEnableBalloonTooltips_Click of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkEnableBalloonTooltips_Click of Form panzerPrefs"
 End Sub
 
 
@@ -2114,7 +2114,7 @@ Private Sub chkIgnoreMouse_Click()
 
 chkIgnoreMouse_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkIgnoreMouse_Click of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkIgnoreMouse_Click of Form panzerPrefs"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -2143,11 +2143,11 @@ Private Sub chkPreventDragging_Click()
         'globeWidget.Locked = 1
         PzGPreventDragging = "1"
 '        If aspectRatio = "landscape" Then
-'            txtLandscapeHoffset.Text = 'fMain.globeForm.Left
-'            txtLandscapeVoffset.Text = 'fMain.globeForm.Top
+'            txtLandscapeHoffset.Text = fAlpha.GaugeForm.Left
+'            txtLandscapeVoffset.Text = fAlpha.GaugeForm.Top
 '        Else
-'            txtPortraitHoffset.Text = 'fMain.globeForm.Left
-'            txtPortraitYoffset.Text = 'fMain.globeForm.Top
+'            txtPortraitHoffset.Text = fAlpha.GaugeForm.Left
+'            txtPortraitYoffset.Text = fAlpha.GaugeForm.Top
 '        End If
     End If
 
@@ -2158,7 +2158,7 @@ chkPreventDragging_Click_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkPreventDragging_Click of Form panzerEarthPrefs"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkPreventDragging_Click of Form panzerPrefs"
             Resume Next
           End If
     End With
@@ -2198,7 +2198,7 @@ Private Sub chkWidgetHidden_Click()
 
 chkWidgetHidden_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkWidgetHidden_Click of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkWidgetHidden_Click of Form panzerPrefs"
 
 End Sub
 
@@ -2230,7 +2230,7 @@ Private Sub cmbAspectHidden_Click()
 
 cmbAspectHidden_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure cmbAspectHidden_Click of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure cmbAspectHidden_Click of Form panzerPrefs"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -2265,7 +2265,7 @@ cmbDebug_Click_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure cmbDebug_Click of Form panzerEarthPrefs"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure cmbDebug_Click of Form panzerPrefs"
             Resume Next
           End If
     End With
@@ -2299,7 +2299,7 @@ Private Sub cmbScrollWheelDirection_Click()
 
 cmbScrollWheelDirection_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure cmbScrollWheelDirection_Click of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure cmbScrollWheelDirection_Click of Form panzerPrefs"
 End Sub
 
 Private Sub cmbWidgetLandscape_Click()
@@ -2347,7 +2347,7 @@ cmbWidgetPosition_Click_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure cmbWidgetPosition_Click of Form panzerEarthPrefs"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure cmbWidgetPosition_Click of Form panzerPrefs"
             Resume Next
           End If
     End With
@@ -2384,7 +2384,7 @@ IsVisible_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure IsVisible of Form panzerEarthPrefs"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure IsVisible of Form panzerPrefs"
             Resume Next
           End If
     End With
@@ -2416,7 +2416,7 @@ Private Sub showLastTab()
 
 showLastTab_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure showLastTab of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure showLastTab of Form panzerPrefs"
 
 End Sub
 
@@ -2462,7 +2462,7 @@ Private Sub positionPrefsFramesButtons()
     rightHandAlignment = fraAboutButton.Left + fraAboutButton.Width ' use final button rightmost as reference
     frameWidth = rightHandAlignment - frameLeft
     fraScrollbarCover.Left = rightHandAlignment - 690
-    panzerEarthPrefs.Width = rightHandAlignment + leftHandGutterWidth + 75 ' (not quite sure why we need the 75 twips padding)
+    panzerPrefs.Width = rightHandAlignment + leftHandGutterWidth + 75 ' (not quite sure why we need the 75 twips padding)
     
     ' align the top buttons
     fraGeneralButton.Top = buttonTop
@@ -2537,8 +2537,8 @@ Private Sub positionPrefsFramesButtons()
     
     ' set the height of the form itself
 '    If dynamicSizingFlg = False Then
-'        panzerEarthPrefs.Height = btnHelp.Top + btnHelp.Height + 600
-'        lastFormHeight = panzerEarthPrefs.Height
+'        panzerPrefs.Height = btnHelp.Top + btnHelp.Height + 600
+'        lastFormHeight = panzerPrefs.Height
 '    End If
 
    On Error GoTo 0
@@ -2546,7 +2546,7 @@ Private Sub positionPrefsFramesButtons()
 
 positionPrefsFramesButtons_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure positionPrefsFramesButtons of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure positionPrefsFramesButtons of Form panzerPrefs"
 
 End Sub
 
@@ -2563,7 +2563,7 @@ Private Sub btnCancel_Click()
    On Error GoTo btnCancel_Click_Error
 
     btnSave.Enabled = False ' disable the save button
-    panzerEarthPrefs.themeTimer.Enabled = False
+    panzerPrefs.themeTimer.Enabled = False
 
     Unload Me
 
@@ -2572,7 +2572,7 @@ Private Sub btnCancel_Click()
 
 btnCancel_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnCancel_Click of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnCancel_Click of Form panzerPrefs"
 End Sub
 '
 '---------------------------------------------------------------------------------------
@@ -2597,7 +2597,7 @@ Private Sub btnHelp_Click()
 
 btnHelp_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnHelp_Click of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnHelp_Click of Form panzerPrefs"
 End Sub
 '
 '---------------------------------------------------------------------------------------
@@ -2735,7 +2735,7 @@ Private Sub btnSave_Click()
     ' sets the characteristics of the globe and menus immediately after saving
     Call adjustMainControls
     
-    panzerEarthPrefs.SetFocus
+    panzerPrefs.SetFocus
     btnSave.Enabled = False ' disable the save button showing it has successfully saved
     
    On Error GoTo 0
@@ -2743,7 +2743,7 @@ Private Sub btnSave_Click()
 
 btnSave_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnSave_Click of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnSave_Click of Form panzerPrefs"
 
 End Sub
 
@@ -2790,7 +2790,7 @@ Private Sub btnPrefsFont_Click()
     fntItalics = CBool(PzGPrefsFontItalics)
     fntColour = CLng(PzGPrefsFontColour)
         
-    Call changeFont(panzerEarthPrefs, True, fntFont, fntSize, fntWeight, fntStyle, fntColour, fntItalics, fntUnderline, fntFontResult)
+    Call changeFont(panzerPrefs, True, fntFont, fntSize, fntWeight, fntStyle, fntColour, fntItalics, fntUnderline, fntFontResult)
     
     PzGPrefsFont = CStr(fntFont)
     PzGPrefsFontSize = CStr(fntSize)
@@ -2818,7 +2818,7 @@ Private Sub btnPrefsFont_Click()
 
 btnPrefsFont_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnPrefsFont_Click of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnPrefsFont_Click of Form panzerPrefs"
 
 End Sub
 
@@ -2870,7 +2870,7 @@ Private Sub adjustPrefsControls()
     txtDefaultEditor.Text = PzGDefaultEditor
     
     If PzGPrefsFont <> vbNullString Then
-        Call changeFormFont(panzerEarthPrefs, PzGPrefsFont, Val(PzGPrefsFontSize), fntWeight, fntStyle, PzGPrefsFontItalics, PzGPrefsFontColour)
+        Call changeFormFont(panzerPrefs, PzGPrefsFont, Val(PzGPrefsFontSize), fntWeight, fntStyle, PzGPrefsFontItalics, PzGPrefsFontColour)
     End If
        
     ' fonts tab
@@ -2883,13 +2883,13 @@ Private Sub adjustPrefsControls()
         
     If PzGPreventDragging = "1" Then
         If aspectRatio = "landscape" Then
-'            txtLandscapeHoffset.Text = 'fMain.globeForm.Left
-'            txtLandscapeVoffset.Text = 'fMain.globeForm.Top
+'            txtLandscapeHoffset.Text = fAlpha.GaugeForm.Left
+'            txtLandscapeVoffset.Text = fAlpha.GaugeForm.Top
             txtLandscapeHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGMaximiseFormX & "px"
             txtLandscapeVoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGMaximiseFormY & "px"
         Else
-'            txtPortraitHoffset.Text = 'fMain.globeForm.Left
-'            txtPortraitYoffset.Text = 'fMain.globeForm.Top
+'            txtPortraitHoffset.Text = fAlpha.GaugeForm.Left
+'            txtPortraitYoffset.Text = fAlpha.GaugeForm.Top
             txtPortraitHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGMaximiseFormX & "px"
             txtPortraitYoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGMaximiseFormY & "px"
         End If
@@ -2917,7 +2917,7 @@ Private Sub adjustPrefsControls()
 
 adjustPrefsControls_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure adjustPrefsControls of Form PanzerEarthPrefs on line " & Erl
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure adjustPrefsControls of Form panzerPrefs on line " & Erl
 
 End Sub
 '
@@ -2994,7 +2994,7 @@ populatePrefsComboBoxes_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure populatePrefsComboBoxes of Form panzerEarthPrefs"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure populatePrefsComboBoxes of Form panzerPrefs"
             Resume Next
           End If
     End With
@@ -3036,7 +3036,7 @@ Private Sub clearBorderStyle()
 
 clearBorderStyle_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure clearBorderStyle of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure clearBorderStyle of Form panzerPrefs"
 
 End Sub
 
@@ -3079,7 +3079,7 @@ Form_Resize_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Form_Resize of Form panzerEarthPrefs"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Form_Resize of Form panzerPrefs"
             Resume Next
           End If
     End With
@@ -3106,7 +3106,7 @@ Private Sub Form_Unload(Cancel As Integer)
 
 Form_Unload_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Form_Unload of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Form_Unload of Form panzerPrefs"
 End Sub
 Private Sub Form_MouseMove(Button As Integer, shift As Integer, x As Single, y As Single)
     fraScrollbarCover.Visible = True
@@ -3633,7 +3633,7 @@ Public Sub setPrefsTooltips()
 
 setPrefsTooltips_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setPrefsTooltips of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setPrefsTooltips of Form panzerPrefs"
 
 End Sub
 '---------------------------------------------------------------------------------------
@@ -3655,7 +3655,7 @@ Public Sub DestroyToolTip()
 
 DestroyToolTip_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure DestroyToolTip of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure DestroyToolTip of Form panzerPrefs"
 End Sub
 '---------------------------------------------------------------------------------------
 ' Procedure : loadPrefsAboutText
@@ -3679,7 +3679,7 @@ Private Sub loadPrefsAboutText()
 
 loadPrefsAboutText_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure loadPrefsAboutText of Form PanzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure loadPrefsAboutText of Form panzerPrefs"
     
 End Sub
 
@@ -3735,7 +3735,7 @@ Private Sub picButtonMouseUpEvent(ByVal thisTabName As String, ByRef thisPicName
         padding = 200 ' add normal padding below the help button to position the bottom of the form
 
         lastFormHeight = btnHelp.Top + btnHelp.Height + captionHeight + borderWidth + padding
-        panzerEarthPrefs.Height = lastFormHeight
+        panzerPrefs.Height = lastFormHeight
     End If
     
     If thisTabName = "about" Then
@@ -3751,7 +3751,7 @@ Private Sub picButtonMouseUpEvent(ByVal thisTabName As String, ByRef thisPicName
 
 picButtonMouseUpEvent_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure picButtonMouseUpEvent of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure picButtonMouseUpEvent of Form panzerPrefs"
 
 End Sub
 
@@ -3811,7 +3811,7 @@ End Sub
 '        frmCount = frmCount + 1
 '        If frmCount >= 500 Then
 '            frmCount = 0
-'            panzerEarthPrefs.Refresh
+'            panzerPrefs.Refresh
 '        End If
 '    Next useloop
 '
@@ -3820,7 +3820,7 @@ End Sub
 '
 'scrollFrameDownward_Error:
 '
-'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure scrollFrameDownward of Form panzerEarthPrefs"
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure scrollFrameDownward of Form panzerPrefs"
 '
 'End Sub
 
@@ -3849,7 +3849,7 @@ Private Sub themeTimer_Timer()
 
 themeTimer_Timer_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure themeTimer_Timer of Form PanzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure themeTimer_Timer of Form panzerPrefs"
 
 End Sub
 
@@ -3870,7 +3870,7 @@ Private Sub mnuCoffee_Click()
     Exit Sub
 mnuCoffee_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuCoffee_Click of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuCoffee_Click of Form panzerPrefs"
 End Sub
 
 
@@ -3894,7 +3894,7 @@ mnuLicenceA_Click_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuLicenceA_Click of Form panzerEarthPrefs"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuLicenceA_Click of Form panzerPrefs"
             Resume Next
           End If
     End With
@@ -3921,7 +3921,7 @@ Private Sub mnuSupport_Click()
 
 mnuSupport_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuSupport_Click of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuSupport_Click of Form panzerPrefs"
 End Sub
 
 
@@ -3943,18 +3943,18 @@ Private Sub mnuAuto_Click()
     
    On Error GoTo mnuAuto_Click_Error
 
-    If panzerEarthPrefs.themeTimer.Enabled = True Then
+    If panzerPrefs.themeTimer.Enabled = True Then
             MsgBox "Automatic Theme Selection is now Disabled"
-            panzerEarthPrefs.mnuAuto.Caption = "Auto Theme Disabled - Click to Enable"
-            panzerEarthPrefs.mnuAuto.Checked = False
+            panzerPrefs.mnuAuto.Caption = "Auto Theme Disabled - Click to Enable"
+            panzerPrefs.mnuAuto.Checked = False
             
-            panzerEarthPrefs.themeTimer.Enabled = False
+            panzerPrefs.themeTimer.Enabled = False
     Else
             MsgBox "Auto Theme Selection Enabled. If the o/s theme changes the utility should automatically skin the utility to suit the theme."
-            panzerEarthPrefs.mnuAuto.Caption = "Auto Theme Enabled - Click to Disable"
-            panzerEarthPrefs.mnuAuto.Checked = True
+            panzerPrefs.mnuAuto.Caption = "Auto Theme Enabled - Click to Disable"
+            panzerPrefs.mnuAuto.Checked = True
             
-            panzerEarthPrefs.themeTimer.Enabled = True
+            panzerPrefs.themeTimer.Enabled = True
             Call setThemeColour
     End If
 
@@ -3963,7 +3963,7 @@ Private Sub mnuAuto_Click()
 
 mnuAuto_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuAuto_Click of Form PanzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuAuto_Click of Form panzerPrefs"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -3976,11 +3976,11 @@ End Sub
 Private Sub mnuDark_Click()
    On Error GoTo mnuDark_Click_Error
 
-    panzerEarthPrefs.mnuAuto.Caption = "Auto Theme Disabled - Click to Enable"
-    panzerEarthPrefs.mnuAuto.Checked = False
-    panzerEarthPrefs.mnuDark.Caption = "Dark Theme Enabled"
-    panzerEarthPrefs.mnuLight.Caption = "Light Theme Enable"
-    panzerEarthPrefs.themeTimer.Enabled = False
+    panzerPrefs.mnuAuto.Caption = "Auto Theme Disabled - Click to Enable"
+    panzerPrefs.mnuAuto.Checked = False
+    panzerPrefs.mnuDark.Caption = "Dark Theme Enabled"
+    panzerPrefs.mnuLight.Caption = "Light Theme Enable"
+    panzerPrefs.themeTimer.Enabled = False
     
     PzGSkinTheme = "dark"
 
@@ -3991,7 +3991,7 @@ Private Sub mnuDark_Click()
 
 mnuDark_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuDark_Click of Form PanzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuDark_Click of Form panzerPrefs"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -4005,11 +4005,11 @@ Private Sub mnuLight_Click()
     'MsgBox "Auto Theme Selection Manually Disabled"
    On Error GoTo mnuLight_Click_Error
     
-    panzerEarthPrefs.mnuAuto.Caption = "Auto Theme Disabled - Click to Enable"
-    panzerEarthPrefs.mnuAuto.Checked = False
-    panzerEarthPrefs.mnuDark.Caption = "Dark Theme Enable"
-    panzerEarthPrefs.mnuLight.Caption = "Light Theme Enabled"
-    panzerEarthPrefs.themeTimer.Enabled = False
+    panzerPrefs.mnuAuto.Caption = "Auto Theme Disabled - Click to Enable"
+    panzerPrefs.mnuAuto.Checked = False
+    panzerPrefs.mnuDark.Caption = "Dark Theme Enable"
+    panzerPrefs.mnuLight.Caption = "Light Theme Enabled"
+    panzerPrefs.themeTimer.Enabled = False
     
     PzGSkinTheme = "light"
 
@@ -4020,7 +4020,7 @@ Private Sub mnuLight_Click()
 
 mnuLight_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuLight_Click of Form PanzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuLight_Click of Form panzerPrefs"
 End Sub
 
 
@@ -4042,10 +4042,10 @@ Private Sub setThemeShade(ByVal redC As Integer, ByVal greenC As Integer, ByVal 
 
     ' RGB(redC, greenC, blueC) is the background colour used by the lighter themes
     
-    panzerEarthPrefs.BackColor = RGB(redC, greenC, blueC)
+    panzerPrefs.BackColor = RGB(redC, greenC, blueC)
     
     ' all buttons must be set to graphical
-    For Each ctrl In panzerEarthPrefs.Controls
+    For Each ctrl In panzerPrefs.Controls
         If (TypeOf ctrl Is CommandButton) Or (TypeOf ctrl Is CheckBox) Or (TypeOf ctrl Is Label) Or (TypeOf ctrl Is OptionButton) Or (TypeOf ctrl Is Frame) Then
           ctrl.BackColor = RGB(redC, greenC, blueC)
         End If
@@ -4053,26 +4053,26 @@ Private Sub setThemeShade(ByVal redC As Integer, ByVal greenC As Integer, ByVal 
     
     If redC = 212 Then
         'classicTheme = True
-        panzerEarthPrefs.mnuLight.Checked = False
-        panzerEarthPrefs.mnuDark.Checked = True
+        panzerPrefs.mnuLight.Checked = False
+        panzerPrefs.mnuDark.Checked = True
         
         Call setIconImagesDark
         
     Else
         'classicTheme = False
-        panzerEarthPrefs.mnuLight.Checked = True
-        panzerEarthPrefs.mnuDark.Checked = False
+        panzerPrefs.mnuLight.Checked = True
+        panzerPrefs.mnuDark.Checked = False
         
         Call setIconImagesLight
                 
     End If
     
     'now change the color of the sliders.
-    panzerEarthPrefs.sliAnimationInterval.BackColor = RGB(redC, greenC, blueC)
-    'panzerEarthPrefs.'sliWidgetSkew.BackColor = RGB(redC, greenC, blueC)
-    panzerEarthPrefs.sliGaugeSize.BackColor = RGB(redC, greenC, blueC)
-    panzerEarthPrefs.sliOpacity.BackColor = RGB(redC, greenC, blueC)
-    panzerEarthPrefs.txtAboutText.BackColor = RGB(redC, greenC, blueC)
+    panzerPrefs.sliAnimationInterval.BackColor = RGB(redC, greenC, blueC)
+    'panzerPrefs.'sliWidgetSkew.BackColor = RGB(redC, greenC, blueC)
+    panzerPrefs.sliGaugeSize.BackColor = RGB(redC, greenC, blueC)
+    panzerPrefs.sliOpacity.BackColor = RGB(redC, greenC, blueC)
+    panzerPrefs.txtAboutText.BackColor = RGB(redC, greenC, blueC)
     
     sPutINISetting "Software\PzStopwatch", "skinTheme", PzGSkinTheme, PzGSettingsFile ' now saved to the toolsettingsfile
 
@@ -4114,13 +4114,13 @@ Private Sub setThemeColour()
         SysClr = GetSysColor(COLOR_BTNFACE)
         PzGSkinTheme = "dark"
         
-        panzerEarthPrefs.mnuDark.Caption = "Dark Theme Enabled"
-        panzerEarthPrefs.mnuLight.Caption = "Light Theme Enable"
+        panzerPrefs.mnuDark.Caption = "Dark Theme Enabled"
+        panzerPrefs.mnuLight.Caption = "Light Theme Enable"
 
     Else
         Call setModernThemeColours
-        panzerEarthPrefs.mnuDark.Caption = "Dark Theme Enable"
-        panzerEarthPrefs.mnuLight.Caption = "Light Theme Enabled"
+        panzerPrefs.mnuDark.Caption = "Dark Theme Enable"
+        panzerPrefs.mnuLight.Caption = "Light Theme Enabled"
     End If
 
     storeThemeColour = SysClr
@@ -4151,7 +4151,7 @@ Private Sub adjustPrefsTheme()
     Else
         If classicThemeCapable = True Then
             mnuAuto.Caption = "Auto Theme Enabled - Click to Disable"
-            panzerEarthPrefs.themeTimer.Enabled = True
+            panzerPrefs.themeTimer.Enabled = True
         Else
             PzGSkinTheme = "light"
             Call setModernThemeColours
@@ -4163,7 +4163,7 @@ Private Sub adjustPrefsTheme()
 
 adjustPrefsTheme_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure adjustPrefsTheme of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure adjustPrefsTheme of Form panzerPrefs"
     
 End Sub
 
@@ -4353,7 +4353,7 @@ Private Sub loadHigherResImages()
         topIconWidth = 1010
     End If
     
-    If panzerEarthPrefs.mnuDark.Checked = True Then
+    If panzerPrefs.mnuDark.Checked = True Then
         Call setIconImagesDark
     Else
         Call setIconImagesLight
@@ -4364,7 +4364,7 @@ Private Sub loadHigherResImages()
 
 loadHigherResImages_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure loadHigherResImages of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure loadHigherResImages of Form panzerPrefs"
 End Sub
 '---------------------------------------------------------------------------------------
 ' Procedure : positionTimer_Timer
@@ -4384,7 +4384,7 @@ Private Sub positionTimer_Timer()
 
 positionTimer_Timer_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure positionTimer_Timer of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure positionTimer_Timer of Form panzerPrefs"
 End Sub
 
 
@@ -4409,8 +4409,8 @@ Private Sub chkEnableResizing_Click()
         dynamicSizingFlg = False
         txtPrefsFontCurrentSize.Visible = False
         lblCurrentFontsTab.Visible = False
-        Unload panzerEarthPrefs
-        panzerEarthPrefs.show
+        Unload panzerPrefs
+        panzerPrefs.show
         Call readPrefsPosition
         chkEnableResizing.Caption = "Enable Corner Resizing"
     End If
@@ -4422,7 +4422,7 @@ Private Sub chkEnableResizing_Click()
 
 chkEnableResizing_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkEnableResizing_Click of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure chkEnableResizing_Click of Form panzerPrefs"
 
 End Sub
 
@@ -4478,7 +4478,7 @@ Private Sub setframeHeights()
 
 setframeHeights_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setframeHeights of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setframeHeights of Form panzerPrefs"
 End Sub
 
 
@@ -4498,31 +4498,31 @@ Private Sub setIconImagesDark()
     
     resourcePath = App.Path & "\resources\images"
 
-    If fFExists(resourcePath & "\config-icon-dark-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgConfig.Picture = LoadPicture(resourcePath & "\config-icon-dark-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\general-icon-dark-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgGeneral.Picture = LoadPicture(resourcePath & "\general-icon-dark-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\position-icon-dark-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgPosition.Picture = LoadPicture(resourcePath & "\position-icon-dark-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\font-icon-dark-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgFonts.Picture = LoadPicture(resourcePath & "\font-icon-dark-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\development-icon-dark-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgDevelopment.Picture = LoadPicture(resourcePath & "\development-icon-dark-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\sounds-icon-dark-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgSounds.Picture = LoadPicture(resourcePath & "\sounds-icon-dark-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\windows-icon-dark-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgWindow.Picture = LoadPicture(resourcePath & "\windows-icon-dark-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\about-icon-dark-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgAbout.Picture = LoadPicture(resourcePath & "\about-icon-dark-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\config-icon-dark-" & topIconWidth & ".jpg") Then panzerPrefs.imgConfig.Picture = LoadPicture(resourcePath & "\config-icon-dark-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\general-icon-dark-" & topIconWidth & ".jpg") Then panzerPrefs.imgGeneral.Picture = LoadPicture(resourcePath & "\general-icon-dark-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\position-icon-dark-" & topIconWidth & ".jpg") Then panzerPrefs.imgPosition.Picture = LoadPicture(resourcePath & "\position-icon-dark-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\font-icon-dark-" & topIconWidth & ".jpg") Then panzerPrefs.imgFonts.Picture = LoadPicture(resourcePath & "\font-icon-dark-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\development-icon-dark-" & topIconWidth & ".jpg") Then panzerPrefs.imgDevelopment.Picture = LoadPicture(resourcePath & "\development-icon-dark-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\sounds-icon-dark-" & topIconWidth & ".jpg") Then panzerPrefs.imgSounds.Picture = LoadPicture(resourcePath & "\sounds-icon-dark-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\windows-icon-dark-" & topIconWidth & ".jpg") Then panzerPrefs.imgWindow.Picture = LoadPicture(resourcePath & "\windows-icon-dark-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\about-icon-dark-" & topIconWidth & ".jpg") Then panzerPrefs.imgAbout.Picture = LoadPicture(resourcePath & "\about-icon-dark-" & topIconWidth & ".jpg")
     
     ' I may yet create clicked versions of all the icons but not now!
-    If fFExists(resourcePath & "\config-icon-dark-600-clicked.jpg") Then panzerEarthPrefs.imgConfigClicked.Picture = LoadPicture(resourcePath & "\config-icon-dark-600-clicked.jpg")
-    If fFExists(resourcePath & "\general-icon-dark-600-clicked.jpg") Then panzerEarthPrefs.imgGeneralClicked.Picture = LoadPicture(resourcePath & "\general-icon-dark-600-clicked.jpg")
-    If fFExists(resourcePath & "\position-icon-dark-600-clicked.jpg") Then panzerEarthPrefs.imgPositionClicked.Picture = LoadPicture(resourcePath & "\position-icon-dark-600-clicked.jpg")
-    If fFExists(resourcePath & "\font-icon-dark-600-clicked.jpg") Then panzerEarthPrefs.imgFontsClicked.Picture = LoadPicture(resourcePath & "\font-icon-dark-600-clicked.jpg")
-    If fFExists(resourcePath & "\development-icon-dark-600-clicked.jpg") Then panzerEarthPrefs.imgDevelopmentClicked.Picture = LoadPicture(resourcePath & "\development-icon-dark-600-clicked.jpg")
-    If fFExists(resourcePath & "\sounds-icon-dark-600-clicked.jpg") Then panzerEarthPrefs.imgSoundsClicked.Picture = LoadPicture(resourcePath & "\sounds-icon-dark-600-clicked.jpg")
-    If fFExists(resourcePath & "\windows-icon-dark-600-clicked.jpg") Then panzerEarthPrefs.imgWindowClicked.Picture = LoadPicture(resourcePath & "\windows-icon-dark-600-clicked.jpg")
-    If fFExists(resourcePath & "\about-icon-dark-600-clicked.jpg") Then panzerEarthPrefs.imgAboutClicked.Picture = LoadPicture(resourcePath & "\about-icon-dark-600-clicked.jpg")
+    If fFExists(resourcePath & "\config-icon-dark-600-clicked.jpg") Then panzerPrefs.imgConfigClicked.Picture = LoadPicture(resourcePath & "\config-icon-dark-600-clicked.jpg")
+    If fFExists(resourcePath & "\general-icon-dark-600-clicked.jpg") Then panzerPrefs.imgGeneralClicked.Picture = LoadPicture(resourcePath & "\general-icon-dark-600-clicked.jpg")
+    If fFExists(resourcePath & "\position-icon-dark-600-clicked.jpg") Then panzerPrefs.imgPositionClicked.Picture = LoadPicture(resourcePath & "\position-icon-dark-600-clicked.jpg")
+    If fFExists(resourcePath & "\font-icon-dark-600-clicked.jpg") Then panzerPrefs.imgFontsClicked.Picture = LoadPicture(resourcePath & "\font-icon-dark-600-clicked.jpg")
+    If fFExists(resourcePath & "\development-icon-dark-600-clicked.jpg") Then panzerPrefs.imgDevelopmentClicked.Picture = LoadPicture(resourcePath & "\development-icon-dark-600-clicked.jpg")
+    If fFExists(resourcePath & "\sounds-icon-dark-600-clicked.jpg") Then panzerPrefs.imgSoundsClicked.Picture = LoadPicture(resourcePath & "\sounds-icon-dark-600-clicked.jpg")
+    If fFExists(resourcePath & "\windows-icon-dark-600-clicked.jpg") Then panzerPrefs.imgWindowClicked.Picture = LoadPicture(resourcePath & "\windows-icon-dark-600-clicked.jpg")
+    If fFExists(resourcePath & "\about-icon-dark-600-clicked.jpg") Then panzerPrefs.imgAboutClicked.Picture = LoadPicture(resourcePath & "\about-icon-dark-600-clicked.jpg")
 
    On Error GoTo 0
    Exit Sub
 
 setIconImagesDark_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setIconImagesDark of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setIconImagesDark of Form panzerPrefs"
 
 End Sub
 
@@ -4542,31 +4542,31 @@ Private Sub setIconImagesLight()
     
     resourcePath = App.Path & "\resources\images"
     
-    If fFExists(resourcePath & "\config-icon-light-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgConfig.Picture = LoadPicture(resourcePath & "\config-icon-light-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\general-icon-light-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgGeneral.Picture = LoadPicture(resourcePath & "\general-icon-light-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\position-icon-light-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgPosition.Picture = LoadPicture(resourcePath & "\position-icon-light-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\font-icon-light-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgFonts.Picture = LoadPicture(resourcePath & "\font-icon-light-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\development-icon-light-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgDevelopment.Picture = LoadPicture(resourcePath & "\development-icon-light-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\sounds-icon-light-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgSounds.Picture = LoadPicture(resourcePath & "\sounds-icon-light-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\windows-icon-light-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgWindow.Picture = LoadPicture(resourcePath & "\windows-icon-light-" & topIconWidth & ".jpg")
-    If fFExists(resourcePath & "\about-icon-light-" & topIconWidth & ".jpg") Then panzerEarthPrefs.imgAbout.Picture = LoadPicture(resourcePath & "\about-icon-light-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\config-icon-light-" & topIconWidth & ".jpg") Then panzerPrefs.imgConfig.Picture = LoadPicture(resourcePath & "\config-icon-light-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\general-icon-light-" & topIconWidth & ".jpg") Then panzerPrefs.imgGeneral.Picture = LoadPicture(resourcePath & "\general-icon-light-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\position-icon-light-" & topIconWidth & ".jpg") Then panzerPrefs.imgPosition.Picture = LoadPicture(resourcePath & "\position-icon-light-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\font-icon-light-" & topIconWidth & ".jpg") Then panzerPrefs.imgFonts.Picture = LoadPicture(resourcePath & "\font-icon-light-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\development-icon-light-" & topIconWidth & ".jpg") Then panzerPrefs.imgDevelopment.Picture = LoadPicture(resourcePath & "\development-icon-light-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\sounds-icon-light-" & topIconWidth & ".jpg") Then panzerPrefs.imgSounds.Picture = LoadPicture(resourcePath & "\sounds-icon-light-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\windows-icon-light-" & topIconWidth & ".jpg") Then panzerPrefs.imgWindow.Picture = LoadPicture(resourcePath & "\windows-icon-light-" & topIconWidth & ".jpg")
+    If fFExists(resourcePath & "\about-icon-light-" & topIconWidth & ".jpg") Then panzerPrefs.imgAbout.Picture = LoadPicture(resourcePath & "\about-icon-light-" & topIconWidth & ".jpg")
     
     ' I may yet create clicked versions of all the icons but not now!
-    If fFExists(resourcePath & "\config-icon-light-600-clicked.jpg") Then panzerEarthPrefs.imgConfigClicked.Picture = LoadPicture(resourcePath & "\config-icon-light-600-clicked.jpg")
-    If fFExists(resourcePath & "\general-icon-light-600-clicked.jpg") Then panzerEarthPrefs.imgGeneralClicked.Picture = LoadPicture(resourcePath & "\general-icon-light-600-clicked.jpg")
-    If fFExists(resourcePath & "\position-icon-light-600-clicked.jpg") Then panzerEarthPrefs.imgPositionClicked.Picture = LoadPicture(resourcePath & "\position-icon-light-600-clicked.jpg")
-    If fFExists(resourcePath & "\font-icon-light-600-clicked.jpg") Then panzerEarthPrefs.imgFontsClicked.Picture = LoadPicture(resourcePath & "\font-icon-light-600-clicked.jpg")
-    If fFExists(resourcePath & "\development-icon-light-600-clicked.jpg") Then panzerEarthPrefs.imgDevelopmentClicked.Picture = LoadPicture(resourcePath & "\development-icon-light-600-clicked.jpg")
-    If fFExists(resourcePath & "\sounds-icon-light-600-clicked.jpg") Then panzerEarthPrefs.imgSoundsClicked.Picture = LoadPicture(resourcePath & "\sounds-icon-light-600-clicked.jpg")
-    If fFExists(resourcePath & "\windows-icon-light-600-clicked.jpg") Then panzerEarthPrefs.imgWindowClicked.Picture = LoadPicture(resourcePath & "\windows-icon-light-600-clicked.jpg")
-    If fFExists(resourcePath & "\about-icon-light-600-clicked.jpg") Then panzerEarthPrefs.imgAboutClicked.Picture = LoadPicture(resourcePath & "\about-icon-light-600-clicked.jpg")
+    If fFExists(resourcePath & "\config-icon-light-600-clicked.jpg") Then panzerPrefs.imgConfigClicked.Picture = LoadPicture(resourcePath & "\config-icon-light-600-clicked.jpg")
+    If fFExists(resourcePath & "\general-icon-light-600-clicked.jpg") Then panzerPrefs.imgGeneralClicked.Picture = LoadPicture(resourcePath & "\general-icon-light-600-clicked.jpg")
+    If fFExists(resourcePath & "\position-icon-light-600-clicked.jpg") Then panzerPrefs.imgPositionClicked.Picture = LoadPicture(resourcePath & "\position-icon-light-600-clicked.jpg")
+    If fFExists(resourcePath & "\font-icon-light-600-clicked.jpg") Then panzerPrefs.imgFontsClicked.Picture = LoadPicture(resourcePath & "\font-icon-light-600-clicked.jpg")
+    If fFExists(resourcePath & "\development-icon-light-600-clicked.jpg") Then panzerPrefs.imgDevelopmentClicked.Picture = LoadPicture(resourcePath & "\development-icon-light-600-clicked.jpg")
+    If fFExists(resourcePath & "\sounds-icon-light-600-clicked.jpg") Then panzerPrefs.imgSoundsClicked.Picture = LoadPicture(resourcePath & "\sounds-icon-light-600-clicked.jpg")
+    If fFExists(resourcePath & "\windows-icon-light-600-clicked.jpg") Then panzerPrefs.imgWindowClicked.Picture = LoadPicture(resourcePath & "\windows-icon-light-600-clicked.jpg")
+    If fFExists(resourcePath & "\about-icon-light-600-clicked.jpg") Then panzerPrefs.imgAboutClicked.Picture = LoadPicture(resourcePath & "\about-icon-light-600-clicked.jpg")
 
    On Error GoTo 0
    Exit Sub
 
 setIconImagesLight_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setIconImagesLight of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setIconImagesLight of Form panzerPrefs"
 
 End Sub
 

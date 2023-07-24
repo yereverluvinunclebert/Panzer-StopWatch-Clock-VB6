@@ -16,7 +16,7 @@ Begin VB.Form menuForm
    Begin VB.Menu mnuMainMenu 
       Caption         =   "mainmenu"
       Begin VB.Menu mnuAbout 
-         Caption         =   "About Panzer Earth Cairo widget"
+         Caption         =   "About Panzer StopWatch Cairo widget"
       End
       Begin VB.Menu mnuBlank5 
          Caption         =   "-"
@@ -35,7 +35,7 @@ Begin VB.Form menuForm
          Caption         =   ""
       End
       Begin VB.Menu mnuHelpSplash 
-         Caption         =   "Panzer Earth Gauge Help"
+         Caption         =   "Panzer StopWatch Gauge Help"
       End
       Begin VB.Menu mnuOnline 
          Caption         =   "Online Help and other options"
@@ -74,7 +74,7 @@ Begin VB.Form menuForm
          Caption         =   "Edit Widget using..."
       End
       Begin VB.Menu mnuSwitchOff 
-         Caption         =   "Switch off my functions (Globe Rotation)"
+         Caption         =   "Switch off my functions (Ticking hands)"
       End
       Begin VB.Menu mnuTurnFunctionsOn 
          Caption         =   "Turn all functions ON"
@@ -403,7 +403,7 @@ Private Sub mnuQuit_Click()
 
     On Error GoTo mnuQuit_Click_Error
     
-    Call globeForm_Unload
+    Call thisForm_Unload
 
    On Error GoTo 0
    Exit Sub
@@ -481,7 +481,7 @@ Public Sub mnuLatest_Click()
     answer = MsgBox("Download latest version of the program from github - this button opens a browser window and connects to the widget download page where you can check and download the latest SETUP.EXE file). Proceed?", vbExclamation + vbYesNo)
 
     If answer = vbYes Then
-        Call ShellExecute(Me.hwnd, "Open", "https://github.com/yereverluvinunclebert/Panzer-Earth-gauge-VB6", vbNullString, App.Path, 1)
+        Call ShellExecute(Me.hwnd, "Open", "https://github.com/yereverluvinunclebert/Panzer-StopWatch-Clock-VB6", vbNullString, App.Path, 1)
     End If
 
 

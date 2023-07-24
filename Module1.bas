@@ -1584,12 +1584,12 @@ Public Sub makeVisibleFormElements()
 
     'NOTE that when you position a widget you are positioning the form it is drawn upon.
 
-    'fMain.globeForm.Left = Val(fGetINISetting("Software\PzStopwatch", "maximiseFormX", PzGSettingsFile)) ' / screenPixelsPerPixelX
-    'fMain.globeForm.Top = Val(fGetINISetting("Software\PzStopwatch", "maximiseFormY", PzGSettingsFile)) ' / screenPixelsPerPixelY
+    fAlpha.GaugeForm.Left = Val(fGetINISetting("Software\PzStopwatch", "maximiseFormX", PzGSettingsFile)) ' / screenPixelsPerPixelX
+    fAlpha.GaugeForm.Top = Val(fGetINISetting("Software\PzStopwatch", "maximiseFormY", PzGSettingsFile)) ' / screenPixelsPerPixelY
 
     ' The RC forms are measured in pixels, do remember that...
 
-    'fMain.globeForm.Show
+    fAlpha.GaugeForm.show
 
     On Error GoTo 0
     Exit Sub
@@ -1787,8 +1787,8 @@ Public Sub mainScreen()
     If aspectRatio = "landscape" Then
         If PzGWidgetLandscape = "1" Then
             If PzGLandscapeFormHoffset <> vbNullString Then
-                'fMain.globeForm.Left = Val(PzGLandscapeFormHoffset)
-                'fMain.globeForm.Top = Val(PzGLandscapeFormVoffset)
+                fAlpha.GaugeForm.Left = Val(PzGLandscapeFormHoffset)
+                fAlpha.GaugeForm.Top = Val(PzGLandscapeFormVoffset)
             End If
         End If
         If PzGAspectHidden = "2" Then
@@ -1800,8 +1800,8 @@ Public Sub mainScreen()
     ' check if the widget has a lock for the screen type.
     If aspectRatio = "portrait" Then
         If PzGWidgetPortrait = "1" Then
-            'fMain.globeForm.Left = Val(PzGPortraitHoffset)
-            'fMain.globeForm.Top = Val(PzGPortraitYoffset)
+            fAlpha.GaugeForm.Left = Val(PzGPortraitHoffset)
+            fAlpha.GaugeForm.Top = Val(PzGPortraitYoffset)
         End If
         If PzGAspectHidden = "1" Then
             'Print "Hiding the widget for portrait mode"
@@ -1810,24 +1810,24 @@ Public Sub mainScreen()
     End If
 
     ' calculate the on screen widget position
-'    If 'fMain.globeForm.Left < 0 Then
-'        'fMain.globeForm.Left = 10
+'    If fAlpha.GaugeForm.Left < 0 Then
+'        fAlpha.GaugeForm.Left = 10
 '    End If
-'    If 'fMain.globeForm.Top < 0 Then
-'        'fMain.globeForm.Top = 0
+'    If fAlpha.GaugeForm.Top < 0 Then
+'        fAlpha.GaugeForm.Top = 0
 '    End If
-'    If 'fMain.globeForm.Left > screenWidthPixels - 50 Then
-'        'fMain.globeForm.Left = screenWidthPixels - 150
+'    If fAlpha.GaugeForm.Left > screenWidthPixels - 50 Then
+'        fAlpha.GaugeForm.Left = screenWidthPixels - 150
 '    End If
-'    If 'fMain.globeForm.Top > screenHeightPixels - 50 Then
-'        'fMain.globeForm.Top = screenHeightPixels - 150
+'    If fAlpha.GaugeForm.Top > screenHeightPixels - 50 Then
+'        fAlpha.GaugeForm.Top = screenHeightPixels - 150
 '    End If
 '
 '    ' calculate the current hlocation in % of the screen
 '    ' store the current hlocation in % of the screen
 '    If PzGWidgetPosition = "1" Then
-'        PzGhLocationPercPrefValue = Str$('fMain.globeForm.Left / screenWidthPixels * 100)
-'        PzGvLocationPercPrefValue = Str$('fMain.globeForm.Top / screenHeightPixels * 100)
+'        PzGhLocationPercPrefValue = Str$(fAlpha.GaugeForm.Left / screenWidthPixels * 100)
+'        PzGvLocationPercPrefValue = Str$(fAlpha.GaugeForm.Top / screenHeightPixels * 100)
 '    End If
 
    On Error GoTo 0
@@ -1841,18 +1841,18 @@ End Sub
 
 
 '---------------------------------------------------------------------------------------
-' Procedure : globeForm_Unload
+' Procedure : thisForm_Unload
 ' Author    : beededea
 ' Date      : 18/08/2022
 ' Purpose   : the standard form unload routine
 '---------------------------------------------------------------------------------------
 '
-Public Sub globeForm_Unload() ' name follows VB6 standard naming convention
+Public Sub thisForm_Unload() ' name follows VB6 standard naming convention
     
     On Error GoTo Form_Unload_Error
     
-'    PzGMaximiseFormX = Str$('fMain.globeForm.Left) ' saving in pixels
-'    PzGMaximiseFormY = Str$('fMain.globeForm.Top)
+'    PzGMaximiseFormX = Str$(fAlpha.GaugeForm.Left) ' saving in pixels
+'    PzGMaximiseFormY = Str$(fAlpha.GaugeForm.Top)
     
     sPutINISetting "Software\PzStopwatch", "maximiseFormX", PzGMaximiseFormX, PzGSettingsFile
     sPutINISetting "Software\PzStopwatch", "maximiseFormY", PzGMaximiseFormY, PzGSettingsFile
@@ -1890,21 +1890,21 @@ Public Sub unloadAllForms()
     
     ' unload the native VB6 and RC5 forms
     
-    Unload panzerEarthPrefs
+    Unload panzerPrefs
     Unload helpForm
     Unload frmLicence
     Unload frmTimer
     Unload menuForm
 
     fMain.aboutForm.Unload  ' RC5's own method for killing forms
-    'fMain.globeForm.Unload
+    fAlpha.GaugeForm.Unload
     
     ' remove all variable references to each form in turn
     
-    Set panzerEarthPrefs = Nothing
+    Set panzerPrefs = Nothing
     Set helpForm = Nothing
     Set fMain.aboutForm = Nothing
-'    Set 'fMain.globeForm = Nothing
+'    Set fAlpha.GaugeForm = Nothing
     Set frmLicence = Nothing
     Set frmTimer = Nothing
     Set menuForm = Nothing
@@ -1959,27 +1959,27 @@ End Sub
 Public Sub makeProgramPreferencesAvailable()
     On Error GoTo makeProgramPreferencesAvailable_Error
     
-    If panzerEarthPrefs.IsVisible = False Then
+    If panzerPrefs.IsVisible = False Then
     
-        If panzerEarthPrefs.WindowState = vbMinimized Then
-            panzerEarthPrefs.WindowState = vbNormal
+        If panzerPrefs.WindowState = vbMinimized Then
+            panzerPrefs.WindowState = vbNormal
             'Call readPrefsPosition
         End If
                 ' set the current position of the utility according to previously stored positions
 
-        If panzerEarthPrefs.WindowState = vbNormal Then
+        If panzerPrefs.WindowState = vbNormal Then
         
             Call readPrefsPosition
             
-'            If (('fMain.globeForm.Left + 'fMain.globeForm.Width) * screenTwipsPerPixelX) + 200 + panzerEarthPrefs.Width > screenWidthTwips Then
-'                panzerEarthPrefs.Left = ('fMain.globeForm.Left * screenTwipsPerPixelX) - (panzerEarthPrefs.Width + 200)
+'            If ((fAlpha.GaugeForm.Left + fAlpha.GaugeForm.Width) * screenTwipsPerPixelX) + 200 + panzerPrefs.Width > screenWidthTwips Then
+'                panzerPrefs.Left = (fAlpha.GaugeForm.Left * screenTwipsPerPixelX) - (panzerPrefs.Width + 200)
 '            End If
             
-            If panzerEarthPrefs.Left < 0 Then panzerEarthPrefs.Left = 0
-            If panzerEarthPrefs.Top < 0 Then panzerEarthPrefs.Top = 0
+            If panzerPrefs.Left < 0 Then panzerPrefs.Left = 0
+            If panzerPrefs.Top < 0 Then panzerPrefs.Top = 0
             
-            panzerEarthPrefs.show  ' show it again
-            panzerEarthPrefs.SetFocus
+            panzerPrefs.show  ' show it again
+            panzerPrefs.SetFocus
         End If
     End If
     
@@ -2009,15 +2009,15 @@ Public Sub readPrefsPosition()
 
     ' if a current location not stored then position to the middle of the screen
     If PzGFormXPosTwips <> "" Then
-        panzerEarthPrefs.Left = Val(PzGFormXPosTwips)
+        panzerPrefs.Left = Val(PzGFormXPosTwips)
     Else
-        panzerEarthPrefs.Left = screenWidthTwips / 2 - panzerEarthPrefs.Width / 2
+        panzerPrefs.Left = screenWidthTwips / 2 - panzerPrefs.Width / 2
     End If
 
     If PzGFormYPosTwips <> "" Then
-        panzerEarthPrefs.Top = Val(PzGFormYPosTwips)
+        panzerPrefs.Top = Val(PzGFormYPosTwips)
     Else
-        panzerEarthPrefs.Top = Screen.Height / 2 - panzerEarthPrefs.Height / 2
+        panzerPrefs.Top = Screen.Height / 2 - panzerPrefs.Height / 2
     End If
 
    On Error GoTo 0
@@ -2038,9 +2038,9 @@ Public Sub writePrefsPosition()
         
    On Error GoTo writePrefsPosition_Error
 
-    If panzerEarthPrefs.WindowState = vbNormal Then ' when vbMinimised the value = -48000  !
-        PzGFormXPosTwips = Str$(panzerEarthPrefs.Left)
-        PzGFormYPosTwips = Str$(panzerEarthPrefs.Top)
+    If panzerPrefs.WindowState = vbNormal Then ' when vbMinimised the value = -48000  !
+        PzGFormXPosTwips = Str$(panzerPrefs.Left)
+        PzGFormYPosTwips = Str$(panzerPrefs.Top)
         
         ' now write those params to the toolSettings.ini
         sPutINISetting "Software\PzStopwatch", "formXPos", PzGFormXPosTwips, PzGSettingsFile
@@ -2052,7 +2052,7 @@ Public Sub writePrefsPosition()
 
 writePrefsPosition_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure writePrefsPosition of Form panzerEarthPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure writePrefsPosition of Form panzerPrefs"
 End Sub
 
 

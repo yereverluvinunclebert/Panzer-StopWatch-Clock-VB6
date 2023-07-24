@@ -2,14 +2,14 @@ VERSION 5.00
 Begin VB.Form helpForm 
    BorderStyle     =   0  'None
    Caption         =   "Form1"
-   ClientHeight    =   9105
+   ClientHeight    =   8685
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   11265
+   ClientWidth     =   10770
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
-   ScaleHeight     =   9105
-   ScaleWidth      =   11265
+   ScaleHeight     =   8685
+   ScaleWidth      =   10770
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.PictureBox picHelp 
@@ -17,14 +17,14 @@ Begin VB.Form helpForm
       BackColor       =   &H80000005&
       BorderStyle     =   0  'None
       ForeColor       =   &H80000008&
-      Height          =   9105
+      Height          =   8685
       Left            =   0
       Picture         =   "frmHelp.frx":0000
-      ScaleHeight     =   9105
-      ScaleWidth      =   11250
+      ScaleHeight     =   8685
+      ScaleWidth      =   10770
       TabIndex        =   0
       Top             =   0
-      Width           =   11250
+      Width           =   10770
       Begin VB.Label lblPunklabsLink 
          BackStyle       =   0  'Transparent
          Caption         =   "                                                         "

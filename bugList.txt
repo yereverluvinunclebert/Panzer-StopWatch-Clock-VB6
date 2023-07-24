@@ -1,0 +1,3 @@
+' aboutForm is not fading out but instantly hiding, opacity is acting strange
+' GaugeForm.WidgetRoot.Zoom in PzStop does not scale images as well as CC.ScaleDrawings in PzEarth
+' all references to globeForm need to refer to the new form

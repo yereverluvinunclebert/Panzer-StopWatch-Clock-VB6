@@ -117,7 +117,7 @@ Private Sub declineLabel_Click()
 
     MsgBox "Please uninstall and remove Steamydock" & vbCr & "from your computer."
 
-    'Call globeForm_Unload
+    Call thisForm_Unload
     
     sPutINISetting "Software\PzStopwatch", "Licence", slicence, toolSettingsFile
     End

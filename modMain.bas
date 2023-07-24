@@ -379,9 +379,9 @@ Public Sub adjustMainControls()
     End If
     
     If PzGShowTaskbar = "0" Then
-        'fMain.globeForm.ShowInTaskbar = False
+        fAlpha.GaugeForm.ShowInTaskbar = False
     Else
-        'fMain.globeForm.ShowInTaskbar = True
+        fAlpha.GaugeForm.ShowInTaskbar = True
     End If
                  
     ' set the z-ordering of the window
@@ -416,11 +416,11 @@ Public Sub setWindowZordering()
    On Error GoTo setWindowZordering_Error
 
 '    If Val(PzGWindowLevel) = 0 Then
-'        Call SetWindowPos(fMain.globeForm.hwnd, HWND_BOTTOM, 0&, 0&, 0&, 0&, OnTopFlags)
+'        Call SetWindowPos(fAlpha.GaugeForm.hwnd, HWND_BOTTOM, 0&, 0&, 0&, 0&, OnTopFlags)
 '    ElseIf Val(PzGWindowLevel) = 1 Then
-'        Call SetWindowPos(fMain.globeForm.hwnd, HWND_TOP, 0&, 0&, 0&, 0&, OnTopFlags)
+'        Call SetWindowPos(fAlpha.GaugeForm.hwnd, HWND_TOP, 0&, 0&, 0&, 0&, OnTopFlags)
 '    ElseIf Val(PzGWindowLevel) = 2 Then
-'        Call SetWindowPos(fMain.globeForm.hwnd, HWND_TOPMOST, 0&, 0&, 0&, 0&, OnTopFlags)
+'        Call SetWindowPos(fAlpha.GaugeForm.hwnd, HWND_TOPMOST, 0&, 0&, 0&, 0&, OnTopFlags)
 '    End If
 
    On Error GoTo 0
@@ -737,7 +737,7 @@ Private Sub handleUnhideMode(ByVal thisUnhideMode As String)
     If thisUnhideMode = "unhide" Then     'parse the command line
         PzGUnhide = "true"
         sPutINISetting "Software\PzStopwatch", "unhide", PzGUnhide, PzGSettingsFile
-        Call globeForm_Unload
+        Call thisForm_Unload
         End
     End If
 

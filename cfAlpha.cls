@@ -17,7 +17,7 @@ Public WithEvents GaugeForm As cWidgetForm
 Attribute GaugeForm.VB_VarHelpID = -1
 Public PSDExcludePaths As cCollection, FX As Long, FY As Long, FZ As Single  'available on the outside, even after the Form was closed
 
-Private PSDWidth As Long, PSDHeight As Long, DragWidgetKey As String, CloseWidgetKey As String, CloseWidget As cWidgetBase
+Private PSDWidth As Long, PSDHeight As Long, DragWidgetKey As String ', CloseWidgetKey As String, CloseWidget As cWidgetBase
 Attribute PSDWidth.VB_VarHelpID = -1
 Private Overlay As cwOverlay
 Attribute Overlay.VB_VarHelpID = -1
@@ -36,7 +36,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
   With New_c.SimplePSD(PSD_FileNameOrByteArray)  'create a new PSD-Parser.instance (and load the passed content)
     PSDWidth = .Width: PSDHeight = .Height       'store the original Psd-Pixel-Width/Height in Private vars (as the base from which we calculate the zoomed Form-Width/Height)
     DragWidgetKey = LCase$(WidgetKeyForDragging) 'store the passed WidgetKey (for the Widget, which allows Form-Dragging on MouseDown)
-    CloseWidgetKey = LCase$(WidgetKeyForClose)   'same here, for the optional CloseWidget (which needs a preloaded ImgResource under the same Key)
+    'CloseWidgetKey = LCase$(WidgetKeyForClose)   'same here, for the optional CloseWidget (which needs a preloaded ImgResource under the same Key)
  
     'Cairo.ImageList-buffering - and associated Widget-construction (via a loop over all PSD-Layers)
     Dim i As Long, W As cWidgetBase
@@ -71,12 +71,12 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
     Next
   End With '<-- the Parser-instance will be destroyed here (freeing the Memory, the internal PSD-Layers have occupied)
   
-  If Len(CloseWidgetKey) Then 'in case the Optional InitParam was set, we create an additional cwAlphaImg Widget for closing the Form
-    Set CloseWidget = GaugeForm.Widgets.Add(New_W("cwAlphaImg"), CloseWidgetKey).Widget
-        CloseWidget.ImageKey = CloseWidgetKey 'this cwAlphaImg-instance will render from a normal ImageList-Key (not a PSD-LayerPath-Key)
-        CloseWidget.HoverColor = vbRed
-        CloseWidget.MousePointer = IDC_HAND
-  End If
+'  If Len(CloseWidgetKey) Then 'in case the Optional InitParam was set, we create an additional cwAlphaImg Widget for closing the Form
+'    Set CloseWidget = GaugeForm.Widgets.Add(New_W("cwAlphaImg"), CloseWidgetKey).Widget
+'        CloseWidget.ImageKey = CloseWidgetKey 'this cwAlphaImg-instance will render from a normal ImageList-Key (not a PSD-LayerPath-Key)
+'        CloseWidget.HoverColor = vbRed
+'        CloseWidget.MousePointer = IDC_HAND
+'  End If
   
   Set Overlay = GaugeForm.Widgets.Add(New cwOverlay, "Overlay", 0, 0, PSDWidth, PSDHeight)
   Set Overlay.OverlayImages = PSDExcludePaths 'make the excluded PSD-Surface-Paths known in the Overlay-Widget
@@ -91,20 +91,22 @@ End Sub
 Private Sub GaugeForm_BubblingEvent(Sender As Object, EventName As String, P1 As Variant, P2 As Variant, P3 As Variant, P4 As Variant, P5 As Variant, P6 As Variant, P7 As Variant)
   If EventName = "W_Click" Then 'central handling of all Click-Events
     Select Case LCase$(Sender.Widget.Key)
-      Case CloseWidgetKey: GaugeForm.Unload 'only one specific WidgetKey is handled here so far (click-wise)
+      'Case CloseWidgetKey
+        
+        'GaugeForm.Unload 'only one specific WidgetKey is handled here so far (click-wise)
       'please add your own cases, based on the PSD-LayerPaths we generally use as Keys here (for the ImageList as well as the Widgets)
-      Case Else:  Debug.Print Sender.Widget.Key
+      'Case Else:  Debug.Print Sender.Widget.Key
     End Select
   End If
 End Sub
 
-Private Sub GaugeForm_MouseMove(Button As Integer, shift As Integer, X As Single, Y As Single)
-  Static x0 As Single, y0 As Single: If Button = 0 Then x0 = X: y0 = Y 'just store the offsets when no button is down
+Private Sub GaugeForm_MouseMove(Button As Integer, shift As Integer, x As Single, y As Single)
+  Static x0 As Single, y0 As Single: If Button = 0 Then x0 = x: y0 = y 'just store the offsets when no button is down
   
   If Button = vbLeftButton And Not GaugeForm.ActiveWidget Is Nothing Then 'Form-Dragging (under certain conditions)
      If StrComp(GaugeForm.ActiveWidget.Key, DragWidgetKey, vbTextCompare) Then Exit Sub 'leave, if the ActiveWidget.Key is not the DragWidgetKey
-     FX = (X - x0) * GaugeForm.WidgetRoot.Zoom + GaugeForm.Left
-     FY = (Y - y0) * GaugeForm.WidgetRoot.Zoom + GaugeForm.Top
+     FX = (x - x0) * GaugeForm.WidgetRoot.Zoom + GaugeForm.Left
+     FY = (y - y0) * GaugeForm.WidgetRoot.Zoom + GaugeForm.Top
      GaugeForm.Move FX, FY
   End If
 End Sub
@@ -113,7 +115,7 @@ Private Sub GaugeForm_MouseWheel(ByVal MouseKeys As Long, ByVal Rotation As Long
   If MouseKeys = 8 Then AdjustZoom FZ + Rotation / 1200  'change the Zoom only, when the Ctrl-Key is down
 End Sub
 Private Sub GaugeForm_ResizeWithDimensionsDIP(ByVal dx As Single, ByVal dy As Single)
-  If Not CloseWidget Is Nothing Then CloseWidget.Move dx - 32, 0, 32, 32 'place the close-widget at the top-right of the form
+  'If Not CloseWidget Is Nothing Then CloseWidget.Move dx - 32, 0, 32, 32 'place the close-widget at the top-right of the form
 End Sub
 
 Private Sub AdjustZoom(ByVal NewZoom As Single)
@@ -129,7 +131,7 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub GaugeForm_MouseDown(Button As Integer, shift As Integer, X As Single, Y As Single)
+Private Sub GaugeForm_MouseDown(Button As Integer, shift As Integer, x As Single, y As Single)
    On Error GoTo W_MouseDown_Error
 
     If Button = vbRightButton Then
