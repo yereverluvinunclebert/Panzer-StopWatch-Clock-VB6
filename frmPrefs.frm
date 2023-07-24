@@ -826,22 +826,22 @@ Begin VB.Form panzerPrefs
       Width           =   7500
       Begin VB.Frame fraGeneralInner 
          BorderStyle     =   0  'None
-         Height          =   3000
+         Height          =   3105
          Left            =   465
          TabIndex        =   53
          Top             =   300
          Width           =   6600
          Begin VB.CheckBox chkGenStartup 
-            Caption         =   "Run the Earth Widget at Windows Startup *"
-            Height          =   225
+            Caption         =   "Run the Stop Watch Widget at Windows Startup *"
+            Height          =   465
             Left            =   2010
             TabIndex        =   104
             ToolTipText     =   "Check this box to enable the automatic start of the program when Windows is started."
-            Top             =   2775
-            Width           =   3555
+            Top             =   2655
+            Width           =   3900
          End
          Begin VB.CheckBox chkGaugeFunctions 
-            Caption         =   "Rotating Earth Enabled *"
+            Caption         =   "Ticking toggle *"
             Height          =   225
             Left            =   1995
             TabIndex        =   54
@@ -975,7 +975,7 @@ Begin VB.Form panzerPrefs
             Width           =   345
          End
          Begin VB.Label lblGeneral 
-            Caption         =   "When checked this box enables the spinning earth functionality. That's it! *"
+            Caption         =   "When checked this box enables the clock hands - That's it! *"
             Height          =   660
             Index           =   2
             Left            =   2025
@@ -1582,7 +1582,7 @@ Begin VB.Form panzerPrefs
                Width           =   5430
             End
             Begin VB.Label lblDebug 
-               Caption         =   $"frmPrefs.frx":40F8
+               Caption         =   $"frmPrefs.frx":40FC
                Height          =   930
                Index           =   9
                Left            =   1545
@@ -3282,7 +3282,7 @@ Private Sub lblGitHub_dblClick()
     
     answer = MsgBox("This option opens a browser window and take you straight to Github. Proceed?", vbExclamation + vbYesNo)
     If answer = vbYes Then
-       Call ShellExecute(Me.hwnd, "Open", "https://github.com/yereverluvinunclebert/Panzer-Earth-gauge-VB6", vbNullString, App.Path, 1)
+       Call ShellExecute(Me.hwnd, "Open", "https://github.com/yereverluvinunclebert/Panzer-StopWatch-Clock-VB6", vbNullString, App.Path, 1)
     End If
 End Sub
 
