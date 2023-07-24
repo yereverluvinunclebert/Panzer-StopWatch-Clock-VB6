@@ -1,0 +1,57 @@
+PANZER EARTH WIDGET
+
+The Panzer Earth Widget is a utility displaying a rotating earth in a dieselpunk fashion on your desktop. It can be resized and placed anywhere on your desktop. It uses minimal resources and helps give your desktop a dieselpunk make-over. 
+
+Right-click on the widget to display the function menu, mouse hover over the widget and press CTRL+mousewheel up/down to resize. It works well on Windows XP to Windoes 11 (sic).
+
+This version was developed on Windows 7 using 32 bit VisualBasic 6 as a FOSS project creating a WoW64 widget for the desktop. 
+
+It is open source to allow easy configuration, bug-fixing, enhancement and community contribution towards free-and-useful VB6 utilities that can be created by anyone. The first step was the creation of this template program to form the basis for the conversion of other desktop utilities or 'widgets'. A future step is new VB6 widgets with more functionality and then hopefully, conversion of each to RADBasic/TwinBasic for future-proofing and 64bit-ness. 
+
+This utility is one of a set of steampunk and dieselpunk widgets. That you can find here on Deviantart: https://www.deviantart.com/yereverluvinuncleber/gallery
+
+I do hope you enjoy using this utility and others. Your own software enhancements and contributions will be gratefully received if you choose to contribute.
+
+CREDITS:
+
+I have really tried to maintain the credits as the project has progressed. If I have made a mistake and left someone out then do forgive me. I will make amends if anyone points out my mistake in leaving someone out.
+
+MicroSoft in the 90s - MS built good, lean and useful tools in the late 90s/early 2000s. Thanks for VB6.
+
+Olaf Schmidt    - This tool was built using the RichClient RC5 Cairo wrapper for VB6. Specifically the components using transparency. Thanks for the massive effort Olaf in creating Cairo counterparts for all VB6 native controls and giving us access to advanced features on controls such as transparency.
+
+Shuja Ali @ codeguru for his settings.ini code.
+
+ALLAPI.COM        For the registry reading code.
+
+Rxbagain on codeguru for his Open File common dialog code without a dependent OCX
+http://forums.codeguru.com/member.php?92278-rxbagain
+
+si_the_geek       for his special folder code
+
+Elroy on VB forums for the balloon tooltips
+
+Harry Whitfield for his quality testing, brain stimulation and being an unwitting source of inspiration.
+
+
+LICENCE AGREEMENTS:
+
+Copyright © 2023 Dean Beedell
+
+Using this program implies you have accepted the licence. The GPL licence applies to the code this software Is provided as-is, without any express or implied warranty. In no event will the
+author be held liable for any damages arising from the use of this software. Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation is required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public Licence as published by the Free Software Foundation; either version 2 of the Licence, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public Licence for more details.
+
+You should have received a copy of the GNU General Public Licence along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301
+USA
+
+If you use this software in any way whatsoever then that implies acceptance of the licence. If you do not wish to comply with the licence terms then please remove the download, binary and source code from your systems immediately. 
+
+You may use any of my own imagery in your own creations but commercially only with my permission. In all other non-commercial cases I require a credit to the original artist using my name or one of my pseudonyms and a link to my site. With regard to the commercial use of incorporated images, permission and a licence would need to be obtained from the original owner and creator, ie. me.

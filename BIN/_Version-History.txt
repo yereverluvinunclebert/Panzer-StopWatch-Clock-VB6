@@ -1,0 +1,748 @@
+version 6.0.0.15
+- cWebView2:  now using *App-specific* UserData-Folders, in case the UserData-Param was left out in the Bind-Method
+- cSimplePSD: a bit of hardening, to properly cooperate with a "wider range of PSD-Files"
+- RC6Widgets got a new cwAlphaImg Widget
+
+
+version 6.0.0.14
+- cWebView2: restored the former behaviour of AddObject/COM-support (as it was in 6.0.0.12)
+ 
+ 
+version 6.0.0.13
+- updated cairo_sqlite to newest SQLite-Version: 3.42.0
+- cWebView2: added the (cancellable) NavigationStarting-Event (to allow for userdefined URI-Navigation WhiteListing/BlackListing)
+- cWebView2: added the (cancellable) WebResourceRequested-Event (to allow for user-permitted ResourceLoading of Images, Videos, Sounds, etc.)
+- cWebView2: prevented "vb-HostObject not found" errors in the console of the DevTools-Window
+- added a new Class: cSimplePSD, to parse Alpha-Layers into enumerable cairo-Surfaces directly from PhotoShop-*.psd files
+
+
+version 6.0.0.12
+- another attempt to make cWebView2-Loading-Behaviour more compatible with other Host-Processes than VB6-compiled executables
+  (now passing manually allocated WStrings instead of StrPtr(to BSTR) in the ICoreWebView2EnvironmentOptions-Interface)
+- fix and sanity-check for the first (StdDev) parameter of the cCairoSurface.GaussianBlur method 
+  (now returning just an unchanged copy of the original surface, instead of crashing)
+
+
+version 6.0.0.11
+- update of this distribution-packages MS-"WebView2Loader.dll" (to newest version 1.0.1462.37)
+- attempt to improve cWebView2-Loading-Behaviour in the Bind-Method 
+  (by determining the "compatible-version" via GetAvailableCoreWebView2BrowserVersionString-FlatAPI)
+
+
+version 6.0.0.10
+- updated cairo_sqlite to newest SQLite-Version: 3.39.2
+- introduced a new cCursor-Class for more lightweight "Stepping" through SQLite-Resultsets...
+  (usage basically like a CmdObject - followed by: Do While cCursor.Step: V = cCursor.ColVal(idx): Loop)
+- added new Events to cWebView2 (WebResourceResponseReceived, FrameCreated, DownloadStarting)
+- ... as well as the new (Read/Write) Setting-Props: 
+      - UserAgent, AreBrowserAcceleratorKeysEnabled, IsPasswordAutosaveEnabled, 
+      - IsGeneralAutofillEnabled, IsPinchZoomEnabled, IsSwipeNavigationEnabled
+- cArrayList.BindToArray now allows also "external Bindings" (Mappings, to predefined - normal VB-Arrays)
+- cFSO.GetFileHash accepts now either: "normal FileNames" - or alternatively cStream-Objects
+- the cCollection.SerializeToJson-functionality now also supports "leaf-members" of type:
+      - cRecordset, cArrayList, cSortedDictionary
+ 
+
+version: 6.0.0.9
+- introduced new Class: cBigInt  (available via New_c.BigInt(InitValue)
+- introduced new Class: cArrInfo (available via New_c.ArrInfo)
+- introduced new Class: cMultiFrameImg (for decoding of *.tif, animated *.gif and *.webp + *.heic on Win10)
+- BugFix in cDirList.DirWatchStart (when used with Paths to Network-Drives or -Shares)
+  (ReceiveBuffer-fallback to max 64kB in case of Shares was not working properly)
+- cCairoPattern now contains wrapper-methods, covering the cairo-Mesh-functionality
+- cWebServer (better recognized utf8-text-transport by specifying "text/html; charset=utf-8" -
+  instead of just: "text/html" in the default-text-response Content-Type header)
+- cConnection was enhanced with two new error-related Methods (https://www.sqlite.org/c3ref/errcode.html):
+  LastDBErrCode(Optional ByVal GetExtendedCode As Boolean) As Long
+  GetSqliteErrStr(ByVal ResultCode As Long) As String
+- cCrypt: got two new Methods (HexEncode, HexDecode)
+- cWebView2 enhancements:
+  the Class-wrapper now informs the chromium-subsystem about its current TopLevel-Window-Position 
+  new Method: NavigateWithWebResourceRequest(ByVal URI As String, Optional ByVal Method As String = "GET", _
+              Optional ByVal Headers_CrLfSeparated As String, Optional ContentStream As cStream, _
+              Optional ByVal SecondsToWaitForRequestComplete As Double = 8)
+
+
+version: 6.0.0.8
+- cWidgetForm: new TimerInterval-Prop + new Timer-Event (for more compatibility with VBA-UserForms)
+- new cUTC-Class for TimeConversions (reachable via New_c.UTC)
+- new convenience-method cCairoContext.SaveAndTransform
+
+
+version: 6.0.0.7
+- added a new optional Param (WithoutExtension As Boolean = False) to cFSO.GetFileNameFromFullPath
+- added a new cVidCap-Class (for easy capturing of Frames from Camera-Devices)
+- added 2 new Properties to cCSV (ReplaceDoubledQuotChars and ExpectedEncoding) 
+  and fixed a small glitch (which was only happening when a quoted textcell ended with sequence: "..."" ")
+- cWidgetRoot: avoid SubPixel-precise placements of moving Widgets again (for the sake of sharp Font-rendering)
+  (introduced this in version 6.0.0.4 as a rendering-optimization for "zoomed Widgets")
+
+
+version: 6.0.0.6
+- added new Optional Constructor-Params to: New_c.MemDB(...), .CSV(...) and .SVG(...)
+- added .Add and .AddNL Aliases to cStringBuilder
+- added cFSO.GetFileNameWithoutExtension
+- fixed inconsistent NewLine-reporting-behaviour on cCSV (only happened in "FullRowScan-Mode" for vbLF and vbCr)
+  (FullRowScanMode can now be ensured already at construction-time via: New_c.CSV(vbNullChar, vbNullChar)
+- added an IStreamUnk Getter-method to cStream (to make it usable outside, in conjunction with Win32-APIs)
+- fixed an issue with adBigInt Field-Values when imported via cConnection.CreateTableFromAdoRs
+
+
+version: 6.0.0.5
+- fix for ZStd-compression-methods (which are now again exported as _stdcall in cairo_sqlite.dll, 
+  instead of the prior _cdecl-exports) ... thanks to Jason, who reported this 
+
+- fix in cWebView2, now accepting userdefined FixedRuntime-Folders again - in the BindTo-method,
+  in case the FixedRuntime was not sitting behind \Programs x86\ ...(reason: new WebView2Loaders now expect 
+  a prefilled 'TargetCompatibleBrowserVersion' in the config-object, which was missing in this case)
+  
+
+version: 6.0.0.4
+- updated SQLite to SQLite-Version 3.34.1
+- cConnection now supports different codecs for DB-encryption (defaulting to CODEC_TYPE_RC4 for backward-compatibility)
+
+- cFSO.MultiFileDelete ... made the second (not really useful) Param DstPathOrArrayOrCollection an Optional one
+  (to not break code of earlier versions)
+- cFSO ... GetPathNameFromFullPath, GetFileNameFromFullPath, GetFileExtension now return String explicitely
+  (and not Variant ... also ensured, that GetFileExtension now enforces a lower-case returnvalue)
+
+- removed cRPCConnection.mCompression-Property from the Public Interface (making it a Private Var)
+- cRPCConnection now has a PublicKey-Property (the workaround via Password-Prop was left in place though)
+
+- cCairoContext... small fix for restoring the previous (color)pattern after a TextOutput in a different color
+  (this was introduced in 6.0.0.3 .. the behaviour should be, that TextColor and "last set color-pattern" are independent)
+
+
+version: 6.0.0.3
+- added a new Version-Property to New_c (cConstructor)
+- added a new cEasing-Class, as well as a new Animate-Method on cWidgetBase and cWidgetForm  
+- performance-optimization in Method: cCairoContext.RenderSurfaceContent (thanks to Colin, for pointing that out)
+- changed Type of the cConnection.Synchronous-Property from Boolean to an Enum 
+  (taking care of backward-compatibility internally, in case someone passes a True=-1)
+- added cConnection.GetRs and .ExecCmd for Parameter-Supporting Query and Command-OneLiners
+- added new cChart and cChartAxis Classes for simple Chart-Rendering
+- added a new cwCanvas-WidgetClass (including built-in ControlPoint-support for easier Demo-Scenarios)
+- added a new Method cCairoPattern.CenterCoordSys 
+- added a new Method cCairo.CreateCheckerPattern (to make this a OneLiner for creating BackGrounds in Alpha-Demos)
+- added a new cWidgetForm-Event: ResizeWithDimensionsDIP ... (incorporating the current ZoomFactor of the Form)
+  (also added were new ScaleWidthDIP and ScaleHeightDIP properties) 
+- cDisplay now has additional DPI, Zoom and TwipsPerPixelX/Y Properties
+- directly included cwCanvas-Widget into RC6.dll
+
+version: 6.0.0.2
+- Implemented Touch-Event support on cWidgetBase (which has to be enabled via W-ImplementsTouchMessages = True)
+- Param-enhancements on the NewWindowRequested-Event of cWebView2 
+  (which now has also: ..., URI As String, as well as NewWindowFeatures As cCollection <- as a JSON-Object)
+
+- new version of the main-satellite-(flat)-dll -> now named 'cairo_sqlite.dll'
+  (upgrading the quite old cairo-sources to the newest version, and along with it,
+   also its other dependencies as libPng, zlib, sqlite, etc. in their newest versions)
+
+- new Class cWebView2 (which offers a binding to the new MS-Edge-Chromium-WebControl)...
+  the wrapped new (and small) "flat-dll" which is now included in the BaseDlls here, is named:
+  'WebView2Loader.dll' 
+  Please note, that this loader-dll expects an "evergreen" WebView-install one has to ensure beforehand, 
+  available at this official MS-download-link: https://go.microsoft.com/fwlink/p/?LinkId=2124703
+
+- new Class cHashD (as a fast, hash-based Key/Value-pair container-object)
+
+- new Dynamic Object (instantiatable via New_c.DynObj) with support for dynamic Properties and functions
+
+
+------------------------------------------------------------------------------------------------------------
+Below the older Progress-listing of the previous version 5 of the RichClient (which the RC6-lib is based on) 
+------------------------------------------------------------------------------------------------------------
+ 
+Version: 5.0.79
+- Fix for the (rarely used) cCollection.ItemExists-Method when comparing StringContent of added Items  
+  Thanks to Wolfgang (and Jason Peter Brown), for pointing this out (supplying the needed fix already)
+- Fix in cSelectCommand when parsing named Parameters which don't have enough whitespace around them,
+  and are then followed by SQLites String-Concat-Operator (||)
+     e.g.        "SELECT @x||'/'||@y;"   (which didn't work before, but now does)
+     instead of: "SELECT @x ||'/'||@y;"  (which did work before)
+  Thanks to Wolfgang Enzinger for detecting this
+ 
+
+Version: 5.0.78
+- MemLeak-Fix for the cStream.GetSize-Method (now not requesting the STATSTG.pwcsName member anymore)
+  Thanks to Jason Peter Brown, for detecting this (it became obvious only with a high count of repeated FileStream-requests)...
+
+
+Version: 5.0.77
+- BugFix for the old (GDI-related) cDC-Class (in the DrawLine-Method, which did not pass a Pointer correctly)
+
+
+Version: 5.0.76
+- cActiveScript (in "JScript9"-mode) is now properly switched into the more advanced SCRIPTLANGUAGEVERSION_5_8
+  (which then supports e.g. the built-in JSON-object)
+
+
+Version: 5.0.75
+- IEnumerable-support (via New_c.EnumerateOn(...)) now suppresses Interface-casting-attempts from IEnumVariants-IUnknown to IDispatch 
+- cArrayList now comes with added For Each support 
+- Finally, the functionality of the vbFriendlyInterfaces-Dll is now integrated into the RC5, and available via New_c.VBI
+  ...original code and demos at: http://www.vbforums.com/showthread.php?807263-VB6-LightWeight-COM-and-vbFriendly-BaseInterfaces
+  The slightly adapted Demos for the RC5.VBI-support are available here: http://vbRichClient.com/Downloads/TutorialApps_RC5.VBI.zip
+
+
+Version: 5.0.74
+- cWidgetForm.StartupPosition = vbStartUpOwner can now be used, to center a TopLevel-Form on the OwnerForm which started the ChildForm
+- Optimizations in the Startup/Show-phase of cWidgetForms (less flickering)
+- there's now also less flickering (on the OwnerForm(s) underneath) after Modal-Forms were closed 
+
+
+Version: 5.0.73
+- cWidgetForm.StartupPosition = vbStartUpScreen can now be used, to center a TopLevel-Form on the current Monitor
+- security-related: the RPCServer now raises a serverside-error, when the specified Dll-Filename does not end with '.dll'
+
+
+Version: 5.0.72
+- not really a fix, but instead a "behaviour change" of the recently fixed cArrayList.Queue/DeQueue
+  (switching back to the former behaviour of: "adding to the end, removing from the front", when it comes to queueing)
+  ... both versions (5.0.71 and this one) are still bugfree (queueing-wise), ...
+  ... but the behaviour-change introduced into 5.0.71 was "adding to the front, removing from the end"
+  ... (which caused different element-sequences within the ArrayList index-wise)
+
+
+Version: 5.0.71
+- fixed incorrect behaviour with cArrayList.Queue/DeQueue (this worked before IIRC, 
+  so this error was in all likelihood introduced as a side-effect with the changes on Pop/Dequeue in version 5.0.68)
+
+
+Version: 5.0.70
+- fixed a problem with cWidgetRoot.ActiveWidget (which only happens when cWidgetRoot.DesignMode is True)
+
+
+Version: 5.0.69 
+- hardening with regards to "making copies of empty VariantArrays"
+  (affected were cConstructor.vtblCall and cRecordset.GetRows in case of "no Records")
+  (https://answers.microsoft.com/en-us/msoffice/forum/all/windows-update-2019-08-cumulative-update-has/baeea089-9bba-4a2a-9660-0a220f1656e9)
+
+
+Version: 5.0.68 
+- vb_cairo_sqlite.dll now updated to recent SQLite 3.28.0 (with support for window-functions, plus the sqlar-extension)
+- fix on cArrayList in vbVariant-Mode (when Objects were store in those Variants, and .Pop or .Dequeue Methods were called)
+- smaller fixes/enhancements on cFormula (change of Operator-precedence of / and \ ... as well as support for e-Notation of numbers)
+- added an additional Cairo-FontFallback in case an OutputString contains symbols in the "emoji-category"  
+
+
+Version: 5.0.67 
+- vb_cairo_sqlite.dll now updated to recent SQLite 3.24.0 (with support for the new ZipFile VirtualTable-extension)
+- fix for Unicode-Textrendering via Cairo on Win8.1 and Win10 (adjustments to the new shipping Fonts in the UniScribe-FontFallbacks)
+- better Error-Messages for wrong SQL in SQLite cCommand and cSelectCommand-Objects
+
+  
+Version: 5.0.66 
+- adjust the VB-Circle-Implementation of cVBDraw, to support negative Angle-Arguments as well (thanks to Passel for the hint)
+- fix for cFSO.GetFileExtension in case the FileName doesn't contain a '.' at all (thanks to Jason for pointing that out)
+  
+
+Version: 5.0.65 
+- Performance-Optimizations in cStringBuilder
+- cActiveScript now tries to suppress the popping-up of an external Debugger (by specifying the SCRIPTTEXT_HOSTMANAGESSOURCE Flag)
+
+  
+Version: 5.0.64 
+- vb_cairo_sqlite.dll now updated to recent SQLite 3.21.0 (with support for the new CSV- and DBPage- VirtualTables)
+  ( CSV-extension usage:  http://www.sqlite.org/csv.html  ... DBPage-usage-Link: https://sqlite.org/src/file/src/dbpage.c )
+- slight changes to the SubClassing- and Unload-Behaviour of cWidgetRoot and (Client)cWidgetForms for more IDE-stability
+- enhancements on the WidgetEngine to support Overflow:Auto/Scroll-behaviour in any Widget
+
+
+Version: 5.0.63 
+- cCSV: treat intermittent ("Inter-Column") Byte-Values in the low ASCII-range < 32 as WhiteSpace too (thanks to Bart Smissaert for detecting that)
+- cFSO: the Structured-Storage-support (see version 5.0.62-comments below) now also allows the hand-out 
+        of a StructuredStorage-"Directory" as a JSON-Byte-Array which will reflect the entire Hierarchy of the SubTree
+
+
+Version: 5.0.62
+- SQLite: cTable/cColumns correct the parsing/mapping of cColumn-Props to the Values in complex column-definitions
+          cConnection.CopyDataBase -> take over potentially pre-existing userdefined-Collations and -Functions into the new DB-Connection
+         (thanks again to Wolfgang Enzinger for providing all these "weird", but nevertheless correct examples... ;-))    
+- cCSV: in a quoted Text-Cell - another (double-quoted) Part which is followed by a comma, should not lead to a new cell-detection 
+         (thanks to Bart Smissaert for detecting that)
+- cFSO: for a bit more convenience with Structured-Storage, the cFSO.OpenFileStream-method now allows direct Stream-access 
+        on a SSTG-file using ">" as Path-separators behind the Filename like:
+        FilePathToStructuredStorageFile>StreamName  ... or when reaching deeper into the hierarchy is required:
+        FilePathToStructuredStorageFile>StorageDirectoryName>StreamName
+
+Version: 5.0.61
+- SQLite-cTable/cColumns ... again SQL-comments within Create Table statements (now working properly)
+-    ... at the occasion also better parsing for complex Check-Contstraints (thanks to Wolfgang Enzinger for the example)
+- cCSV: cancel the CSV-Parsing immediately, when a Value <> 0 is returned from the CallBack-function
+
+Version: 5.0.60
+- SQLite-cTable/cColumns ... skip SQL-comments within Create Table statements (when building the Object-Model)
+- handle '... display="none" ... attributes in SVG-Nodes properly
+
+Version: 5.0.59
+- more tolerance in parsing SVG-path-parameters (q/Q, s/S, t/T ... widening the range of properly rendered svg-images)
+- more Buffer-space for RPCServer-transfers (16MB per RPC in both directions)
+
+Version: 5.0.58
+- vb_cairo_sqlite.dll now updated to recent SQLite 3.17.0
+- internal cosmetic changes in cDataSource
+
+Version: 5.0.57
+- better synchronization of Recordset-Moves between a derived cRecordset.DataSource and the cRecordset itself
+  (e.g. for usage in a VB6-DataGrid, which doesn't hand-out a "current RowIndex")
+  
+Version: 5.0.56
+- added support to cCSV for pure LineParsing-Mode (enabled by setting ColSepChar and QuoteChar to Zero before parsing)
+- fixed a small Bug in cDataBase.NameInBrackets - thanks to Carlos for pointing that out
+  (now not returning an empty string, when in the attach-call a bracketed Name was already given)
+- added support for the (much faster) Chakra-Engine (JScript9.dll) in cActiveScripting (by specifying "Chakra" or "JScript9" 
+  as the engine-name - the RC5-COMObjects are available also from there, over New_c and Cairo as usual, especially useful in 
+  these scripting-contexts is the direct support for COM-encapsulated (typed) SafeArrays over New_c.ArrayList)
+
+Version: 5.0.55
+- vb_cairo_sqlite.dll now updated to recent SQLite 3.16.2
+- enabled the <Alt><Space> Key-combination (which shows the Forms System-Menu) for TopLevel-cWidgetForms
+- fixed a bug in the Svg-Parser (sequences which incorporate e-notation, but then are immediately
+  followed by another neg. number without spaces like this: -1.123e-14-123.45 are now properly recognized)
+
+Version: 5.0.54
+- fix an issue with FontUnderline in "PathOnly-Mode" of the DrawText and TexOut calls
+  the line is now drawn as a Rectangle, to allow for the same (later happening) Fill- and Stroke-Options as the Font-Outlines
+
+Version: 5.0.53
+- change the behaviour of the cFSO-BrowseForFolder-Callback, to always support the "KeepDialogOpen"-Param (in case of a shown EditBox)
+
+Version: 5.0.52
+- fix the cWebServer.Listen Method, to allow a successful bind against the "generic IP" 0.0.0.0 
+  (before the fix, cTCPServer.GetHostIP("0.0.0.0") was falling back to the loopback-interface "127.0.0.1")
+  Thanks to Pekko for pointing that out...
+  
+Version: 5.0.51
+- vb_cairo_sqlite.dll now updated to recent SQLite 3.15
+- more tolerance for the cCSV-Parser (when within quoted fields)
+- non-critical fix in the Ratcliff-Routine (extension-function for SQLite) ... 
+  (thanks to Eduardo for finding that - and Larry Serflaten for the suggested fix)
+
+Version: 5.0.50
+- vb_cairo_sqlite.dll now updated to recent SQLite 3.13 
+- download-package now contains a small vbRichClient5.manifest - for SxS based regfree creation in Scripting-environments,
+  the manifest only containing the ClsIID for the New_c Constructor (more is not needed) - usage would be: 
+  Set SxS = CreateObject("Microsoft.Windows.ActCtx")  
+      SxS.Manifest = ...\PathTo\vbRichClient5.manifest
+  Set New_c = SxS.CreateObject("vbRichClient5.cConstructor")
+  
+Version: 5.0.49
+- implemented a New_w Method (for regfree Widget-Creation) in cLangExtension, which extends the abilities of the cActiveScript-Host
+ 
+Version: 5.0.48
+- New Class "cActiveScript", which allows ScriptHosting without using the MS-ScriptControl
+
+Version: 5.0.47
+- Mapping of the single SQL(ite)-Wildcard-Char '_' to the proper '?' Wildcard for the (overridden) Like-Function of the Wrapper
+- cArrayList now supports also "Empty Variants" as the target-param in the cArrayList.CopyToArray method.
+
+Version: 5.0.46
+- Mapping of the (global) IAudioEndPointVolume to the cSimpleAudioVolume-Class (handed out per: cMMDevice.Activate(AudioEndpointVolume) )
+
+Version: 5.0.45
+- Allow instantiation of any RC5-Class on its own thread per retrieving a cThreadHandler-instance this way:
+  Set TH = New_c.RegFree.ThreadObjectCreate("ThreadKey", "New_c", "FSO") 'instantiates a cFSO (using "New_c" instead of a Dll-Name)
+
+Version: 5.0.44
+- make cCairoContext.RenderSurfaceContent aware of the current WidgetRoot-Zoom on a given Context (for better Quality)
+
+Version: 5.0.43
+- new SQLite-version in vb_cairo_sqlite.dll (now at the latest release 3.12)
+- changed the built-in FastLZ-compressor to LZ4 now (for better compression, and much higher decompression-speed)
+
+Version: 5.0.42
+- synchronizing of the RC5-internal cTheme-Class with the current one of the vbWidgets-Project
+  (now supporting the Case: thmTypeProgressFace as well)
+
+Version: 5.0.41
+- performance-optimization for cCollection.Prop(Key) = SomeItem (no need to scan the KeySpace twice)
+- new SQLite-version in vb_cairo_sqlite.dll (now at the latest release 3.11)
+- added support for arbitrary precision math (BigInt-support) into vb_cairo_sqlite.dll 
+  (from gmplib.org, using mini-gmp.c and mini-gmp.h over __stdcall exports)
+
+Version: 5.0.40
+- enabled support for SQLites "File-URIs" in the Wrappers cConnection.CreateNewDB call
+  (FileURIs allow to work against a single InMemory-DB across threads)
+
+Version: 5.0.39
+- new SQLite-version in vb_cairo_sqlite.dll (now at the latest release 3.10.2)
+- fix, which deals with incorrectly set Transaction-Counters in case the SQLite-Wrappers cConnection-Obj
+  was working in "nested Named-SavePoints-Mode" - note, that this mode is not the default on a cConnection
+  (one has to enable this kind of transaction-support explicitely), so most Users shouldn't have been affected.
+
+Version: 5.0.38
+- enhanced cWebServer about WebSocket-support ...
+  At the Moment (to keep the BinComp) - this works only for ServerPush-scenarios, but this is IMO the most interesting 
+  case anyways. For the opposite direction (Browser sends Data to the Server), there's always the normal Ajax-POST-requests...
+ 
+Version: 5.0.37
+- enhanced the cCSV-Class-behaviour, so that it can be used now also as a plain Line- or Word-Parser
+  (this Class was always - and still is "huge-file-capable")
+
+Version: 5.0.36
+- new version of vb_cairo_sqlite.dll (SQLite-version 3.9.0 -> the new JSON- and FTS5 features are contained and enabled)
+- fixed inconsistencies of cWidgetForms.WindowState at the time of reporting (and reading it) in the Resize-Events 
+  (thanks to Roberto Mior for pointing that out)
+
+Version: 5.0.35
+- new version of vb_cairo_sqlite.dll (SQLite-version 3.8.11.1 - and newest libJPGturbo)
+- slightly better decoupled Request-Handling in cWebServer 
+
+Version: 5.0.34
+- increased the Max-Bytes-Volume for RPC-ClientRequest-Data from 2MB to 4MB in send-direction 
+  (in receive direction, the maximum byte-volume of the server-responses remains at 8MB)
+
+Version: 5.0.33
+- changed the cRPCConnection.Connect-Method internally back to a synchronously working HostName-to-IP-resolution
+  (also increased the Max-TimeOut-Interval of the still asynchronously working cTCPClient.GetIP method from its former
+   100msec to now 300msec for a little bit more breathing-space in case of stressed Windows-Domain- or Name-Servers).
+
+Version: 5.0.32
+- enhanced the cUniClipBoard-class about UTF8-aware CF_HTML-readout capabilities
+
+Version: 5.0.31
+- changed the ZeroChar-Termination-Detection in cFSO.ShowOpenDialog- and ShowSaveDialog from Double-ZeroChars to Single-ZeroChars -
+  in case OFN_ALLOWMULTISELECT was *not* set (the MSDN was a bit ambigous about that - thanks to Reexre for discovering that)
+
+Version: 5.0.30
+- make the (ADO-Connection based) SQLite-cConverter-Class aware of Column-Default-Values (used in JET-SQL) which define AutoTimeStamps as: Date() and Now()
+ 
+Version: 5.0.29
+- optimizations whilst Resizing takes place (reduced rectangles for Form-Background-Painting, also spared one RePaint coming from to WM_ERASEBACKGROUND)
+- hardened the older ucPanel-Mode in case of Stop-Button-Presses in the VB-IDE
+
+Version: 5.0.28
+- optimizations in the Form-Rendering-Engine (+ suppressing of a flickering Form-BackColor, when GPU-Surfaces are used against a Form without WidgetRoot)
+
+Version: 5.0.27
+- cColumn (one of the SQLite-Classes)... fix for parsing Column-constraint-infos when intermixed with Foreign-Key-Definitions per "REFERENCES"-Keyword
+  (thanks to Wolfgang Enzinger again, who found that and provided a Demo)
+
+Version: 5.0.26 
+- added four new methods to cCrypt (in addition to the MD5, SHA1 and SHA256 Methods there is now SHA384, SHA512 and their HMAC-variants as well)
+- internal performance-optimization when cMemDB.ExecCmd is called (using a cached CommandObject now, as long as the SQL-CommandString is not changed).
+
+Version: 5.0.25 
+- some enhancements in the Variant-serialization-code for RPC and Threading 
+  (support for empty (0 to -1) Arrays of all types + support for Object-serialization of cArrayList)
+- Thread-Events which were formerly coming in a bit "stuttering", now come in more fluently
+
+Version: 5.0.24 (including new companion-lib with SQLite-version 3.8.9)
+- cTable (one of the SQLite-Classes)... fix for parsing column-infos 
+  (when Primary-Key-Defs are followed by a Check-Constraint, thanks to Wolfgang Enzinger who found that)
+- cDirList (enhancements on the sorting-capabilities), the String-related SortOptions as:
+  dlSortByName, dlSortByDisplayName, dlSortByExtension will now sort "logically" (similar to the the Win-Explorer)
+  when passed as negative EnumValues (with a leading unary-minus, or using the appropriate new EnumValues:
+  dlSortByNameLogically, dlSortByDisplayNameLogically, dlSortByExtensionLogically)
+- cWidgetBase... slight improvements with ToolTip-Handling, the Positioning-Event (W_ShowToolTip) 
+  is now properly raised also in case of changing a ToolTips Caption per cWidgetBase.ToolTip-Prop.
+- on Win7 and higher, the Surface-Uploads (in DXSurface-Mode, useful for fast, final stretching) are using Direct2D instead
+  of DirectX now (working also within the reduced DX-capabilities of VM-Guest-OSes, thanks to Colin for the Test-Projects)
+- small backport-fix in the C-Sources of vb_cairo_sqlite.dll (to make cairo_in_stroke work more reliably also on 
+  non-flattened Paths (as Beziers for example).
+
+Version: 5.0.23
+- completed the implementation of cVBDraw, which implements the VB.Printer-Interface and is useful when 
+  somebody wants to work with VBs old Drawing-Commands against either a Cairo-Image- or -PDF-Surface
+- dragging of Widgets in cWidgetRoot.DesignMode now behaving a bit more like in the VB-IDE
+  (there's also a new Bubbling-Event "DesignDragAdjustXY" to react oneself with other coords
+   than the defaults whilst a Widget is Moving)
+- added a white-ish contrasting shadow to the DragCoordsCursor-TextOut at this occasion
+ 
+Version: 5.0.22
+- new (and much faster than e.g. the CSON-SQLite-C-Addon) JSON-serialization from SQLite-Recordsets with 
+  the new method: cRecordset.ToJSONUTF8 
+- fixed a misbehaviour with cWidgetForm.SetMinMaxDimensions (where dragging from Top/Left was causing a 
+  Form-Move too (switched from WM_WindowPosChanging to WM_GETMINMAXINFO to handle that problem)
+
+Version: 5.0.21 (including new companion-lib with SQLite-version 3.8.8.1)
+- small fix in the cConstructor.Timer construction-routine, in case one passes an Object into the Tag-Param
+- *new version of vb_cairo_sqlite* (now not only including QR-Decoding/Encoding-support, but also the latest 
+  SQLite-version 3.8.8.1)
+- please read the updated Library-Licenses for details on the quirc-lib by Daniel Beer - and for libqrencode
+  by Kentaro Fukuchi - in short, both licenses allow commercial usage... 
+  there's new cQRDecode- as well as cQREncode-Classes in the latest GitHub-version of the vbWidgets.dll
+  
+Version: 5.0.20
+- enhanced cFSO.GetFileIconSurface about the capability to understand also Paths of the Form ::{GUID} ...
+  and handing out the correct IconSurface in these cases too 
+
+Version: 5.0.19
+- fix in cDirList-FileWatcher-Functionality - don't throw a Dll-internal Error, when the watched directory itself gets moved 
+  or deleted from its "WatchedPath-Position" in the Fileystem (just report this by gracefully raising the DirWatch_Stop Event)
+- small fix in the cCSV-parser-class, to not hand out a leading quote-char in the first column 
+  (encountered on files where lines were ending with a quoted field - then starting with a quoted first-field on the next line)
+
+Version: 5.0.18
+- a small fix in cCairoContext.DrawRegularPolygon (rounding-error which became apparent only with larger Step-Counts)
+- the internal Cairo-Image-Loader now has fallbacks, to be able to load CMYK-JPGs - and respects embedded Color-Profiles
+  in *.png- and *.jpg-Files (if there are any)
+
+
+Version: 5.0.17
+- Fixed an issue with apparently double-freed strings (at the C++ end as well as at the VB end) on:
+  cWebKit.Evaluate(JScript)  ...  thanks to Dsalesa for discovering that 
+
+
+Version: 5.0.16
+- Fixed an issue within cPanelLayout and cPanelDef, happening on finland-locales 
+  (related to locale behaviour of the VBA.IsNumeric function, fixed by replacing it with a locale-invariant behaving version)
+- Don't raise Form_Click when DblClicking the TitleBar to maximize the Form ... thanks to Pekko for reporting both bugs 
+
+
+Version: 5.0.15
+- new class cCSV - for fast and generic, callback-based CSV-parsing with huge-file-support 
+  (the callbacks are ensured over the new interface ICSVCallback)
+
+
+Version: 5.0.14
+- new method on cConstructor - New_c.EnumerateOn(...) returns IEnumVariant and allows in conjunction with the new Interface
+  IEnumerable convenient callbacks into a Parent-Class (to enumerate any Parent-internal Content, without using a cCollection
+  or cSortedDictionary)
+
+
+Version: 5.0.13
+- enhancement on cCollection - more convenient access on cCollection-instances which give True for cCollection.IsJSONarray
+  (zerobased access to the members now not only per .ItemByIndex, but also directly per Default-Prop (.Item).
+- JSON-Parser now detects empty array-defintions reliably
+
+
+Version: 5.0.12
+- Bugfix for cEventCollection - adding with an already existing Key will throw an Error, though not cause a "hard-crash" afterwards anymore
+
+
+Version: 5.0.11
+- hardened the XML-parser in cSimpleSAX to not choke on certain types of malformed content (non-closed tags) anymore
+
+
+Version 5.0.10 (also updating to the newest SQLite-Version at this time - Nov. 2013 - 3.8.1)
+- On XP the cCrypt.Base64Enc-method left a trailing vbCrLf (apparently the CRYPT_STRING_NOCRLF-flag is only supported on Vista/Win7/Win8) (fixed now)
+- cWidgetBase - ensure correct Positioning of ToolTips when at the bottom- or right-most ScreenBorders (thanks to Martin Cabrera for the fix)
+
+
+Version 5.0.9
+- Hand out the correct Unicode-Names in cFSO.GetDriveFriendlyName and cDirList.FileNames/DirNames 
+  
+  
+Version 5.0.8
+- W_Paint-Event is now raised also as a bubbling-event ... for performance-reasons, this feature is only "active" currently, 
+  when the hosting Executable of the RC5-lib is wscript.exe or cscript.exe. But with that feature, it is possible to write 
+  cwWidget-Classes even when they are defined as a "pure VBScript-class" (existing Widgets from vbWidgets.dll and their 
+  Events are of course also possible to use within a *.vbs... the above Feature was only needed for Script-internal cwClass-Defs.
+  
+- Enhanced the Cairo-BlendOp-Operator-Enum about the extended Enum-definitions, included since cairo 1.10
+
+- a bit of cosmetics (not really a bug) in the way Win-Alpha-Icons are converted to Cairo-Alpha-Surfaces (with regards to pre-
+  multiplication-handling in conjunction with hBitmap-Masks - now antialiased borders are handled with a little bit more love). 
+
+- added a refresh-timer, which now allows, to have animations in "attached SideImages" of a Drag&Drop-Operation
+
+
+Version 5.0.7
+- small fix in cDataSource - now behaving correctly, when cDataSource contains a cCollection - and the DataSource is trying a
+  .MoveNext from out of a DataSource.BOF-position (before the BugFix, nothing happened) - now we move correctly to the first record
+- a bit of cosmetics (not really a bug) in the way Win-Alpha-Icons are converted to Cairo-Alpha-Surfaces (with regards to pre-
+  multiplication-handling in conjunction with hBitmap-Masks - now antialiased borders are handled with a little bit more love). 
+
+Version 5.0.6
+- small fix in cWebKit-cleanup-behaviour - (in case of a NewWindow-Request, which was cancelled/not-showing, there was a bit
+                                            too much of "internal cleanup" on the temporary, only "half-alive" WebKit-Instance)
+- fix in the Form-Engine-Destroy-Behaviour (in the cWidgetForm.Unload-Method) - now we take special care when destroying Popups,
+  that the appropriate Shadow-Style is correctly in place, before calling DestroyWindow (this bug was affecting only PopupForms
+  with an DropShadow-ExStyle - where "the shadow" was left visible after Unload ... but this happened only on XP, not on Vista or Win7).
+- fix which destroys ToolTips on MouseOver and MouseClick - and hides them as well, when their associated Widget is clicked.
+
+Version 5.0.5
+- fixed a small error in cSVG, when parsing the <path>-Tag (related to lower-case 'c' and 's' entries, which map against cairos RelCurveTo-API)
+- fixed a few Key-Handling - and Tabbing/Focussing-issues, when using a normal VB-Usercontrol (ucPanel.ctl) as the Base for a cWidgetRoot
+- fixed a visual glitch in the cWidgetBase-ToolTip-Handling (when the ToolTip is dynamically changed to an empty string - whilst being visible)
+
+Version 5.0.4  
+- extended the Lib about "Public availability" of the two Main-Entry-Points:
+  'New_c' (which hands out the cConstructor) ... and
+  'Cairo' (which hands out a cCairo-instance)
+  both without declaring Extra-Variables first ... e.g. when used in Test- or Demo-Projects,
+  this might be helpful, to avoid Extra-Typing of the otherwise needed Declaration-Lines in a *.bas
+- added two new Functions to cArrayList (AddElements and RemoveElements) ... useful, when more than a single Element needs to be added/removed  
+
+**** With Version 5.0.3 the planned Interface-Extensions are now (really) complete -> Binary-Compatibility is ON!  ****
+Will refrain from further additions to the Interface now, sorry for the BinComp-break in the two-weeks-interval 
+between Versions 5.0.2 and 5.0.3 - but a few requests came in within those 2 weeks... please excuse this last "small cleanup"
+**** Next round of Interface-Extensions (breaking the BinComp) is planned for Version 6 in about 1-2 years :-)     ****
+ 
+Version 5.0.3  
+- a smaller Fix for the Handling of the new Class cVBDraw, when used as VB-compatible "Drawer" at the WidgetRoot-BaseLayer
+  (Widgets on top of it were destroying those "VB-Drawings at Ground-Level" in some cases before the fix)
+  
+- larger performance-optimizations for the new Class cArrayList (thanks to Bart Smissaert who wrote 
+  some test-cases, which pointed to the right places, where such optimizations were needed most)
+  So, the List.Init Call is now optimized when in the first Optional Param an Array is passed.
+  Other optimizations were done behind the List.Sort-Method.
+  Also added a few important Optional Params in the Sort-Method (to be able to define the exact Sort-Scheme, when the List contains the String-Type)
+  New added method CopyToArray, which works basically as the BindToArray-method, but creates a real, free-standing VBArray (of the same Type) as a copy.
+  New Optional Params in both Methods (BindToArray and CopyToArray), to be able to specify the LBound of the Result
+  
+- some smaller "cosmetic changes" in cAudioCaptureClient with regards to the logarithmic-Scaling of the FFT-Bands 
+  also added a new FFTInputLevelFactor-Property on this Class, and exposed the FFT- and Peak-Calculations as a  
+  new public-method CalculateMeterInfoFromBuf(...) for usage with ones own, user-provided Wav-Buffers 
+  
+- just forgot - and now added the new Classes cTDD, and cTDDResult for easier writing of Tests in Test-Driven-Development-scenarios...
+  this will be useful for the development of the new Compiler, which can start now, based on the "RC5 Runtime-Environment"
+  
+- added a new Optional Param to the cRPCListener.StartServer Method (..., Optional ToCallBeforeAnyRPC As String)
+  In this Param, one can specify "DllName.dll.ClassName.Method", which needs to be called (Error-Free), before the 
+  "real" RPC-method is executed in *any* given RPC. If this specified "Before"-method is raising an Error internally
+  (due to a failed Authentication-Check for example), then this Error is backtransported to the Clientside,
+  and the real RPC-Method is *not* called (followed up) in this case, due to an early exit on the server-end.
+  This trick is helpful, to avoid a lot of special Authentication-Handling at the level of *each and every* normal
+  RPC-Method ... if the new Optional Param is set, this task gets moved "out of the way", into a single, dedicated Dll-location.
+  Thanks to Jason Peter Brown for the suggestion.
+
+
+Version 5.0.2 (including the newest SQLite-Version at this time - march 2013 - 3.7.16)
+
+- larger improvements under the hood in cairos Text-Rendering-queue (based on the UniScribe-API) ...
+  now about factor two faster, when working against Pixel-Surfaces - also in the Measurement-functions -
+  this was tuned, (or came to attention) whilst developing the new cwGrid-Widget, rendering quite a lot of (clipped) Text-Cells
+
+- new Methods in cConstructor: GetStringFromPointerW, + a whole new set of methods, to call functions by Pointer: CreateInstanceUnk, vtblCall,
+                               GetFuncPtr, cdeclCall, cdeclCallDirect, stdCall, stdCallDirect - especially the new __CallDirect functions work nearly
+                               as fast as a normal VB-Declare now (factor 10-20 faster than the older cCDecl-Class from Paul Caton, which was introduced
+                               in  RC4, but is now omitted from RC5, to achieve a bit of "weight-loss" on the Binary, and not include double-functionality
+                               new IsXPPlus, IsVistaPlus, IsWin7Plus, IsWin8Plus - those Is...Functions work independently from "Compatibility-Settings" 
+
+- new Methods in cCairo: CreateMenuItemRoot, CreateMenuItemFromJSON
+
+- new class cMenuItem (works in conjunction with the above two constructor-functions, it's a DataSource-Class, which is more powerful than the class-name
+                       may suggest..., it allows nested hierarchical MenuDefs and can serialize the state of a complete Menu-hierarchy at any time,
+                       with one line of code (to JSON). Currently used together with the new cwMenu-Widget 
+						   
+- new class cArrayList:  very memory-efficient, works "typed" (needs basically only the same memory as the native Array-Type) 
+                         methods as: Add(Optional BeforeIndex), Remove(by Index), Push, Pop, Queue, DeQueue, Sort, Clone...
+                         Serialization-Support (Content-Property) and BindArray/ReleaseArray-Functions, to span a native Array-Type over the current content
+						 
+- new class cVBDraw: This class provides the classic VB-Drawing-interface (Line, Circle, Point, Scale etc.) in exactly the same "old-fashioned param-typing"-style, 
+                     those older Drawing-Commands require - it can be retrieved over Cairo.CreateVBDrawing (to be bound to a VB-PicureBox but also to a PDF-Filename!) - 
+                     It is also directly available on a cWidgetRoot... In case of Set MyVBDrawing = cWidgetRoot.VBDrawing, the WidgetRoot binds itself internally
+                     to the VBDraw-Instance it hands out, and then VB-Drawing-commands are possible, which are shown below the Widgets-layer 
+					 (under the hood all is working antialiased and unicode-capable with cairo of course)
+					 
+- new Optional "FieldInfo"-Param in cConnection.CreateTableFromADORs
+
+- new cFields.Exists method in the SQLite-Wrapper (to check for FieldNames in a given cRecordset)
+
+- new Methods in cDirList -> DirWatchStart, DirWatchStop (incl. new appropriate Watch-Events for File-Add/Remove/Change-Actions, based on IOCompletionPorts)
+
+- new Methods in cFSO -> overhauled CreateFileStream/OpenFileStream-APIs - now using more Optional Params and
+                         the SHCreateStreamOnFileEx-API under the hood for "Huge-File-Support (>4GB)
+                         GetFileHash-Function (also for huge files >4GB), supporting MD5/SHA1/SHA256...(SHA1 with about 300-400MB/s throughput)
+                         SetFileAttributesEx (for Attributes, as well as optional FileDates, also working for Directories - unicode-capable)
+                         ShowFoldersDialog (unicode-capable, free Root- and Selection-Path specifying, Change- and Edit-Events)
+                         Unicode-FileName-capable DeleteFile, MoveFile, CopyFile, CreateDirectory, RemoveDirectory, CurrentDirectory
+                         New, easy to use, unicode-capable MultiFileOp-Functions (based on SHFileOperation, incl. returning of a "RenameOnCollision_MapCollection")
+                         EnsurePath (Auto-Creation of deeper nested Directories)
+                         EnsurePathEndSep (small Helper-Function, to ensure proper Path-Separator-Trailing or -Removing)
+						 
+- new Methods in cCrypt -> AESEncrypt/AESDecrypt in different depths (including optional InitVector- and PW-Hash-Params)
+
+- new Methods in cDataSource (too many to list - it's a whole set of functions for Tree(Node)-Support on nested cCollections ...
+                              initializable also directly from JSON-Strings - working in conjunction with the new, virtual cwTree-Widget)
+							  
+- a set of new Classes for the Vista/Win7/Win8 CoreAudio-API(cMMDeviceEnumerator, cMMDeviceCollection, cMMDevice, cPropertyStore
+                                                             cAudioClient, cAudioRenderClient, cAudioCaptureClient
+                                                             cSimpleAudioVolume, cAudioStreamVolume, cChannelAudioVolume, 
+                                                             cAudioMeterInformation, cMP3Resource
+                                                             cDeviceTopology, cControlInterface cConnector, cPartsList, 
+                                                             cPart, cAudioInputSelector
+															 
+- Win7/Win8 Touch-Interfaces -> in cWidgetForm and cWidgetRoot -> RegisterTouchWindow/UnRegisterTouchWindow/IsTouchWindow
+                                in cWidgetBase a new Event -> Touch(Infos() As cTouchInfo)
+                                a new Class -> cTouchInfo
+
+
+Version 5.0.1 
+- new Methods in cFSO -> Unicode-capable ShellExecute, IsFileWritable, ShowOpenDialog, ShowSaveDialog 
+- new Methods in cStream -> WriteFromLong, ReadToLong
+- new Methods in cCollection -> Prop, ItemExists, IndexBySortKeyIndex, SortKeyIndexByIndex
+- new Methods in the Archiver-Class cWebArchive -> ReadContentsFromByteArray, SaveContentsToByteArray
+- new Methods in cConnection (SQLite) -> OpenDBReadOnly, CreateTable, NewFieldDefs
+- new Methods in cCairoSurface -> AdjustColors/GetColorLUT(Brightness, Contrast, Gamma, Invert),
+                                  BindToArrayLong (In addition to BindArray for Long()-instead of Byte()-Arrays)
+- new Methods in cWidgetBase -> InnerWidget, ToolTipDuration, MoveToBack, CalculateScreenOffsets
+                                CalculateScreenDimensions, CalculateScreenPopupOffsets, CurrentMonitor
+- new Methods in cWidgetForm -> FullScreen, SetCapture/ReleaseCapture, Locked
+- new Method in cConstructor -> HPTimer (using the QuerPerformance-APIs under the hood)
+And finally included:
+Win7/Win8 Gesture-Interfaces -> in cWidgetForm and cWidgetRoot -> SetGestureConfig/GetGestureConfig
+								in cWidgetBase two new Events -> Gesture(Info As cGestureInfo) and GestureNotify()
+								two new Classes -> cGestureConfigList, cGestureInfo
+
+
+Version 5.0.0
+- cWidgetRoot.Windowless=False is now fully working (hWnd-based Widgets behave identically to the "original Windowless ones" now)
+- new cPanelLayout/cPanelDef-Classes, which ensure "FrameSet-like behaviour" (with Docking- and BackGround-ImageSplit-support)
+- overhauled WidgetLoading/WidgetSaving mechanism - new Interface (IXMLWidgetStore, accompanying IWidgetLoader)
+- new cWidgetBase.InnerWidget-Property (to exclude "inner-controls" from the XML-serialization, as e.g. 
+  on the cwTextBox, to exclude the serialization of its internally (dynamically) created cwScrollbars)
+- new cMemDB-convenience-class (wrapping an InMemory-SQLite-Connection for easier "LINQ-Like" usage)
+- new cDataSourceDisp/cDataSource-Classes which are Binding-related and can throw Events (across InProcess-Dlls)
+  (cDataSource can wrap two kind of Container-Types behind a commonly usable interface: cRecordset, cCollection)
+- new Property 'Prop' on the cCollection, which allows for "AddOrReplace"-behaviour in write-direction on a given Key
+  also added to cCollection were the methods IndexBySortKeyIndex() and SortKeyIndexByIndex() for easier dynamic 
+  switching between sort-modes (sorted and unsorted read-outs over the Index).
+- new cfLayoutView-Class, which in conjunction with the cDataSource___- and cPanel___-Classes can be used
+  in very loosely coupled XAML/WPF-like MVC-scenarios now
+- added GetCPUCoresCount-Function to cConstructor
+- added MemCopy-Function to cConstructor ...internally delegating to RtlMoveMemory ... this is an offer for people
+  who are unnerved by AVIRAs (false-positives) warnings, which in very small Exe-Projects are triggered 
+  already by the sheer existence of the RtlMoveMemory-API Declare-line ... on larger compiled Binaries
+  ...as e.g. the RC5-lib here... these warnings are not thrown by AVIRAs heuristics... so this is a way out of this mess)
+
+
+-------- major version-bump from 4 to 5 (DllName-Change from vbRichClient4.dll to vbRichClient5.dll ---------------
+
+
+Version 4.0.6
+- new cWidgetRoot.Windowless-Property
+- new cWidgetBase.ToolTipDuration-Property
+- new Class cWebArchive (a File- and InMemory-Archiver, which can load
+  its Content also from Resources)
+
+Version 4.0.5
+- fixed cWidgetForm.Load, which didn't behave exactly right in conjunction with
+  cWidgetForm.Show
+- new Method on cFSO (cFSO.IsFileWritable)
+- new Method on cThreadHandler (cThreadHandler.WaitForEmptyJobQueue)
+- new Version of vb_cairo_sqlite.dll (SQLite now again at recent version 3.7.14)
+
+Version 4.0.4
+- fixed TimeOut of 1.3sec whilst opening SQLite-Files on ReadOnly-Folders 
+  (or if the File itself got the ReadOnly-Attribute - using sqlite3_open_v2)
+- changed the chinese Default-Fallback-Font to the better matching "SimSun"
+  in case of "mixed Unicode-TextOutput" (thanks to Boxian Zhou, for pointing that out)
+
+Version 4.0.3
+- bugfix in cTCPServer.SendData (in case the connection was reset by 
+  the remote side) thanks to Wolfgang Wolf for catching that 
+- Added a new EnumValue for the first Param in cWidgetForms.Create
+  (Value 6 now ensures Borderless-Alpha-Windows, which behave similar
+  to PopUps, but do have a TaskBar-Entry and are not "TopMost"
+
+Version 4.0.2 
+- companion Dll vb_cairo_sqlite now includes latest SQLite 3.7.10 -
+  also fixed the contained chipmunk-based static-lib, so that it
+  doesn't depend on SSE2 capable CPUs anymore
+- fixed a Bug in cWidgetForms, when created on a separate Thread
+  (They need GetDeskTopWindow as a Parent then)
+- Workaround for missing RealmName-Prop in cWebResponse (now it's
+  possible to use: cWebResponse.ServerName = "ServerName (RealmName)"
+
+Version 4.0.1
+- stabilized the cWidgetForms-engine for Debugging-Safety
+- did the same enhancements also in cSubClass
+- Fixes/Performance-Enhancements in the Widget-Rendering-Stack
+- cFSO.ReadByteContent/ReadTextContent was fixed, to also give correct
+  results on existing Files with no content (an empty ByteArray or String)
+- Rs.UpdateBatch Fix, when working against an "attached Table" (when said
+  table was similarly named to an already existing table in the main-DB)

@@ -1,0 +1,3155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <title>Panzer Earth Cairo Widget Help</title>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+</head>
+
+
+<body>
+
+
+
+
+
+
+
+
+
+
+<h1>Panzer Earth VB6 Cairo Widget ver. 0.1.74 <br>
+
+
+
+</h1>
+
+
+
+Document Version No. 00013<br>
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<img style="width: 1464px; height: 912px;" title="Showing PanzerEarth in operation on Windows 7" src="pzEarth-on-desktop.png" alt="Showing PanzerEarth in operation on Windows 7">
+<big style="font-weight: bold;"><br>
+
+
+
+
+
+
+
+
+
+
+</big><span style="font-weight: bold;">Fig 01.
+Showing The Panzer Earth Widget in operation on Windows.</span><br>
+
+
+
+
+
+
+
+
+
+
+<big style="font-weight: bold;"><br>
+
+
+
+
+
+
+
+
+
+
+Welcome to the Panzer Earth Widget.</big><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+<img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">The
+Panzer Earth VB6 gauge&nbsp;is a simple utility displaying a rotating
+earth
+in a dieselpunk fashion on your desktop. It can be resized and placed
+anywhere on your desktop. It uses minimal resources and helps give your
+desktop a dieselpunk make-over. This help file describes just the
+rotating earth widget and not the other widgets shown above. The others
+are javascript desktop widgets that will be converted to VB6 'widgets'
+one at a time as time allows.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+Right-click on the widget to display the function menu, mouse hover
+over the widget and press CTRL+mousewheel up/down to resize. It works
+well on Windows XP to Windows 11.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+This version was developed on Windows 7 using 32 bit VisualBasic 6 as a
+FOSS project, creating a WoW64 widget for the desktop. <br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+It is open source to allow easy configuration, bug-fixing, enhancement
+and community contribution towards a set of free-and-useful VB6
+utilities that can be created by anyone. The first step was the
+creation of this template program to form the basis for the conversion
+of other desktop utilities or 'widgets' from other engines as shown
+above. A future step is new VB6 widgets with more functionality and
+then hopefully, conversion of each to RADBasic/TwinBasic for
+future-proofing and 64bit-ness. <br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+This utility is one of a set of steampunk and dieselpunk widgets. That
+you can find them all here on Deviantart:
+https://www.deviantart.com/yereverluvinuncleber/gallery<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+I do hope you enjoy using this utility and others. Your own software
+enhancements and contributions will be gratefully received if you ever
+choose to contribute.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<div class="indent">
+<h3>Installation</h3>
+
+
+
+
+
+
+
+
+
+
+<img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">When
+you run the&nbsp;SETUP.EXE a splash screen will appear for 1 brief second,
+then it will suggest default locations where you can install this
+utility. When the installation is complete it will run the program.
+That is it.<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+To uninstall the program, there is an uninstall.exe that will
+remove the application for you in the program folder. If you ever want
+to to reinstall a new version of the program, <span style="text-decoration: underline;">always uninstall the old
+version beforehand</span>.<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+<h3>Anti Virus Tools</h3>
+
+
+
+
+
+
+
+
+
+
+<img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">
+When you install the Panzer Earth Widget for the first time you will
+need to accept that your anti-virus tool will pause the installation to
+test the installation program for malware. Due to this program being
+written in VB6 and being a new program your a/v tool has not
+encountered, it WILL flag it as being potentially malware. This is a
+FALSE POSITIVE. This only occurs with such tools as Avast or similar, see below.<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+If you do not feel at ease with running this tool with an exception for
+malware scans, then I suggest <span style="text-decoration: underline;">you uninstall it and instead only run
+software you trust</span>. To help you gain that trust, the source code for
+this utility is on github. You can view and edit that code at your
+leisure and you can even compile the code for yourself. This should
+give you the confidence that you need. There is a link on the tool's
+right click menu that will take you straight through to the github page here: <a href="https://github.com/yereverluvinunclebert/Panzer-Earth-gauge-VB6">https://github.com/yereverluvinunclebert/Panzer-Earth-gauge-VB6</a> <br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+The
+a/v tool I have
+installed on my PC is Avast - the following&nbsp;is what occurs on
+installation on my system: When Avast first encounters the SETUP.EXE
+file
+it will test this for malware, it takes approx. 20-30 seconds to
+complete a scan. Let it finish. Once done, the setup will then run the
+installation and finally it will run Panzer Earth
+Cairo Widget itself. At this point Avast will do another scan to test
+the Panzer Earth Widget program binary (the .exe file) which will take
+another 30 seconds or so. When that second scan is complete you will
+find the rotating earth on your desktop running nomally.<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+Until
+the Avast databases are updated and it fully trusts the program, Avast
+may try to scan it every time it is run. This is a pain but it will
+eventually go away. In the meantime, if you want to prevent
+your a/v tool from scanning (and being continually intrusive on a
+trusted program
+such as this) then you will need to set an exception or an exclusion
+within
+Avast (or whichever anti-virus tool you use). &nbsp;Eventually, the
+creators of the various a/v tools will become familiar with this
+particular utility and the binary will no longer raise any false
+positives
+nor alarms. <br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+This is a new VB6 utility so it is an inevitable occurrence -
+being a new and unknown binary, it is of course&nbsp;frustrating but it
+will eventually go away.&nbsp;<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+<h3>Basic Functionality</h3>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;"></span><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">When
+you
+install and run the
+widget for the first time it will present you with the licence screen
+and launch the prefs. You must accept the licence terms to proceed
+further. The Preference screen allows you to configure the
+functionality of &nbsp;the rotating globe component of the Panzer
+Earth
+'widget'. The Rotating earth will also appear on your main monitor,
+animating slowly using minimal resources. This widget's functionality
+is limited as it is just a template for widgets yet to come, however,
+it can be increased in size, animation speed can be changed,
+opacity/transparency may be set as to the user's discretion. The widget
+can also be made to hide for a pre-determined period. If the
+application is already running then you can double-click to run a new
+instance of the binary and you will have two or more globes running on
+the desktop. As each Panzer Earth running program is a 'Widget' each
+will not appear on the taskbar. Widgets tend to operate underneath all
+your other programs and sit quietly on the desktop doing their thing.<br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+<img style="width: 300px; height: 270px;" alt="earth-small.png" title="earth-small.png" src="earth-small.png"><br>
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Fig 01a.
+Showing The Panzer Earth Widget&nbsp;in large mode.<br>
+
+
+
+
+
+
+
+
+</span>
+<h3>Menus &amp; Other Options</h3>
+
+
+
+
+
+
+
+
+
+
+<p><img style="width: 491px; height: 443px;" alt="PzEarth showing right click menu options." title="PzEarth showing right click menu options." src="menu01.png"><br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 02. Panzer Earth Widget showing right click menu options.</span></p>
+
+
+
+
+<p><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">You
+will note the use of the&nbsp;Centurion Light SF at 8pt on all the menu
+images shown in this document. This is the recommended font for use
+with this utility giving it a suitably old-fashioned feel. You will
+find the </span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">Centurion Light SF font </span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">below
+the PzEarth
+program resources folder in the "other" directory. You install this
+font by double-clicking on it. If this font is not installed and
+selected, the
+default font is Times New Roman.</span><span style="font-weight: bold;"></span></p>
+
+
+
+
+<p><span style="font-weight: bold;"></span></p>
+
+
+
+
+
+
+
+
+
+
+<p><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">A right-click on any icon in the icon pane will give you more
+options,&nbsp;the main menu is disclosed when right-clicking
+anywhere on the dock.</p>
+
+
+
+<p><br>
+
+
+
+
+
+
+
+
+
+
+</p>
+
+
+
+
+
+
+
+
+
+
+<p><img style="width: 395px; height: 356px;" alt="SteamyDock right click menu options when an application is already running." title="SteamyDock right click menu options when an application is already running." src="menu.png"><br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 03. Panzer Earth Widget right click menu options&nbsp;.</span></p>
+
+
+
+
+<p><span style="font-weight: bold;"></span></p>
+
+
+
+
+<p><span style="font-weight: bold;"></span></p>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;"></span><span style="font-weight: bold;"><br>
+
+
+
+
+
+ About&nbsp;</span><span style="font-weight: bold;">Panzer Earth Cairo Widget<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+</span><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">When you select this option, the
+About Window provides a brief hint as to what this program is 'about' and
+who made it. There are more relevant details at the end of this document.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<img style="width: 745px; height: 622px;" alt="about" src="about.png"> <br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 04. The About Window.</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;"></span><span style="font-weight: bold;">Widget Preferences.</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+The Widget Preferences screen will be described in more detail in the Preferences section of this help document. See below.<br>
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;"><br>
+
+
+
+
+
+Donate a coffee with Kofi.</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+Panzer Earth Gauge Help.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">Panzer Earth Gauge Help.</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+When you select this option a brief&nbsp;one-screen help pop-up will appear.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<img style="width: 985px; height: 799px;" alt="the help image" title="the help image" src="panzer-earTh-gauge-help.png"><br>
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 05. The Help Window.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+</span><br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Other <br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 212px; height: 95px;" alt="menu" src="menu02.png"><br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 04. Other menu options</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+The "other" option &nbsp;gives access to extra menu options, the help (this page) and other useful functions.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">The Licence Screen<br>
+
+
+
+
+
+</span><br>
+
+
+
+
+
+When you select this option, a licence window will appear allowing you
+to accept or decline the licence. The licence screen will be described
+in more detail in the&nbsp;licence section of this help document. See
+below.<br>
+
+
+
+
+
+<span style="font-weight: bold;"><br>
+
+
+
+
+
+</span>
+
+
+
+
+<span style="font-weight: bold;">Reveal Widget in Windows
+Explorer.</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+When you select this option, a file explorer window will open using the
+folder location where your application is situated. A useful function
+to find an application quickly.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Reload Widget.</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+This option quietly stops and restarts the Panzer Earth Widget. On occasion
+the Panzer Earth Widget might have a tiny problem due to an unforeseen bug, in that case&nbsp;you can simply reset
+it by
+reloading the widget. If the widget has focus a key-press on the F5 key will also
+restart the widget.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Edit Widget</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+This menu option only appears if the DEBUG selection option is ON in
+the Development Preferences. In the pref.s, enter the path here to the
+.vbp file. If the widget's source code is unpacked and placed somewhere
+locally
+and the VB6 IDE is installed, this menu option will launch the VB6 IDE
+so you can edit the program, re-code and compile dynamically. &nbsp;A
+link to the github location will be found on the update button on the
+about page of the preferences.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Switch off my functions
+&amp; Turn all my functions ON</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+These options are a toggle to stop and start the globe rotation.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Lock Widget</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+The globe can be made to lock into place so that it cannot be moved.
+This will also store the widget's current X,Y location on the screen, storing these values in the preferences.
+If the widget is restarted it will relocate to this position automatically.&nbsp;<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;"></span></div>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Hide Widget for n Minutes</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+The globe can be made to&nbsp;hide so that it does not interfere
+with
+the running of other programs that&nbsp;require all of your screen
+space. It will re-appear automatically in a pre-determined time. The
+default time to hide can be modified in the
+settings/preferences. <br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<big><span style="font-weight: bold;"></span></big><span style="font-weight: bold;"></span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">The Licence Screen<br>
+
+
+
+
+
+
+
+
+
+
+</span><br>
+
+
+
+
+
+
+
+
+
+
+<img style="width: 343px; height: 308px;" alt="licence" src="Licence.jpg"><br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 05. The Licence Window.</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+<img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">
+
+The licensing is rather important. Using this program implies
+you have accepted the licence. The GPL licence applies to the code
+alone.
+With regard to the resources and icons bundled with the program note
+this: Do not forget that when you are using my icons and resources for
+commercial projects you need to obtain my written consent and a
+commercial use licence that allows you to do so. Otherwise, usage of
+the associated resources is
+forbidden.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+LICENCE AGREEMENTS:<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">
+The software is provided 'as-is', without any express or implied
+warranty. In no event will the author be held liable for any damages
+arising from the use of this software. Permission is granted to anyone
+to use<br>
+
+
+
+
+
+
+
+
+
+
+this software for any purpose, including commercial applications, and
+to alter it and redistribute it freely, subject to the following
+restrictions:<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<div style="margin-left: 40px;">1. The origin of this
+software must not
+be misrepresented; you must not claim that you wrote the original
+software. If you use this software in a product, an acknowledgment in
+the product documentation is required.<br>
+
+
+
+
+
+
+
+
+
+
+2. Altered source versions must be plainly marked as such, and must not
+be misrepresented as being the original software.<br>
+
+
+
+
+
+
+
+
+
+
+3. This notice may not be removed or altered from any source
+distribution.<br>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;"><br>
+
+
+
+
+
+</span><br>
+
+
+
+
+
+
+
+
+
+
+<h3>The Preferences:</h3>
+
+
+
+
+
+
+
+
+
+
+<span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;"></span><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">The
+configuration of the widget is performed using the preference utility.
+It is an approximate analogue of the Yahoo widget preferences screen
+and replicates some of its functionality.<br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<img style="width: 599px; height: 407px;" alt="The General Prefs pane" title="The General Prefs pane" src="prefs-general.png"><br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 07. The General Prefs pane.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+</span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;"></span><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png"><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">The
+General Panel contains the most important user-configurable items
+required for the program to operate correctly. <br>
+
+
+
+
+
+
+
+
+
+
+You can enable or disable the spinning earth functionality. You can
+adjust the slider to make the animation smooth or choppy. Lower values
+are smoother but the smoother it runs the more CPU it uses. </span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">The
+animation is CPU bound but this program was tested on 15 year old, low
+power 2.7ghz core2duo laptops, the CPU usage was typically &lt; 4%.
+</span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">On
+modern systems the CPU usage is a mere trifle, less than 1%, so the
+overhead can be safely ignored. <br>
+
+
+
+
+
+
+
+
+
+
+</span><br>
+
+
+
+
+
+
+
+
+
+
+<img style="width: 599px; height: 460px;" alt="The Config Prefs pane" title="The Config Prefs pane" src="prefs-config.png"><br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 08. The Config Prefs pane.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png"><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">The
+configuration panel is the location for optional configuration items.
+These items change how PzEarth operates. Configure them to suit your
+needs and your mode of operation. </span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">You may also adjust the
+gauge to a percentage of the original size. &nbsp;</span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">As an alternative you can</span> mouse hover
+over the widget itself and press CTRL in combination with the mousewheel up/down to resize.&nbsp;<span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;"></span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">The scroll-wheel resizing direction is determined here, the
+direction chosen causes the gauge to increase in size. <br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+</span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">There are two
+types
+of tooltips used within this widget, native text tooltips and
+balloon tooltips. Disable each type here.<br>
+
+
+
+
+
+
+
+
+
+
+</span><span style="font-weight: bold;"><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 599px; height: 398px;" alt="The Fonts Prefs pane" title="The Fonts Prefs pane" src="prefs-fonts.png"><br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 09. The Fonts Prefs pane.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png"><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">The
+fonts panel allows you to configure the fonts used in the preferences
+utility itself. Personally, I like to be able to configure the look and
+feel of my applications beyond the defaults and this option allows some
+limited customisation as shown above.&nbsp;</span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">You will note the use of the&nbsp;Centurion Light SF at 8pt on all the menu images shown in this document. </span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;"> This is the recommended font for use with this utility giving it a suitably old-fashioned feel.</span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">&nbsp;</span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">You will find the </span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">Centurion Light SF font </span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">below
+the PzEarth
+program resources folder in the "other" directory. You install this
+font by double-clicking on it. If this font is not installed and
+selected, the
+default font is Times New Roman.</span><br>
+
+
+
+
+<span style="font-weight: bold;"><br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 599px; height: 288px;" alt="The Sound Prefs pane" title="The Sound Prefs pane" src="prefs-sounds.png"><br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 10. The Sound Prefs pane.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png"><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">The
+sound panel allows you to configure the sounds that occur within FCW.
+Some of the animations have associated sounds, you can control these
+here.<br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+</span>
+
+<span style="font-weight: bold;"><br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 599px; height: 653px;" alt="The Position Prefs pane" title="The Position Prefs pane" src="prefs-position.png"><br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 11. The Position Prefs pane.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png"><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">The
+position panel allows you to configure how the widget will operate in
+tablet mode. <br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;"><br>
+
+
+
+
+
+
+
+
+Aspect Ratio Hidden
+Mode:&nbsp; </span>We
+suggest that you don't fiddle with this unless you really know what you
+are doing. Here you can choose whether the Pz Earth widget is hidden by
+default in either landscape or portrait mode or not at all. This option
+allows you to have certain widgets that do not obscure the screen in
+either landscape or portrait. If you accidentally set it so you can't
+find your widget on screen at all then change the setting here to NONE.
+If the widget is accidentally hidden then it will reappear after a set
+interval has elapsed.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Widget Position by
+Percent: </span>The widget can be positioned proportionally when
+switching between portrait/landscape.&nbsp; <br>
+
+
+
+
+
+
+
+
+
+
+<br style="font-weight: bold;">
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Widget Position Locked. </span>You
+can turn off the ability to drag the program with the mouse. <br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Widget Locked in
+Landscape/</span></span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none; font-weight: bold;">Portrait</span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;"><span style="font-weight: bold;">:</span>
+The widget can be locked into a certain position in either
+landscape/portrait mode, it ensures that the widget always appears
+exactly where you want it to. Using the fields adjacent, you can assign
+a default x/y position for both Landscape or Portrait mode. When the
+widget is locked in place (using the Widget Position Locked option in
+the Window Tab), this value is set automatically.<br>
+
+
+
+
+
+
+
+
+
+
+</span><span style="font-weight: bold;"><br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 599px; height: 506px;" alt="The Development Prefs pane" title="The Development Prefs pane" src="prefs-development.png"><br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 12. The Development Prefs panel.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png"><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">The
+development panel allows you to configure the menu to call the Visual
+Basic Project file.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+Turning on&nbsp;debug mode will provide extra information in the
+debug
+window (not yet implemented) and will enable the default editor menu
+option.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+It may be useful to assign a command to the dbl click function of this
+widget. <br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+</span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">It
+may be useful to assign a program to run on&nbsp;the shift+dbl
+click function of this widget. <br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+</span>The configuration option is greyed out until the DEBUG
+selection option is ON. Enter the path here to your project's&nbsp;<span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">Visual
+Basic Project file</span>(.vbp).
+If the program's source code is unpacked and placed somewhere locally -
+and the VB6 IDE is installed, this menu option will launch the VB6 IDE
+and the program will appear ready for editing.<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;"><br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 599px; height: 577px;" alt="The Window Prefs pane" title="The Window Prefs pane" src="prefs-window.png"><br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 13. The Window Prefs pane.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png"><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">The
+window panel brings&nbsp;compatible&nbsp;features carried over
+from the Yahoo Widget (javascript) version of this program.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;"><br>
+
+
+
+
+
+
+
+
+Window Level : </span>This
+setting controls the relative layering of this widget. You may use it
+to place it on top of other windows or underneath. <br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Ignore Mouse: </span>Checking
+this box causes the program to ignore all mouse events except right
+click menu interactions.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Hiding Widget: </span>Can
+also be
+hidden using the widget's right click menu. Note: if set from the menu
+it will re-appear automatically within the number of minutes selected
+below.<br>
+
+
+
+
+
+
+
+
+
+
+</span><span style="font-weight: bold;"><br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 599px; height: 729px;" alt="The About Prefs pane" title="The About Prefs pane" src="prefs-about.png"><br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">
+Fig 14. The About Prefs pane.</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png"><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">The
+about panel offers some information on the widget, credits to other
+authors and links to more information.</span>
+<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Resizing the Preferences Panel.</span><br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png"><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">On
+high definition 4K screens, the prefs panel may initially appear a
+little small. This is due to the prefs being designed for 'normal'
+lower resolution screens but not the newer types&nbsp;with high DPI settings on 4K
+monitors. However, there is a built-in method to increase the overall size and
+the </span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">check box </span><span style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; display: inline ! important; float: none;">control
+to enable this is located at the base of the about page. Tick this box
+and this will enable the borders to be dragged to increase the size.
+The fonts and controls will grow accordingly. The icon images that
+appear in the toolbar at the top will increase in resolution on
+form-width-intervals of 1,500 twips.&nbsp; Think of this as a
+poor-man's-method of dealing with high DPI screens, this will suffice
+until I manage to make the
+whole application DPI aware. Note that making a VB6 application DPI
+aware is not easy...</span>
+<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+<span style="font-weight: bold;">
+
+
+
+-oOo-</span><br>
+
+
+
+
+
+
+
+<h3>Technology:&nbsp;<br>
+
+
+
+
+
+
+
+
+
+
+</h3>
+
+
+
+
+
+
+
+
+<img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">The
+utility was created using VB6 and RC5/Cairo graphics,
+VB6 was Microsoft's once vaunted flagship
+language. This program was built upon Windows 7, in my opinion
+Microsoft's last desktop
+operating system with a decent GUI - with no nags, no tiles nor
+advertising. I used VB6 to prove it can be done and to reacquaint
+myself
+with the technology further. The utility will be migrated to TwinBasic
+so there will be a version that is both future-proof <span style="text-decoration: underline;">and 64bit</span>.
+This help
+file
+will appy to either version as they will be functionally identical.<br>
+
+
+
+
+
+
+
+
+
+
+<h3>VB6 Version Credits:<br>
+
+
+
+
+
+
+
+
+
+
+</h3>
+
+
+
+
+
+
+
+
+
+
+<div style="text-align: justify;"><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">In addition to using VB6, I also used&nbsp;MZ-TOOLS 3.0, CodeHelp Core
+IDE Extender
+Framework
+2.2 &amp; Rubberduck. <br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+This
+program was built with the assistance of various snippets or chunks of
+FOSS code. VB6 has been around for so long that&nbsp;the codebase
+is
+immense. You can find snippets to do this or that and I have utilised a
+few bits of code for this dock which has sped the development
+process <span style="text-decoration: underline;">immeasurably</span>.<br>
+
+
+
+
+
+
+
+
+
+
+<ul>
+
+
+
+
+
+
+
+
+
+
+  <li>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;Olaf Schmidt&nbsp;&nbsp;&nbsp; - This tool was
+built using the
+RichClient RC5 Cairo wrapper for VB6. Specifically the components using
+transparency.&nbsp;<br>
+
+
+
+
+
+
+
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Thanks
+for the massive effort
+Olaf in creating Cairo counterparts for all the native VB6 controls and
+giving us access to advanced features&nbsp;such &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;as image and control transparency.<br>
+
+
+
+
+
+
+
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;</li>
+
+
+
+
+
+
+
+
+
+
+  <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Shuja Ali
+(codeguru.com) for his settings.ini code.</li>
+
+
+
+
+
+
+
+
+
+
+  <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Registry reading code from ALLAPI.COM.</li>
+
+
+
+
+
+
+
+
+
+
+  <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Rxbagain on codeguru for his Open File common dialog code without a
+dependent OCX</li>
+
+
+
+
+
+
+
+
+
+
+  <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+si_the_geek&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+for his special folder code</li>
+
+
+
+
+
+
+
+
+
+
+  <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Elroy on VB forums for the balloon tooltips</li>
+
+
+
+
+
+  <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Rod Stephens from vb-helper.com for the resizing code</li>
+
+
+
+
+
+
+
+
+
+
+</ul>
+
+
+
+
+
+
+
+
+
+
+Some credit goes to the chaps on the VB forum who answered my
+incessant questions without giving up on me. Not in any particular
+order: si_the_geek, &nbsp;jmcilhinney, .paul, elroy, krool,
+fafalone, the trick, Niya, Olaf
+Schmidt, passel, Shaggy Hiker, Chris.E, LaVolpe to name
+but a few who have responded or commented. If I have forgotten anyone who assisted, my apologies here.<br>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+Finally, credit to Harry Whitfield, Emeritus Professor, University of
+Newcastle upon Tyne, for helping me with ideas, testing and being a
+sounding board for my ideas. I would have done none of this without him
+- as he is my programming Yoda and my inspiration to do better.<br>
+
+
+
+
+
+
+
+
+
+
+<h3>Links</h3>
+
+
+
+
+
+
+
+
+<img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">Here are some physical links to the chaps mentioned above. Please visit them and review their other creations.<br>
+
+
+
+
+
+
+ 
+
+
+
+
+
+<ul>
+
+
+
+
+
+
+
+
+
+
+  <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;MZ-TOOLS <font size="-1"><span style="font-family: Courier New;"><br>
+
+
+
+
+
+
+
+
+
+
+    <span style="font-weight: bold;">&nbsp; &nbsp;
+&nbsp;https://www.mztools.com/<br>
+
+
+
+
+
+
+
+
+
+
+    </span></span></font></li>
+
+
+
+
+
+
+
+
+
+
+  <li>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+CodeHelp&nbsp;<font size="-1"><span style="font-family: Courier New;"><br>
+
+
+
+
+
+
+
+
+
+
+    <span style="font-weight: bold;">&nbsp; &nbsp;
+&nbsp;http://www.planetsourcecode.com/vb/scripts/ShowCode.asp?txtCodeId=62468&amp;lngWId=1<br>
+
+
+
+
+
+
+
+
+
+
+    </span></span></font></li>
+
+
+
+
+
+
+
+
+
+
+  <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rubberduck
+    <br>
+
+
+
+
+
+
+
+
+
+
+    <span style="font-weight: bold;">&nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; </span><font style="font-weight: bold;" size="-1"><span style="font-family: Courier New;">http://rubberduckvba.com/<br>
+
+
+
+
+
+
+
+
+
+
+    </span></font></li>
+
+
+
+
+
+
+
+
+
+
+  <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;Registry code ALLAPI.COM <br>
+
+
+
+
+
+
+
+
+
+
+    <font style="font-weight: bold;" size="-1"><span style="font-family: Courier New;">&nbsp; &nbsp;
+&nbsp;http://www.planet-source-code.com/vb/scripts/ShowCode.asp?txtCodeId=67466&amp;lngWId=1<br>
+
+
+
+
+
+
+
+
+
+
+    </span></font>&nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; Olaf
+Schmidt&nbsp;<br>
+
+
+
+
+
+
+
+
+
+
+    <font style="font-weight: bold;" size="-1"><span style="font-family: Courier New;">&nbsp; &nbsp;
+&nbsp;</span></font><small><span style="font-family: Courier New; font-weight: bold;">http://www.vbrichclient.com/#/en/About/</span></small><br>
+
+
+
+
+
+
+
+
+
+
+    <small><span style="font-weight: bold; font-family: Courier New;"></span></small>&nbsp;
+&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;Rxbagain<br>
+
+
+
+
+
+
+
+
+
+
+    <small style="font-weight: bold;"><span style="font-family: Courier New;">&nbsp;
+&nbsp;&nbsp;
+http://forums.codeguru.com/member.php?92278-rxbagain</span></small><br>
+
+
+
+
+
+
+
+
+
+
+  </li>
+
+
+
+
+
+
+
+
+
+
+  <li>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+&nbsp;
+si_the_geek&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+
+
+
+
+
+
+
+
+
+
+&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;<small><span style="font-family: Courier New; font-weight: bold;">https://www.vbforums.com/member.php?34875-si_the_geek</span></small>
+
+
+
+  </li>
+
+
+
+
+
+
+  <li>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp; &nbsp;La
+Volpe<br>
+
+
+
+
+
+
+
+
+
+
+    <small><span style="font-family: Courier New;">&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="font-weight: bold;"></span></span></small><small style="font-weight: bold;"><span style="font-family: Courier New;">https://www.vbforums.com/member.php?92357-LaVolpe<br>
+
+
+
+
+
+
+
+
+
+
+    </span></small></li>
+
+
+
+
+
+
+
+
+
+
+  <li><small><span style="font-family: Courier New;">&nbsp;&nbsp;
+&nbsp; </span></small>Harry Whitfield&nbsp;<small><span style="font-family: Courier New;"><br>
+
+
+
+
+
+
+
+
+
+
+    </span></small><small><span style="font-family: Courier New;">&nbsp;&nbsp;
+&nbsp; <span style="font-weight: bold;">https://g6auc.me.uk/</span></span></small><small><span style="font-family: Courier New;"></span></small></li>
+
+
+
+
+
+
+
+
+
+
+  <br>
+
+
+
+
+
+
+
+
+
+
+</ul>
+
+
+
+
+
+
+
+
+
+
+<big><span style="font-weight: bold;"></span></big>
+<h3>Donations:</h3>
+
+
+
+
+
+
+
+
+<img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">
+
+People like me create these tools and we do it for&nbsp;nothing,
+for
+free, gratis. However, it makes my day when someone sends a gift, a
+treat or a present and it inspires me to do more. In all the time that
+I have created all these tools (thirty or more tools) I have received
+no more than a dozen or so
+gifts but when someone has done so I feel like I have just
+inherited&nbsp;a new friend. All I ask is that if you use this tool
+and
+continue to do so, consider sending me something small once every few
+years. I have a penchant for licorice and cheap SSDs, the former is
+cheap and brings a smile to my face, the latter has me running round
+the room in circles.<br>
+
+
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;"><br>
+
+
+
+
+
+
+
+
+
+
+Copyright&nbsp;&copy;2023 Dean Beedell<br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+</span><img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">This program is free software; you can redistribute it
+and/or modify it
+under the terms of the GNU General Public Licence as published by the
+Free Software Foundation; either version 2 of the Licence, or (at your
+option) any later version. This program is distributed in the hope that
+it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.&nbsp; See the
+GNU
+General Public Licence for more details. You should have received a
+copy of the GNU General Public Licence along
+with this program; if not, write to the Free Software Foundation, Inc.,
+51 Franklin St, Fifth Floor, Boston, MA&nbsp; 02110-1301&nbsp;
+USA<br>
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+<img style="width: 48px; height: 48px; float: left;" alt="sauron.png" title="sauron.png" src="sauron.png">
+You may use any of my own imagery in your own creations but
+commercially only with my permission. In all other non-commercial cases
+I still require a credit to the original artist using my name or at least one of my
+pseudonyms - and a link to my site. With regard to the commercial use of
+incorporated images, permission and a licence would need to be obtained
+from the original owner and creator -&nbsp; ie. from me.<br>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
