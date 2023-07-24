@@ -188,3 +188,5 @@ permission. In all other non-commercial cases I require a credit to the
 original artist using my name or one of my pseudonyms and a link to my site. 
 With regard to the commercial use of incorporated images, permission and a 
 licence would need to be obtained from the original owner and creator, ie. me.
+
+![panzer-clock-ywidget-displa](https://github.com/yereverluvinunclebert/Panzer-StopWatch-Clock-VB6/assets/2788342/daf48cf7-d9fa-4026-84e7-aef518ab72bf)
