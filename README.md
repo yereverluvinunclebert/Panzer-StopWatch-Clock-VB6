@@ -112,7 +112,7 @@ without any additional Microsoft OCX components, just the basic controls that
 ship with VB6.  
 
 	
-* Uses the RC6 Cairo wrapper from Olaf Schmidt.
+* Uses the latest version of the RC6 Cairo framework from Olaf Schmidt.
 
 During development the RC6 components need to be registered. These scripts are 
 used to register. Run each by double-clicking on them.
