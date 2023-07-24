@@ -1,18 +1,13 @@
 # Panzer-StopWatch-Clock-VB6
 
- A FOSS Earth VB6 Widget for Reactos, XP, Win7, 8 and 10+.
+ A FOSS Stopwatch VB6 Widget for Reactos, XP, Win7, 8 and 10+.
  
- The Panzer Earth VB6 gauge is a simple utility displaying a rotating earth in a
- dieselpunk fashion on your desktop. It can be resized and placed anywhere on 
- your desktop. It uses minimal resources and helps give your desktop a 
- dieselpunk make-over. 
-
-![panzer-stopwatch650](https://github.com/yereverluvinunclebert/Panzer-Clock-Ywidget/assets/2788342/352fb2cb-742d-4e24-afe7-906b05e7fb1e)
-
 This Panzer widget is an attractive dieselpunk Yahoo widget for your desktop. 
 It will be a simple multi-timezone stopwatch and clock. Functional and gorgeous at 
 the same time. This Widget is a moveable widget that you can move anywhere 
 around the desktop as you require.
+
+![panzer-stopwatch650](https://github.com/yereverluvinunclebert/Panzer-Clock-Ywidget/assets/2788342/352fb2cb-742d-4e24-afe7-906b05e7fb1e)
 
 This widgets functionality is limited as it is just a template for widgets yet
 to come, however, it can be increased in size, animation speed can be changed, 
@@ -23,7 +18,7 @@ Right-click on the widget to display the function menu, mouse hover over the
 widget and press CTRL+mousewheel up/down to resize. It works well on Windows XP 
 to Windows 11.
 
-The Panzer Earth VB6 gauge is Beta-grade software, under development, not yet 
+The Panzer Stopwatch VB6 gauge is Beta-grade software, under development, not yet 
 ready to use on a production system - use at your own risk.
 
 This version was developed on Windows 7 using 32 bit VisualBasic 6 as a FOSS 
@@ -43,11 +38,26 @@ I do hope you enjoy using this utility and others. Your own software
 enhancements and contributions will be gratefully received if you choose to 
 contribute.
 
-Built using: 
+BUILD: The program runs without any Microsoft plugins.
 
-	RJTextEd Advanced Editor  https://www.rj-texted.se/  
-	Adobe Photoshop CS ver 8.0 (2003)  https://www.adobe.com/uk/products/photoshop/free-trial-download.html
-  Yahoo Widgets SDK: engine (Konfabulator), runtime, debugger & documentation
+Built using: VB6, MZ-TOOLS 3.0, VBAdvance, CodeHelp Core IDE Extender
+Framework 2.2 & Rubberduck 2.4.1, RichClient6
+
+Links:
+
+	https://www.vbrichclient.com/#/en/About/
+	MZ-TOOLS https://www.mztools.com/  
+	CodeHelp http://www.planetsourcecode.com/vb/scripts/ShowCode.asp?txtCodeId=62468&lngWId=1  
+	Rubberduck http://rubberduckvba.com/  
+	Rocketdock https://punklabs.com/  
+	Registry code ALLAPI.COM  
+	La Volpe http://www.planet-source-code.com/vb/scripts/ShowCode.asp?txtCodeId=67466&lngWId=1  
+	PrivateExtractIcons code http://www.activevb.de/rubriken/  
+	Persistent debug code http://www.vbforums.com/member.php?234143-Elroy  
+	Open File common dialog code without dependent OCX - http://forums.codeguru.com/member.php?92278-rxbagain  
+	VBAdvance  
+	Fafalone for the enumerate Explorer windows code
+
 
 Tested on :
 
@@ -87,26 +97,31 @@ si_the_geek       for his special folder code
 Elroy on VB forums for the balloon tooltips
 
 Harry Whitfield for his quality testing, brain stimulation and being an 
-unwitting source of inspiration.
-
-Tested on :
-
-  ReactOS 0.4.14 32bit on virtualBox  
-  windows 7 professional 32bit on intel  
-  windows 7 ultimate 64bit on intel  
-  windows 7 professional 64bit on intel  
-  windows xp sp3 32bit on intel   
-  windows 10 home 64bit on intel  
-  windows 10 home 64bit on amd  
-  windows 11 64bit on intel   
+unwitting source of inspiration. 
 
 Dependencies:
 
-A windows-alike o/s such as Windows XP, 7-11 or Apple Mac OSX 11.   
+o A windows-alike o/s such as Windows XP, 7-11 or Apple Mac OSX 11. 
 
-Requires a PzEarth folder in C:\Users\<user>\AppData\Roaming\ 
-eg: C:\Users\<user>\AppData\Roaming\PzEarth
-Requires a settings.ini file to exist in C:\Users\<user>\AppData\Roaming\PzEarth
+o Microsoft VB6 IDE installed with its runtime components. The program runs 
+without any additional Microsoft OCX components, just the basic controls that 
+ship with VB6.  
+
+	
+* Uses the RC6 Cairo wrapper from Olaf Schmidt.
+
+During development the RC6 components need to be registered. These scripts are 
+used to register. Run each by double-clicking on them.
+
+RegisterRC6inPlace.vbs
+RegisterRC6WidgetsInPlace.vbs
+
+During runtime on the users system, the RC6 components are dynamically 
+referenced using modRC6regfree.bas which is compiled into the binary.	
+
+Requires a PzStopWatch folder in C:\Users\<user>\AppData\Roaming\ 
+eg: C:\Users\<user>\AppData\Roaming\PzStopWatch
+Requires a settings.ini file to exist in C:\Users\<user>\AppData\Roaming\PzStopWatch
 The above will be created automatically by the compiled program when run for the 
 first time.
 
@@ -117,7 +132,7 @@ in mscomctl.ocx. The slider control OCX file is shipped with this package.
 * CCRSlider.ocx
 
 This OCX will reside in the program folder. The program reference to this OCX is 
-contained within the supplied resource file Panzer Earth Gauge.RES. It is 
+contained within the supplied resource file Panzer Stopwatch Gauge.RES. It is 
 compiled into the binary.
 
 * OLEGuids.tlb
@@ -136,21 +151,12 @@ REGTLIB %SystemRoot%\System32\OLEGUIDS.TLB
 
 In the VB6 IDE - project - references - browse - select the OLEGuids.tlb
 
-* Uses the RC5 Cairo wrapper from Olaf Schmidt.
 
-During development the RC5 components need to be registered. These scripts are 
-used to register. Run each by double-clicking on them.
-
-RegisterRC5inPlace.vbs
-RegisterVBWidgetsInPlace.vbs
-
-During runtime on the users system, the RC5 components are dynamically 
-referenced using modRC5regfree.bas which is compiled into the binary.
 
 * SETUP.EXE - The program is currently distributed using setup2go, a very useful 
 and comprehensive installer program that builds a .exe installer. Youll have to 
 find a copy of setup2go on the web as it is now abandonware. Contact me
-directly for a copy. The file "install PzEarth 0.1.0.s2g" is the configuration 
+directly for a copy. The file "install PzStopwatch 0.1.0.s2g" is the configuration 
 file for setup2go. When you build it will report any errors in the build.
 
 * HELP.CHM - the program documentation is built using the NVU HTML editor and 
@@ -165,7 +171,7 @@ HELP folder.
   VisualBasic Runtime Objects and Procedures  
   VisualBasic Objects and Procedures  
   OLE Automation  
-  vbRichClient5  
+  vbRichClient6  
 
 
 LICENCE AGREEMENTS:
