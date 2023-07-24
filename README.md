@@ -117,8 +117,8 @@ ship with VB6.
 During development the RC6 components need to be registered. These scripts are 
 used to register. Run each by double-clicking on them.
 
-RegisterRC6inPlace.vbs
-RegisterRC6WidgetsInPlace.vbs
+	RegisterRC6inPlace.vbs
+	RegisterRC6WidgetsInPlace.vbs
 
 During runtime on the users system, the RC6 components are dynamically 
 referenced using modRC6regfree.bas which is compiled into the binary.	
