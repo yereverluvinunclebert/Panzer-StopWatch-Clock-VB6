@@ -41,7 +41,7 @@ contribute.
 BUILD: The program runs without any Microsoft plugins.
 
 Built using: VB6, MZ-TOOLS 3.0, VBAdvance, CodeHelp Core IDE Extender
-Framework 2.2 & Rubberduck 2.4.1, RichClient6
+Framework 2.2 & Rubberduck 2.4.1, RichClient 6
 
 Links:
 
@@ -119,6 +119,7 @@ RegisterRC6WidgetsInPlace.vbs
 During runtime on the users system, the RC6 components are dynamically 
 referenced using modRC6regfree.bas which is compiled into the binary.	
 
+
 Requires a PzStopWatch folder in C:\Users\<user>\AppData\Roaming\ 
 eg: C:\Users\<user>\AppData\Roaming\PzStopWatch
 Requires a settings.ini file to exist in C:\Users\<user>\AppData\Roaming\PzStopWatch
@@ -167,11 +168,11 @@ HELP folder.
 
  Project References:
 
-  VisualBasic for Applications  
-  VisualBasic Runtime Objects and Procedures  
-  VisualBasic Objects and Procedures  
-  OLE Automation  
-  vbRichClient6  
+	VisualBasic for Applications  
+	VisualBasic Runtime Objects and Procedures  
+	VisualBasic Objects and Procedures  
+	OLE Automation  
+	vbRichClient6  
 
 
 LICENCE AGREEMENTS:
