@@ -20,6 +20,8 @@ Right-click on the widget to display the function menu, mouse hover over the
 widget and press CTRL+mousewheel up/down to resize. It works well on Windows XP 
 to Windows 11.
 
+![panzer-clock-web-help](https://github.com/yereverluvinunclebert/Panzer-StopWatch-Clock-VB6/assets/2788342/62704796-76ee-4053-a163-c0767d2cd42b)
+
 The Panzer Stopwatch VB6 gauge is Beta-grade software, under development, not yet 
 ready to use on a production system - use at your own risk.
 
