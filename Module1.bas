@@ -283,7 +283,7 @@ Private Const VER_PLATFORM_WIN32_NT = 2
 ' general
 Public PzGStartup As String
 Public PzGGaugeFunctions As String
-Public PzGAnimationInterval As String
+'Public PzGAnimationInterval As String
 'Public 'PzGWidgetSkew As String
 
 ' config
@@ -1876,19 +1876,18 @@ End Sub
 ' Procedure : unloadAllForms
 ' Author    : beededea
 ' Date      : 28/06/2023
-' Purpose   : unload all VB6 and RC5 forms
+' Purpose   : unload all VB6 and RC6 forms
 '---------------------------------------------------------------------------------------
 '
 Public Sub unloadAllForms()
     
    On Error GoTo unloadAllForms_Error
 
-    'unload the RC5 widgets on the RC5 forms first
+    'unload the RC6 widgets on the RC6 forms first
     
     aboutWidget.Widgets.RemoveAll
-    'globeWidget.Widgets.RemoveAll
     
-    ' unload the native VB6 and RC5 forms
+    ' unload the native VB6 and RC6 forms
     
     Unload panzerPrefs
     Unload helpForm
@@ -1896,7 +1895,7 @@ Public Sub unloadAllForms()
     Unload frmTimer
     Unload menuForm
 
-    fMain.aboutForm.Unload  ' RC5's own method for killing forms
+    fMain.aboutForm.Unload  ' RC6's own method for killing forms
     fAlpha.GaugeForm.Unload
     
     ' remove all variable references to each form in turn
@@ -1904,10 +1903,12 @@ Public Sub unloadAllForms()
     Set panzerPrefs = Nothing
     Set helpForm = Nothing
     Set fMain.aboutForm = Nothing
-'    Set fAlpha.GaugeForm = Nothing
+    Set fAlpha.GaugeForm = Nothing
     Set frmLicence = Nothing
     Set frmTimer = Nothing
     Set menuForm = Nothing
+    
+    End
 
    On Error GoTo 0
    Exit Sub
@@ -1931,8 +1932,8 @@ Public Sub reloadWidget()
     
     Call unloadAllForms
     
-    ' this will call the routines as called by sub main() and initialise the program and RELOAD the RC5 forms.
-    Call mainRoutine(True) ' sets the restart flag to avoid repriming the Rc5 message pump.
+    ' this will call the routines as called by sub main() and initialise the program and RELOAD the RC6 forms.
+    Call mainRoutine(True) ' sets the restart flag to avoid repriming the RC6 message pump.
 
     On Error GoTo 0
     Exit Sub

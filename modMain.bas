@@ -123,7 +123,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     Call adjustMainControls ' this needs to be here after the initialisation of the Cairo forms and widgets
     
     ' check the selected monitor properties to determine form placement
-    'Call monitorProperties(frmHidden) - might use RC5 for this?
+    'Call monitorProperties(frmHidden) - might use RC6 for this?
     
     ' move/hide onto/from the main screen
     Call mainScreen
@@ -196,7 +196,7 @@ Private Sub initialiseGlobalVars()
     ' general
     PzGStartup = vbNullString
     PzGGaugeFunctions = vbNullString
-    PzGAnimationInterval = vbNullString
+'    PzGAnimationInterval = vbNullString
     
     ' config
     PzGEnableTooltips = vbNullString
@@ -446,7 +446,7 @@ Public Sub readSettingsFile(ByVal location As String, ByVal PzGSettingsFile As S
         ' general
         PzGStartup = fGetINISetting(location, "startup", PzGSettingsFile)
         PzGGaugeFunctions = fGetINISetting(location, "gaugeFunctions", PzGSettingsFile)
-        PzGAnimationInterval = fGetINISetting(location, "animationInterval", PzGSettingsFile)
+'        PzGAnimationInterval = fGetINISetting(location, "animationInterval", PzGSettingsFile)
         
         ' configuration
         PzGEnableTooltips = fGetINISetting(location, "enableTooltips", PzGSettingsFile)
@@ -530,7 +530,7 @@ Public Sub validateInputs()
             
         ' general
         If PzGGaugeFunctions = vbNullString Then PzGGaugeFunctions = "1" ' always turn
-        If PzGAnimationInterval = vbNullString Then PzGAnimationInterval = "130"
+'        If PzGAnimationInterval = vbNullString Then PzGAnimationInterval = "130"
         If PzGStartup = vbNullString Then PzGStartup = "1"
         
         ' Config

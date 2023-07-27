@@ -1,0 +1,42 @@
+NONE Daylight Saving not used
+-
+AR - Argentina
+AU-LHI - Australia - Lord Howe Island
+AU-NSW - Australia - New South Wales
+AU-SA - Australia - South Australia
+AU-TAS - Australia - Tasmania
+AU-VIC - Australia - Victoria
+AU-WA - Australia - Western Australia
+AZ - Azerbaijan
+BD - Bangladesh
+BM - Bermuda
+BR - Brazil
+BS - Bahamas
+CA - Canada
+CA-SJ - Canada - Newfoundland, St.John's
+CA-WG - Canada - Manitoba, Winnipeg
+CL - Chile
+CU - Cuba
+EG - Egypt
+EU - Europe - European Union
+FK - Falkland Islands
+IL - Israel
+IQ - Iraq
+IR - Iran
+JO - Jordan
+KG - Kyrgyzstan
+LB - Lebanon
+MN - Mongolia
+MX - Mexico
+MU - Mauritius
+NA - Namibia
+NZ - New Zealand
+NZ-CI - New Zealand - Chatham Islands
+PK - Pakistan
+PS - Palestine
+PY - Paraguay
+RU - Russia
+SY - Syria
+UA - Ukraine
+US - United States
+UY - Uruguay

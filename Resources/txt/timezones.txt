@@ -1,0 +1,35 @@
+System Time
+GMT - 12:00 International Date Line West
+GMT - 11:00 Midway Island
+GMT - 10:00 US Hawaii
+GMT - 09:00 US Alaska
+GMT - 08:00 US Pacific Time
+GMT - 07:00 US Mountain Time
+GMT - 06:00 US Central Time
+GMT - 05:00 US Eastern Time
+GMT - 04:30 Caracas
+GMT - 04:00 Atlantic Time
+GMT - 03:30 Newfoundland
+GMT - 03:00 Brasilia
+GMT - 02:00 Mid-Atlantic
+GMT - 01:00 Azores
+GMT - 00:00 Greenwich Mean Time: London
+GMT + 01:00 Amsterdam
+GMT + 02:00 Athens
+GMT + 03:00 Baghdad
+GMT + 03:30 Tehran
+GMT + 04:00 Abu Dhabi
+GMT + 04:30 Kabul
+GMT + 05:00 Ekaterinburg
+GMT + 05:30 Kolkata
+GMT + 05:45 Kathmandu
+GMT + 06:00 Almaty
+GMT + 06:30 Rangoon
+GMT + 07:00 Bangkok
+GMT + 08:00 Beijing
+GMT + 09:00 Tokyo
+GMT + 09:30 Darwin
+GMT + 10:00 Sydney
+GMT + 11:00 Magadan
+GMT + 12:00 Auckland
+GMT + 13:00 Nukualofa
