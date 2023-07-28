@@ -4,7 +4,7 @@ Option Explicit
 
 '------------------------------------------------------ STARTS
 ' for SetWindowPos z-ordering
-Public Declare Function SetWindowPos Lib "user32" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
+Public Declare Function SetWindowPos Lib "user32" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal X As Long, ByVal Y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
 
 Private Const HWND_TOP As Long = 0 ' for SetWindowPos z-ordering
 Private Const HWND_TOPMOST As Long = -1
@@ -197,7 +197,13 @@ Private Sub initialiseGlobalVars()
     PzGStartup = vbNullString
     PzGGaugeFunctions = vbNullString
 '    PzGAnimationInterval = vbNullString
-    
+
+    PzGClockFaceSwitchPref = vbNullString
+    PzGMainGaugeTimeZone = vbNullString
+    PzGMainDaylightSaving = vbNullString
+    PzGSecondaryGaugeTimeZone = vbNullString
+    PzGSecondaryDaylightSaving = vbNullString
+
     ' config
     PzGEnableTooltips = vbNullString
     PzGEnableBalloonTooltips = vbNullString
@@ -352,6 +358,13 @@ Public Sub adjustMainControls()
 '        'globeWidget.opacity = Val(PzGOpacity) / 100
 '        'globeWidget.Widget.Refresh
 '    End If
+
+
+'PzGClockFaceSwitchPref
+'PzGMainGaugeTimeZone
+'PzGMainDaylightSaving
+'PzGSecondaryGaugeTimeZone
+'PzGSecondaryDaylightSaving
     
     If PzGGaugeFunctions = "1" Then
         ''globeWidget.Rotating = True
@@ -448,6 +461,13 @@ Public Sub readSettingsFile(ByVal location As String, ByVal PzGSettingsFile As S
         PzGGaugeFunctions = fGetINISetting(location, "gaugeFunctions", PzGSettingsFile)
 '        PzGAnimationInterval = fGetINISetting(location, "animationInterval", PzGSettingsFile)
         
+
+        PzGClockFaceSwitchPref = fGetINISetting(location, "clockFaceSwitchPref", PzGSettingsFile)
+        PzGMainGaugeTimeZone = fGetINISetting(location, "mainGaugeTimeZone", PzGSettingsFile)
+        PzGMainDaylightSaving = fGetINISetting(location, "mainDaylightSaving", PzGSettingsFile)
+        PzGSecondaryGaugeTimeZone = fGetINISetting(location, "secondaryGaugeTimeZone", PzGSettingsFile)
+        PzGSecondaryDaylightSaving = fGetINISetting(location, "secondaryDaylightSaving", PzGSettingsFile)
+
         ' configuration
         PzGEnableTooltips = fGetINISetting(location, "enableTooltips", PzGSettingsFile)
         PzGEnableBalloonTooltips = fGetINISetting(location, "enableBalloonTooltips", PzGSettingsFile)
@@ -533,6 +553,12 @@ Public Sub validateInputs()
 '        If PzGAnimationInterval = vbNullString Then PzGAnimationInterval = "130"
         If PzGStartup = vbNullString Then PzGStartup = "1"
         
+        If PzGClockFaceSwitchPref = vbNullString Then PzGClockFaceSwitchPref = "0"
+        If PzGMainGaugeTimeZone = vbNullString Then PzGMainGaugeTimeZone = "1"
+        If PzGMainDaylightSaving = vbNullString Then PzGMainDaylightSaving = "1"
+        If PzGSecondaryGaugeTimeZone = vbNullString Then PzGSecondaryGaugeTimeZone = "1"
+        If PzGSecondaryDaylightSaving = vbNullString Then PzGSecondaryDaylightSaving = "1"
+
         ' Config
         If PzGEnableTooltips = vbNullString Then PzGEnableTooltips = "1"
         If PzGEnableBalloonTooltips = vbNullString Then PzGEnableBalloonTooltips = "1"
