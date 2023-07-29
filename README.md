@@ -7,7 +7,7 @@ It will be a simple multi-timezone stopwatch and clock. Functional and gorgeous 
 the same time. This Widget is a moveable widget that you can move anywhere 
 around the desktop as you require.
 
-![panzer-stopwatch650](https://github.com/yereverluvinunclebert/Panzer-Clock-Ywidget/assets/2788342/352fb2cb-742d-4e24-afe7-906b05e7fb1e)
+![panzer-photo-1440x900X](https://github.com/yereverluvinunclebert/Panzer-StopWatch-Clock-VB6/assets/2788342/c4b6515a-8425-4f0b-8393-d092306c7624)
 
 This widgets functionality is limited as it is just a template for widgets yet
 to come, however, it can be increased in size, animation speed can be changed, 
