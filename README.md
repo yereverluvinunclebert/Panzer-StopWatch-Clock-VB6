@@ -60,7 +60,6 @@ Links:
 	Persistent debug code http://www.vbforums.com/member.php?234143-Elroy  
 	Open File common dialog code without dependent OCX - http://forums.codeguru.com/member.php?92278-rxbagain  
 	VBAdvance  
-	Fafalone for the enumerate Explorer windows code
 
 
 Tested on :
