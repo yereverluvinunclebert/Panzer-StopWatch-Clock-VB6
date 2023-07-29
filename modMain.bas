@@ -52,43 +52,51 @@ End Sub
 '
 Public Sub mainRoutine(ByVal restart As Boolean)
     Dim extractCommand As String: extractCommand = vbNullString
+    Dim dragLayer As String: dragLayer = vbNullString
+    Dim thisPSDname As String: thisPSDname = vbNullString
 
-   On Error GoTo main_routine_Error
-   
-  'Cairo.SetDPIAwareness
+    On Error GoTo main_routine_Error
+    
+    dragLayer = "Set 1/face/Set 1/Layer 30"
+    thisPSDname = App.Path & "\Res\tank-clock-mk1.psd"
+    
+    'Cairo.SetDPIAwareness
  
-  Cairo.ImageList.AddImage "app-exit", App.Path & "\Res\app-exit.svgz" 'add the image-key and resource for the close-widget
+    If restart = False Then
+        Cairo.ImageList.AddImage "app-exit", App.Path & "\Res\app-exit.svgz" 'add the image-key and resource for the close-widget
+        
+        fAlpha.FX = 222 'init position- and zoom-values (directly set on Public-Props of the Form-hosting Class)
+        fAlpha.FY = 111
+        fAlpha.FZ = 0.4
+        
+        'every PSD-Path we exclude here from the normal PSD-Widget-Loading, will later be rendered in cwOverlay (in that exact order)
+        With fAlpha.PSDExcludePaths
+          .Add Empty, "set 1/face/layer 36 copy" 'arrow-hand-top
+          .Add Empty, "set 1/face/layer 36"      'arrow-hand-right
+          .Add Empty, "set 1/face/layer 35"      'arrow-hand-bottom
+          
+          .Add Empty, "set 1/face/layer 40" 'clock-hand-hours-shadow
+          .Add Empty, "set 1/face/layer 32" 'clock-hand-hours
+         
+          .Add Empty, "set 1/face/layer 38" 'clock-hand-minutes-shadow
+          .Add Empty, "set 1/face/layer 39" 'clock-hand-minutes
     
-    fAlpha.FX = 222 'init position- and zoom-values (directly set on Public-Props of the Form-hosting Class)
-    fAlpha.FY = 111
-    fAlpha.FZ = 0.4
-    
-    'every PSD-Path we exclude here from the normal PSD-Widget-Loading, will later be rendered in cwOverlay (in that exact order)
-    With fAlpha.PSDExcludePaths
-      .Add Empty, "set 1/face/layer 36 copy" 'arrow-hand-top
-      .Add Empty, "set 1/face/layer 36"      'arrow-hand-right
-      .Add Empty, "set 1/face/layer 35"      'arrow-hand-bottom
-      
-      .Add Empty, "set 1/face/layer 40" 'clock-hand-hours-shadow
-      .Add Empty, "set 1/face/layer 32" 'clock-hand-hours
+          .Add Empty, "set 1/face/layer 33" 'clock-hand-seconds-shadow
+          .Add Empty, "set 1/face/layer 34" 'clock-hand-seconds
      
-      .Add Empty, "set 1/face/layer 38" 'clock-hand-minutes-shadow
-      .Add Empty, "set 1/face/layer 39" 'clock-hand-minutes
-
-      .Add Empty, "set 1/face/layer 33" 'clock-hand-seconds-shadow
-      .Add Empty, "set 1/face/layer 34" 'clock-hand-seconds
- 
-      .Add Empty, "set 1/big reflection/layer 7" 'all reflections
-      .Add Empty, "set 1/big reflection/layer 9"
-      .Add Empty, "set 1/big reflection/layer 10"
-      .Add Empty, "set 1/window reflection/layer 8"
-      .Add Empty, "set 1/window reflection/layer 23 copy"
-      .Add Empty, "set 1/window reflection/layer 23 copy 3"
-      .Add Empty, "set 1/window reflection/layer 23 copy 2"
-    End With
+          .Add Empty, "set 1/big reflection/layer 7" 'all reflections
+          .Add Empty, "set 1/big reflection/layer 9"
+          .Add Empty, "set 1/big reflection/layer 10"
+          .Add Empty, "set 1/window reflection/layer 8"
+          .Add Empty, "set 1/window reflection/layer 23 copy"
+          .Add Empty, "set 1/window reflection/layer 23 copy 3"
+          .Add Empty, "set 1/window reflection/layer 23 copy 2"
+        End With
+    End If
     
-    fAlpha.InitFromPSD App.Path & "\Res\tank-clock-mk1.psd", "Set 1/face/Set 1/Layer 30", "app-exit"
-
+    ' start the load of the PSD file using RC6 PSD-Parser.instance
+    fAlpha.InitFromPSD thisPSDname, dragLayer
+    
     ' initialise global vars
     Call initialiseGlobalVars
     
@@ -108,13 +116,13 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     Call checkLicenceState
 
     ' initialise and create the main forms on the current display
-    Call createFormOnCurrentDisplay
+    Call createAboutFormOnCurrentDisplay
     
     ' set the z-ordering of the main form
     Call setWindowZordering
     
     ' place the form at the saved location
-    Call makeVisibleFormElements
+    makeVisibleFormElements
     
     ' resolve VB6 sizing width bug
     Call determineScreenDimensions
@@ -721,14 +729,14 @@ setHidingTime_Error:
 End Sub
 
 '---------------------------------------------------------------------------------------
-' Procedure : createFormOnCurrentDisplay
+' Procedure : createAboutFormOnCurrentDisplay
 ' Author    : beededea
 ' Date      : 07/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub createFormOnCurrentDisplay()
-    On Error GoTo createFormOnCurrentDisplay_Error
+Private Sub createAboutFormOnCurrentDisplay()
+    On Error GoTo createAboutFormOnCurrentDisplay_Error
 
     With New_c.Displays(1) 'get the current Display
       fMain.InitAndShowAsFreeForm .WorkLeft, .WorkTop, 1000, 1000, "Panzer Earth Gauge"
@@ -737,11 +745,11 @@ Private Sub createFormOnCurrentDisplay()
     On Error GoTo 0
     Exit Sub
 
-createFormOnCurrentDisplay_Error:
+createAboutFormOnCurrentDisplay_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure createFormOnCurrentDisplay of Module modMain"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure createAboutFormOnCurrentDisplay of Module modMain"
             Resume Next
           End If
     End With

@@ -1598,6 +1598,7 @@ Public Sub makeVisibleFormElements()
     ' The RC forms are measured in pixels, do remember that...
 
     fAlpha.GaugeForm.show
+    fAlpha.GaugeForm.Refresh
 
     On Error GoTo 0
     Exit Sub
@@ -1818,25 +1819,25 @@ Public Sub mainScreen()
     End If
 
     ' calculate the on screen widget position
-'    If fAlpha.GaugeForm.Left < 0 Then
-'        fAlpha.GaugeForm.Left = 10
-'    End If
-'    If fAlpha.GaugeForm.Top < 0 Then
-'        fAlpha.GaugeForm.Top = 0
-'    End If
-'    If fAlpha.GaugeForm.Left > screenWidthPixels - 50 Then
-'        fAlpha.GaugeForm.Left = screenWidthPixels - 150
-'    End If
-'    If fAlpha.GaugeForm.Top > screenHeightPixels - 50 Then
-'        fAlpha.GaugeForm.Top = screenHeightPixels - 150
-'    End If
-'
-'    ' calculate the current hlocation in % of the screen
-'    ' store the current hlocation in % of the screen
-'    If PzGWidgetPosition = "1" Then
-'        PzGhLocationPercPrefValue = Str$(fAlpha.GaugeForm.Left / screenWidthPixels * 100)
-'        PzGvLocationPercPrefValue = Str$(fAlpha.GaugeForm.Top / screenHeightPixels * 100)
-'    End If
+    If fAlpha.GaugeForm.Left < 0 Then
+        fAlpha.GaugeForm.Left = 10
+    End If
+    If fAlpha.GaugeForm.Top < 0 Then
+        fAlpha.GaugeForm.Top = 0
+    End If
+    If fAlpha.GaugeForm.Left > screenWidthPixels - 50 Then
+        fAlpha.GaugeForm.Left = screenWidthPixels - 150
+    End If
+    If fAlpha.GaugeForm.Top > screenHeightPixels - 50 Then
+        fAlpha.GaugeForm.Top = screenHeightPixels - 150
+    End If
+
+    ' calculate the current hlocation in % of the screen
+    ' store the current hlocation in % of the screen
+    If PzGWidgetPosition = "1" Then
+        PzGhLocationPercPrefValue = Str$(fAlpha.GaugeForm.Left / screenWidthPixels * 100)
+        PzGvLocationPercPrefValue = Str$(fAlpha.GaugeForm.Top / screenHeightPixels * 100)
+    End If
 
    On Error GoTo 0
    Exit Sub
@@ -1859,13 +1860,13 @@ Public Sub thisForm_Unload() ' name follows VB6 standard naming convention
     
     On Error GoTo Form_Unload_Error
     
-'    PzGMaximiseFormX = Str$(fAlpha.GaugeForm.Left) ' saving in pixels
-'    PzGMaximiseFormY = Str$(fAlpha.GaugeForm.Top)
+    PzGMaximiseFormX = Str$(fAlpha.GaugeForm.Left) ' saving in pixels
+    PzGMaximiseFormY = Str$(fAlpha.GaugeForm.Top)
     
     sPutINISetting "Software\PzStopwatch", "maximiseFormX", PzGMaximiseFormX, PzGSettingsFile
     sPutINISetting "Software\PzStopwatch", "maximiseFormY", PzGMaximiseFormY, PzGSettingsFile
     
-    Call unloadAllForms
+    Call unloadAllForms(True)
 
     On Error GoTo 0
     Exit Sub
@@ -1887,7 +1888,7 @@ End Sub
 ' Purpose   : unload all VB6 and RC6 forms
 '---------------------------------------------------------------------------------------
 '
-Public Sub unloadAllForms()
+Public Sub unloadAllForms(ByVal endItAll As Boolean)
     
    On Error GoTo unloadAllForms_Error
 
@@ -1916,7 +1917,7 @@ Public Sub unloadAllForms()
     Set frmTimer = Nothing
     Set menuForm = Nothing
     
-    End
+    If endItAll = True Then End
 
    On Error GoTo 0
    Exit Sub
@@ -1938,7 +1939,7 @@ Public Sub reloadWidget()
     
     On Error GoTo reloadWidget_Error
     
-    Call unloadAllForms
+    Call unloadAllForms(False) ' unload forms but do not END
     
     ' this will call the routines as called by sub main() and initialise the program and RELOAD the RC6 forms.
     Call mainRoutine(True) ' sets the restart flag to avoid repriming the RC6 message pump.

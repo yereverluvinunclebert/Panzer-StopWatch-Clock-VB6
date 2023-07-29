@@ -100,13 +100,13 @@ Private Sub GaugeForm_BubblingEvent(Sender As Object, EventName As String, P1 As
   End If
 End Sub
 
-Private Sub GaugeForm_MouseMove(Button As Integer, shift As Integer, x As Single, y As Single)
-  Static x0 As Single, y0 As Single: If Button = 0 Then x0 = x: y0 = y 'just store the offsets when no button is down
+Private Sub GaugeForm_MouseMove(Button As Integer, shift As Integer, X As Single, Y As Single)
+  Static x0 As Single, y0 As Single: If Button = 0 Then x0 = X: y0 = Y 'just store the offsets when no button is down
   
   If Button = vbLeftButton And Not GaugeForm.ActiveWidget Is Nothing Then 'Form-Dragging (under certain conditions)
      If StrComp(GaugeForm.ActiveWidget.Key, DragWidgetKey, vbTextCompare) Then Exit Sub 'leave, if the ActiveWidget.Key is not the DragWidgetKey
-     FX = (x - x0) * GaugeForm.WidgetRoot.Zoom + GaugeForm.Left
-     FY = (y - y0) * GaugeForm.WidgetRoot.Zoom + GaugeForm.Top
+     FX = (X - x0) * GaugeForm.WidgetRoot.Zoom + GaugeForm.Left
+     FY = (Y - y0) * GaugeForm.WidgetRoot.Zoom + GaugeForm.Top
      GaugeForm.Move FX, FY
   End If
 End Sub
@@ -131,7 +131,7 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub GaugeForm_MouseDown(Button As Integer, shift As Integer, x As Single, y As Single)
+Private Sub GaugeForm_MouseDown(Button As Integer, shift As Integer, X As Single, Y As Single)
    On Error GoTo W_MouseDown_Error
 
     If Button = vbRightButton Then
