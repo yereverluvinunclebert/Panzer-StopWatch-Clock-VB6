@@ -20,6 +20,8 @@ Attribute W.VB_VarHelpID = -1
 Private WithEvents tmrClock As cTimer, HDeg As Double, MDeg As Double, SDeg As Double
 Attribute tmrClock.VB_VarHelpID = -1
 
+Private mTicking As Boolean
+
 Private Sub Class_Initialize()
   Set W = Cairo.WidgetBase
       W.BackColor = -1  'we don't use any BackColor here
@@ -79,3 +81,46 @@ Private Sub tmrClock_Timer() 'update the private "Degree-Variables" for Hour-, M
 End Sub
 
 
+'---------------------------------------------------------------------------------------
+' Procedure : Ticking
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Get Ticking() As Boolean
+   On Error GoTo TickingGet_Error
+
+  Ticking = mTicking
+
+   On Error GoTo 0
+   Exit Property
+
+TickingGet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Ticking of Class Module cwGlobe"
+End Property
+'---------------------------------------------------------------------------------------
+' Procedure : Ticking
+' Author    :
+' Date      : 09/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Let Ticking(ByVal newValue As Boolean)
+   On Error GoTo TickingLet_Error
+
+  If mTicking <> newValue Then mTicking = newValue Else Exit Property
+    If mTicking Then
+        Set tmrClock = New_c.Timer(200, True)
+    Else
+        Set tmrClock = Nothing
+    End If
+
+   On Error GoTo 0
+   Exit Property
+
+TickingLet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Ticking of Class Module cwGlobe"
+End Property ' the earth Ticking flag

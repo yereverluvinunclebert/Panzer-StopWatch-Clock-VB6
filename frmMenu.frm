@@ -576,7 +576,7 @@ End Sub
 Private Sub mnuSwitchOff_Click()
    On Error GoTo mnuSwitchOff_Click_Error
 
-    'globeWidget.Rotating = False
+    Overlay.Ticking = False
     mnuSwitchOff.Checked = True
     mnuTurnFunctionsOn.Checked = False
     
@@ -608,7 +608,7 @@ Private Sub mnuTurnFunctionsOn_Click()
         PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
 
-    'globeWidget.Rotating = True
+    Overlay.Ticking = True
     mnuSwitchOff.Checked = False
     mnuTurnFunctionsOn.Checked = True
     

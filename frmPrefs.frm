@@ -2050,7 +2050,7 @@ End Sub
 
 Private Sub chkGaugeFunctions_Click()
     btnSave.Enabled = True ' enable the save button
-    'globeWidget.Rotating = chkGaugeFunctions.Value
+    Overlay.Ticking = chkGaugeFunctions.Value
 End Sub
 
 Private Sub chkGenStartup_Click()
@@ -2172,7 +2172,7 @@ Private Sub chkPreventDragging_Click()
     btnSave.Enabled = True ' enable the save button
     ' immediately make the widget locked in place
     If chkPreventDragging.Value = 0 Then
-        'globeWidget.Locked = 0
+        'Overlay.Locked = 0
         PzGPreventDragging = "0"
         If aspectRatio = "landscape" Then
             txtLandscapeHoffset.Text = vbNullString
@@ -2182,7 +2182,7 @@ Private Sub chkPreventDragging_Click()
             txtPortraitYoffset.Text = vbNullString
         End If
     Else
-        'globeWidget.Locked = 1
+        'Overlay.Locked = 1
         PzGPreventDragging = "1"
 '        If aspectRatio = "landscape" Then
 '            txtLandscapeHoffset.Text = fAlpha.GaugeForm.Left
@@ -2220,12 +2220,12 @@ Private Sub chkWidgetHidden_Click()
    On Error GoTo chkWidgetHidden_Click_Error
 
     If chkWidgetHidden.Value = 0 Then
-        'globeWidget.Hidden = False
+        'Overlay.Hidden = False
 
         frmTimer.revealWidgetTimer.Enabled = False
         PzGWidgetHidden = "0"
     Else
-        'globeWidget.Hidden = True
+        'Overlay.Hidden = True
 
         frmTimer.revealWidgetTimer.Enabled = True
         PzGWidgetHidden = "1"
@@ -2256,13 +2256,13 @@ Private Sub cmbAspectHidden_Click()
    On Error GoTo cmbAspectHidden_Click_Error
 
     If cmbAspectHidden.ListIndex = 1 And aspectRatio = "portrait" Then
-        'globeWidget.Hidden = True
+        'Overlay.Hidden = True
 
     ElseIf cmbAspectHidden.ListIndex = 2 And aspectRatio = "landscape" Then
-        'globeWidget.Hidden = True
+        'Overlay.Hidden = True
 
     Else
-        'globeWidget.Hidden = False
+        'Overlay.Hidden = False
     End If
 
     btnSave.Enabled = True ' enable the save button
@@ -2334,7 +2334,7 @@ Private Sub cmbScrollWheelDirection_Click()
    On Error GoTo cmbScrollWheelDirection_Click_Error
 
     btnSave.Enabled = True ' enable the save button
-    'globeWidget.ZoomDirection = cmbScrollWheelDirection.List(cmbScrollWheelDirection.ListIndex)
+    'Overlay.ZoomDirection = cmbScrollWheelDirection.List(cmbScrollWheelDirection.ListIndex)
 
    On Error GoTo 0
    Exit Sub

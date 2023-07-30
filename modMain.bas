@@ -20,6 +20,7 @@ Public revealWidgetTimerCount As Integer
  
 Public fAlpha As New cfAlpha
 Public aboutWidget As cwAbout
+Public Overlay As cwOverlay
 
 '---------------------------------------------------------------------------------------
 ' Procedure : Main
@@ -52,18 +53,18 @@ End Sub
 '
 Public Sub mainRoutine(ByVal restart As Boolean)
     Dim extractCommand As String: extractCommand = vbNullString
-    Dim dragLayer As String: dragLayer = vbNullString
-    Dim thisPSDname As String: thisPSDname = vbNullString
+    Dim chosenDragLayer As String: chosenDragLayer = vbNullString
+    Dim thisPSDFullPath As String: thisPSDFullPath = vbNullString
 
     On Error GoTo main_routine_Error
     
-    dragLayer = "Set 1/face/Set 1/Layer 30"
-    thisPSDname = App.Path & "\Res\tank-clock-mk1.psd"
+    chosenDragLayer = "Set 1/face/Set 1/Layer 30"
+    thisPSDFullPath = App.Path & "\Res\tank-clock-mk1.psd"
     
     'Cairo.SetDPIAwareness
  
-    If restart = False Then
-        Cairo.ImageList.AddImage "app-exit", App.Path & "\Res\app-exit.svgz" 'add the image-key and resource for the close-widget
+    If restart = False Then ' no need to reload the PSDExcludePaths layer name keys
+        'Cairo.ImageList.AddImage "app-exit", App.Path & "\Res\app-exit.svgz" 'add the image-key and resource for the close-widget
         
         fAlpha.FX = 222 'init position- and zoom-values (directly set on Public-Props of the Form-hosting Class)
         fAlpha.FY = 111
@@ -95,7 +96,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     End If
     
     ' start the load of the PSD file using RC6 PSD-Parser.instance
-    fAlpha.InitFromPSD thisPSDname, dragLayer
+    fAlpha.InitFromPSD thisPSDFullPath, chosenDragLayer ' no optional close layer
     
     ' initialise global vars
     Call initialiseGlobalVars
@@ -122,7 +123,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     Call setWindowZordering
     
     ' place the form at the saved location
-    makeVisibleFormElements
+    Call makeVisibleFormElements
     
     ' resolve VB6 sizing width bug
     Call determineScreenDimensions
@@ -150,7 +151,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     ' configure any global timers here
     Call configureTimers
 
-    ' RC message pump will auto-exit when Cairo Forms = 0 so we run it only when 0, this prevents message interruption
+    ' RC message pump will auto-exit when Cairo Forms > 0 so we run it only when 0, this prevents message interruption
     ' when running twice on reload.
     If Cairo.WidgetForms.Count = 0 Then Cairo.WidgetForms.EnterMessageLoop
   
@@ -375,11 +376,11 @@ Public Sub adjustMainControls()
 'PzGSecondaryDaylightSaving
     
     If PzGGaugeFunctions = "1" Then
-        ''globeWidget.Rotating = True
+        Overlay.Ticking = True
         menuForm.mnuSwitchOff.Checked = False
         menuForm.mnuTurnFunctionsOn.Checked = True
     Else
-        ''globeWidget.Rotating = False
+        Overlay.Ticking = False
         menuForm.mnuSwitchOff.Checked = True
         menuForm.mnuTurnFunctionsOn.Checked = False
     End If

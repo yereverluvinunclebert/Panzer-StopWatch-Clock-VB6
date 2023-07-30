@@ -19,8 +19,7 @@ Public PSDExcludePaths As cCollection, FX As Long, FY As Long, FZ As Single  'av
 
 Private PSDWidth As Long, PSDHeight As Long, DragWidgetKey As String ', CloseWidgetKey As String, CloseWidget As cWidgetBase
 Attribute PSDWidth.VB_VarHelpID = -1
-Private Overlay As cwOverlay
-Attribute Overlay.VB_VarHelpID = -1
+
 
 Private Sub Class_Initialize()
   Set PSDExcludePaths = New_c.Collection(False)
