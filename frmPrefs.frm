@@ -2050,7 +2050,7 @@ End Sub
 
 Private Sub chkGaugeFunctions_Click()
     btnSave.Enabled = True ' enable the save button
-    Overlay.Ticking = chkGaugeFunctions.Value
+    overlayWidget.Ticking = chkGaugeFunctions.Value
 End Sub
 
 Private Sub chkGenStartup_Click()
@@ -2172,7 +2172,7 @@ Private Sub chkPreventDragging_Click()
     btnSave.Enabled = True ' enable the save button
     ' immediately make the widget locked in place
     If chkPreventDragging.Value = 0 Then
-        'Overlay.Locked = 0
+        'overlayWidget.Locked = 0
         PzGPreventDragging = "0"
         If aspectRatio = "landscape" Then
             txtLandscapeHoffset.Text = vbNullString
@@ -2182,14 +2182,14 @@ Private Sub chkPreventDragging_Click()
             txtPortraitYoffset.Text = vbNullString
         End If
     Else
-        'Overlay.Locked = 1
+        'overlayWidget.Locked = 1
         PzGPreventDragging = "1"
 '        If aspectRatio = "landscape" Then
-'            txtLandscapeHoffset.Text = fAlpha.GaugeForm.Left
-'            txtLandscapeVoffset.Text = fAlpha.GaugeForm.Top
+'            txtLandscapeHoffset.Text = fAlpha.gaugeForm.Left
+'            txtLandscapeVoffset.Text = fAlpha.gaugeForm.Top
 '        Else
-'            txtPortraitHoffset.Text = fAlpha.GaugeForm.Left
-'            txtPortraitYoffset.Text = fAlpha.GaugeForm.Top
+'            txtPortraitHoffset.Text = fAlpha.gaugeForm.Left
+'            txtPortraitYoffset.Text = fAlpha.gaugeForm.Top
 '        End If
     End If
 
@@ -2220,12 +2220,12 @@ Private Sub chkWidgetHidden_Click()
    On Error GoTo chkWidgetHidden_Click_Error
 
     If chkWidgetHidden.Value = 0 Then
-        'Overlay.Hidden = False
+        'overlayWidget.Hidden = False
 
         frmTimer.revealWidgetTimer.Enabled = False
         PzGWidgetHidden = "0"
     Else
-        'Overlay.Hidden = True
+        'overlayWidget.Hidden = True
 
         frmTimer.revealWidgetTimer.Enabled = True
         PzGWidgetHidden = "1"
@@ -2256,13 +2256,13 @@ Private Sub cmbAspectHidden_Click()
    On Error GoTo cmbAspectHidden_Click_Error
 
     If cmbAspectHidden.ListIndex = 1 And aspectRatio = "portrait" Then
-        'Overlay.Hidden = True
+        'overlayWidget.Hidden = True
 
     ElseIf cmbAspectHidden.ListIndex = 2 And aspectRatio = "landscape" Then
-        'Overlay.Hidden = True
+        'overlayWidget.Hidden = True
 
     Else
-        'Overlay.Hidden = False
+        'overlayWidget.Hidden = False
     End If
 
     btnSave.Enabled = True ' enable the save button
@@ -2334,7 +2334,7 @@ Private Sub cmbScrollWheelDirection_Click()
    On Error GoTo cmbScrollWheelDirection_Click_Error
 
     btnSave.Enabled = True ' enable the save button
-    'Overlay.ZoomDirection = cmbScrollWheelDirection.List(cmbScrollWheelDirection.ListIndex)
+    'overlayWidget.ZoomDirection = cmbScrollWheelDirection.List(cmbScrollWheelDirection.ListIndex)
 
    On Error GoTo 0
    Exit Sub
@@ -2945,13 +2945,13 @@ Private Sub adjustPrefsControls()
         
     If PzGPreventDragging = "1" Then
         If aspectRatio = "landscape" Then
-'            txtLandscapeHoffset.Text = fAlpha.GaugeForm.Left
-'            txtLandscapeVoffset.Text = fAlpha.GaugeForm.Top
+'            txtLandscapeHoffset.Text = fAlpha.gaugeForm.Left
+'            txtLandscapeVoffset.Text = fAlpha.gaugeForm.Top
             txtLandscapeHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGMaximiseFormX & "px"
             txtLandscapeVoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGMaximiseFormY & "px"
         Else
-'            txtPortraitHoffset.Text = fAlpha.GaugeForm.Left
-'            txtPortraitYoffset.Text = fAlpha.GaugeForm.Top
+'            txtPortraitHoffset.Text = fAlpha.gaugeForm.Left
+'            txtPortraitYoffset.Text = fAlpha.gaugeForm.Top
             txtPortraitHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGMaximiseFormX & "px"
             txtPortraitYoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGMaximiseFormY & "px"
         End If
@@ -3483,24 +3483,24 @@ Private Sub imgWindow_MouseUp(Button As Integer, shift As Integer, X As Single, 
 End Sub
 
 'Private Sub sliAnimationInterval_Change()
-'    'globeWidget.RotationSpeed = sliAnimationInterval.Value
+'    'overlayWidget.RotationSpeed = sliAnimationInterval.Value
 '    btnSave.Enabled = True ' enable the save button
 '
 'End Sub
 
 'Private Sub 'sliWidgetSkew_Click()
 '    btnSave.Enabled = True ' enable the save button
-'    'globeWidget.GlobeSkewDeg = 'sliWidgetSkew.Value
+'    'overlayWidget.GlobeSkewDeg = 'sliWidgetSkew.Value
 'End Sub
 
 Private Sub sliGaugeSize_Change()
     btnSave.Enabled = True ' enable the save button
-    'globeWidget.Zoom = sliGaugeSize.Value / 100
+    'overlayWidget.Zoom = sliGaugeSize.Value / 100
 End Sub
 
 Private Sub sliOpacity_Change()
     btnSave.Enabled = True ' enable the save button
-    'globeWidget.opacity = sliOpacity.Value / 100
+    'overlayWidget.opacity = sliOpacity.Value / 100
     PzGOpacity = LTrim$(Str$(sliOpacity.Value))
 End Sub
 

@@ -20,7 +20,7 @@ Public revealWidgetTimerCount As Integer
  
 Public fAlpha As New cfAlpha
 Public aboutWidget As cwAbout
-Public Overlay As cwOverlay
+Public overlayWidget As cwOverlay
 
 '---------------------------------------------------------------------------------------
 ' Procedure : Main
@@ -359,13 +359,13 @@ Public Sub adjustMainControls()
     ' validate the inputs of any data from the input settings file
     Call validateInputs
     
-'    'globeWidget.RotationSpeed = Val(PzGAnimationInterval)
-'    'globeWidget.Zoom = Val(PzGGaugeSize) / 100
-'    'globeWidget.ZoomDirection = PzGScrollWheelDirection
+'    'overlayWidget.RotationSpeed = Val(PzGAnimationInterval)
+'    'overlayWidget.Zoom = Val(PzGGaugeSize) / 100
+'    'overlayWidget.ZoomDirection = PzGScrollWheelDirection
 '
-'    If 'globeWidget.Hidden = False Then
-'        'globeWidget.opacity = Val(PzGOpacity) / 100
-'        'globeWidget.Widget.Refresh
+'    If 'overlayWidget.Hidden = False Then
+'        'overlayWidget.opacity = Val(PzGOpacity) / 100
+'        'overlayWidget.Widget.Refresh
 '    End If
 
 
@@ -376,11 +376,11 @@ Public Sub adjustMainControls()
 'PzGSecondaryDaylightSaving
     
     If PzGGaugeFunctions = "1" Then
-        Overlay.Ticking = True
+        overlayWidget.Ticking = True
         menuForm.mnuSwitchOff.Checked = False
         menuForm.mnuTurnFunctionsOn.Checked = True
     Else
-        Overlay.Ticking = False
+        overlayWidget.Ticking = False
         menuForm.mnuSwitchOff.Checked = True
         menuForm.mnuTurnFunctionsOn.Checked = False
     End If
@@ -394,16 +394,16 @@ Public Sub adjustMainControls()
         
     If PzGPreventDragging = "0" Then
         menuForm.mnuLockWidget.Checked = False
-        ''globeWidget.Locked = False
+        ''overlayWidget.Locked = False
     Else
         menuForm.mnuLockWidget.Checked = True
-        'globeWidget.Locked = True ' this is just here for continuity's sake, it is also set at the time the control is selected
+        'overlayWidget.Locked = True ' this is just here for continuity's sake, it is also set at the time the control is selected
     End If
     
     If PzGShowTaskbar = "0" Then
-        fAlpha.GaugeForm.ShowInTaskbar = False
+        fAlpha.gaugeForm.ShowInTaskbar = False
     Else
-        fAlpha.GaugeForm.ShowInTaskbar = True
+        fAlpha.gaugeForm.ShowInTaskbar = True
     End If
                  
     ' set the z-ordering of the window
@@ -438,11 +438,11 @@ Public Sub setWindowZordering()
    On Error GoTo setWindowZordering_Error
 
 '    If Val(PzGWindowLevel) = 0 Then
-'        Call SetWindowPos(fAlpha.GaugeForm.hwnd, HWND_BOTTOM, 0&, 0&, 0&, 0&, OnTopFlags)
+'        Call SetWindowPos(fAlpha.gaugeForm.hwnd, HWND_BOTTOM, 0&, 0&, 0&, 0&, OnTopFlags)
 '    ElseIf Val(PzGWindowLevel) = 1 Then
-'        Call SetWindowPos(fAlpha.GaugeForm.hwnd, HWND_TOP, 0&, 0&, 0&, 0&, OnTopFlags)
+'        Call SetWindowPos(fAlpha.gaugeForm.hwnd, HWND_TOP, 0&, 0&, 0&, 0&, OnTopFlags)
 '    ElseIf Val(PzGWindowLevel) = 2 Then
-'        Call SetWindowPos(fAlpha.GaugeForm.hwnd, HWND_TOPMOST, 0&, 0&, 0&, 0&, OnTopFlags)
+'        Call SetWindowPos(fAlpha.gaugeForm.hwnd, HWND_TOPMOST, 0&, 0&, 0&, 0&, OnTopFlags)
 '    End If
 
    On Error GoTo 0

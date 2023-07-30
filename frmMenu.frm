@@ -313,7 +313,7 @@ End Sub
 Private Sub mnuHideWidget_Click()
     On Error GoTo mnuHideWidget_Click_Error
        
-    'globeWidget.Hidden = True
+    'overlayWidget.Hidden = True
     
     frmTimer.revealWidgetTimer.Enabled = True
     PzGWidgetHidden = "1"
@@ -348,10 +348,10 @@ Private Sub mnuLockWidget_Click()
     If PzGPreventDragging = "1" Then
         mnuLockWidget.Checked = False
         PzGPreventDragging = "0"
-        'globeWidget.Locked = False
+        'overlayWidget.Locked = False
     Else
         mnuLockWidget.Checked = True
-        'globeWidget.Locked = 1
+        'overlayWidget.Locked = 1
         PzGPreventDragging = "1"
     End If
 
@@ -576,7 +576,7 @@ End Sub
 Private Sub mnuSwitchOff_Click()
    On Error GoTo mnuSwitchOff_Click_Error
 
-    Overlay.Ticking = False
+    overlayWidget.Ticking = False
     mnuSwitchOff.Checked = True
     mnuTurnFunctionsOn.Checked = False
     
@@ -608,7 +608,7 @@ Private Sub mnuTurnFunctionsOn_Click()
         PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
 
-    Overlay.Ticking = True
+    overlayWidget.Ticking = True
     mnuSwitchOff.Checked = False
     mnuTurnFunctionsOn.Checked = True
     

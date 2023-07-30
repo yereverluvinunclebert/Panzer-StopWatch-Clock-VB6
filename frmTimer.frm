@@ -92,7 +92,7 @@ Private Sub revealWidgetTimer_Timer()
     revealWidgetTimerCount = revealWidgetTimerCount + 1
     If revealWidgetTimerCount >= (minutesToHide * 12) Then
         revealWidgetTimerCount = 0
-        'globeWidget.Hidden = False
+        'overlayWidget.Hidden = False
         revealWidgetTimer.Enabled = False
         PzGWidgetHidden = "0"
         sPutINISetting "Software\PzStopwatch", "widgetHidden", PzGWidgetHidden, PzGSettingsFile
@@ -164,7 +164,7 @@ Private Sub settingsTimer_Timer()
     PzGUnhide = fGetINISetting("Software\PzStopwatch", "unhide", PzGSettingsFile)
 
     If PzGUnhide = "true" Then
-        'globeWidget.Hidden = False
+        'overlayWidget.Hidden = False
         sPutINISetting "Software\PzStopwatch", "unhide", vbNullString, PzGSettingsFile
     End If
 

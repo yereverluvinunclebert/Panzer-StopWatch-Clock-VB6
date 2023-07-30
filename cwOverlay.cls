@@ -51,7 +51,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                  Set Pat.Matrix = Pat.Matrix.TranslateCoords(19, 160) 'shift to the "rotation-point" within the Pattern
                  CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                  CC.RotateDrawingsDeg -7 + HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
-   
+                 
              Case "set 1/face/layer 38", "set 1/face/layer 39" 'minutes-shadow- and minutes-hand
                  Set Pat.Matrix = Pat.Matrix.TranslateCoords(44, 105) 'shift to the "rotation-point" within the Pattern
                  CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
@@ -72,12 +72,28 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
    Next
 End Sub
  
+'---------------------------------------------------------------------------------------
+' Procedure : tmrClock_Timer
+' Author    : beededea
+' Date      : 30/07/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
 Private Sub tmrClock_Timer() 'update the private "Degree-Variables" for Hour-, Minute- and Second-Hands + Refresh
   Static T As Date: T = Time
+   On Error GoTo tmrClock_Timer_Error
+
   HDeg = 30 * (Hour(T) Mod 12 + Minute(T) / 60)
   MDeg = 6 * (Minute(T) + Second(T) / 60)
   If SDeg <> 6 * Second(T) Then SDeg = 6 * Second(T) Else Exit Sub 'only refresh, when SDeg was changed to a new value
   W.Parent.Refresh
+
+   On Error GoTo 0
+   Exit Sub
+
+tmrClock_Timer_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrClock_Timer of Class Module cwOverlay"
 End Sub
 
 
@@ -98,7 +114,7 @@ Public Property Get Ticking() As Boolean
 
 TickingGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Ticking of Class Module cwGlobe"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Ticking of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
 ' Procedure : Ticking
@@ -122,5 +138,5 @@ Public Property Let Ticking(ByVal newValue As Boolean)
 
 TickingLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Ticking of Class Module cwGlobe"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Ticking of Class Module cwOverlay"
 End Property ' the earth Ticking flag

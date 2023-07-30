@@ -1537,10 +1537,10 @@ Public Sub setMainTooltips()
    On Error GoTo setMainTooltips_Error
 
     If PzGEnableTooltips = "1" Then
-        ''globeWidget.Widget.FontName = PzGPrefsFont ' does not apply to the tooltip
-        'globeWidget.Widget.ToolTip = "Use CTRL+mouse scrollwheel up/down to resize."
+        ''overlayWidget.Widget.FontName = PzGPrefsFont ' does not apply to the tooltip
+        'overlayWidget.Widget.ToolTip = "Use CTRL+mouse scrollwheel up/down to resize."
     Else
-        'globeWidget.Widget.ToolTip = ""
+        'overlayWidget.Widget.ToolTip = ""
     End If
     
     Call ChangeToolTipWidgetDefaultSettings(Cairo.ToolTipWidget.Widget)
@@ -1592,13 +1592,13 @@ Public Sub makeVisibleFormElements()
 
     'NOTE that when you position a widget you are positioning the form it is drawn upon.
 
-    fAlpha.GaugeForm.Left = Val(fGetINISetting("Software\PzStopwatch", "maximiseFormX", PzGSettingsFile)) ' / screenPixelsPerPixelX
-    fAlpha.GaugeForm.Top = Val(fGetINISetting("Software\PzStopwatch", "maximiseFormY", PzGSettingsFile)) ' / screenPixelsPerPixelY
+    fAlpha.gaugeForm.Left = Val(fGetINISetting("Software\PzStopwatch", "maximiseFormX", PzGSettingsFile)) ' / screenPixelsPerPixelX
+    fAlpha.gaugeForm.Top = Val(fGetINISetting("Software\PzStopwatch", "maximiseFormY", PzGSettingsFile)) ' / screenPixelsPerPixelY
 
     ' The RC forms are measured in pixels, do remember that...
 
-    fAlpha.GaugeForm.show
-    'fAlpha.GaugeForm.Refresh
+    fAlpha.gaugeForm.show
+    'fAlpha.gaugeForm.Refresh
 
     On Error GoTo 0
     Exit Sub
@@ -1796,47 +1796,47 @@ Public Sub mainScreen()
     If aspectRatio = "landscape" Then
         If PzGWidgetLandscape = "1" Then
             If PzGLandscapeFormHoffset <> vbNullString Then
-                fAlpha.GaugeForm.Left = Val(PzGLandscapeFormHoffset)
-                fAlpha.GaugeForm.Top = Val(PzGLandscapeFormVoffset)
+                fAlpha.gaugeForm.Left = Val(PzGLandscapeFormHoffset)
+                fAlpha.gaugeForm.Top = Val(PzGLandscapeFormVoffset)
             End If
         End If
         If PzGAspectHidden = "2" Then
             'Print "Hiding the widget for landscape mode"
-            'globeWidget.opacity = 0
+            'overlayWidget.opacity = 0
         End If
     End If
     
     ' check if the widget has a lock for the screen type.
     If aspectRatio = "portrait" Then
         If PzGWidgetPortrait = "1" Then
-            fAlpha.GaugeForm.Left = Val(PzGPortraitHoffset)
-            fAlpha.GaugeForm.Top = Val(PzGPortraitYoffset)
+            fAlpha.gaugeForm.Left = Val(PzGPortraitHoffset)
+            fAlpha.gaugeForm.Top = Val(PzGPortraitYoffset)
         End If
         If PzGAspectHidden = "1" Then
             'Print "Hiding the widget for portrait mode"
-            'globeWidget.opacity = 0
+            'overlayWidget.opacity = 0
         End If
     End If
 
     ' calculate the on screen widget position
-    If fAlpha.GaugeForm.Left < 0 Then
-        fAlpha.GaugeForm.Left = 10
+    If fAlpha.gaugeForm.Left < 0 Then
+        fAlpha.gaugeForm.Left = 10
     End If
-    If fAlpha.GaugeForm.Top < 0 Then
-        fAlpha.GaugeForm.Top = 0
+    If fAlpha.gaugeForm.Top < 0 Then
+        fAlpha.gaugeForm.Top = 0
     End If
-    If fAlpha.GaugeForm.Left > screenWidthPixels - 50 Then
-        fAlpha.GaugeForm.Left = screenWidthPixels - 150
+    If fAlpha.gaugeForm.Left > screenWidthPixels - 50 Then
+        fAlpha.gaugeForm.Left = screenWidthPixels - 150
     End If
-    If fAlpha.GaugeForm.Top > screenHeightPixels - 50 Then
-        fAlpha.GaugeForm.Top = screenHeightPixels - 150
+    If fAlpha.gaugeForm.Top > screenHeightPixels - 50 Then
+        fAlpha.gaugeForm.Top = screenHeightPixels - 150
     End If
 
     ' calculate the current hlocation in % of the screen
     ' store the current hlocation in % of the screen
     If PzGWidgetPosition = "1" Then
-        PzGhLocationPercPrefValue = Str$(fAlpha.GaugeForm.Left / screenWidthPixels * 100)
-        PzGvLocationPercPrefValue = Str$(fAlpha.GaugeForm.Top / screenHeightPixels * 100)
+        PzGhLocationPercPrefValue = Str$(fAlpha.gaugeForm.Left / screenWidthPixels * 100)
+        PzGvLocationPercPrefValue = Str$(fAlpha.gaugeForm.Top / screenHeightPixels * 100)
     End If
 
    On Error GoTo 0
@@ -1860,8 +1860,8 @@ Public Sub thisForm_Unload() ' name follows VB6 standard naming convention
     
     On Error GoTo Form_Unload_Error
     
-    PzGMaximiseFormX = Str$(fAlpha.GaugeForm.Left) ' saving in pixels
-    PzGMaximiseFormY = Str$(fAlpha.GaugeForm.Top)
+    PzGMaximiseFormX = Str$(fAlpha.gaugeForm.Left) ' saving in pixels
+    PzGMaximiseFormY = Str$(fAlpha.gaugeForm.Top)
     
     sPutINISetting "Software\PzStopwatch", "maximiseFormX", PzGMaximiseFormX, PzGSettingsFile
     sPutINISetting "Software\PzStopwatch", "maximiseFormY", PzGMaximiseFormY, PzGSettingsFile
@@ -1905,14 +1905,14 @@ Public Sub unloadAllForms(ByVal endItAll As Boolean)
     Unload menuForm
 
     fMain.aboutForm.Unload  ' RC6's own method for killing forms
-    fAlpha.GaugeForm.Unload
+    fAlpha.gaugeForm.Unload
     
     ' remove all variable references to each form in turn
     
     Set panzerPrefs = Nothing
     Set helpForm = Nothing
     Set fMain.aboutForm = Nothing
-    Set fAlpha.GaugeForm = Nothing
+    Set fAlpha.gaugeForm = Nothing
     Set frmLicence = Nothing
     Set frmTimer = Nothing
     Set menuForm = Nothing
@@ -1981,8 +1981,8 @@ Public Sub makeProgramPreferencesAvailable()
         
             Call readPrefsPosition
             
-'            If ((fAlpha.GaugeForm.Left + fAlpha.GaugeForm.Width) * screenTwipsPerPixelX) + 200 + panzerPrefs.Width > screenWidthTwips Then
-'                panzerPrefs.Left = (fAlpha.GaugeForm.Left * screenTwipsPerPixelX) - (panzerPrefs.Width + 200)
+'            If ((fAlpha.gaugeForm.Left + fAlpha.gaugeForm.Width) * screenTwipsPerPixelX) + 200 + panzerPrefs.Width > screenWidthTwips Then
+'                panzerPrefs.Left = (fAlpha.gaugeForm.Left * screenTwipsPerPixelX) - (panzerPrefs.Width + 200)
 '            End If
             
             If panzerPrefs.Left < 0 Then panzerPrefs.Left = 0
