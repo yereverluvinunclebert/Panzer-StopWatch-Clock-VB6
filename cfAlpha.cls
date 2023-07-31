@@ -183,12 +183,13 @@ Private Sub gaugeForm_MouseMove(Button As Integer, shift As Integer, X As Single
   
    On Error GoTo gaugeForm_MouseMove_Error
 
-   If Button = vbLeftButton And Not gaugeForm.ActiveWidget Is Nothing Then 'Form-Dragging (under certain conditions)
-     'If StrComp(gaugeForm.ActiveWidget.Key, DragWidgetKey, vbTextCompare) Then Exit Sub 'leave, if the ActiveWidget.Key is not the DragWidgetKey
-     FX = (X - x0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Left
-     FY = (Y - y0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Top
-     gaugeForm.Move FX, FY
-  End If
+    If overlayWidget.Locked = True Then Exit Sub
+    If Button = vbLeftButton And Not gaugeForm.ActiveWidget Is Nothing Then 'Form-Dragging (under certain conditions)
+      'If StrComp(gaugeForm.ActiveWidget.Key, DragWidgetKey, vbTextCompare) Then Exit Sub 'leave, if the ActiveWidget.Key is not the DragWidgetKey
+      FX = (X - x0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Left
+      FY = (Y - y0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Top
+      gaugeForm.Move FX, FY
+    End If
 
    On Error GoTo 0
    Exit Sub

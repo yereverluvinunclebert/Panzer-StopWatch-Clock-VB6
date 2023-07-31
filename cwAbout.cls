@@ -74,10 +74,10 @@ Public Property Get Widgets() As cWidgets:  Set Widgets = W.Widgets: End Propert
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub W_MouseDown(Button As Integer, shift As Integer, ByVal x As Single, ByVal y As Single)
+Private Sub W_MouseDown(Button As Integer, shift As Integer, ByVal X As Single, ByVal Y As Single)
    On Error GoTo W_MouseDown_Error
 
-    tmrFadeOut.Enabled = True
+    tmrFadeOut.Enabled = True ' this is not currently making the opacity reduce
 
    On Error GoTo 0
    Exit Sub
@@ -176,15 +176,15 @@ End Property
 Private Sub tmrFadeIn_Timer()
       
    On Error GoTo tmrFadeIn_Timer_Error
-        fMain.aboutForm.show
-        opacity = opacity + 0.05
-        If opacity >= 1 Then
-            opacity = 1
+    fMain.aboutForm.show
+    opacity = opacity + 0.05
+    If opacity >= 1 Then
+        opacity = 1
 
-            tmrFadeIn.Enabled = False
+        tmrFadeIn.Enabled = False
 
-            Exit Sub
-        End If
+        Exit Sub
+    End If
     W.Refresh
 
    On Error GoTo 0
@@ -201,20 +201,22 @@ End Sub
 ' Date      : 17/05/2023
 ' Purpose   : timer to make the about form or about image fade out in opacity
 '---------------------------------------------------------------------------------------
-'
+' < - this timer is not causing the opacity to fade out
 Private Sub tmrFadeOut_Timer()
       
    On Error GoTo tmrFadeOut_Timer_Error
 
-        opacity = opacity - 0.05
-        If opacity < 0 Then
-            opacity = 0
-
-            tmrFadeOut.Enabled = False
-            fMain.aboutForm.Hide
-
-            Exit Sub
-        End If
+    opacity = opacity - 0.05
+    
+    If opacity < 0 Then
+        opacity = 0
+        
+        tmrFadeOut.Enabled = False
+        fMain.aboutForm.Hide
+        
+        Exit Sub
+    End If
+    
     W.Refresh
 
    On Error GoTo 0
@@ -262,7 +264,7 @@ Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Sing
     W.ForeColor = vbBlack
     W.SelectFontSettingsInto CC
     W.Refresh
-    
+   
     CC.DrawText 0, 0, dx + 350, dy - 390, "                                                                                                                            version " & App.Major & "." & App.Minor & "." & App.Revision & vbNullString, , , 2, True, , mOpacity
 
    On Error GoTo 0

@@ -28,7 +28,13 @@ Private WithEvents tmrClock As cTimer, HDeg As Double, MDeg As Double, SDeg As D
 Attribute tmrClock.VB_VarHelpID = -1
 
 Private mTicking As Boolean
+Private mLocked As Boolean
+Private mHidden As Boolean
 
+' property mLocked
+' property mHidden
+
+ 
 '---------------------------------------------------------------------------------------
 ' Procedure : Class_Initialize
 ' Author    : beededea
@@ -54,6 +60,139 @@ End Sub
 
 Public Property Get Widget() As cWidgetBase: Set Widget = W: End Property
 Public Property Get Widgets() As cWidgets: Set Widgets = W.Widgets: End Property
+
+
+'---------------------------------------------------------------------------------------
+' Property : Ticking
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Get Ticking() As Boolean
+   On Error GoTo TickingGet_Error
+
+  Ticking = mTicking
+
+   On Error GoTo 0
+   Exit Property
+
+TickingGet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Ticking of Class Module cwOverlay"
+End Property
+'---------------------------------------------------------------------------------------
+' Property  : Ticking
+' Author    :
+' Date      : 09/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Let Ticking(ByVal newValue As Boolean)
+   On Error GoTo TickingLet_Error
+
+  If mTicking <> newValue Then mTicking = newValue Else Exit Property
+    If mTicking Then
+        Set tmrClock = New_c.Timer(200, True)
+    Else
+        Set tmrClock = Nothing
+    End If
+
+   On Error GoTo 0
+   Exit Property
+
+TickingLet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Ticking of Class Module cwOverlay"
+End Property ' the earth Ticking flag
+
+
+'---------------------------------------------------------------------------------------
+' Property : Locked
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Get Locked() As Boolean
+   On Error GoTo LockedGet_Error
+
+  Locked = mLocked
+
+   On Error GoTo 0
+   Exit Property
+
+LockedGet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwGlobe"
+End Property
+'---------------------------------------------------------------------------------------
+' Property  : Locked
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Let Locked(ByVal newValue As Boolean)
+   On Error GoTo LockedLet_Error
+
+  If mLocked <> newValue Then mLocked = newValue Else Exit Property
+
+   On Error GoTo 0
+   Exit Property
+
+LockedLet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwGlobe"
+End Property
+
+'---------------------------------------------------------------------------------------
+' Property  : Hidden
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Get Hidden() As Boolean
+   On Error GoTo HiddenGet_Error
+
+  Hidden = mHidden
+
+   On Error GoTo 0
+   Exit Property
+
+HiddenGet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwGlobe"
+End Property
+'---------------------------------------------------------------------------------------
+' Property  : Hidden
+' Author    : beededea
+' Date      : 10/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Let Hidden(ByVal newValue As Boolean)
+   On Error GoTo HiddenLet_Error
+
+    If mHidden <> newValue Then mHidden = newValue Else Exit Property
+    If mHidden = True Then
+        W.Visible = False
+        'opacity = 0
+        W.Refresh
+    Else
+        W.Visible = True
+        'opacity = Val(PzGOpacity) / 100
+        W.Refresh
+    End If
+
+   On Error GoTo 0
+   Exit Property
+
+HiddenLet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwGlobe"
+End Property
 
 Private Sub W_HitTest(ByVal X As Single, ByVal Y As Single, HitResultHit As Boolean) 'ensure ClickThrough-behaviour in ImagePixels which are "fully Alpha"
   HitResultHit = False 'for this Overlay-Widget, we make everything "fully click-through"
@@ -120,46 +259,3 @@ tmrClock_Timer_Error:
 End Sub
 
 
-'---------------------------------------------------------------------------------------
-' Procedure : Ticking
-' Author    : beededea
-' Date      : 17/05/2023
-' Purpose   :
-'---------------------------------------------------------------------------------------
-'
-Public Property Get Ticking() As Boolean
-   On Error GoTo TickingGet_Error
-
-  Ticking = mTicking
-
-   On Error GoTo 0
-   Exit Property
-
-TickingGet_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Ticking of Class Module cwOverlay"
-End Property
-'---------------------------------------------------------------------------------------
-' Procedure : Ticking
-' Author    :
-' Date      : 09/05/2023
-' Purpose   :
-'---------------------------------------------------------------------------------------
-'
-Public Property Let Ticking(ByVal newValue As Boolean)
-   On Error GoTo TickingLet_Error
-
-  If mTicking <> newValue Then mTicking = newValue Else Exit Property
-    If mTicking Then
-        Set tmrClock = New_c.Timer(200, True)
-    Else
-        Set tmrClock = Nothing
-    End If
-
-   On Error GoTo 0
-   Exit Property
-
-TickingLet_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Ticking of Class Module cwOverlay"
-End Property ' the earth Ticking flag

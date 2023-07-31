@@ -23,8 +23,6 @@ Option Explicit
 Public WithEvents aboutForm As cWidgetForm
 Attribute aboutForm.VB_VarHelpID = -1
 
-
-
 '---------------------------------------------------------------------------------------
 ' Procedure : InitAndShowAsFreeForm
 ' Author    :

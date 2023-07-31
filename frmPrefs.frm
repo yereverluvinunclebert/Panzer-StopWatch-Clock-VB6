@@ -2172,7 +2172,7 @@ Private Sub chkPreventDragging_Click()
     btnSave.Enabled = True ' enable the save button
     ' immediately make the widget locked in place
     If chkPreventDragging.Value = 0 Then
-        'overlayWidget.Locked = 0
+        overlayWidget.Locked = 0
         PzGPreventDragging = "0"
         If aspectRatio = "landscape" Then
             txtLandscapeHoffset.Text = vbNullString
@@ -2182,15 +2182,15 @@ Private Sub chkPreventDragging_Click()
             txtPortraitYoffset.Text = vbNullString
         End If
     Else
-        'overlayWidget.Locked = 1
+        overlayWidget.Locked = 1
         PzGPreventDragging = "1"
-'        If aspectRatio = "landscape" Then
-'            txtLandscapeHoffset.Text = fAlpha.gaugeForm.Left
-'            txtLandscapeVoffset.Text = fAlpha.gaugeForm.Top
-'        Else
-'            txtPortraitHoffset.Text = fAlpha.gaugeForm.Left
-'            txtPortraitYoffset.Text = fAlpha.gaugeForm.Top
-'        End If
+        If aspectRatio = "landscape" Then
+            txtLandscapeHoffset.Text = fAlpha.gaugeForm.Left
+            txtLandscapeVoffset.Text = fAlpha.gaugeForm.Top
+        Else
+            txtPortraitHoffset.Text = fAlpha.gaugeForm.Left
+            txtPortraitYoffset.Text = fAlpha.gaugeForm.Top
+        End If
     End If
 
     On Error GoTo 0

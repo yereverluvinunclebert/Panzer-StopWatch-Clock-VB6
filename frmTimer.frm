@@ -79,6 +79,8 @@ Option Explicit
 
 
 
+
+
 '---------------------------------------------------------------------------------------
 ' Procedure : revealWidgetTimer_Timer
 ' Author    : beededea

@@ -348,10 +348,10 @@ Private Sub mnuLockWidget_Click()
     If PzGPreventDragging = "1" Then
         mnuLockWidget.Checked = False
         PzGPreventDragging = "0"
-        'overlayWidget.Locked = False
+        overlayWidget.Locked = False
     Else
         mnuLockWidget.Checked = True
-        'overlayWidget.Locked = 1
+        overlayWidget.Locked = 1
         PzGPreventDragging = "1"
     End If
 

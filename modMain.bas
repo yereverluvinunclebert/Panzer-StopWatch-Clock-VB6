@@ -368,10 +368,10 @@ Public Sub adjustMainControls()
         
     If PzGPreventDragging = "0" Then
         menuForm.mnuLockWidget.Checked = False
-        ''overlayWidget.Locked = False
+        overlayWidget.Locked = False
     Else
         menuForm.mnuLockWidget.Checked = True
-        'overlayWidget.Locked = True ' this is just here for continuity's sake, it is also set at the time the control is selected
+        overlayWidget.Locked = True ' this is just here for continuity's sake, it is also set at the time the control is selected
     End If
     
     If PzGShowTaskbar = "0" Then
