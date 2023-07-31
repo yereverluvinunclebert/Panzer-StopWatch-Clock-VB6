@@ -15,11 +15,11 @@ Private Const OnTopFlags  As Long = SWP_NOMOVE Or SWP_NOSIZE
 '------------------------------------------------------ ENDS
 
 Public fMain As New cfMain
+Public aboutWidget As cwAbout
 
 Public revealWidgetTimerCount As Integer
  
 Public fAlpha As New cfAlpha
-Public aboutWidget As cwAbout
 Public overlayWidget As cwOverlay
 
 '---------------------------------------------------------------------------------------
@@ -58,45 +58,19 @@ Public Sub mainRoutine(ByVal restart As Boolean)
 
     On Error GoTo main_routine_Error
     
-    chosenDragLayer = "Set 1/face/Set 1/Layer 30"
+    chosenDragLayer = "stopwatch/face/housing/surround"
     thisPSDFullPath = App.Path & "\Res\tank-clock-mk1.psd"
-    
-    'Cairo.SetDPIAwareness
+    fAlpha.FX = 222 'init position- and zoom-values (directly set on Public-Props of the Form-hosting Class)
+    fAlpha.FY = 111
+    fAlpha.FZ = 0.4
+        
+    'Cairo.SetDPIAwareness ' this is off for the moment
  
-    If restart = False Then ' no need to reload the PSDExcludePaths layer name keys
-        'Cairo.ImageList.AddImage "app-exit", App.Path & "\Res\app-exit.svgz" 'add the image-key and resource for the close-widget
-        
-        fAlpha.FX = 222 'init position- and zoom-values (directly set on Public-Props of the Form-hosting Class)
-        fAlpha.FY = 111
-        fAlpha.FZ = 0.4
-        
-        'every PSD-Path we exclude here from the normal PSD-Widget-Loading, will later be rendered in cwOverlay (in that exact order)
-        With fAlpha.PSDExcludePaths
-          .Add Empty, "set 1/face/layer 36 copy" 'arrow-hand-top
-          .Add Empty, "set 1/face/layer 36"      'arrow-hand-right
-          .Add Empty, "set 1/face/layer 35"      'arrow-hand-bottom
-          
-          .Add Empty, "set 1/face/layer 40" 'clock-hand-hours-shadow
-          .Add Empty, "set 1/face/layer 32" 'clock-hand-hours
-         
-          .Add Empty, "set 1/face/layer 38" 'clock-hand-minutes-shadow
-          .Add Empty, "set 1/face/layer 39" 'clock-hand-minutes
+    'load the collection for storing the overlay surfaces with its relevant keys direct from the PSD
+    If restart = False Then Call loadExcludePathCollection ' no need to reload the collPSDExcludePaths layer name keys
     
-          .Add Empty, "set 1/face/layer 33" 'clock-hand-seconds-shadow
-          .Add Empty, "set 1/face/layer 34" 'clock-hand-seconds
-     
-          .Add Empty, "set 1/big reflection/layer 7" 'all reflections
-          .Add Empty, "set 1/big reflection/layer 9"
-          .Add Empty, "set 1/big reflection/layer 10"
-          .Add Empty, "set 1/window reflection/layer 8"
-          .Add Empty, "set 1/window reflection/layer 23 copy"
-          .Add Empty, "set 1/window reflection/layer 23 copy 3"
-          .Add Empty, "set 1/window reflection/layer 23 copy 2"
-        End With
-    End If
-    
-    ' start the load of the PSD file using RC6 PSD-Parser.instance
-    fAlpha.InitFromPSD thisPSDFullPath, chosenDragLayer ' no optional close layer
+    ' start the load of the PSD file using the RC6 PSD-Parser.instance
+    Call fAlpha.InitFromPSD(thisPSDFullPath, chosenDragLayer)  ' no optional close layer as 3rd param
     
     ' initialise global vars
     Call initialiseGlobalVars
@@ -155,7 +129,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     ' when running twice on reload.
     If Cairo.WidgetForms.Count = 0 Then Cairo.WidgetForms.EnterMessageLoop
   
-  Debug.Print "App-ShutDown (one can buffer these values for the next run):"; fAlpha.FX; fAlpha.FY; fAlpha.FZ
+  'Debug.Print "App-ShutDown (one can buffer these values for the next run):"; fAlpha.FX; fAlpha.FY; fAlpha.FZ
    
    On Error GoTo 0
    Exit Sub
@@ -789,3 +763,43 @@ handleUnhideMode_Error:
     End With
 End Sub
 
+'---------------------------------------------------------------------------------------
+' Procedure : loadExcludePathCollection
+' Author    : beededea
+' Date      : 30/07/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub loadExcludePathCollection()
+
+        'every PSD-Path we exclude here from the normal PSD-Widget-Loading, will later be rendered in cwOverlay (in that exact order)
+   On Error GoTo loadExcludePathCollection_Error
+
+        With fAlpha.collPSDExcludePaths
+          .Add Empty, "stopwatch/face/swSecondHand" 'arrow-hand-top
+          .Add Empty, "stopwatch/face/swMinuteHand"      'arrow-hand-right
+          .Add Empty, "stopwatch/face/swHourHand"      'arrow-hand-bottom
+          
+          .Add Empty, "stopwatch/face/hourShadow" 'clock-hand-hours-shadow
+          .Add Empty, "stopwatch/face/hourHand" 'clock-hand-hours
+         
+          .Add Empty, "stopwatch/face/minuteShadow" 'clock-hand-minutes-shadow
+          .Add Empty, "stopwatch/face/minuteHand" 'clock-hand-minutes
+    
+          .Add Empty, "stopwatch/face/secondShadow" 'clock-hand-seconds-shadow
+          .Add Empty, "stopwatch/face/secondHand" 'clock-hand-seconds
+     
+          .Add Empty, "stopwatch/bigReflection" 'all reflections
+          .Add Empty, "stopwatch/windowReflection"
+
+        End With
+
+
+   On Error GoTo 0
+   Exit Sub
+
+loadExcludePathCollection_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure loadExcludePathCollection of Module modMain"
+
+End Sub

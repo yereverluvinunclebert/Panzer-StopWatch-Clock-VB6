@@ -11,9 +11,16 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+'---------------------------------------------------------------------------------------
+' Module    : cwOverlay
+' Author    : beededea
+' Date      : 31/07/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+
 Option Explicit 'a "fully click-through" Widget, which allows for "all kind of things to render "on top of the PSD-generated Widgets"
 
-Public OverlayImages As cCollection, cxPerc As Single, cyPerc As Single 'these Public Props are set in the Parent (here, cfAlpha)
+Public cCollOverlayImages As cCollection, cxPerc As Single, cyPerc As Single 'these Public Props are set in the Parent (here, cfAlpha)
 
 Private WithEvents W As cWidgetBase
 Attribute W.VB_VarHelpID = -1
@@ -22,11 +29,27 @@ Attribute tmrClock.VB_VarHelpID = -1
 
 Private mTicking As Boolean
 
+'---------------------------------------------------------------------------------------
+' Procedure : Class_Initialize
+' Author    : beededea
+' Date      : 31/07/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
 Private Sub Class_Initialize()
+   On Error GoTo Class_Initialize_Error
+
   Set W = Cairo.WidgetBase
-      W.BackColor = -1  'we don't use any BackColor here
+      W.BackColor = -1  'we don't use any BackColor here, transparent
       W.ImplementsHitTest = True 'when at False, no HitTest-Event would be triggered
   Set tmrClock = New_c.Timer(200, True)
+
+   On Error GoTo 0
+   Exit Sub
+
+Class_Initialize_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Class_Initialize of Class Module cwOverlay"
 End Sub
 
 Public Property Get Widget() As cWidgetBase: Set Widget = W: End Property
@@ -39,25 +62,25 @@ End Sub
 
 Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As Single, ByVal dx_Aligned As Single, ByVal dy_Aligned As Single, UserObj As Object)
    Dim i As Long, Arr, Key As String, Pat As cCairoPattern
-   For i = 0 To OverlayImages.Count - 1
-     Arr = OverlayImages.ItemByIndex(i)
-     Key = OverlayImages.KeyByIndex(i)
+   For i = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection
+     Arr = cCollOverlayImages.ItemByIndex(i)
+     Key = cCollOverlayImages.KeyByIndex(i)
      
      If IsArray(Arr) Then
         CC.Save
            Set Pat = Cairo.ImageList(Key).CreateSurfacePattern 'derive a Pattern-Obj from each retrieved ImageList-Surface-reference
            Select Case Key
-             Case "set 1/face/layer 40", "set 1/face/layer 32" 'hours-shadow- and hour-hand
+             Case "stopwatch/face/hourShadow", "stopwatch/face/hourHand" 'hours-shadow- and hour-hand
                  Set Pat.Matrix = Pat.Matrix.TranslateCoords(19, 160) 'shift to the "rotation-point" within the Pattern
                  CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                  CC.RotateDrawingsDeg -7 + HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
                  
-             Case "set 1/face/layer 38", "set 1/face/layer 39" 'minutes-shadow- and minutes-hand
+             Case "stopwatch/face/minuteShadow", "stopwatch/face/minuteHand" 'minutes-shadow- and minutes-hand
                  Set Pat.Matrix = Pat.Matrix.TranslateCoords(44, 105) 'shift to the "rotation-point" within the Pattern
                  CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                  CC.RotateDrawingsDeg -61 + MDeg
                  
-              Case "set 1/face/layer 33", "set 1/face/layer 34" 'seconds-shadow- and seconds-hand
+              Case "stopwatch/face/secondShadow", "stopwatch/face/secondHand" 'seconds-shadow- and seconds-hand
                  Set Pat.Matrix = Pat.Matrix.TranslateCoords(60, 160) 'shift to the "rotation-point" within the Pattern
                  CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                  CC.RotateDrawingsDeg -50 + SDeg
