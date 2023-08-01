@@ -18,9 +18,9 @@ Attribute gaugeForm.VB_VarHelpID = -1
 
 Public collPSDNonUIElements As cCollection, FX As Long, FY As Long, FZ As Single  'available on the outside, even after the Form was closed
 
-Private PSDWidth As Long: PSDWidth = 0
-Private PSDHeight As Long: PSDHeight = 0
-Private DragWidgetKey As String: DragWidgetKey = vbNullString
+Private PSDWidth As Long
+Private PSDHeight As Long
+Private DragWidgetKey As String
 
 ', CloseWidgetKey As String, CloseWidget As cWidgetBase
 
@@ -182,16 +182,16 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub gaugeForm_MouseMove(Button As Integer, shift As Integer, X As Single, Y As Single)
-  Static x0 As Single, y0 As Single: If Button = 0 Then x0 = X: y0 = Y 'just store the offsets when no button is down
+Private Sub gaugeForm_MouseMove(Button As Integer, shift As Integer, x As Single, y As Single)
+  Static x0 As Single, y0 As Single: If Button = 0 Then x0 = x: y0 = y 'just store the offsets when no button is down
   
    On Error GoTo gaugeForm_MouseMove_Error
 
     If overlayWidget.Locked = True Then Exit Sub
     If Button = vbLeftButton And Not gaugeForm.ActiveWidget Is Nothing Then 'Form-Dragging (under certain conditions)
       'If StrComp(gaugeForm.ActiveWidget.Key, DragWidgetKey, vbTextCompare) Then Exit Sub 'leave, if the ActiveWidget.Key is not the DragWidgetKey
-      FX = (X - x0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Left
-      FY = (Y - y0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Top
+      FX = (x - x0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Left
+      FY = (y - y0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Top
       gaugeForm.Move FX, FY
     End If
 
@@ -272,7 +272,7 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub gaugeForm_MouseDown(Button As Integer, shift As Integer, X As Single, Y As Single)
+Private Sub gaugeForm_MouseDown(Button As Integer, shift As Integer, x As Single, y As Single)
    On Error GoTo W_MouseDown_Error
 
     If Button = vbRightButton Then

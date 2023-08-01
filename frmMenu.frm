@@ -314,7 +314,7 @@ Private Sub mnuHideWidget_Click()
     On Error GoTo mnuHideWidget_Click_Error
        
     'overlayWidget.Hidden = True
-    
+    fAlpha.gaugeForm.Visible = False
     frmTimer.revealWidgetTimer.Enabled = True
     PzGWidgetHidden = "1"
     ' we have to save the value here

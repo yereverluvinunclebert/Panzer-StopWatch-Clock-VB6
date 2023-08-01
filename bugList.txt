@@ -1,8 +1,13 @@
-' aboutForm is not fading out but instantly hiding, opacity is acting strangely on fade out
-' GaugeForm.WidgetRoot.Zoom in PzStop does not scale images as well as CC.ScaleDrawings in PzEarth
 ' all references to globeForm need to refer to the new form - done
+' Rename all the PSD layers to proper names to equate to the YWE version - done
+' hiding - make it work - done
+
+' aboutForm is not fading back in but instantly hiding, opacity is acting strangely on fade out
+' GaugeForm.WidgetRoot.Zoom in PzStop does not scale images as well as CC.ScaleDrawings in PzEarth
+
 ' Cairo.DpiAwareness is off to avoid the partly graphical VB6 native forms requiring new images
 ' Change the helpForm to an RC6 form?
-' Rename all the PSD layers to proper names to equate to the YWE version - WIP
-' upgrade to RC6 new verion to obtain opacity control over the overlays currently limited to 25%
+
+' upgrade to RC6 new version from Olaf to obtain opacity control over the overlays currently limited to 25%
 ' monitorProperties, make it work
+
