@@ -177,6 +177,7 @@ Private Sub tmrFadeIn_Timer()
       
    On Error GoTo tmrFadeIn_Timer_Error
     fMain.aboutForm.show
+    
     opacity = opacity + 0.05
     If opacity >= 1 Then
         opacity = 1
@@ -233,7 +234,7 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub W_Paint(CC As cCairoContext, ByVal xAbs As Single, ByVal yAbs As Single, ByVal dx_Aligned As Single, ByVal dy_Aligned As Single, UserObj As Object)
+Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As Single, ByVal dx_Aligned As Single, ByVal dy_Aligned As Single, UserObj As Object)
    On Error GoTo W_Paint_Error
 
     Draw CC, dx_Aligned, dy_Aligned, mOpacity

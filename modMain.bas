@@ -67,7 +67,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     'Cairo.SetDPIAwareness ' this is off for the moment
  
     'load the collection for storing the overlay surfaces with its relevant keys direct from the PSD
-    If restart = False Then Call loadExcludePathCollection ' no need to reload the collPSDExcludePaths layer name keys
+    If restart = False Then Call loadExcludePathCollection ' no need to reload the collPSDNonUIElements layer name keys
     
     ' start the load of the PSD file using the RC6 PSD-Parser.instance
     Call fAlpha.InitFromPSD(thisPSDFullPath, chosenDragLayer)  ' no optional close layer as 3rd param
@@ -714,7 +714,7 @@ Private Sub createAboutFormOnCurrentDisplay()
     On Error GoTo createAboutFormOnCurrentDisplay_Error
 
     With New_c.Displays(1) 'get the current Display
-      fMain.InitAndShowAsFreeForm .WorkLeft, .WorkTop, 1000, 1000, "Panzer Earth Gauge"
+      fMain.initAndShowAboutForm .WorkLeft, .WorkTop, 1000, 1000, "Panzer Earth Gauge"
     End With
 
     On Error GoTo 0
@@ -767,33 +767,33 @@ End Sub
 ' Procedure : loadExcludePathCollection
 ' Author    : beededea
 ' Date      : 30/07/2023
-' Purpose   :
+' Purpose   : Do not create Widgets for those in the exclude list.
+'             all non UI-interacting elements (no mouse events) must be inserted here
 '---------------------------------------------------------------------------------------
 '
 Private Sub loadExcludePathCollection()
 
-        'every PSD-Path we exclude here from the normal PSD-Widget-Loading, will later be rendered in cwOverlay (in that exact order)
-   On Error GoTo loadExcludePathCollection_Error
+    'all of these will be rendered in cwOverlay in the same order as below
+    On Error GoTo loadExcludePathCollection_Error
 
-        With fAlpha.collPSDExcludePaths
+        With fAlpha.collPSDNonUIElements ' the exclude list
           .Add Empty, "stopwatch/face/swSecondHand" 'arrow-hand-top
-          .Add Empty, "stopwatch/face/swMinuteHand"      'arrow-hand-right
-          .Add Empty, "stopwatch/face/swHourHand"      'arrow-hand-bottom
+          .Add Empty, "stopwatch/face/swMinuteHand" 'arrow-hand-right
+          .Add Empty, "stopwatch/face/swHourHand"   'arrow-hand-bottom
           
-          .Add Empty, "stopwatch/face/hourShadow" 'clock-hand-hours-shadow
-          .Add Empty, "stopwatch/face/hourHand" 'clock-hand-hours
+          .Add Empty, "stopwatch/face/hourShadow"   'clock-hand-hours-shadow
+          .Add Empty, "stopwatch/face/hourHand"     'clock-hand-hours
          
           .Add Empty, "stopwatch/face/minuteShadow" 'clock-hand-minutes-shadow
-          .Add Empty, "stopwatch/face/minuteHand" 'clock-hand-minutes
+          .Add Empty, "stopwatch/face/minuteHand"   'clock-hand-minutes
     
           .Add Empty, "stopwatch/face/secondShadow" 'clock-hand-seconds-shadow
-          .Add Empty, "stopwatch/face/secondHand" 'clock-hand-seconds
+          .Add Empty, "stopwatch/face/secondHand"   'clock-hand-seconds
      
-          .Add Empty, "stopwatch/bigReflection" 'all reflections
+          .Add Empty, "stopwatch/bigReflection"     'all reflections
           .Add Empty, "stopwatch/windowReflection"
 
         End With
-
 
    On Error GoTo 0
    Exit Sub

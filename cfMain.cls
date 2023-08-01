@@ -24,18 +24,17 @@ Public WithEvents aboutForm As cWidgetForm
 Attribute aboutForm.VB_VarHelpID = -1
 
 '---------------------------------------------------------------------------------------
-' Procedure : InitAndShowAsFreeForm
+' Procedure : initAndShowAboutForm
 ' Author    :
 ' Date      : 27/04/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Sub InitAndShowAsFreeForm(ByVal X As Long, ByVal Y As Long, Optional ByVal dx As Long, Optional ByVal dy As Long, Optional ByVal Caption As String)
+Public Sub initAndShowAboutForm(ByVal X As Long, ByVal Y As Long, Optional ByVal dx As Long, Optional ByVal dy As Long, Optional ByVal Caption As String)
     
     Const WFFStyleTool As Integer = 7 ' additional styles above the normal five  WFFStyleTool = 7 makes the taskbar button go away
     
-    On Error GoTo InitAndShowAsFreeForm_Error
-
+    On Error GoTo initAndShowAboutForm_Error
     
     ' create an invisible form using a Cairo Widget Form with the predefined caption and sizing
     Set aboutForm = Cairo.WidgetForms.Create(WFFStyleTool, Caption, , 750, 675)
@@ -49,9 +48,9 @@ Public Sub InitAndShowAsFreeForm(ByVal X As Long, ByVal Y As Long, Optional ByVa
    On Error GoTo 0
    Exit Sub
 
-InitAndShowAsFreeForm_Error:
+initAndShowAboutForm_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure InitAndShowAsFreeForm of Class Module cfMain"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure initAndShowAboutForm of Class Module cfMain"
     
 End Sub
 '---------------------------------------------------------------------------------------

@@ -16,10 +16,13 @@ Option Explicit 'simple Alpha-Form (...to be filled with (mostly Img-) Content v
 Public WithEvents gaugeForm As cWidgetForm
 Attribute gaugeForm.VB_VarHelpID = -1
 
-Public collPSDExcludePaths As cCollection, FX As Long, FY As Long, FZ As Single  'available on the outside, even after the Form was closed
+Public collPSDNonUIElements As cCollection, FX As Long, FY As Long, FZ As Single  'available on the outside, even after the Form was closed
 
-Private PSDWidth As Long, PSDHeight As Long, DragWidgetKey As String ', CloseWidgetKey As String, CloseWidget As cWidgetBase
-Attribute PSDWidth.VB_VarHelpID = -1
+Private PSDWidth As Long: PSDWidth = 0
+Private PSDHeight As Long: PSDHeight = 0
+Private DragWidgetKey As String: DragWidgetKey = vbNullString
+
+', CloseWidgetKey As String, CloseWidget As cWidgetBase
 
 Private mGlowing As Boolean
 '---------------------------------------------------------------------------------------
@@ -33,7 +36,7 @@ Private Sub Class_Initialize()
    On Error GoTo Class_Initialize_Error
 
     mGlowing = False ' when the alpha for the overlays arrives this might be usable
-    Set collPSDExcludePaths = New_c.Collection(False)
+    Set collPSDNonUIElements = New_c.Collection(False)
 
    On Error GoTo 0
    Exit Sub
@@ -47,7 +50,7 @@ End Sub
 ' Procedure : InitFromPSD
 ' Author    : beededea
 ' Date      : 31/07/2023
-' Purpose   :    loads up the Cairo imageList with keyed entries
+' Purpose   :    loads up the Cairo imageList with keyed entries and a surface from each and every PSD layer
 '                adds path X,Y and alpha to the excluded collection
 '                creates widgets with corresponding keynames, locations and sizes as per PSD for each layer
 '                cwOverlay class puts it on the screen
@@ -80,12 +83,12 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
       If .LayerByteSize(i) Then  ' this is a true Alpha-Surface-Layer and not just a PSD layer 'group'
          If .LayerAlphaPercent(i) > 0 Then ' only handles layers that have an opacity greater than 0 - need to note this for the future, this will cause a problem!
             
-            'add the current Layer path into the global ImageList (using LayerPath as the ImageKey)
-            Cairo.ImageList.AddSurface .LayerPath(i), .LayerSurface(i) ' required LayerSurface is always empty, so is this just loading up collection entries with empty surfaces?
+            'add each current Layer path and surface object into the global ImageList collection (using LayerPath as the ImageKey)
+            Cairo.ImageList.AddSurface .LayerPath(i), .LayerSurface(i)
             
-            If collPSDExcludePaths.Exists(.LayerPath(i)) Then ' we do not create Widgets for those in the exclude list.
+            If collPSDNonUIElements.Exists(.LayerPath(i)) Then ' we do not create Widgets for those in this exclude list.
                 'we add layer info. (used in cwOverlay) to the "excluded paths" previously defined in Sub Main,
-                collPSDExcludePaths(.LayerPath(i)) = Array(.LayerX(i), .LayerY(i), .LayerAlphaPercent(i)) 'here we update the so far empty slots with the PSD-offsets
+                collPSDNonUIElements(.LayerPath(i)) = Array(.LayerX(i), .LayerY(i), .LayerAlphaPercent(i)) 'here we update the so far empty slots with the PSD-offsets
                
             Else 'everything not in the exclude-list will get its own Widget-instance
                Set W = gaugeForm.Widgets.Add(New_W("cwAlphaImg"), LCase$(.LayerPath(i)), .LayerX(i), .LayerY(i), .LayerWidth(i), .LayerHeight(i)).Widget
@@ -96,7 +99,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                 ' Note: set the Hover colour close to the original layer to avoid too much intrusion, 0 being grey
                 ' Task: Name the PSD layers correctly
                 
-                ' Task: Add all layers that provide a UI function below
+                ' Task: Add all layers that provide a UI function below and assign properties as required
                 
                Select Case LCase$(W.Key) 'demonstrates, how to influence certain Widget-Props specifically (depending on the current LayerPath-Key)
                 ' set the characteristics of the indentified drag area
@@ -113,6 +116,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
             End If
          End If
       End If
+      
     Next
   End With '<-- the Parser-instance will be destroyed here (freeing the Memory, the internal PSD-Layers have occupied)
   
@@ -124,7 +128,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
 '  End If
   
   Set overlayWidget = gaugeForm.Widgets.Add(New cwOverlay, "Overlay", 0, 0, PSDWidth, PSDHeight)
-  Set overlayWidget.cCollOverlayImages = collPSDExcludePaths 'make the excluded PSD-Surface-Paths known to the Overlay-Widget
+  Set overlayWidget.cCollOverlayImages = collPSDNonUIElements 'make the excluded PSD-Surface-Paths known to the Overlay-Widget
       overlayWidget.cxPerc = 0.4940476 'define the relative center (within cwOverlay, which has the same size as the Form and the PSD...) this is used for clock-hand-positioning
       overlayWidget.cyPerc = 0.4727272
   

@@ -15,10 +15,11 @@ Attribute VB_Exposed = False
 ' Module    : cwOverlay
 ' Author    : beededea
 ' Date      : 31/07/2023
-' Purpose   :
+' Purpose   : create a fully click-through Widget, which allows for all kind of
+'             things to render on top of the PSD-generated Widgets created in cfAlpha
 '---------------------------------------------------------------------------------------
 
-Option Explicit 'a "fully click-through" Widget, which allows for "all kind of things to render "on top of the PSD-generated Widgets"
+Option Explicit
 
 Public cCollOverlayImages As cCollection, cxPerc As Single, cyPerc As Single 'these Public Props are set in the Parent (here, cfAlpha)
 
@@ -31,8 +32,9 @@ Private mTicking As Boolean
 Private mLocked As Boolean
 Private mHidden As Boolean
 
-' property mLocked
-' property mHidden
+' property Locked
+' property Hidden
+' property Ticking
 
  
 '---------------------------------------------------------------------------------------
@@ -193,45 +195,85 @@ HiddenLet_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwGlobe"
 End Property
-
+'
+'---------------------------------------------------------------------------------------------
+' Procedure : W_HitTest
+' Author    : beededea
+' Date      : 01/08/2023
+' Purpose   : This is run continuously for the whole widget.
+'             For this Overlay-Widget alone, we make everything "fully click-through"
+'---------------------------------------------------------------------------------------------
+'
 Private Sub W_HitTest(ByVal X As Single, ByVal Y As Single, HitResultHit As Boolean) 'ensure ClickThrough-behaviour in ImagePixels which are "fully Alpha"
-  HitResultHit = False 'for this Overlay-Widget, we make everything "fully click-through"
+   On Error GoTo W_HitTest_Error
+
+   HitResultHit = False
+
+   On Error GoTo 0
+   Exit Sub
+
+W_HitTest_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure W_HitTest of Class Module cwOverlay"
 End Sub
 
 
+'---------------------------------------------------------------------------------------
+' Procedure : W_Paint
+' Author    : beededea
+' Date      : 01/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
 Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As Single, ByVal dx_Aligned As Single, ByVal dy_Aligned As Single, UserObj As Object)
-   Dim i As Long, Arr, Key As String, Pat As cCairoPattern
-   For i = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection
+   Dim i As Long: i = 0
+   Dim Arr As Variant
+   Dim Key As String: Key = vbNullString
+   Dim Pat As cCairoPattern
+   
+   On Error GoTo W_Paint_Error
+
+   For i = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
      Arr = cCollOverlayImages.ItemByIndex(i)
      Key = cCollOverlayImages.KeyByIndex(i)
      
      If IsArray(Arr) Then
-        CC.Save
-           Set Pat = Cairo.ImageList(Key).CreateSurfacePattern 'derive a Pattern-Obj from each retrieved ImageList-Surface-reference
-           Select Case Key
-             Case "stopwatch/face/hourShadow", "stopwatch/face/hourHand" 'hours-shadow- and hour-hand
-                 Set Pat.Matrix = Pat.Matrix.TranslateCoords(19, 160) 'shift to the "rotation-point" within the Pattern
-                 CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
-                 CC.RotateDrawingsDeg -7 + HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
-                 
-             Case "stopwatch/face/minuteShadow", "stopwatch/face/minuteHand" 'minutes-shadow- and minutes-hand
-                 Set Pat.Matrix = Pat.Matrix.TranslateCoords(44, 105) 'shift to the "rotation-point" within the Pattern
-                 CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
-                 CC.RotateDrawingsDeg -61 + MDeg
-                 
-              Case "stopwatch/face/secondShadow", "stopwatch/face/secondHand" 'seconds-shadow- and seconds-hand
-                 Set Pat.Matrix = Pat.Matrix.TranslateCoords(60, 160) 'shift to the "rotation-point" within the Pattern
-                 CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
-                 CC.RotateDrawingsDeg -50 + SDeg
-  
-             Case Else 'plain output for everything else ... this includes the reflection-layers,
-                       'as well as the little arrow-hands which are not dynamically handled currently
-                Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'here we only shift the Pattern via the original PSD-Offsets (stored in Arr(0) and Arr(1))
-           End Select
-           CC.Paint Arr(2), Pat 'finally we render the Pattern with the current PSD-LayerAlpha, present in Arr(2)
-        CC.Restore
+            CC.Save
+            'derive a Pattern-Obj from each retrieved ImageList-Surface-reference
+            Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
+            
+            ' for specific keys perform rotation actions, clock hands &c
+            Select Case Key
+                Case "stopwatch/face/hourShadow", "stopwatch/face/hourHand" 'hours-shadow- and hour-hand
+                   Set Pat.Matrix = Pat.Matrix.TranslateCoords(19, 160) 'shift to the "rotation-point" within the Pattern
+                   CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
+                   CC.RotateDrawingsDeg -7 + HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                   
+                Case "stopwatch/face/minuteShadow", "stopwatch/face/minuteHand" 'minutes-shadow- and minutes-hand
+                   Set Pat.Matrix = Pat.Matrix.TranslateCoords(44, 105) 'shift to the "rotation-point" within the Pattern
+                   CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
+                   CC.RotateDrawingsDeg -61 + MDeg
+                   
+                Case "stopwatch/face/secondShadow", "stopwatch/face/secondHand" 'seconds-shadow- and seconds-hand
+                    Set Pat.Matrix = Pat.Matrix.TranslateCoords(60, 160) 'shift to the "rotation-point" within the Pattern
+                    CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
+                    CC.RotateDrawingsDeg -50 + SDeg
+    
+                Case Else 'plain output for everything else ... this includes the reflection-layers,
+                    'Task: add the little arrow-hands which are not dynamically handled currently
+                    Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'here we only shift the Pattern via the original PSD-Offsets (stored in Arr(0) and Arr(1))
+            End Select
+            CC.Paint Arr(2), Pat 'finally we render the Pattern with the current PSD-LayerAlpha, present in Arr(2)
+            CC.Restore
      End If
    Next
+
+   On Error GoTo 0
+   Exit Sub
+
+W_Paint_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure W_Paint of Class Module cwOverlay"
 End Sub
  
 '---------------------------------------------------------------------------------------

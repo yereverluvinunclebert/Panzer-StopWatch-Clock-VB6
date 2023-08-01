@@ -1437,7 +1437,7 @@ Public Sub aboutClickEvent()
     fMain.aboutForm.Load
     fMain.aboutForm.show
     
-    'aboutWidget.opacity = 0
+    aboutWidget.opacity = 0
     aboutWidget.show = True
     aboutWidget.Widget.Refresh
     
