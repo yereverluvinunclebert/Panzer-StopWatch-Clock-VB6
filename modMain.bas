@@ -4,7 +4,7 @@ Option Explicit
 
 '------------------------------------------------------ STARTS
 ' for SetWindowPos z-ordering
-Public Declare Function SetWindowPos Lib "user32" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal X As Long, ByVal Y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
+Public Declare Function SetWindowPos Lib "user32" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
 
 Private Const HWND_TOP As Long = 0 ' for SetWindowPos z-ordering
 Private Const HWND_TOPMOST As Long = -1
@@ -64,7 +64,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     fAlpha.FY = 111
     fAlpha.FZ = 0.4
         
-    'Cairo.SetDPIAwareness ' this is off for the moment
+    Cairo.SetDPIAwareness ' this is off for the moment
  
     'load the collection for storing the overlay surfaces with its relevant keys direct from the PSD
     If restart = False Then Call loadExcludePathCollection ' no need to reload the collPSDNonUIElements layer name keys
@@ -129,7 +129,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     ' when running twice on reload.
     If Cairo.WidgetForms.Count = 0 Then Cairo.WidgetForms.EnterMessageLoop
   
-  'Debug.Print "App-ShutDown (one can buffer these values for the next run):"; fAlpha.FX; fAlpha.FY; fAlpha.FZ
+    'Debug.Print "App-ShutDown (one can buffer these values for the next run):"; fAlpha.FX; fAlpha.FY; fAlpha.FZ
    
    On Error GoTo 0
    Exit Sub

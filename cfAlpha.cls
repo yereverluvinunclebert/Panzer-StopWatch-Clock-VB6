@@ -106,6 +106,8 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                 Case DragWidgetKey 'the "special DragWidgetKey" we've passed from the outside into this init-routine
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_SIZEALL
+                    
+                    W.ToolTip = "drag me"
                 ' set the characteristics of the interactive areas
                 Case "stopwatch/face/housing/helpButton", "stopwatch/face/housing/startButton", "stopwatch/face/housing/stopButton", "stopwatch/face/housing/switchFacesButton" 'three Widget-Keys, picked for "special click-behaviour"
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6

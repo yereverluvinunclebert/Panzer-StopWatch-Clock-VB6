@@ -3,14 +3,14 @@ Object = "{BCE37951-37DF-4D69-A8A3-2CFABEE7B3CC}#1.0#0"; "CCRSlider.ocx"
 Begin VB.Form panzerPrefs 
    AutoRedraw      =   -1  'True
    Caption         =   "Panzer Stop Watch Preferences"
-   ClientHeight    =   10650
+   ClientHeight    =   10635
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   8970
+   ClientWidth     =   8955
    LinkTopic       =   "Form2"
-   ScaleHeight     =   10800
+   ScaleHeight     =   10784.79
    ScaleMode       =   0  'User
-   ScaleWidth      =   8970
+   ScaleWidth      =   8955
    StartUpPosition =   3  'Windows Default
    Visible         =   0   'False
    Begin VB.Frame fraGeneral 
@@ -219,9 +219,10 @@ Begin VB.Form panzerPrefs
    Begin VB.CheckBox chkEnableResizing 
       Caption         =   "Enable Corner Resize"
       Height          =   210
-      Left            =   3225
+      Left            =   3240
       TabIndex        =   135
       Top             =   10125
+      Visible         =   0   'False
       Width           =   2250
    End
    Begin VB.Frame fraAboutButton 
@@ -1868,7 +1869,8 @@ Private Sub Form_Load()
 
     On Error GoTo Form_Load_Error
     
-    dynamicSizingFlg = False
+    dynamicSizingFlg = True
+    
     lastFormHeight = 0
     topIconWidth = 600 '40 pixels
     PzGFormXPosTwips = ""
@@ -1900,6 +1902,9 @@ Private Sub Form_Load()
     
     'load the about text
     Call loadPrefsAboutText
+    
+    Me.Height = 18000
+    chkEnableResizing.Value = 1
 
    On Error GoTo 0
    Exit Sub
@@ -3854,10 +3859,10 @@ Private Sub picButtonMouseUpEvent(ByVal thisTabName As String, ByRef thisPicName
     
     If thisTabName = "about" Then
         lblAsterix.Visible = False
-        chkEnableResizing.Visible = True
+        'chkEnableResizing.Visible = True
     Else
         lblAsterix.Visible = True
-        chkEnableResizing.Visible = False
+        'chkEnableResizing.Visible = False
     End If
     
    On Error GoTo 0

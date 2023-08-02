@@ -1537,10 +1537,10 @@ Public Sub setMainTooltips()
    On Error GoTo setMainTooltips_Error
 
     If PzGEnableTooltips = "1" Then
-        ''overlayWidget.Widget.FontName = PzGPrefsFont ' does not apply to the tooltip
-        'overlayWidget.Widget.ToolTip = "Use CTRL+mouse scrollwheel up/down to resize."
+        overlayWidget.Widget.FontName = PzGPrefsFont ' does not apply to the tooltip
+        overlayWidget.Widget.ToolTip = "Use CTRL+mouse scrollwheel up/down to resize."
     Else
-        'overlayWidget.Widget.ToolTip = ""
+        overlayWidget.Widget.ToolTip = ""
     End If
     
     Call ChangeToolTipWidgetDefaultSettings(Cairo.ToolTipWidget.Widget)
@@ -1564,10 +1564,10 @@ Public Sub ChangeToolTipWidgetDefaultSettings(My_Widget As cWidgetBase)
    On Error GoTo ChangeToolTipWidgetDefaultSettings_Error
 
     With My_Widget
-
+    
     .FontName = PzGPrefsFont
-    .FontSize = PzGPrefsFontSize
-
+    .FontSize = Val(PzGPrefsFontSize)
+    
     End With
 
    On Error GoTo 0
