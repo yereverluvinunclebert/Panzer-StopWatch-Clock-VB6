@@ -215,7 +215,7 @@ End Sub
 Private Sub gaugeForm_MouseWheel(ByVal MouseKeys As Long, ByVal Rotation As Long, ByVal Xpos As Single, ByVal Ypos As Single)
    On Error GoTo gaugeForm_MouseWheel_Error
 
-  If MouseKeys = 8 Then Call AdjustZoom(FZ + Rotation / 1200)   'change the Zoom only, when the Ctrl-Key is down
+  If MouseKeys = 8 Then Call AdjustZoom(FZ + Rotation / 2400)   'change the Zoom only, when the Ctrl-Key is down
 
    On Error GoTo 0
    Exit Sub

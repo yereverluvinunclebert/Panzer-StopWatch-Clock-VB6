@@ -290,7 +290,7 @@ Private Sub addImagesToImageList()
     On Error GoTo addImagesToImageList_Error
 
     Cairo.ImageList.AddImage "about", App.Path & "\Resources\images\about.png"
-    Cairo.ImageList.AddImage "help", App.Path & "\Resources\images\panzergauge-help.jpg"
+    Cairo.ImageList.AddImage "help", App.Path & "\Resources\images\panzergauge-help.png"
     
 '    'add Resources to the global ImageList
 '    Cairo.ImageList.AddImage "surround", App.Path & "\Resources\images\surround.png"

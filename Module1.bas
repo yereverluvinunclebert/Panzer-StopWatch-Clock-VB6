@@ -1539,8 +1539,12 @@ Public Sub setMainTooltips()
     If PzGEnableTooltips = "1" Then
         overlayWidget.Widget.FontName = PzGPrefsFont ' does not apply to the tooltip
         overlayWidget.Widget.ToolTip = "Use CTRL+mouse scrollwheel up/down to resize."
+        helpWidget.Widget.ToolTip = "Click on me to make me go away."
+        aboutWidget.Widget.ToolTip = "Click on me to make me go away."
     Else
-        overlayWidget.Widget.ToolTip = ""
+        overlayWidget.Widget.ToolTip = vbNullString
+        helpWidget.Widget.ToolTip = vbNullString
+        aboutWidget.Widget.ToolTip = vbNullString
     End If
     
     Call ChangeToolTipWidgetDefaultSettings(Cairo.ToolTipWidget.Widget)

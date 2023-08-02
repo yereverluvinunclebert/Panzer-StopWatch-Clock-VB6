@@ -55,7 +55,7 @@ Public Sub initAndShowStandardForms(ByVal X As Long, ByVal Y As Long, Optional B
     helpForm.WidgetRoot.BackColor = -1
          
     ' create a new globe widget with a name and location, first step of that is to run Class_Initialize
-    Set helpWidget = helpForm.Widgets.Add(New cwHelp, "help", 0, 0, 1100, 970)
+    Set helpWidget = helpForm.Widgets.Add(New cwHelp, "help", 0, 0, 1400, 1150)
 
 
    On Error GoTo 0
