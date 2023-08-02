@@ -2,14 +2,17 @@
 ' Rename all the PSD layers to proper names to equate to the YWE version - done
 ' hiding - make it work - done
 ' task bar display after save - done
-
-' aboutForm is not fading back in but instantly hiding, opacity is acting strangely on fade out
-' GaugeForm.WidgetRoot.Zoom in PzStop does not scale images as well as CC.ScaleDrawings in PzEarth
-
-' Cairo.DpiAwareness is off to avoid the partly graphical VB6 native forms requiring new images
-' Change the helpForm to an RC6 form?
+' Change the helpForm to an RC6 form - done
 
 ' upgrade to RC6 new version from Olaf to obtain opacity control over the overlays currently limited to 25%
 ' monitorProperties, make it work
 
+' stopwatch icon created
+' left justification frames in the prefs
+' left justification of help button
+
+' RC BUGS
+' about widget image shadows not rendering correctly in the stopwatch, same code on RC5 widget works correctly
+' aboutForm is not fading back-in but instantly hiding in DPI aware mode, opacity is acting strangely on second fade in
+' tooltips also resize when the whole thing is resized, which is not necessarily a good idea for a UI.
 

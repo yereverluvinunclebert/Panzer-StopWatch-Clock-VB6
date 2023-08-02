@@ -65,7 +65,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     fAlpha.FY = 111
     fAlpha.FZ = 0.4
         
-    Cairo.SetDPIAwareness ' this is off for the moment
+    Cairo.SetDPIAwareness
  
     'load the collection for storing the overlay surfaces with its relevant keys direct from the PSD
     If restart = False Then Call loadExcludePathCollection ' no need to reload the collPSDNonUIElements layer name keys

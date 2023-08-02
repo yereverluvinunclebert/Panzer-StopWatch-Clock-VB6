@@ -107,7 +107,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_SIZEALL
                     
-                    W.ToolTip = "drag me"
+                    W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
                 ' set the characteristics of the interactive areas
                 Case "stopwatch/face/housing/helpButton", "stopwatch/face/housing/startButton", "stopwatch/face/housing/stopButton", "stopwatch/face/housing/switchFacesButton" 'three Widget-Keys, picked for "special click-behaviour"
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
