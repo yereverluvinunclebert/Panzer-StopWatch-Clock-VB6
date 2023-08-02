@@ -6,6 +6,7 @@ Begin VB.Form frmLicence
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   5055
+   Icon            =   "licence.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
@@ -17,7 +18,7 @@ Begin VB.Form frmLicence
       BackColor       =   &H00414D38&
       Height          =   4245
       Left            =   -60
-      Picture         =   "licence.frx":0000
+      Picture         =   "licence.frx":385D2
       ScaleHeight     =   4185
       ScaleWidth      =   5055
       TabIndex        =   0

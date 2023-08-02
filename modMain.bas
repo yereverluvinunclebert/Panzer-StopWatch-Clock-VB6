@@ -4,7 +4,7 @@ Option Explicit
 
 '------------------------------------------------------ STARTS
 ' for SetWindowPos z-ordering
-Public Declare Function SetWindowPos Lib "user32" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
+Public Declare Function SetWindowPos Lib "user32" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal X As Long, ByVal Y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
 
 Private Const HWND_TOP As Long = 0 ' for SetWindowPos z-ordering
 Private Const HWND_TOPMOST As Long = -1
@@ -16,6 +16,7 @@ Private Const OnTopFlags  As Long = SWP_NOMOVE Or SWP_NOSIZE
 
 Public fMain As New cfMain
 Public aboutWidget As cwAbout
+Public helpWidget As cwHelp
 
 Public revealWidgetTimerCount As Integer
  
@@ -289,6 +290,7 @@ Private Sub addImagesToImageList()
     On Error GoTo addImagesToImageList_Error
 
     Cairo.ImageList.AddImage "about", App.Path & "\Resources\images\about.png"
+    Cairo.ImageList.AddImage "help", App.Path & "\Resources\images\panzergauge-help.jpg"
     
 '    'add Resources to the global ImageList
 '    Cairo.ImageList.AddImage "surround", App.Path & "\Resources\images\surround.png"
@@ -714,7 +716,7 @@ Private Sub createAboutFormOnCurrentDisplay()
     On Error GoTo createAboutFormOnCurrentDisplay_Error
 
     With New_c.Displays(1) 'get the current Display
-      fMain.initAndShowAboutForm .WorkLeft, .WorkTop, 1000, 1000, "Panzer Earth Gauge"
+      fMain.initAndShowStandardForms .WorkLeft, .WorkTop, 1000, 1000, "Panzer Stopwatch Gauge"
     End With
 
     On Error GoTo 0

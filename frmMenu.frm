@@ -285,15 +285,24 @@ Private Sub mnuHelpSplash_Click()
     If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
-    
-    helpForm.Top = (screenHeightTwips / 2) - (helpForm.Height / 2)
-    helpForm.Left = (screenWidthTwips / 2) - (helpForm.Width / 2)
+
+
+    fMain.helpForm.Top = (screenHeightPixels / 2) - (fMain.helpForm.Height / 2)
+    fMain.helpForm.Left = (screenWidthPixels / 2) - (fMain.helpForm.Width / 2)
      
-    helpForm.show
+    fMain.helpForm.Load
+    fMain.helpForm.show
     
-     If (helpForm.WindowState = 1) Then
-         helpForm.WindowState = 0
+    helpWidget.opacity = 0
+    helpWidget.show = True
+    helpWidget.Widget.Refresh
+    
+     If (fMain.helpForm.WindowState = 1) Then
+         fMain.helpForm.WindowState = 0
      End If
+
+
+
 
    On Error GoTo 0
    Exit Sub

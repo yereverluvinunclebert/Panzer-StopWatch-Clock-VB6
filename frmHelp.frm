@@ -1,5 +1,5 @@
 VERSION 5.00
-Begin VB.Form helpForm 
+Begin VB.Form helpFormOld 
    BorderStyle     =   0  'None
    Caption         =   "Form1"
    ClientHeight    =   8685
@@ -7,6 +7,7 @@ Begin VB.Form helpForm
    ClientTop       =   0
    ClientWidth     =   10770
    ControlBox      =   0   'False
+   Icon            =   "frmHelp.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   8685
    ScaleWidth      =   10770
@@ -19,7 +20,7 @@ Begin VB.Form helpForm
       ForeColor       =   &H80000008&
       Height          =   8685
       Left            =   0
-      Picture         =   "frmHelp.frx":0000
+      Picture         =   "frmHelp.frx":385D2
       ScaleHeight     =   8685
       ScaleWidth      =   10770
       TabIndex        =   0
@@ -37,7 +38,7 @@ Begin VB.Form helpForm
       End
    End
 End
-Attribute VB_Name = "helpForm"
+Attribute VB_Name = "helpFormOld"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True

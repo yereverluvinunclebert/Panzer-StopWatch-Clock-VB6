@@ -1899,19 +1899,20 @@ Public Sub unloadAllForms(ByVal endItAll As Boolean)
     ' unload the native VB6 and RC6 forms
     
     Unload panzerPrefs
-    Unload helpForm
+    'Unload helpForm
     Unload frmLicence
     Unload frmTimer
     Unload menuForm
 
     fMain.aboutForm.Unload  ' RC6's own method for killing forms
+    fMain.helpForm.Unload  ' RC6's own method for killing forms
     fAlpha.gaugeForm.Unload
     
     ' remove all variable references to each form in turn
     
     Set panzerPrefs = Nothing
-    Set helpForm = Nothing
     Set fMain.aboutForm = Nothing
+    Set fMain.helpForm = Nothing
     Set fAlpha.gaugeForm = Nothing
     Set frmLicence = Nothing
     Set frmTimer = Nothing

@@ -67,7 +67,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
     On Error GoTo InitFromPSD_Error
 
     'create the Alpha-capable Top-Level-Form
-    Set gaugeForm = Cairo.WidgetForms.Create(IIf(App.LogMode, AlphaNoTaskbarEntry, AlphaWithTaskbarEntry), "AlphaForm", True, 1, 1)
+    Set gaugeForm = Cairo.WidgetForms.Create(IIf(App.LogMode, AlphaNoTaskbarEntry, AlphaWithTaskbarEntry), "Panzer Stopwatch Gauge", True, 1, 1)
         gaugeForm.WidgetRoot.BackColor = -1
  
     With New_c.SimplePSD(PSD_FileNameOrByteArray)  'create a new PSD-Parser.instance (and load the passed content)
@@ -184,16 +184,16 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub gaugeForm_MouseMove(Button As Integer, shift As Integer, x As Single, y As Single)
-  Static x0 As Single, y0 As Single: If Button = 0 Then x0 = x: y0 = y 'just store the offsets when no button is down
+Private Sub gaugeForm_MouseMove(Button As Integer, shift As Integer, X As Single, Y As Single)
+  Static x0 As Single, y0 As Single: If Button = 0 Then x0 = X: y0 = Y 'just store the offsets when no button is down
   
    On Error GoTo gaugeForm_MouseMove_Error
 
     If overlayWidget.Locked = True Then Exit Sub
     If Button = vbLeftButton And Not gaugeForm.ActiveWidget Is Nothing Then 'Form-Dragging (under certain conditions)
       'If StrComp(gaugeForm.ActiveWidget.Key, DragWidgetKey, vbTextCompare) Then Exit Sub 'leave, if the ActiveWidget.Key is not the DragWidgetKey
-      FX = (x - x0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Left
-      FY = (y - y0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Top
+      FX = (X - x0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Left
+      FY = (Y - y0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Top
       gaugeForm.Move FX, FY
     End If
 
@@ -274,7 +274,7 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub gaugeForm_MouseDown(Button As Integer, shift As Integer, x As Single, y As Single)
+Private Sub gaugeForm_MouseDown(Button As Integer, shift As Integer, X As Single, Y As Single)
    On Error GoTo W_MouseDown_Error
 
     If Button = vbRightButton Then
