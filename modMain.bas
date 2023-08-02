@@ -64,6 +64,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     fAlpha.FX = 222 'init position- and zoom-values (directly set on Public-Props of the Form-hosting Class)
     fAlpha.FY = 111
     fAlpha.FZ = 0.4
+    
         
     Cairo.SetDPIAwareness
  
@@ -95,7 +96,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     Call createAboutFormOnCurrentDisplay
     
     ' set the z-ordering of the main form
-    Call setWindowZordering
+    'Call setWindowZordering
     
     ' place the form at the saved location
     Call makeVisibleFormElements
@@ -125,7 +126,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
 
     ' configure any global timers here
     Call configureTimers
-
+    
     ' RC message pump will auto-exit when Cairo Forms > 0 so we run it only when 0, this prevents message interruption
     ' when running twice on reload.
     If Cairo.WidgetForms.Count = 0 Then Cairo.WidgetForms.EnterMessageLoop
@@ -392,7 +393,7 @@ Public Sub adjustMainControls()
     Call setHidingTime
 
     If minutesToHide > 0 Then menuForm.mnuHideWidget.Caption = "Hide Widget for " & minutesToHide & " min."
-
+    
    On Error GoTo 0
    Exit Sub
 
@@ -413,13 +414,13 @@ Public Sub setWindowZordering()
 
    On Error GoTo setWindowZordering_Error
 
-'    If Val(PzGWindowLevel) = 0 Then
-'        Call SetWindowPos(fAlpha.gaugeForm.hwnd, HWND_BOTTOM, 0&, 0&, 0&, 0&, OnTopFlags)
-'    ElseIf Val(PzGWindowLevel) = 1 Then
-'        Call SetWindowPos(fAlpha.gaugeForm.hwnd, HWND_TOP, 0&, 0&, 0&, 0&, OnTopFlags)
-'    ElseIf Val(PzGWindowLevel) = 2 Then
-'        Call SetWindowPos(fAlpha.gaugeForm.hwnd, HWND_TOPMOST, 0&, 0&, 0&, 0&, OnTopFlags)
-'    End If
+    If Val(PzGWindowLevel) = 0 Then
+        Call SetWindowPos(fAlpha.gaugeForm.hwnd, HWND_BOTTOM, 0&, 0&, 0&, 0&, OnTopFlags)
+    ElseIf Val(PzGWindowLevel) = 1 Then
+        Call SetWindowPos(fAlpha.gaugeForm.hwnd, HWND_TOP, 0&, 0&, 0&, 0&, OnTopFlags)
+    ElseIf Val(PzGWindowLevel) = 2 Then
+        Call SetWindowPos(fAlpha.gaugeForm.hwnd, HWND_TOPMOST, 0&, 0&, 0&, 0&, OnTopFlags)
+    End If
 
    On Error GoTo 0
    Exit Sub
