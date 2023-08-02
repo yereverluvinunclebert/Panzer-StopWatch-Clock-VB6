@@ -257,6 +257,8 @@ End Sub
 Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Single, ByVal mOpacity As Double)
    On Error GoTo Draw_Error
 
+    CC.ScaleDrawings 1.4, 1.4
+
     CC.RenderSurfaceContent "about", aboutxo, aboutyo, , , , mOpacity
         
     'set some Font- and ForeColor-Properties and draw some Text on the Widget
@@ -266,7 +268,7 @@ Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Sing
     W.SelectFontSettingsInto CC
     W.Refresh
    
-    CC.DrawText 0, 0, dx + 350, dy - 390, "                                                                                                                            version " & App.Major & "." & App.Minor & "." & App.Revision & vbNullString, , , 2, True, , mOpacity
+    CC.DrawText 350, 0, dx, dy - 490, "version " & App.Major & "." & App.Minor & "." & App.Revision & vbNullString, , , 2, True, , mOpacity
 
    On Error GoTo 0
    Exit Sub

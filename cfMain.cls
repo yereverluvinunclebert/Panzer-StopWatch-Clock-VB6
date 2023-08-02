@@ -37,13 +37,13 @@ Public Sub initAndShowAboutForm(ByVal X As Long, ByVal Y As Long, Optional ByVal
     On Error GoTo initAndShowAboutForm_Error
     
     ' create an invisible form using a Cairo Widget Form with the predefined caption and sizing
-    Set aboutForm = Cairo.WidgetForms.Create(WFFStyleTool, Caption, , 750, 675)
+    Set aboutForm = Cairo.WidgetForms.Create(WFFStyleTool, Caption, , 1400, 1200)
     
     ' make the about form transparent
     aboutForm.WidgetRoot.BackColor = -1
          
     ' create a new globe widget with a name and location, first step of that is to run Class_Initialize
-    Set aboutWidget = aboutForm.Widgets.Add(New cwAbout, "about", 0, 0, 870, 870)
+    Set aboutWidget = aboutForm.Widgets.Add(New cwAbout, "about", 0, 0, 1100, 970)
 
    On Error GoTo 0
    Exit Sub
