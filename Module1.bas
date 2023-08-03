@@ -2120,3 +2120,45 @@ settingsTimer_Timer_Error:
 End Sub
 
 
+
+
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : lockWidget
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Sub lockWidget()
+
+    Dim fileToPlay As String: fileToPlay = vbNullString
+
+   On Error GoTo lockWidget_Error
+
+    fileToPlay = "lock.wav"
+    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
+        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+    End If
+    
+    If PzGPreventDragging = "1" Then
+        menuForm.mnuLockWidget.Checked = False
+        PzGPreventDragging = "0"
+        overlayWidget.Locked = False
+    Else
+        menuForm.mnuLockWidget.Checked = True
+        overlayWidget.Locked = 1
+        PzGPreventDragging = "1"
+    End If
+
+    sPutINISetting "Software\PzStopwatch", "preventDragging", PzGPreventDragging, PzGSettingsFile
+
+   On Error GoTo 0
+   Exit Sub
+
+lockWidget_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure lockWidget of Module Module1"
+
+End Sub

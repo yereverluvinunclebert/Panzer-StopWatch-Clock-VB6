@@ -367,8 +367,10 @@ End Sub
 '
 Private Sub lockbutton_click_event()
    On Error GoTo lockbutton_click_event_Error
+   
+    Call lockWidget
 
-    MsgBox "lock!"
+    'MsgBox "lock!"
 
    On Error GoTo 0
    Exit Sub
@@ -578,26 +580,26 @@ gaugeForm_MouseWheel_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure gaugeForm_MouseWheel of Class Module cfAlpha"
 End Sub
+''
+''---------------------------------------------------------------------------------------
+'' Procedure : gaugeForm_ResizeWithDimensionsDIP
+'' Author    : beededea
+'' Date      : 31/07/2023
+'' Purpose   : put any other resizing action in here - unused
+''---------------------------------------------------------------------------------------
+''
+'Private Sub gaugeForm_ResizeWithDimensionsDIP(ByVal dx As Single, ByVal dy As Single)
+'   On Error GoTo gaugeForm_ResizeWithDimensionsDIP_Error
 '
-'---------------------------------------------------------------------------------------
-' Procedure : gaugeForm_ResizeWithDimensionsDIP
-' Author    : beededea
-' Date      : 31/07/2023
-' Purpose   : put any other resizing action in here - unused
-'---------------------------------------------------------------------------------------
+'  'If Not CloseWidget Is Nothing Then CloseWidget.Move dx - 32, 0, 32, 32 'place the close-widget at the top-right of the form
 '
-Private Sub gaugeForm_ResizeWithDimensionsDIP(ByVal dx As Single, ByVal dy As Single)
-   On Error GoTo gaugeForm_ResizeWithDimensionsDIP_Error
-
-  'If Not CloseWidget Is Nothing Then CloseWidget.Move dx - 32, 0, 32, 32 'place the close-widget at the top-right of the form
-
-   On Error GoTo 0
-   Exit Sub
-
-gaugeForm_ResizeWithDimensionsDIP_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure gaugeForm_ResizeWithDimensionsDIP of Class Module cfAlpha"
-End Sub
+'   On Error GoTo 0
+'   Exit Sub
+'
+'gaugeForm_ResizeWithDimensionsDIP_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure gaugeForm_ResizeWithDimensionsDIP of Class Module cfAlpha"
+'End Sub
 
 '---------------------------------------------------------------------------------------
 ' Procedure : AdjustZoom

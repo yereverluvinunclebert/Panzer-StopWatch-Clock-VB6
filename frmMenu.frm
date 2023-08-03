@@ -345,26 +345,10 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub mnuLockWidget_Click()
-    Dim fileToPlay As String: fileToPlay = vbNullString
 
     On Error GoTo mnuLockWidget_Click_Error
-
-    fileToPlay = "lock.wav"
-    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
-        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
-    End If
     
-    If PzGPreventDragging = "1" Then
-        mnuLockWidget.Checked = False
-        PzGPreventDragging = "0"
-        overlayWidget.Locked = False
-    Else
-        mnuLockWidget.Checked = True
-        overlayWidget.Locked = 1
-        PzGPreventDragging = "1"
-    End If
-
-    sPutINISetting "Software\PzStopwatch", "preventDragging", PzGPreventDragging, PzGSettingsFile
+    Call lockWidget
 
    On Error GoTo 0
    Exit Sub
@@ -374,6 +358,9 @@ mnuLockWidget_Click_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuLockWidget_Click_Error of Form menuForm"
 
 End Sub
+
+
+
 
 '---------------------------------------------------------------------------------------
 ' Procedure : mnuProgramPreferences_Click
