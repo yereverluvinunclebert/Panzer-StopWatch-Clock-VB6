@@ -65,15 +65,8 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     fAlpha.FY = 111
     fAlpha.FZ = 0.4
     
-        
     Cairo.SetDPIAwareness
  
-    'load the collection for storing the overlay surfaces with its relevant keys direct from the PSD
-    If restart = False Then Call loadExcludePathCollection ' no need to reload the collPSDNonUIElements layer name keys
-    
-    ' start the load of the PSD file using the RC6 PSD-Parser.instance
-    Call fAlpha.InitFromPSD(thisPSDFullPath, chosenDragLayer)  ' no optional close layer as 3rd param
-    
     ' initialise global vars
     Call initialiseGlobalVars
     
@@ -88,7 +81,16 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     
     ' read the dock settings from the new configuration file
     Call readSettingsFile("Software\PzStopwatch", PzGSettingsFile)
+    
+    ' validate the inputs of any data from the input settings file
+    Call validateInputs
         
+    'load the collection for storing the overlay surfaces with its relevant keys direct from the PSD
+    If restart = False Then Call loadExcludePathCollection ' no need to reload the collPSDNonUIElements layer name keys
+    
+    ' start the load of the PSD file using the RC6 PSD-Parser.instance
+    Call fAlpha.InitFromPSD(thisPSDFullPath, chosenDragLayer)  ' no optional close layer as 3rd param
+            
     ' check first usage and display licence screen
     Call checkLicenceState
 
@@ -290,28 +292,10 @@ Private Sub addImagesToImageList()
     
     On Error GoTo addImagesToImageList_Error
 
+'    add Resources to the global ImageList that are not being pulled from the PSD directly
+    
     Cairo.ImageList.AddImage "about", App.Path & "\Resources\images\about.png"
     Cairo.ImageList.AddImage "help", App.Path & "\Resources\images\panzergauge-help.png"
-    
-'    'add Resources to the global ImageList
-'    Cairo.ImageList.AddImage "surround", App.Path & "\Resources\images\surround.png"
-'    Cairo.ImageList.AddImage "switchFacesButton", App.Path & "\Resources\images\switchFacesButton.png"
-'    Cairo.ImageList.AddImage "startButton", App.Path & "\Resources\images\startButton.png"
-'    Cairo.ImageList.AddImage "stopButton", App.Path & "\Resources\images\stopButton.png"
-'    Cairo.ImageList.AddImage "pin", App.Path & "\Resources\images\pin.png"
-'    Cairo.ImageList.AddImage "prefs", App.Path & "\Resources\images\prefs01.png"
-'    Cairo.ImageList.AddImage "helpButton", App.Path & "\Resources\images\helpButton.png"
-'    Cairo.ImageList.AddImage "tickSwitch", App.Path & "\Resources\images\tickSwitch.png"
-'
-'    For useloop = 1 To 36
-'        Cairo.ImageList.AddImage "EarthGlobe" & useloop, App.Path & "\Resources\images\globe\Earth-spinning_" & useloop & ".png"
-'    Next useloop
-'
-'    Cairo.ImageList.AddImage "Ring", App.Path & "\Resources\images\Ring.png", 545, 545
-'    Cairo.ImageList.AddImage "Glow", App.Path & "\Resources\images\Glow.png"
-'    Cairo.ImageList.AddImage "bigReflection", App.Path & "\Resources\images\bigReflection.png"
-'    Cairo.ImageList.AddImage "windowReflection", App.Path & "\Resources\images\windowReflection.png"
-    
     Cairo.ImageList.AddImage "frmIcon", App.Path & "\Resources\images\Icon.png"
 
    On Error GoTo 0
@@ -779,24 +763,40 @@ Private Sub loadExcludePathCollection()
     'all of these will be rendered in cwOverlay in the same order as below
     On Error GoTo loadExcludePathCollection_Error
 
-        With fAlpha.collPSDNonUIElements ' the exclude list
-          .Add Empty, "stopwatch/face/swSecondHand" 'arrow-hand-top
-          .Add Empty, "stopwatch/face/swMinuteHand" 'arrow-hand-right
-          .Add Empty, "stopwatch/face/swHourHand"   'arrow-hand-bottom
-          
-          .Add Empty, "stopwatch/face/hourShadow"   'clock-hand-hours-shadow
-          .Add Empty, "stopwatch/face/hourHand"     'clock-hand-hours
-         
-          .Add Empty, "stopwatch/face/minuteShadow" 'clock-hand-minutes-shadow
-          .Add Empty, "stopwatch/face/minuteHand"   'clock-hand-minutes
-    
-          .Add Empty, "stopwatch/face/secondShadow" 'clock-hand-seconds-shadow
-          .Add Empty, "stopwatch/face/secondHand"   'clock-hand-seconds
-     
-          .Add Empty, "stopwatch/bigReflection"     'all reflections
-          .Add Empty, "stopwatch/windowReflection"
+    With fAlpha.collPSDNonUIElements ' the exclude list
+        .Add Empty, "stopwatch/face/swSecondHand" 'arrow-hand-top
+        .Add Empty, "stopwatch/face/swMinuteHand" 'arrow-hand-right
+        .Add Empty, "stopwatch/face/swHourHand"   'arrow-hand-bottom
+        
+        .Add Empty, "stopwatch/face/hourShadow"   'clock-hand-hours-shadow
+        .Add Empty, "stopwatch/face/hourHand"     'clock-hand-hours
+        
+        .Add Empty, "stopwatch/face/minuteShadow" 'clock-hand-minutes-shadow
+        .Add Empty, "stopwatch/face/minuteHand"   'clock-hand-minutes
+        
+        .Add Empty, "stopwatch/face/secondShadow" 'clock-hand-seconds-shadow
+        .Add Empty, "stopwatch/face/secondHand"   'clock-hand-seconds
+        
+        .Add Empty, "stopwatch/bigReflection"     'all reflections
+        .Add Empty, "stopwatch/windowReflection"
+        
+        .Add Empty, "MKI for VB6"
+        .Add Empty, "PANZER"
+        
+        .Add Empty, "swHourFace"
+        .Add Empty, "swMinuteFace"
+        .Add Empty, "swSecondFace"
+        
+        .Add Empty, "4Digit"
+        .Add Empty, "2Digit"
+        .Add Empty, "eagle"
+        .Add Empty, "MADE IN GERMANY"
+        .Add Empty, "ITALO FONTANA"
+        
+        .Add Empty, "watchFace"
+        .Add Empty, "darkFaceBackground"
 
-        End With
+    End With
 
    On Error GoTo 0
    Exit Sub

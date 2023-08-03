@@ -50,6 +50,7 @@ Private Sub Class_Initialize()
   Set W = Cairo.WidgetBase
       W.BackColor = -1  'we don't use any BackColor here, transparent
       W.ImplementsHitTest = True 'when at False, no HitTest-Event would be triggered
+      
   Set tmrClock = New_c.Timer(200, True)
 
    On Error GoTo 0
@@ -264,6 +265,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'here we only shift the Pattern via the original PSD-Offsets (stored in Arr(0) and Arr(1))
             End Select
             CC.Paint Arr(2), Pat 'finally we render the Pattern with the current PSD-LayerAlpha, present in Arr(2)
+            
             CC.Restore
      End If
    Next

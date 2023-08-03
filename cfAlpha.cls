@@ -63,7 +63,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
   
     Dim i As Long: i = 0
     Dim W As cWidgetBase
-  
+   
     On Error GoTo InitFromPSD_Error
 
     'create the Alpha-capable Top-Level-Form
@@ -88,18 +88,18 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
             
             If collPSDNonUIElements.Exists(.LayerPath(i)) Then ' we do not create Widgets for those in this exclude list.
                 'we add layer info. (used in cwOverlay) to the "excluded paths" previously defined in Sub Main,
-                collPSDNonUIElements(.LayerPath(i)) = Array(.LayerX(i), .LayerY(i), .LayerAlphaPercent(i)) 'here we update the so far empty slots with the PSD-offsets
+                collPSDNonUIElements(.LayerPath(i)) = Array(.LayerX(i), .LayerY(i), Val(PzGOpacity) / 100) 'here we update the so far empty slots with the PSD-offsets
                
             Else 'everything not in the exclude-list will get its own Widget-instance
                Set W = gaugeForm.Widgets.Add(New_W("cwAlphaImg"), LCase$(.LayerPath(i)), .LayerX(i), .LayerY(i), .LayerWidth(i), .LayerHeight(i)).Widget
                    W.ImageKey = W.Key 'W.Key equals ImageList-Key, set above - and LayerPath(i) at this point ... set it also as the ImageKey of our new created Widget
-                   W.Alpha = .LayerAlphaPercent(i) 'important (to transport the PSD-LayerAlpha to this Widget-instance as well)
-                   'W.ToolTip = W.Key 'can be left out (or one can set it on specific Widgets, as shown in the Select Case below)
+                   'W.Alpha = .LayerAlphaPercent(i) 'important (to transport the PSD-LayerAlpha to this Widget-instance as well)
+                   ' W.ToolTip = W.Key 'can be left out (or one can set it on specific Widgets, as shown in the Select Case below)
+                   W.Alpha = Val(PzGOpacity) / 100
                    
                 ' Note: set the Hover colour close to the original layer to avoid too much intrusion, 0 being grey
-                ' Task: Name the PSD layers correctly
                 
-                ' Task: Add all layers that provide a UI function below and assign properties as required
+                ' Task: Add all layers that provide a UI function below and assign properties as required wip
                 
                Select Case LCase$(W.Key) 'demonstrates, how to influence certain Widget-Props specifically (depending on the current LayerPath-Key)
                 ' set the characteristics of the indentified drag area
@@ -107,13 +107,28 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_SIZEALL
                     
-                    W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
+                    'W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
                 ' set the characteristics of the interactive areas
-                Case "stopwatch/face/housing/helpButton", "stopwatch/face/housing/startButton", "stopwatch/face/housing/stopButton", "stopwatch/face/housing/switchFacesButton" 'three Widget-Keys, picked for "special click-behaviour"
+                Case "stopwatch/face/housing/helpbutton" 'three Widget-Keys, picked for "special click-behaviour"
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_HAND
+                    W.ToolTip = "Press for a little help."
+                'stopwatch/face/housing/startButton
+                Case "stopwatch/face/housing/startbutton"
+                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+                    W.MousePointer = IDC_HAND
+                    W.ToolTip = "Press to zero."
+                Case "stopwatch/face/housing/stopbutton"
+                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+                    W.MousePointer = IDC_HAND
+                    W.ToolTip = "Press to continue the timing run. This button is active only when a timing run has been paused."
+                Case "stopwatch/face/housing/switchfacesbutton"
+                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+                    W.MousePointer = IDC_HAND
+                    W.ToolTip = "Press to switch the dial faces."
                 Case Else 'all other added Layer-Widgets will be -1 or "non-hoverable" and "fully click-through"
                     W.HoverColor = -1
+                    W.MousePointer = IDC_NO
                End Select
             End If
          End If
