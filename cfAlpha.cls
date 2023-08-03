@@ -116,6 +116,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                     Else
                         W.ToolTip = vbNullString
                     End If
+                    
                 Case "stopwatch/face/housing/startbutton"
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_HAND
@@ -124,6 +125,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                     Else
                         W.ToolTip = vbNullString
                     End If
+                    
                 Case "stopwatch/face/housing/stopbutton"
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_HAND
@@ -141,6 +143,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                     End If
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_HAND
+                    
                 Case "stopwatch/face/housing/lockbutton"
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_HAND
@@ -149,6 +152,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                     Else
                         W.ToolTip = vbNullString
                     End If
+                    
                 Case "stopwatch/face/housing/prefsbutton"
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
 
@@ -158,6 +162,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                     Else
                         W.ToolTip = vbNullString
                     End If
+                    
                 Case "stopwatch/face/housing/tickbutton"
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_HAND
@@ -179,6 +184,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                     W.HoverColor = -1 ' task: might change this later when new ver or RC6 arrives
                     W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
                     W.MousePointer = IDC_SIZEALL
+                    
                End Select
                
 '                .Add Empty, "stopwatch/face/mki for vb6"
@@ -432,6 +438,97 @@ watchface_click_event_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure watchface_click_event of Class Module cfAlpha"
 
 End Sub
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : gaugeForm_DblClick
+' Author    : beededea
+' Date      : 05/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Sub gaugeForm_DblClick()
+
+    On Error GoTo gaugeForm_DblClick_Error
+
+    If LTrim$(PzGDblClickCommand) = vbNullString Then Exit Sub
+    If SHIFT_1 = True Then
+        SHIFT_1 = False
+        Call ShellExecute(fAlpha.gaugeForm.hwnd, "Open", PzGOpenFile, vbNullString, App.Path, 1)
+    Else
+        Call ShellExecute(fAlpha.gaugeForm.hwnd, "Open", PzGDblClickCommand, vbNullString, App.Path, 1)
+    End If
+
+    On Error GoTo 0
+    Exit Sub
+
+gaugeForm_DblClick_Error:
+
+    With Err
+         If .Number <> 0 Then
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure gaugeForm_DblClick of Class Module cfMain"
+            Resume Next
+          End If
+    End With
+End Sub
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : gaugeForm_KeyDown
+' Author    : beededea
+' Date      : 01/06/2019
+' Purpose   : get F5 and SHIFT keypresses
+'---------------------------------------------------------------------------------------
+'
+Private Sub gaugeForm_KeyDown(ByRef KeyCode As Integer, ByRef shift As Integer)
+    On Error GoTo gaugeForm_KeyDown_Error
+
+    Call getKeyPress(KeyCode, shift)
+
+    On Error GoTo 0
+    Exit Sub
+
+gaugeForm_KeyDown_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure gaugeForm_KeyDown of Class Module cfMain"
+End Sub
+''
+'---------------------------------------------------------------------------------------
+' Procedure : gaugeForm_MouseUp
+' Author    : beededea
+' Date      : 05/05/2023
+' Purpose   : save the form x,y position when ever the globe/form is dragged
+'---------------------------------------------------------------------------------------
+'
+Private Sub gaugeForm_MouseUp(Button As Integer, shift As Integer, X As Single, Y As Single)
+    On Error GoTo gaugeForm_MouseUp_Error
+
+    'If overlayWidget.Locked = True Then Exit Sub
+
+    ' no point in saving when prefs are visible.
+    If panzerPrefs.IsVisible = False Then ' checks without activating the form - important!.
+       PzGMaximiseFormX = Str$(gaugeForm.Left) ' saving in pixels
+       PzGMaximiseFormY = Str$(gaugeForm.Top)
+
+       sPutINISetting "Software\PzStopwatch", "maximiseFormX", PzGMaximiseFormX, PzGSettingsFile
+       sPutINISetting "Software\PzStopwatch", "maximiseFormY", PzGMaximiseFormY, PzGSettingsFile
+    End If
+
+    'Static x0, y0: If Button Then gaugeForm.Move gaugeForm.Left + X - x0, gaugeForm.Top + Y - y0 Else x0 = X: y0 = Y
+
+    On Error GoTo 0
+    Exit Sub
+
+gaugeForm_MouseUp_Error:
+
+    With Err
+         If .Number <> 0 Then
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure gaugeForm_MouseUp of Class Module cfMain"
+            Resume Next
+          End If
+    End With
+End Sub
+
 '---------------------------------------------------------------------------------------
 ' Procedure : gaugeForm_MouseMove
 ' Author    : beededea
@@ -443,10 +540,12 @@ Private Sub gaugeForm_MouseMove(Button As Integer, shift As Integer, X As Single
   Static x0 As Single, y0 As Single: If Button = 0 Then x0 = X: y0 = Y 'just store the offsets when no button is down
   
    On Error GoTo gaugeForm_MouseMove_Error
-
+    
     If overlayWidget.Locked = True Then Exit Sub
+    If PzGIgnoreMouse = "1" Then Exit Sub
+
     If Button = vbLeftButton And Not gaugeForm.ActiveWidget Is Nothing Then 'Form-Dragging (under certain conditions)
-      'If StrComp(gaugeForm.ActiveWidget.Key, DragWidgetKey, vbTextCompare) Then Exit Sub 'leave, if the ActiveWidget.Key is not the DragWidgetKey
+
       FX = (X - x0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Left
       FY = (Y - y0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Top
       gaugeForm.Move FX, FY
