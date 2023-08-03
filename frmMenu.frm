@@ -269,48 +269,30 @@ End Sub
 
 
 '---------------------------------------------------------------------------------------
-' Procedure : mnuHelpPdf_Click
+' Procedure : mnuHelpSplash_Click
 ' Author    : beededea
-' Date      : 14/05/2023
+' Date      : 03/08/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
 Private Sub mnuHelpSplash_Click()
+   On Error GoTo mnuHelpSplash_Click_Error
 
-
-    Dim fileToPlay As String: fileToPlay = vbNullString
-    On Error GoTo mnuHelpPdf_Click_Error
-
-    fileToPlay = "till.wav"
-    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
-        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
-    End If
-
-
-    fMain.helpForm.Top = (screenHeightPixels / 2) - (fMain.helpForm.Height / 2)
-    fMain.helpForm.Left = (screenWidthPixels / 2) - (fMain.helpForm.Width / 2)
-     
-    fMain.helpForm.Load
-    fMain.helpForm.show
-    
-    helpWidget.opacity = 0
-    helpWidget.show = True
-    helpWidget.Widget.Refresh
-    
-     If (fMain.helpForm.WindowState = 1) Then
-         fMain.helpForm.WindowState = 0
-     End If
-
-
-
+    Call helpSplash
 
    On Error GoTo 0
    Exit Sub
 
-mnuHelpPdf_Click_Error:
+mnuHelpSplash_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuHelpPdf_Click of Form menuForm"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuHelpSplash_Click of Form menuForm"
+
 End Sub
+
+
+
+
+
 
 '---------------------------------------------------------------------------------------
 ' Procedure : mnuHideWidget_Click

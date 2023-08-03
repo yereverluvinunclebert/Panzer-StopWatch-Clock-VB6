@@ -2162,3 +2162,46 @@ lockWidget_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure lockWidget of Module Module1"
 
 End Sub
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : helpSplash
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Sub helpSplash()
+
+    Dim fileToPlay As String: fileToPlay = vbNullString
+
+    On Error GoTo helpSplash_Error
+
+    fileToPlay = "till.wav"
+    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
+        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+    End If
+
+
+    fMain.helpForm.Top = (screenHeightPixels / 2) - (fMain.helpForm.Height / 2)
+    fMain.helpForm.Left = (screenWidthPixels / 2) - (fMain.helpForm.Width / 2)
+     
+    fMain.helpForm.Load
+    fMain.helpForm.show
+    
+    helpWidget.opacity = 0
+    helpWidget.show = True
+    helpWidget.Widget.Refresh
+    
+     If (fMain.helpForm.WindowState = 1) Then
+         fMain.helpForm.WindowState = 0
+     End If
+
+   On Error GoTo 0
+   Exit Sub
+
+helpSplash_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure helpSplash of Form menuForm"
+     
+End Sub

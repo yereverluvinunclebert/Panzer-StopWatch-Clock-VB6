@@ -286,7 +286,7 @@ End Sub
 Private Sub helpbutton_click_event()
    On Error GoTo helpbutton_click_event_Error
 
-    MsgBox "help!"
+   Call helpSplash
 
    On Error GoTo 0
    Exit Sub
@@ -370,8 +370,6 @@ Private Sub lockbutton_click_event()
    
     Call lockWidget
 
-    'MsgBox "lock!"
-
    On Error GoTo 0
    Exit Sub
 
@@ -390,7 +388,7 @@ End Sub
 Private Sub prefsbutton_click_event()
    On Error GoTo prefsbutton_click_event_Error
 
-    MsgBox "prefs!"
+   Call makeProgramPreferencesAvailable
 
    On Error GoTo 0
    Exit Sub
