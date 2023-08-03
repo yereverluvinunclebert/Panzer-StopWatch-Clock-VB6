@@ -245,17 +245,17 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
             
             ' for specific keys perform rotation actions, clock hands &c
             Select Case Key
-                Case "stopwatch/face/hourShadow", "stopwatch/face/hourHand" 'hours-shadow- and hour-hand
+                Case "stopwatch/face/hourshadow", "stopwatch/face/hourhand" 'hours-shadow- and hour-hand
                    Set Pat.Matrix = Pat.Matrix.TranslateCoords(19, 160) 'shift to the "rotation-point" within the Pattern
                    CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                    CC.RotateDrawingsDeg -7 + HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
                    
-                Case "stopwatch/face/minuteShadow", "stopwatch/face/minuteHand" 'minutes-shadow- and minutes-hand
+                Case "stopwatch/face/minuteshadow", "stopwatch/face/minutehand" 'minutes-shadow- and minutes-hand
                    Set Pat.Matrix = Pat.Matrix.TranslateCoords(44, 105) 'shift to the "rotation-point" within the Pattern
                    CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                    CC.RotateDrawingsDeg -61 + MDeg
                    
-                Case "stopwatch/face/secondShadow", "stopwatch/face/secondHand" 'seconds-shadow- and seconds-hand
+                Case "stopwatch/face/secondshadow", "stopwatch/face/secondhand" 'seconds-shadow- and seconds-hand
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(60, 160) 'shift to the "rotation-point" within the Pattern
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                     CC.RotateDrawingsDeg -50 + SDeg

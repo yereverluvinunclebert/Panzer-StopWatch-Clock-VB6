@@ -348,7 +348,6 @@ End Sub
 Private Sub switchfacesbutton_click_event()
    On Error GoTo switchfacesbutton_click_event_Error
 
-    MsgBox "switch!"
 
    On Error GoTo 0
    Exit Sub
@@ -386,8 +385,15 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub prefsbutton_click_event()
+    Dim fileToPlay As String: fileToPlay = vbNullString
+   
    On Error GoTo prefsbutton_click_event_Error
-
+    
+    fileToPlay = "winding.wav"
+    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
+        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+    End If
+    
    Call makeProgramPreferencesAvailable
 
    On Error GoTo 0
@@ -406,9 +412,19 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub tickbutton_click_event()
-   On Error GoTo tickbutton_click_event_Error
-
-    MsgBox "tick!"
+    Dim fileToPlay As String: fileToPlay = vbNullString
+   
+    On Error GoTo tickbutton_click_event_Error
+    
+    If overlayWidget.Ticking = True Then
+        fileToPlay = "lock.wav"
+        If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
+            PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+        End If
+        Call SwitchOff
+    Else
+        Call TurnFunctionsOn
+    End If
 
    On Error GoTo 0
    Exit Sub

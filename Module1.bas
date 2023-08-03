@@ -2205,3 +2205,65 @@ helpSplash_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure helpSplash of Form menuForm"
      
 End Sub
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : SwitchOff
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Sub SwitchOff()
+
+   On Error GoTo SwitchOff_Error
+
+    overlayWidget.Ticking = False
+    menuForm.mnuSwitchOff.Checked = True
+    menuForm.mnuTurnFunctionsOn.Checked = False
+    
+    PzGGaugeFunctions = "0"
+    sPutINISetting "Software\PzStopwatch", "gaugeFunctions", PzGGaugeFunctions, PzGSettingsFile
+
+   On Error GoTo 0
+   Exit Sub
+
+SwitchOff_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure SwitchOff of Module Module1"
+
+End Sub
+
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : TurnFunctionsOn
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Sub TurnFunctionsOn()
+    Dim fileToPlay As String: fileToPlay = vbNullString
+
+   On Error GoTo TurnFunctionsOn_Error
+
+    fileToPlay = "ting.wav"
+    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
+        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+    End If
+
+    overlayWidget.Ticking = True
+    menuForm.mnuSwitchOff.Checked = False
+    menuForm.mnuTurnFunctionsOn.Checked = True
+    
+    PzGGaugeFunctions = "1"
+    sPutINISetting "Software\PzStopwatch", "gaugeFunctions", PzGGaugeFunctions, PzGSettingsFile
+
+   On Error GoTo 0
+   Exit Sub
+
+TurnFunctionsOn_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure TurnFunctionsOn of Form menuForm"
+End Sub

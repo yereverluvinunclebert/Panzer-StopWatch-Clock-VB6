@@ -554,13 +554,8 @@ End Sub
 Private Sub mnuSwitchOff_Click()
    On Error GoTo mnuSwitchOff_Click_Error
 
-    overlayWidget.Ticking = False
-    mnuSwitchOff.Checked = True
-    mnuTurnFunctionsOn.Checked = False
+    Call SwitchOff
     
-    PzGGaugeFunctions = "0"
-    sPutINISetting "Software\PzStopwatch", "gaugeFunctions", PzGGaugeFunctions, PzGSettingsFile
-
    On Error GoTo 0
    Exit Sub
 
@@ -570,6 +565,8 @@ mnuSwitchOff_Click_Error:
 
 End Sub
 
+
+
 '---------------------------------------------------------------------------------------
 ' Procedure : mnuTurnFunctionsOn_Click
 ' Author    : beededea
@@ -578,21 +575,10 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub mnuTurnFunctionsOn_Click()
-    Dim fileToPlay As String: fileToPlay = vbNullString
-    On Error GoTo mnuTurnFunctionsOn_Click_Error
+   On Error GoTo mnuTurnFunctionsOn_Click_Error
 
-    fileToPlay = "ting.wav"
-    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
-        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
-    End If
-
-    overlayWidget.Ticking = True
-    mnuSwitchOff.Checked = False
-    mnuTurnFunctionsOn.Checked = True
-    
-    PzGGaugeFunctions = "1"
-    sPutINISetting "Software\PzStopwatch", "gaugeFunctions", PzGGaugeFunctions, PzGSettingsFile
-
+   Call TurnFunctionsOn
+   
    On Error GoTo 0
    Exit Sub
 
@@ -600,6 +586,8 @@ mnuTurnFunctionsOn_Click_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure mnuTurnFunctionsOn_Click of Form menuForm"
 End Sub
+
+
 
 '---------------------------------------------------------------------------------------
 ' Procedure : mnuWidgets_Click
