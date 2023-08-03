@@ -22,8 +22,6 @@ Private PSDWidth As Long
 Private PSDHeight As Long
 Private DragWidgetKey As String
 
-', CloseWidgetKey As String, CloseWidget As cWidgetBase
-
 Private mGlowing As Boolean
 '---------------------------------------------------------------------------------------
 ' Procedure : Class_Initialize
@@ -243,13 +241,25 @@ Private Sub gaugeForm_BubblingEvent(Sender As Object, EventName As String, P1 As
 
   If EventName = "W_Click" Then
     Select Case LCase$(Sender.Widget.Key)
-      'Case CloseWidgetKey
-      
-        ' Task: add each UI element and call a function for each
-        
-        'gaugeForm.Unload 'only one specific WidgetKey is handled here so far (click-wise)
-      'please add your own cases, based on the PSD-LayerPaths we generally use as Keys here (for the ImageList as well as the Widgets)
-      'Case Else:  Debug.Print Sender.Widget.Key
+    
+        Case "stopwatch/face/housing/helpbutton" 'three Widget-Keys, picked for "special click-behaviour"
+            Call helpbutton_click_event
+        Case "stopwatch/face/housing/startbutton"
+             Call startbutton_click_event
+        Case "stopwatch/face/housing/stopbutton"
+             Call stopbutton_click_event
+        Case "stopwatch/face/housing/switchfacesbutton"
+             Call switchfacesbutton_click_event
+        Case "stopwatch/face/housing/lockbutton"
+             Call lockbutton_click_event
+        Case "stopwatch/face/housing/prefsbutton"
+             Call prefsbutton_click_event
+        Case "stopwatch/face/housing/tickbutton"
+             Call tickbutton_click_event
+        Case "stopwatch/face/watchface"
+             Call watchface_click_event
+        Case Else
+            Debug.Print Sender.Widget.Key
     End Select
   End If
 
@@ -260,7 +270,168 @@ gaugeForm_BubblingEvent_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure gaugeForm_BubblingEvent of Class Module cfAlpha"
 End Sub
+'---------------------------------------------------------------------------------------
+' Procedure : helpbutton_click_event
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub helpbutton_click_event()
+   On Error GoTo helpbutton_click_event_Error
 
+    MsgBox "help!"
+
+   On Error GoTo 0
+   Exit Sub
+
+helpbutton_click_event_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure helpbutton_click_event of Class Module cfAlpha"
+    
+End Sub
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : startbutton_click_event
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub startbutton_click_event()
+   On Error GoTo startbutton_click_event_Error
+
+    MsgBox "start!"
+
+   On Error GoTo 0
+   Exit Sub
+
+startbutton_click_event_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure startbutton_click_event of Class Module cfAlpha"
+
+End Sub
+'---------------------------------------------------------------------------------------
+' Procedure : stopbutton_click_event
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub stopbutton_click_event()
+   On Error GoTo stopbutton_click_event_Error
+
+    MsgBox "stop!"
+
+   On Error GoTo 0
+   Exit Sub
+
+stopbutton_click_event_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure stopbutton_click_event of Class Module cfAlpha"
+
+End Sub
+'---------------------------------------------------------------------------------------
+' Procedure : switchfacesbutton_click_event
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub switchfacesbutton_click_event()
+   On Error GoTo switchfacesbutton_click_event_Error
+
+    MsgBox "switch!"
+
+   On Error GoTo 0
+   Exit Sub
+
+switchfacesbutton_click_event_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure switchfacesbutton_click_event of Class Module cfAlpha"
+
+End Sub
+'---------------------------------------------------------------------------------------
+' Procedure : lockbutton_click_event
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub lockbutton_click_event()
+   On Error GoTo lockbutton_click_event_Error
+
+    MsgBox "lock!"
+
+   On Error GoTo 0
+   Exit Sub
+
+lockbutton_click_event_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure lockbutton_click_event of Class Module cfAlpha"
+
+End Sub
+'---------------------------------------------------------------------------------------
+' Procedure : prefsbutton_click_event
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub prefsbutton_click_event()
+   On Error GoTo prefsbutton_click_event_Error
+
+    MsgBox "prefs!"
+
+   On Error GoTo 0
+   Exit Sub
+
+prefsbutton_click_event_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure prefsbutton_click_event of Class Module cfAlpha"
+
+End Sub
+'---------------------------------------------------------------------------------------
+' Procedure : tickbutton_click_event
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub tickbutton_click_event()
+   On Error GoTo tickbutton_click_event_Error
+
+    MsgBox "tick!"
+
+   On Error GoTo 0
+   Exit Sub
+
+tickbutton_click_event_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tickbutton_click_event of Class Module cfAlpha"
+
+End Sub
+'---------------------------------------------------------------------------------------
+' Procedure : watchface_click_event
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub watchface_click_event()
+   On Error GoTo watchface_click_event_Error
+
+    MsgBox "face!"
+
+   On Error GoTo 0
+   Exit Sub
+
+watchface_click_event_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure watchface_click_event of Class Module cfAlpha"
+
+End Sub
 '---------------------------------------------------------------------------------------
 ' Procedure : gaugeForm_MouseMove
 ' Author    : beededea
