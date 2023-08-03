@@ -101,35 +101,104 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                 
                 ' Task: Add all layers that provide a UI function below and assign properties as required wip
                 
+                ' set the characteristics of the interactive areas
                Select Case LCase$(W.Key) 'demonstrates, how to influence certain Widget-Props specifically (depending on the current LayerPath-Key)
                 ' set the characteristics of the indentified drag area
                 Case DragWidgetKey 'the "special DragWidgetKey" we've passed from the outside into this init-routine
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_SIZEALL
                     
-                    'W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
-                ' set the characteristics of the interactive areas
+                    W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
+
                 Case "stopwatch/face/housing/helpbutton" 'three Widget-Keys, picked for "special click-behaviour"
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_HAND
-                    W.ToolTip = "Press for a little help."
-                'stopwatch/face/housing/startButton
+                    If PzGEnableTooltips = "1" Then
+                        W.ToolTip = "Press for a little help."
+                    Else
+                        W.ToolTip = vbNullString
+                    End If
                 Case "stopwatch/face/housing/startbutton"
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_HAND
-                    W.ToolTip = "Press to zero."
+                    If PzGEnableTooltips = "1" Then
+                        W.ToolTip = "Press to zero."
+                    Else
+                        W.ToolTip = vbNullString
+                    End If
                 Case "stopwatch/face/housing/stopbutton"
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_HAND
-                    W.ToolTip = "Press to continue the timing run. This button is active only when a timing run has been paused."
+                   If PzGEnableTooltips = "1" Then
+                        W.ToolTip = "Press to continue the timing run. This button is active only when a timing run has been paused."
+                    Else
+                        W.ToolTip = vbNullString
+                    End If
+
                 Case "stopwatch/face/housing/switchfacesbutton"
+                    If PzGEnableTooltips = "1" Then
+                        W.ToolTip = "Press to switch the dial faces."
+                    Else
+                        W.ToolTip = vbNullString
+                    End If
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_HAND
-                    W.ToolTip = "Press to switch the dial faces."
+                Case "stopwatch/face/housing/lockbutton"
+                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+                    W.MousePointer = IDC_HAND
+                    If PzGEnableTooltips = "1" Then
+                        W.ToolTip = "Press to lock the widget in place"
+                    Else
+                        W.ToolTip = vbNullString
+                    End If
+                Case "stopwatch/face/housing/prefsbutton"
+                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+
+                    W.MousePointer = IDC_HAND
+                    If PzGEnableTooltips = "1" Then
+                        W.ToolTip = "Press to open the widget preferences"
+                    Else
+                        W.ToolTip = vbNullString
+                    End If
+                Case "stopwatch/face/housing/tickbutton"
+                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+                    W.MousePointer = IDC_HAND
+                    If PzGEnableTooltips = "1" Then
+                        W.ToolTip = "Choose smooth movement or regular ticks"
+                    Else
+                        W.ToolTip = vbNullString
+                    End If
+                 Case "stopwatch/face/watchface"
+                    W.HoverColor = -1 ' set the hover colour to grey - ' task: might change this later when new ver or RC6 arrives
+                    W.MousePointer = IDC_SIZEALL
+                    If PzGEnableTooltips = "1" Then
+                        W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
+                    Else
+                        W.ToolTip = vbNullString
+                    End If
+                   
                 Case Else 'all other added Layer-Widgets will be -1 or "non-hoverable" and "fully click-through"
-                    W.HoverColor = -1
-                    W.MousePointer = IDC_NO
+                    W.HoverColor = -1 ' task: might change this later when new ver or RC6 arrives
+                    W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
+                    W.MousePointer = IDC_SIZEALL
                End Select
+               
+'                .Add Empty, "stopwatch/face/mki for vb6"
+'                .Add Empty, "stopwatch/face/panzer"
+'
+'                .Add Empty, "stopwatch/face/swhourface"
+'                .Add Empty, "stopwatch/face/swminuteface"
+'                .Add Empty, "stopwatch/face/swsecondface"
+'
+'                .Add Empty, "stopwatch/face/4digit"
+'                .Add Empty, "stopwatch/face/2digit"
+'                .Add Empty, "stopwatch/face/eagle"
+'                .Add Empty, "stopwatch/face/made in germany"
+'                .Add Empty, "stopwatch/face/italo fontana"
+'
+'                .Add Empty, "stopwatch/face/darkfacebackground"
+'                .Add Empty, "stopwatch/face/watchface"
+               
             End If
          End If
       End If

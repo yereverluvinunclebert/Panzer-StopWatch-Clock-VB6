@@ -764,37 +764,26 @@ Private Sub loadExcludePathCollection()
     On Error GoTo loadExcludePathCollection_Error
 
     With fAlpha.collPSDNonUIElements ' the exclude list
-        .Add Empty, "stopwatch/face/swSecondHand" 'arrow-hand-top
-        .Add Empty, "stopwatch/face/swMinuteHand" 'arrow-hand-right
-        .Add Empty, "stopwatch/face/swHourHand"   'arrow-hand-bottom
+    
+
+
+        .Add Empty, "stopwatch/face/swsecondhand" 'arrow-hand-top
+        .Add Empty, "stopwatch/face/swminutehand" 'arrow-hand-right
+        .Add Empty, "stopwatch/face/swhourhand"   'arrow-hand-bottom
         
-        .Add Empty, "stopwatch/face/hourShadow"   'clock-hand-hours-shadow
-        .Add Empty, "stopwatch/face/hourHand"     'clock-hand-hours
+        .Add Empty, "stopwatch/face/hourshadow"   'clock-hand-hours-shadow
+        .Add Empty, "stopwatch/face/hourhand"     'clock-hand-hours
         
-        .Add Empty, "stopwatch/face/minuteShadow" 'clock-hand-minutes-shadow
-        .Add Empty, "stopwatch/face/minuteHand"   'clock-hand-minutes
+        .Add Empty, "stopwatch/face/minuteshadow" 'clock-hand-minutes-shadow
+        .Add Empty, "stopwatch/face/minutehand"   'clock-hand-minutes
         
-        .Add Empty, "stopwatch/face/secondShadow" 'clock-hand-seconds-shadow
-        .Add Empty, "stopwatch/face/secondHand"   'clock-hand-seconds
+        .Add Empty, "stopwatch/face/secondshadow" 'clock-hand-seconds-shadow
+        .Add Empty, "stopwatch/face/secondhand"   'clock-hand-seconds
         
-        .Add Empty, "stopwatch/bigReflection"     'all reflections
-        .Add Empty, "stopwatch/windowReflection"
+        .Add Empty, "stopwatch/bigreflection"     'all reflections
+        .Add Empty, "stopwatch/windowreflection"
         
-        .Add Empty, "MKI for VB6"
-        .Add Empty, "PANZER"
-        
-        .Add Empty, "swHourFace"
-        .Add Empty, "swMinuteFace"
-        .Add Empty, "swSecondFace"
-        
-        .Add Empty, "4Digit"
-        .Add Empty, "2Digit"
-        .Add Empty, "eagle"
-        .Add Empty, "MADE IN GERMANY"
-        .Add Empty, "ITALO FONTANA"
-        
-        .Add Empty, "watchFace"
-        .Add Empty, "darkFaceBackground"
+
 
     End With
 
