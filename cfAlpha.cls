@@ -585,11 +585,23 @@ End Sub
 ' Date      : 31/07/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
-'
+' rotate forward positive = smaller
 Private Sub gaugeForm_MouseWheel(ByVal MouseKeys As Long, ByVal Rotation As Long, ByVal Xpos As Single, ByVal Ypos As Single)
+   Dim RotationDirection As Long: RotationDirection = 0
+   
    On Error GoTo gaugeForm_MouseWheel_Error
 
-  If MouseKeys = 8 Then Call AdjustZoom(FZ + Rotation / 2400)   'change the Zoom only, when the Ctrl-Key is down
+    If PzGScrollWheelDirection = "down" Then
+        If Rotation > 0 Then
+            RotationDirection = 0 - Abs(Rotation)
+        Else
+            RotationDirection = Abs(Rotation)
+        End If
+    Else
+        RotationDirection = Rotation
+    End If
+    
+   If MouseKeys = 8 Then Call AdjustZoom(FZ + RotationDirection / 2400)   'change the Zoom only, when the Ctrl-Key is down
 
    On Error GoTo 0
    Exit Sub

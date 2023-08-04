@@ -12,14 +12,16 @@
 ' left justification of help button - done
 ' prefs position saved and restored - done
 ' positioning the whole form - done
+' save and restore the gauge position - done
+' resizing make it stick after a reboot/reload - done
+' top justification frames in the prefs - done
+' unload the widgets in the alpha form
+' new savePosition routine - done
 
-' mousewheel resize up/down
+' mousewheel resize up/down direction
+' top justification of help button - wip
 
-' top justification frames in the prefs
-' top justification of help button
-' resizing make it stick after a reboot/reload
 ' switch functions off, make it stick after a reboot/reload
-' save and restore the gauge position
 
 ' %systemroot handled as per steamydock
 ' hide normal font box, show only the resized font

@@ -436,7 +436,6 @@ Public Sub readSettingsFile(ByVal location As String, ByVal PzGSettingsFile As S
         
         PzGGaugeSize = fGetINISetting(location, "gaugeSize", PzGSettingsFile)
         PzGScrollWheelDirection = fGetINISetting(location, "scrollWheelDirection", PzGSettingsFile)
-        'PzGWidgetSkew = fGetINISetting(location, "widgetSkew", PzGSettingsFile)
         
         ' position
         PzGAspectHidden = fGetINISetting(location, "aspectHidden", PzGSettingsFile)

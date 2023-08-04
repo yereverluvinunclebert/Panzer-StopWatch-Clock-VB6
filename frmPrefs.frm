@@ -2666,10 +2666,7 @@ Private Sub btnSave_Click()
     
     ' general
     PzGGaugeFunctions = LTrim$(Str$(chkGaugeFunctions.Value))
-    'PzGAnimationInterval = LTrim$(Str$(sliAnimationInterval.Value))
-    ''PzGWidgetSkew = LTrim$(Str$('sliWidgetSkew.Value))
     PzGStartup = LTrim$(Str$(chkGenStartup.Value))
-    
     
     PzGClockFaceSwitchPref = cmbClockFaceSwitchPref.List(cmbClockFaceSwitchPref.ListIndex)
     PzGMainGaugeTimeZone = cmbMainGaugeTimeZone.List(cmbMainGaugeTimeZone.ListIndex)
