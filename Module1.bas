@@ -1604,7 +1604,6 @@ Public Sub makeVisibleFormElements()
     ' The RC forms are measured in pixels, do remember that...
 
     fAlpha.gaugeForm.show
-    'fAlpha.gaugeForm.Refresh
 
     On Error GoTo 0
     Exit Sub

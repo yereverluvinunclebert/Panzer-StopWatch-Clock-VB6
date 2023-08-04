@@ -5,14 +5,22 @@
 ' Change the helpForm to an RC6 form - done
 ' windowlevel requires a reload, testing - done
 ' create stopwatch icon - done
+' opacity - done
 
 ' upgrade to RC6 new version from Olaf to obtain opacity control over the overlays currently limited to 25%
 ' monitorProperties, make it work
-' opacity - wip
+' ignore mouse.
 
+' resizing make it stick after a reboot/reload
+' functions off, make it stick after a reboot/reload
+' downsize the prefs a bit
 
 ' left justification frames in the prefs
 ' left justification of help button
+' %systemroot handled as per steamydock
+' hide normal font box, show only the resized font
+' try the balloon tooltips on one control
+' mousewheel resize
 
 ' RC BUGS
 ' =======
@@ -23,14 +31,5 @@
 
 ' tooltips also resize when the whole thing is resized, which is not necessarily a good idea for a UI.
 
-' Opacity, cannot set the opacity for surfaces
-'     Cairo.ImageList.AddSurface
-'     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
-'  For widgets, I can set the alpha but not for surfaces, I assume I have to
-'  perform some intermediate step to make a surface transparent.  Is there no CC.Paint_with_Alpha?
-'  I could extract the excluded layers to PNGs and then use RenderSurfaceContent that has an alpha value
-
-' W.MousePointer = IDC_SIZEALL
-' overlayWidget.Widget.MousePointer = IDC_SIZEALL
-'
-' these have no effect
+' how do I set the visibility of the W_ created widgets so I can temporarily
+' make one invisible, for example a locking pin to be made invisible on a mouseDown then re-appear on a mouseUP.

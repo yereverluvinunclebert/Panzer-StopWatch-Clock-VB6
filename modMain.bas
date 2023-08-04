@@ -65,7 +65,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     fAlpha.FY = 111
     fAlpha.FZ = 0.4
     
-    Cairo.SetDPIAwareness
+    Cairo.SetDPIAwareness ' this sets DPI awareness for the whole program incl. native VB6 forms
  
     ' initialise global vars
     Call initialiseGlobalVars
@@ -98,10 +98,15 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     Call createAboutFormOnCurrentDisplay
     
     ' set the z-ordering of the main form
-    'Call setWindowZordering
+    'Call setWindowZordering ' moved to adjustMainControls
     
     ' place the form at the saved location
     Call makeVisibleFormElements
+    
+      ' Task: Move these to sub main function
+  fAlpha.gaugeForm.show 'we are through with the initializations - and show the Form
+  fAlpha.gaugeForm.Move fAlpha.FX, fAlpha.FY
+  fAlpha.AdjustZoom IIf(fAlpha.FZ, fAlpha.FZ, 1)
     
     ' resolve VB6 sizing width bug
     Call determineScreenDimensions

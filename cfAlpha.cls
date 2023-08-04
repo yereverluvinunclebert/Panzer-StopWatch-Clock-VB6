@@ -72,10 +72,6 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
       PSDWidth = .Width
       PSDHeight = .Height       'store the original Psd-Pixel-Width/Height in Private vars (as the base from which we calculate the zoomed Form-Width/Height)
       DragWidgetKey = LCase$(WidgetKeyForDragging) 'store the passed WidgetKey (for the Widget, which allows Form-Dragging on MouseDown)
- 
-    ' see Purpose notes above
-        
-    ' Cairo.ImageList-buffering - and associated Widget-construction (via a loop through all PSD-Layers)
     
     For i = 0 To .LayersCount - 1 ' loop through each of the Layers in the PSD
       If .LayerByteSize(i) Then  ' this is a true Alpha-Surface-Layer and not just a PSD layer 'group'
@@ -187,6 +183,8 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                     
                End Select
                
+               ' other (unused) widgets created from the layers shown here for reference
+               
 '                .Add Empty, "stopwatch/face/mki for vb6"
 '                .Add Empty, "stopwatch/face/panzer"
 '
@@ -210,22 +208,15 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
     Next
   End With '<-- the Parser-instance will be destroyed here (freeing the Memory, the internal PSD-Layers have occupied)
   
-'  If Len(CloseWidgetKey) Then 'in case the Optional InitParam was set, we create an additional cwAlphaImg Widget for closing the Form
-'    Set CloseWidget = gaugeForm.Widgets.Add(New_W("cwAlphaImg"), CloseWidgetKey).Widget
-'        CloseWidget.ImageKey = CloseWidgetKey 'this cwAlphaImg-instance will render from a normal ImageList-Key (not a PSD-LayerPath-Key)
-'        CloseWidget.HoverColor = vbRed
-'        CloseWidget.MousePointer = IDC_HAND
-'  End If
-  
   Set overlayWidget = gaugeForm.Widgets.Add(New cwOverlay, "Overlay", 0, 0, PSDWidth, PSDHeight)
   Set overlayWidget.cCollOverlayImages = collPSDNonUIElements 'make the excluded PSD-Surface-Paths known to the Overlay-Widget
       overlayWidget.cxPerc = 0.4940476 'define the relative center (within cwOverlay, which has the same size as the Form and the PSD...) this is used for clock-hand-positioning
       overlayWidget.cyPerc = 0.4727272
   
   ' Task: Move these to sub main function
-  gaugeForm.show 'we are through with the initializations - and show the Form
-  gaugeForm.Move FX, FY
-  AdjustZoom IIf(FZ, FZ, 1)
+'  gaugeForm.show 'we are through with the initializations - and show the Form
+'  gaugeForm.Move FX, FY
+'  AdjustZoom IIf(FZ, FZ, 1)
 
    On Error GoTo 0
    Exit Sub
@@ -245,7 +236,8 @@ End Sub
 Private Sub gaugeForm_BubblingEvent(Sender As Object, EventName As String, P1 As Variant, P2 As Variant, P3 As Variant, P4 As Variant, P5 As Variant, P6 As Variant, P7 As Variant)
    On Error GoTo gaugeForm_BubblingEvent_Error
 
-  If EventName = "W_Click" Then
+    If PzGIgnoreMouse = "1" Then Exit Sub
+    If EventName = "W_Click" Then
     Select Case LCase$(Sender.Widget.Key)
     
         Case "stopwatch/face/housing/helpbutton" 'three Widget-Keys, picked for "special click-behaviour"
@@ -286,7 +278,9 @@ End Sub
 Private Sub helpbutton_click_event()
    On Error GoTo helpbutton_click_event_Error
 
+    '    If PzGIgnoreMouse = "1" Then Exit Sub
    Call helpSplash
+   
 
    On Error GoTo 0
    Exit Sub
@@ -308,6 +302,7 @@ End Sub
 Private Sub startbutton_click_event()
    On Error GoTo startbutton_click_event_Error
 
+    '    If PzGIgnoreMouse = "1" Then Exit Sub
     MsgBox "start!"
 
    On Error GoTo 0
@@ -328,6 +323,7 @@ End Sub
 Private Sub stopbutton_click_event()
    On Error GoTo stopbutton_click_event_Error
 
+    '    If PzGIgnoreMouse = "1" Then Exit Sub
     MsgBox "stop!"
 
    On Error GoTo 0
@@ -348,6 +344,7 @@ End Sub
 Private Sub switchfacesbutton_click_event()
    On Error GoTo switchfacesbutton_click_event_Error
 
+    '    If PzGIgnoreMouse = "1" Then Exit Sub
 
    On Error GoTo 0
    Exit Sub
@@ -367,8 +364,10 @@ End Sub
 Private Sub lockbutton_click_event()
    On Error GoTo lockbutton_click_event_Error
    
+    '    If PzGIgnoreMouse = "1" Then Exit Sub
+    
     Call lockWidget
-
+    
    On Error GoTo 0
    Exit Sub
 
@@ -387,8 +386,10 @@ End Sub
 Private Sub prefsbutton_click_event()
     Dim fileToPlay As String: fileToPlay = vbNullString
    
-   On Error GoTo prefsbutton_click_event_Error
+    On Error GoTo prefsbutton_click_event_Error
     
+    '    If PzGIgnoreMouse = "1" Then Exit Sub
+
     fileToPlay = "winding.wav"
     If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
@@ -415,6 +416,8 @@ Private Sub tickbutton_click_event()
     Dim fileToPlay As String: fileToPlay = vbNullString
    
     On Error GoTo tickbutton_click_event_Error
+    
+    '    If PzGIgnoreMouse = "1" Then Exit Sub
     
     If overlayWidget.Ticking = True Then
         fileToPlay = "lock.wav"
@@ -444,6 +447,8 @@ End Sub
 Private Sub watchface_click_event()
    On Error GoTo watchface_click_event_Error
 
+    '    If PzGIgnoreMouse = "1" Then Exit Sub
+
     MsgBox "face!"
 
    On Error GoTo 0
@@ -466,6 +471,8 @@ End Sub
 Public Sub gaugeForm_DblClick()
 
     On Error GoTo gaugeForm_DblClick_Error
+
+    '    If PzGIgnoreMouse = "1" Then Exit Sub
 
     If LTrim$(PzGDblClickCommand) = vbNullString Then Exit Sub
     If SHIFT_1 = True Then
@@ -520,7 +527,8 @@ Private Sub gaugeForm_MouseUp(Button As Integer, shift As Integer, X As Single, 
     On Error GoTo gaugeForm_MouseUp_Error
 
     'If overlayWidget.Locked = True Then Exit Sub
-
+    '    If PzGIgnoreMouse = "1" Then Exit Sub
+    
     ' no point in saving when prefs are visible.
     If panzerPrefs.IsVisible = False Then ' checks without activating the form - important!.
        PzGMaximiseFormX = Str$(gaugeForm.Left) ' saving in pixels
@@ -622,7 +630,7 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub AdjustZoom(ByVal NewZoom As Single)
+Public Sub AdjustZoom(ByVal NewZoom As Single)
    On Error GoTo AdjustZoom_Error
 
   FZ = NewZoom
