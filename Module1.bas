@@ -1598,8 +1598,8 @@ Public Sub makeVisibleFormElements()
 
     'NOTE that when you position a widget you are positioning the form it is drawn upon.
     
-     PzGMaximiseFormX = fGetINISetting("Software\PzStopwatch", "maximiseFormX", PzGSettingsFile)
-     PzGMaximiseFormY = fGetINISetting("Software\PzStopwatch", "maximiseFormY", PzGSettingsFile)
+'     PzGMaximiseFormX = fGetINISetting("Software\PzStopwatch", "maximiseFormX", PzGSettingsFile)
+'     PzGMaximiseFormY = fGetINISetting("Software\PzStopwatch", "maximiseFormY", PzGSettingsFile)
 
     fAlpha.gaugeForm.Left = Val(PzGMaximiseFormX)
     fAlpha.gaugeForm.Top = Val(PzGMaximiseFormY)

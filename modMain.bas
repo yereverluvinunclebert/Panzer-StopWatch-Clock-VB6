@@ -95,17 +95,12 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     Call checkLicenceState
 
     ' initialise and create the main forms on the current display
-    Call createAboutFormOnCurrentDisplay
-    
-    ' the z-ordering of the main form moved to adjustMainControls
+    Call createStandardFormsOnCurrentDisplay
     
     ' place the form at the saved location
     Call makeVisibleFormElements
-    
-      ' Task: Move these to sub main function
-  fAlpha.gaugeForm.show 'we are through with the initializations - and show the Form
-  'fAlpha.gaugeForm.Move fAlpha.FX, fAlpha.FY
-  fAlpha.AdjustZoom IIf(fAlpha.FZ, fAlpha.FZ, 1)
+
+    fAlpha.AdjustZoom IIf(fAlpha.FZ, fAlpha.FZ, 1)
     
     ' resolve VB6 sizing width bug
     Call determineScreenDimensions
@@ -695,14 +690,14 @@ setHidingTime_Error:
 End Sub
 
 '---------------------------------------------------------------------------------------
-' Procedure : createAboutFormOnCurrentDisplay
+' Procedure : createStandardFormsOnCurrentDisplay
 ' Author    : beededea
 ' Date      : 07/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub createAboutFormOnCurrentDisplay()
-    On Error GoTo createAboutFormOnCurrentDisplay_Error
+Private Sub createStandardFormsOnCurrentDisplay()
+    On Error GoTo createStandardFormsOnCurrentDisplay_Error
 
     With New_c.Displays(1) 'get the current Display
       fMain.initAndShowStandardForms .WorkLeft, .WorkTop, 1000, 1000, "Panzer Stopwatch Gauge"
@@ -711,11 +706,11 @@ Private Sub createAboutFormOnCurrentDisplay()
     On Error GoTo 0
     Exit Sub
 
-createAboutFormOnCurrentDisplay_Error:
+createStandardFormsOnCurrentDisplay_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure createAboutFormOnCurrentDisplay of Module modMain"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure createStandardFormsOnCurrentDisplay of Module modMain"
             Resume Next
           End If
     End With
