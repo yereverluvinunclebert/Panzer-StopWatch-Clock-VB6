@@ -99,8 +99,6 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     
     ' place the form at the saved location
     Call makeVisibleFormElements
-
-    fAlpha.AdjustZoom IIf(fAlpha.FZ, fAlpha.FZ, 1)
     
     ' resolve VB6 sizing width bug
     Call determineScreenDimensions
@@ -319,15 +317,9 @@ Public Sub adjustMainControls()
     ' validate the inputs of any data from the input settings file
     Call validateInputs
     
-'    'overlayWidget.RotationSpeed = Val(PzGAnimationInterval)
-'    'overlayWidget.Zoom = Val(PzGGaugeSize) / 100
+    fAlpha.AdjustZoom Val(PzGGaugeSize) / 100
+    
 '    'overlayWidget.ZoomDirection = PzGScrollWheelDirection
-'
-'    If 'overlayWidget.Hidden = False Then
-'        'overlayWidget.opacity = Val(PzGOpacity) / 100
-'        'overlayWidget.Widget.Refresh
-'    End If
-
 
 'PzGClockFaceSwitchPref
 'PzGMainGaugeTimeZone

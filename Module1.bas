@@ -1978,9 +1978,11 @@ Public Sub savePosition()
 
     PzGMaximiseFormX = Str$(fAlpha.gaugeForm.Left) ' saving in pixels
     PzGMaximiseFormY = Str$(fAlpha.gaugeForm.Top)
+    PzGGaugeSize = Str$(fAlpha.gaugeForm.WidgetRoot.Zoom * 100)
 
     sPutINISetting "Software\PzStopwatch", "maximiseFormX", PzGMaximiseFormX, PzGSettingsFile
     sPutINISetting "Software\PzStopwatch", "maximiseFormY", PzGMaximiseFormY, PzGSettingsFile
+    sPutINISetting "Software\PzStopwatch", "gaugeSize", PzGGaugeSize, PzGSettingsFile
 
    On Error GoTo 0
    Exit Sub
