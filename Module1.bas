@@ -1867,12 +1867,7 @@ End Sub
 Public Sub thisForm_Unload() ' name follows VB6 standard naming convention
     On Error GoTo Form_Unload_Error
     
-    
-    PzGMaximiseFormX = Str$(fAlpha.gaugeForm.Left) ' saving in pixels
-    PzGMaximiseFormY = Str$(fAlpha.gaugeForm.Top)
-    
-    sPutINISetting "Software\PzStopwatch", "maximiseFormX", PzGMaximiseFormX, PzGSettingsFile
-    sPutINISetting "Software\PzStopwatch", "maximiseFormY", PzGMaximiseFormY, PzGSettingsFile
+    Call savePosition
     
     Call unloadAllForms(True)
 
@@ -1948,6 +1943,8 @@ Public Sub reloadWidget()
     
     On Error GoTo reloadWidget_Error
     
+    Call savePosition
+    
     Call unloadAllForms(False) ' unload forms but do not END
     
     ' this will call the routines as called by sub main() and initialise the program and RELOAD the RC6 forms.
@@ -1967,6 +1964,33 @@ reloadWidget_Error:
 
 End Sub
 
+'---------------------------------------------------------------------------------------
+' Procedure : savePosition
+' Author    : beededea
+' Date      : 04/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Sub savePosition()
+
+   On Error GoTo savePosition_Error
+
+    PzGMaximiseFormX = Str$(fAlpha.gaugeForm.Left) ' saving in pixels
+    PzGMaximiseFormY = Str$(fAlpha.gaugeForm.Top)
+
+    sPutINISetting "Software\PzStopwatch", "maximiseFormX", PzGMaximiseFormX, PzGSettingsFile
+    sPutINISetting "Software\PzStopwatch", "maximiseFormY", PzGMaximiseFormY, PzGSettingsFile
+
+   On Error GoTo 0
+   Exit Sub
+
+savePosition_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure savePosition of Module Module1"
+    
+End Sub
+    
+    
 
 '---------------------------------------------------------------------------------------
 ' Procedure : makeProgramPreferencesAvailable

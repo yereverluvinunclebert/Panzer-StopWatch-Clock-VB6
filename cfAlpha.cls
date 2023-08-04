@@ -531,11 +531,7 @@ Private Sub gaugeForm_MouseUp(Button As Integer, shift As Integer, X As Single, 
     
     ' no point in saving when prefs are visible.
     If panzerPrefs.IsVisible = False Then ' checks without activating the form - important!.
-       PzGMaximiseFormX = Str$(gaugeForm.Left) ' saving in pixels
-       PzGMaximiseFormY = Str$(gaugeForm.Top)
-
-       sPutINISetting "Software\PzStopwatch", "maximiseFormX", PzGMaximiseFormX, PzGSettingsFile
-       sPutINISetting "Software\PzStopwatch", "maximiseFormY", PzGMaximiseFormY, PzGSettingsFile
+        Call savePosition
     End If
 
     'Static x0, y0: If Button Then gaugeForm.Move gaugeForm.Left + X - x0, gaugeForm.Top + Y - y0 Else x0 = X: y0 = Y
