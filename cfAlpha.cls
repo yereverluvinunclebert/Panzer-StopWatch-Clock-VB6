@@ -420,7 +420,7 @@ Private Sub tickbutton_click_event()
     '    If PzGIgnoreMouse = "1" Then Exit Sub
     
     If overlayWidget.Ticking = True Then
-        fileToPlay = "lock.wav"
+        fileToPlay = "ting.wav"
         If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
             PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
         End If

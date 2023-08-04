@@ -1597,10 +1597,13 @@ Public Sub makeVisibleFormElements()
     On Error GoTo makeVisibleFormElements_Error
 
     'NOTE that when you position a widget you are positioning the form it is drawn upon.
+    
+     PzGMaximiseFormX = fGetINISetting("Software\PzStopwatch", "maximiseFormX", PzGSettingsFile)
+     PzGMaximiseFormY = fGetINISetting("Software\PzStopwatch", "maximiseFormY", PzGSettingsFile)
 
-    fAlpha.gaugeForm.Left = Val(fGetINISetting("Software\PzStopwatch", "maximiseFormX", PzGSettingsFile)) ' / screenPixelsPerPixelX
-    fAlpha.gaugeForm.Top = Val(fGetINISetting("Software\PzStopwatch", "maximiseFormY", PzGSettingsFile)) ' / screenPixelsPerPixelY
-
+    fAlpha.gaugeForm.Left = Val(PzGMaximiseFormX)
+    fAlpha.gaugeForm.Top = Val(PzGMaximiseFormY)
+    
     ' The RC forms are measured in pixels, do remember that...
 
     fAlpha.gaugeForm.show
@@ -1862,8 +1865,8 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Public Sub thisForm_Unload() ' name follows VB6 standard naming convention
-    
     On Error GoTo Form_Unload_Error
+    
     
     PzGMaximiseFormX = Str$(fAlpha.gaugeForm.Left) ' saving in pixels
     PzGMaximiseFormY = Str$(fAlpha.gaugeForm.Top)

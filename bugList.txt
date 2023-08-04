@@ -6,21 +6,28 @@
 ' windowlevel requires a reload, testing - done
 ' create stopwatch icon - done
 ' opacity - done
+' ignore mouse - done
+' downsize the prefs a bit - done
+' left justification frames in the prefs - done
+' left justification of help button - done
+' prefs position saved and restored - done
+' positioning the whole form - done
 
-' upgrade to RC6 new version from Olaf to obtain opacity control over the overlays currently limited to 25%
-' monitorProperties, make it work
-' ignore mouse.
+' mousewheel resize up/down
 
+' top justification frames in the prefs
+' top justification of help button
 ' resizing make it stick after a reboot/reload
-' functions off, make it stick after a reboot/reload
-' downsize the prefs a bit
+' switch functions off, make it stick after a reboot/reload
+' save and restore the gauge position
 
-' left justification frames in the prefs
-' left justification of help button
 ' %systemroot handled as per steamydock
 ' hide normal font box, show only the resized font
 ' try the balloon tooltips on one control
-' mousewheel resize
+
+
+' upgrade to RC6 new version from Olaf to obtain opacity control over the overlays currently limited to 25%
+' monitorProperties, make it work
 
 ' RC BUGS
 ' =======
