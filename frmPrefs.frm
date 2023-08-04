@@ -1910,6 +1910,9 @@ Private Sub Form_Load()
     Call loadPrefsAboutText
     
     Me.Height = prefsFormHeight
+    
+    Call readPrefsPosition
+    
     chkEnableResizing.Value = 1
     
     startupFlg = False
@@ -2572,33 +2575,11 @@ Private Sub positionPrefsFramesButtons()
     fraAbout.Visible = False
     
     fraGeneralButton.BorderStyle = 1
-    
-    ' determine the longest frame
-'    currentFrameHeight = fraGeneral.Height
-'    currentFrameHeight = fraConfig.Height
-'    currentFrameHeight = fraFonts.Height
-'    currentFrameHeight = fraSounds.Height
-'    currentFrameHeight = fraPosition.Height
-'    currentFrameHeight = fraDevelopment.Height
-'    currentFrameHeight = fraWindow.Height
-'    currentFrameHeight = fraAbout.Height
-'
-'    'position the lower buttons
-'    btnSave.Top = fraConfig.Top + currentFrameHeight + 250
-'    btnCancel.Top = btnSave.Top
 
     btnCancel.Left = fraWindow.Left + fraWindow.Width - btnCancel.Width
     btnSave.Left = btnCancel.Left - btnSave.Width - 50
-    'btnHelp.Top = btnSave.Top
     btnHelp.Left = frameLeft
     
-'    lblAsterix.Top = btnSave.Top
-    
-    ' set the height of the form itself
-'    If dynamicSizingFlg = False Then
-'        panzerPrefs.Height = btnHelp.Top + btnHelp.Height + 600
-'        lastFormHeight = panzerPrefs.Height
-'    End If
 
    On Error GoTo 0
    Exit Sub
@@ -2754,8 +2735,6 @@ Private Sub btnSave_Click()
         sPutINISetting "Software\PzStopwatch", "scrollWheelDirection", PzGScrollWheelDirection, PzGSettingsFile
                 
         sPutINISetting "Software\PzStopwatch", "gaugeFunctions", PzGGaugeFunctions, PzGSettingsFile
-        'sPutINISetting "Software\PzStopwatch", "animationInterval", PzGAnimationInterval, PzGSettingsFile
-        'sPutINISetting "Software\PzStopwatch", "widgetSkew", 'PzGWidgetSkew, PzGSettingsFile
         
         sPutINISetting "Software\PzStopwatch", "clockFaceSwitchPref", PzGClockFaceSwitchPref, PzGSettingsFile
         sPutINISetting "Software\PzStopwatch", "mainGaugeTimeZone", PzGMainGaugeTimeZone, PzGSettingsFile
@@ -3241,6 +3220,8 @@ Form_Unload_Error:
 End Sub
 Private Sub Form_MouseMove(Button As Integer, shift As Integer, X As Single, Y As Single)
     fraScrollbarCover.Visible = True
+    
+    Call writePrefsPosition
 End Sub
 Private Sub fraAbout_MouseDown(Button As Integer, shift As Integer, X As Single, Y As Single)
     If Button = 2 Then
@@ -4456,13 +4437,12 @@ Private Sub resizeControls()
     
     ' final tweak the bottom button positions
     
-    btnHelp.Top = fraGeneral.Top + fraGeneral.Height + 150
+    btnHelp.Top = fraGeneral.Top + fraGeneral.Height + 400
     btnSave.Top = btnHelp.Top
     btnCancel.Top = btnHelp.Top
     
     btnCancel.Left = fraWindow.Left + fraWindow.Width - btnCancel.Width
     btnSave.Left = btnCancel.Left - btnSave.Width - 150
-    'btnHelp.Top = btnSave.Top
     btnHelp.Left = fraGeneral.Left
   
    On Error GoTo 0
