@@ -757,6 +757,7 @@ Private Sub loadExcludePathCollection()
     
 
 
+        
         .Add Empty, "stopwatch/face/swsecondhand" 'arrow-hand-top
         .Add Empty, "stopwatch/face/swminutehand" 'arrow-hand-right
         .Add Empty, "stopwatch/face/swhourhand"   'arrow-hand-bottom
@@ -773,6 +774,7 @@ Private Sub loadExcludePathCollection()
         .Add Empty, "stopwatch/bigreflection"     'all reflections
         .Add Empty, "stopwatch/windowreflection"
         
+
 
 
     End With

@@ -15,10 +15,11 @@
 ' save and restore the gauge position - done
 ' resizing make it stick after a reboot/reload - done
 ' top justification frames in the prefs - done
-' unload the widgets in the alpha form
+' unload the widgets in the alpha form - done
 ' new savePosition routine - done
+' remove the smaller face images and replace with two merged stopwatch/clock faces - done
+' mousewheel resize up/down direction - done
 
-' mousewheel resize up/down direction
 ' top justification of help button - wip
 
 ' switch functions off, make it stick after a reboot/reload

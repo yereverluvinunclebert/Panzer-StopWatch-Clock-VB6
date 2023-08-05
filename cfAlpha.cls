@@ -61,6 +61,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
   
     Dim i As Long: i = 0
     Dim W As cWidgetBase
+    Dim excludeOpacity As Integer: excludeOpacity = 0
    
     On Error GoTo InitFromPSD_Error
 
@@ -82,8 +83,9 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
             
             If collPSDNonUIElements.Exists(.LayerPath(i)) Then ' we do not create Widgets for those in this exclude list.
                 'we add layer info. (used in cwOverlay) to the "excluded paths" previously defined in Sub Main,
-                collPSDNonUIElements(.LayerPath(i)) = Array(.LayerX(i), .LayerY(i), Val(PzGOpacity) / 100) 'here we update the so far empty slots with the PSD-offsets
-               
+                   
+                collPSDNonUIElements(.LayerPath(i)) = Array(.LayerX(i), .LayerY(i), Val(PzGOpacity) / 100)  'here we update the so far empty slots with the PSD-offsets
+                
             Else 'everything not in the exclude-list will get its own Widget-instance
                Set W = gaugeForm.Widgets.Add(New_W("cwAlphaImg"), LCase$(.LayerPath(i)), .LayerX(i), .LayerY(i), .LayerWidth(i), .LayerHeight(i)).Widget
                    W.ImageKey = W.Key 'W.Key equals ImageList-Key, set above - and LayerPath(i) at this point ... set it also as the ImageKey of our new created Widget
@@ -92,8 +94,6 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                    W.Alpha = Val(PzGOpacity) / 100
                    
                 ' Note: set the Hover colour close to the original layer to avoid too much intrusion, 0 being grey
-                
-                ' Task: Add all layers that provide a UI function below and assign properties as required wip
                 
                 ' set the characteristics of the interactive areas
                Select Case LCase$(W.Key) 'demonstrates, how to influence certain Widget-Props specifically (depending on the current LayerPath-Key)
@@ -167,7 +167,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                     Else
                         W.ToolTip = vbNullString
                     End If
-                 Case "stopwatch/face/watchface"
+                 Case "stopwatch/face/stopwatchface"
                     W.HoverColor = -1 ' set the hover colour to grey - ' task: might change this later when new ver or RC6 arrives
                     W.MousePointer = IDC_SIZEALL
                     If PzGEnableTooltips = "1" Then
@@ -175,12 +175,21 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                     Else
                         W.ToolTip = vbNullString
                     End If
-                   
+                Case "stopwatch/face/clockface"
+                    W.Alpha = 0
+                    W.HoverColor = -1 ' set the hover colour to grey - ' task: might change this later when new ver or RC6 arrives
+                    W.MousePointer = IDC_SIZEALL
+                    If PzGEnableTooltips = "1" Then
+                        W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
+                    Else
+                        W.ToolTip = vbNullString
+                    End If
+                
                 Case Else 'all other added Layer-Widgets will be -1 or "non-hoverable" and "fully click-through"
                     W.HoverColor = -1 ' task: might change this later when new ver or RC6 arrives
                     W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
                     W.MousePointer = IDC_SIZEALL
-                    
+                
                End Select
                
                ' other (unused) widgets created from the layers shown here for reference
@@ -199,7 +208,8 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
 '                .Add Empty, "stopwatch/face/italo fontana"
 '
 '                .Add Empty, "stopwatch/face/darkfacebackground"
-'                .Add Empty, "stopwatch/face/watchface"
+'                .Add Empty, "stopwatch/face/clockface"
+'                .Add Empty, "stopwatch/face/stopwatchface"
                
             End If
          End If
