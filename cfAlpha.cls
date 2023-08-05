@@ -194,19 +194,9 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                
                ' other (unused) widgets created from the layers shown here for reference
                
-'                .Add Empty, "stopwatch/face/mki for vb6"
-'                .Add Empty, "stopwatch/face/panzer"
-'
-'                .Add Empty, "stopwatch/face/swhourface"
-'                .Add Empty, "stopwatch/face/swminuteface"
-'                .Add Empty, "stopwatch/face/swsecondface"
-'
 '                .Add Empty, "stopwatch/face/4digit"
 '                .Add Empty, "stopwatch/face/2digit"
-'                .Add Empty, "stopwatch/face/eagle"
-'                .Add Empty, "stopwatch/face/made in germany"
-'                .Add Empty, "stopwatch/face/italo fontana"
-'
+
 '                .Add Empty, "stopwatch/face/darkfacebackground"
 '                .Add Empty, "stopwatch/face/clockface"
 '                .Add Empty, "stopwatch/face/stopwatchface"
@@ -222,11 +212,6 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
   Set overlayWidget.cCollOverlayImages = collPSDNonUIElements 'make the excluded PSD-Surface-Paths known to the Overlay-Widget
       overlayWidget.cxPerc = 0.4940476 'define the relative center (within cwOverlay, which has the same size as the Form and the PSD...) this is used for clock-hand-positioning
       overlayWidget.cyPerc = 0.4727272
-  
-  ' Task: Move these to sub main function
-'  gaugeForm.show 'we are through with the initializations - and show the Form
-'  gaugeForm.Move FX, FY
-'  AdjustZoom IIf(FZ, FZ, 1)
 
    On Error GoTo 0
    Exit Sub
@@ -247,30 +232,53 @@ Private Sub gaugeForm_BubblingEvent(Sender As Object, EventName As String, P1 As
    On Error GoTo gaugeForm_BubblingEvent_Error
 
     If PzGIgnoreMouse = "1" Then Exit Sub
-    If EventName = "W_Click" Then
-    Select Case LCase$(Sender.Widget.Key)
     
-        Case "stopwatch/face/housing/helpbutton" 'three Widget-Keys, picked for "special click-behaviour"
-            Call helpbutton_click_event
-        Case "stopwatch/face/housing/startbutton"
-             Call startbutton_click_event
-        Case "stopwatch/face/housing/stopbutton"
-             Call stopbutton_click_event
-        Case "stopwatch/face/housing/switchfacesbutton"
-             Call switchfacesbutton_click_event
-        Case "stopwatch/face/housing/lockbutton"
-             Call lockbutton_click_event
-        Case "stopwatch/face/housing/prefsbutton"
-             Call prefsbutton_click_event
-        Case "stopwatch/face/housing/tickbutton"
-             Call tickbutton_click_event
-        Case "stopwatch/face/watchface"
-             Call watchface_click_event
-        Case Else
-            Debug.Print Sender.Widget.Key
-    End Select
-  End If
+    If EventName = "W_MouseDown" Then
+        Select Case LCase$(Sender.Widget.Key)
+            Case "stopwatch/face/housing/lockbutton"
+                Call lockbutton_mouseDown(Sender)
+            Case "stopwatch/face/housing/prefsbutton"
+                Call prefsbutton_mouseDown(Sender)
+            Case "stopwatch/face/housing/tickbutton"
+                Call tickbutton_mouseDown(Sender)
+            Case Else
+                Debug.Print Sender.Widget.Key
+        End Select
 
+        
+    End If
+    
+    If EventName = "W_MouseUp" Then
+        Select Case LCase$(Sender.Widget.Key)
+            Case "stopwatch/face/housing/prefsbutton"
+                Sender.Widget.Alpha = 1
+                Sender.Widget.Refresh
+            Case Else
+                Debug.Print Sender.Widget.Key
+        End Select
+    End If
+    
+    If EventName = "W_Click" Then
+        Select Case LCase$(Sender.Widget.Key)
+        
+            Case "stopwatch/face/housing/helpbutton" 'three Widget-Keys, picked for "special click-behaviour"
+                 Call helpbutton_click
+            Case "stopwatch/face/housing/startbutton"
+                 Call startbutton_click
+            Case "stopwatch/face/housing/stopbutton"
+                 Call stopbutton_click
+            Case "stopwatch/face/housing/switchfacesbutton"
+                 Call switchfacesbutton_click
+
+            Case "stopwatch/face/watchface"
+                 Call watchface_click
+            Case Else
+                Debug.Print Sender.Widget.Key
+        End Select
+    End If
+
+   
+   
    On Error GoTo 0
    Exit Sub
 
@@ -279,14 +287,14 @@ gaugeForm_BubblingEvent_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure gaugeForm_BubblingEvent of Class Module cfAlpha"
 End Sub
 '---------------------------------------------------------------------------------------
-' Procedure : helpbutton_click_event
+' Procedure : helpbutton_click
 ' Author    : beededea
 ' Date      : 03/08/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub helpbutton_click_event()
-   On Error GoTo helpbutton_click_event_Error
+Private Sub helpbutton_click()
+   On Error GoTo helpbutton_click_Error
 
     '    If PzGIgnoreMouse = "1" Then Exit Sub
    Call helpSplash
@@ -295,22 +303,22 @@ Private Sub helpbutton_click_event()
    On Error GoTo 0
    Exit Sub
 
-helpbutton_click_event_Error:
+helpbutton_click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure helpbutton_click_event of Class Module cfAlpha"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure helpbutton_click of Class Module cfAlpha"
     
 End Sub
 
 
 '---------------------------------------------------------------------------------------
-' Procedure : startbutton_click_event
+' Procedure : startbutton_click
 ' Author    : beededea
 ' Date      : 03/08/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub startbutton_click_event()
-   On Error GoTo startbutton_click_event_Error
+Private Sub startbutton_click()
+   On Error GoTo startbutton_click_Error
 
     '    If PzGIgnoreMouse = "1" Then Exit Sub
     MsgBox "start!"
@@ -318,20 +326,20 @@ Private Sub startbutton_click_event()
    On Error GoTo 0
    Exit Sub
 
-startbutton_click_event_Error:
+startbutton_click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure startbutton_click_event of Class Module cfAlpha"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure startbutton_click of Class Module cfAlpha"
 
 End Sub
 '---------------------------------------------------------------------------------------
-' Procedure : stopbutton_click_event
+' Procedure : stopbutton_click
 ' Author    : beededea
 ' Date      : 03/08/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub stopbutton_click_event()
-   On Error GoTo stopbutton_click_event_Error
+Private Sub stopbutton_click()
+   On Error GoTo stopbutton_click_Error
 
     '    If PzGIgnoreMouse = "1" Then Exit Sub
     MsgBox "stop!"
@@ -339,67 +347,72 @@ Private Sub stopbutton_click_event()
    On Error GoTo 0
    Exit Sub
 
-stopbutton_click_event_Error:
+stopbutton_click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure stopbutton_click_event of Class Module cfAlpha"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure stopbutton_click of Class Module cfAlpha"
 
 End Sub
 '---------------------------------------------------------------------------------------
-' Procedure : switchfacesbutton_click_event
+' Procedure : switchfacesbutton_click
 ' Author    : beededea
 ' Date      : 03/08/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub switchfacesbutton_click_event()
-   On Error GoTo switchfacesbutton_click_event_Error
+Private Sub switchfacesbutton_click()
+   On Error GoTo switchfacesbutton_click_Error
 
     '    If PzGIgnoreMouse = "1" Then Exit Sub
 
    On Error GoTo 0
    Exit Sub
 
-switchfacesbutton_click_event_Error:
+switchfacesbutton_click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure switchfacesbutton_click_event of Class Module cfAlpha"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure switchfacesbutton_click of Class Module cfAlpha"
 
 End Sub
 '---------------------------------------------------------------------------------------
-' Procedure : lockbutton_click_event
+' Procedure : lockbutton_mouseDown
 ' Author    : beededea
 ' Date      : 03/08/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub lockbutton_click_event()
-   On Error GoTo lockbutton_click_event_Error
-   
-    '    If PzGIgnoreMouse = "1" Then Exit Sub
+Private Sub lockbutton_mouseDown(Sender As Object)
+   On Error GoTo lockbutton_mouseDown_Error
     
+    If overlayWidget.Locked = 0 Then
+        Sender.Widget.Alpha = 0
+    Else
+        Sender.Widget.Alpha = 1
+    End If
+    Sender.Widget.Refresh
     Call lockWidget
     
    On Error GoTo 0
    Exit Sub
 
-lockbutton_click_event_Error:
+lockbutton_mouseDown_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure lockbutton_click_event of Class Module cfAlpha"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure lockbutton_mouseDown of Class Module cfAlpha"
 
 End Sub
 '---------------------------------------------------------------------------------------
-' Procedure : prefsbutton_click_event
+' Procedure : prefsbutton_mouseDown
 ' Author    : beededea
 ' Date      : 03/08/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub prefsbutton_click_event()
+Private Sub prefsbutton_mouseDown(Sender As Object)
     Dim fileToPlay As String: fileToPlay = vbNullString
    
-    On Error GoTo prefsbutton_click_event_Error
-    
-    '    If PzGIgnoreMouse = "1" Then Exit Sub
+    On Error GoTo prefsbutton_mouseDown_Error
 
+    Sender.Widget.Alpha = 0
+    'Sender.Widget.Visible = False
+    Sender.Widget.Refresh
     fileToPlay = "winding.wav"
     If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
@@ -410,27 +423,32 @@ Private Sub prefsbutton_click_event()
    On Error GoTo 0
    Exit Sub
 
-prefsbutton_click_event_Error:
+prefsbutton_mouseDown_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure prefsbutton_click_event of Class Module cfAlpha"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure prefsbutton_mouseDown of Class Module cfAlpha"
 
 End Sub
 '---------------------------------------------------------------------------------------
-' Procedure : tickbutton_click_event
+' Procedure : tickbutton_mouseDown
 ' Author    : beededea
 ' Date      : 03/08/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub tickbutton_click_event()
+Private Sub tickbutton_mouseDown(Sender As Object)
     Dim fileToPlay As String: fileToPlay = vbNullString
    
-    On Error GoTo tickbutton_click_event_Error
-    
-    '    If PzGIgnoreMouse = "1" Then Exit Sub
+    On Error GoTo tickbutton_mouseDown_Error
     
     If overlayWidget.Ticking = True Then
-        fileToPlay = "ting.wav"
+        Sender.Widget.Alpha = 0
+    Else
+        Sender.Widget.Alpha = 1
+    End If
+    Sender.Widget.Refresh
+    
+    If overlayWidget.Ticking = True Then
+        fileToPlay = "lock.wav"
         If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
             PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
         End If
@@ -442,20 +460,20 @@ Private Sub tickbutton_click_event()
    On Error GoTo 0
    Exit Sub
 
-tickbutton_click_event_Error:
+tickbutton_mouseDown_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tickbutton_click_event of Class Module cfAlpha"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tickbutton_mouseDown of Class Module cfAlpha"
 
 End Sub
 '---------------------------------------------------------------------------------------
-' Procedure : watchface_click_event
+' Procedure : watchface_click
 ' Author    : beededea
 ' Date      : 03/08/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub watchface_click_event()
-   On Error GoTo watchface_click_event_Error
+Private Sub watchface_click()
+   On Error GoTo watchface_click_Error
 
     '    If PzGIgnoreMouse = "1" Then Exit Sub
 
@@ -464,9 +482,9 @@ Private Sub watchface_click_event()
    On Error GoTo 0
    Exit Sub
 
-watchface_click_event_Error:
+watchface_click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure watchface_click_event of Class Module cfAlpha"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure watchface_click of Class Module cfAlpha"
 
 End Sub
 

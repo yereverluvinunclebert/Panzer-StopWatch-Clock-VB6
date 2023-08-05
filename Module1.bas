@@ -2162,10 +2162,9 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Public Sub lockWidget()
-
     Dim fileToPlay As String: fileToPlay = vbNullString
 
-   On Error GoTo lockWidget_Error
+    On Error GoTo lockWidget_Error
 
     fileToPlay = "lock.wav"
     If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then

@@ -181,11 +181,11 @@ Public Property Let Hidden(ByVal newValue As Boolean)
     If mHidden <> newValue Then mHidden = newValue Else Exit Property
     If mHidden = True Then
         W.Visible = False
-        'opacity = 0
+        
         W.Refresh
     Else
         W.Visible = True
-        'opacity = Val(PzGOpacity) / 100
+        
         W.Refresh
     End If
 

@@ -22,11 +22,13 @@
 
 ' top justification of help button - wip
 
-' switch functions off, make it stick after a reboot/reload
+' switch tick functions off, make it stick after a reboot/reload
 
 ' %systemroot handled as per steamydock
 ' hide normal font box, show only the resized font
 ' try the balloon tooltips on one control
+' opacity change after save, does not stick
+'
 
 
 ' upgrade to RC6 new version from Olaf to obtain opacity control over the overlays currently limited to 25%
