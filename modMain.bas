@@ -65,8 +65,6 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     fAlpha.FY = 111
     fAlpha.FZ = 0.4
     
-    Cairo.SetDPIAwareness ' this sets DPI awareness for the whole program incl. native VB6 forms
- 
     ' initialise global vars
     Call initialiseGlobalVars
     
@@ -84,6 +82,10 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     
     ' validate the inputs of any data from the input settings file
     Call validateInputs
+    
+    If PzGDpiAwareness = "1" Then
+        Cairo.SetDPIAwareness ' this sets DPI awareness for the whole program incl. native VB6 forms, requires a program hard restart.
+    End If
         
     'load the collection for storing the overlay surfaces with its relevant keys direct from the PSD
     If restart = False Then Call loadExcludePathCollection ' no need to reload the collPSDNonUIElements layer name keys
@@ -192,6 +194,7 @@ Private Sub initialiseGlobalVars()
     PzGEnableTooltips = vbNullString
     PzGEnableBalloonTooltips = vbNullString
     PzGShowTaskbar = vbNullString
+    PzGDpiAwareness = False
     
     PzGGaugeSize = vbNullString
     PzGScrollWheelDirection = vbNullString
@@ -433,6 +436,8 @@ Public Sub readSettingsFile(ByVal location As String, ByVal PzGSettingsFile As S
         PzGEnableTooltips = fGetINISetting(location, "enableTooltips", PzGSettingsFile)
         PzGEnableBalloonTooltips = fGetINISetting(location, "enableBalloonTooltips", PzGSettingsFile)
         PzGShowTaskbar = fGetINISetting(location, "showTaskbar", PzGSettingsFile)
+        PzGDpiAwareness = fGetINISetting(location, "dpiAwareness", PzGSettingsFile)
+        
         
         PzGGaugeSize = fGetINISetting(location, "gaugeSize", PzGSettingsFile)
         PzGScrollWheelDirection = fGetINISetting(location, "scrollWheelDirection", PzGSettingsFile)
@@ -523,6 +528,8 @@ Public Sub validateInputs()
         If PzGEnableTooltips = vbNullString Then PzGEnableTooltips = "1"
         If PzGEnableBalloonTooltips = vbNullString Then PzGEnableBalloonTooltips = "1"
         If PzGShowTaskbar = vbNullString Then PzGShowTaskbar = "0"
+        If PzGDpiAwareness = vbNullString Then PzGDpiAwareness = "false"
+        
         
         If PzGGaugeSize = vbNullString Then PzGGaugeSize = "25"
         If PzGScrollWheelDirection = vbNullString Then PzGScrollWheelDirection = "up"
@@ -754,10 +761,7 @@ Private Sub loadExcludePathCollection()
     On Error GoTo loadExcludePathCollection_Error
 
     With fAlpha.collPSDNonUIElements ' the exclude list
-    
-
-
-        
+       
         .Add Empty, "stopwatch/face/swsecondhand" 'arrow-hand-top
         .Add Empty, "stopwatch/face/swminutehand" 'arrow-hand-right
         .Add Empty, "stopwatch/face/swhourhand"   'arrow-hand-bottom
@@ -773,9 +777,6 @@ Private Sub loadExcludePathCollection()
         
         .Add Empty, "stopwatch/bigreflection"     'all reflections
         .Add Empty, "stopwatch/windowreflection"
-        
-
-
 
     End With
 

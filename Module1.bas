@@ -298,6 +298,7 @@ Public PzGSecondaryDaylightSaving As String
 Public PzGEnableTooltips As String
 Public PzGEnableBalloonTooltips As String
 Public PzGShowTaskbar As String
+Public PzGDpiAwareness As String
 
 Public PzGGaugeSize As String
 Public PzGScrollWheelDirection As String

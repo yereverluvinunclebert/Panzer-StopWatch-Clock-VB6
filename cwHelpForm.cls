@@ -264,9 +264,14 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Single, ByVal mOpacity As Double)
-   On Error GoTo Draw_Error
+   
+    Dim scaleValue As Double: scaleValue = 0.8
+    
+    On Error GoTo Draw_Error
 
-    CC.ScaleDrawings 1.4, 1.4
+    If PzGDpiAwareness = "1" Then scaleValue = 1.4
+
+    CC.ScaleDrawings scaleValue, scaleValue
 
     CC.RenderSurfaceContent "help", helpxo, helpyo, , , , mOpacity
         

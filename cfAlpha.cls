@@ -244,8 +244,6 @@ Private Sub gaugeForm_BubblingEvent(Sender As Object, EventName As String, P1 As
             Case Else
                 Debug.Print Sender.Widget.Key
         End Select
-
-        
     End If
     
     If EventName = "W_MouseUp" Then
@@ -260,24 +258,18 @@ Private Sub gaugeForm_BubblingEvent(Sender As Object, EventName As String, P1 As
     
     If EventName = "W_Click" Then
         Select Case LCase$(Sender.Widget.Key)
-        
-            Case "stopwatch/face/housing/helpbutton" 'three Widget-Keys, picked for "special click-behaviour"
+            Case "stopwatch/face/housing/helpbutton"
                  Call helpbutton_click
             Case "stopwatch/face/housing/startbutton"
                  Call startbutton_click
             Case "stopwatch/face/housing/stopbutton"
                  Call stopbutton_click
             Case "stopwatch/face/housing/switchfacesbutton"
-                 Call switchfacesbutton_click
-
-            Case "stopwatch/face/watchface"
-                 Call watchface_click
+                 Call switchfacesbutton_click(Sender)
             Case Else
                 Debug.Print Sender.Widget.Key
         End Select
     End If
-
-   
    
    On Error GoTo 0
    Exit Sub
@@ -296,9 +288,7 @@ End Sub
 Private Sub helpbutton_click()
    On Error GoTo helpbutton_click_Error
 
-    '    If PzGIgnoreMouse = "1" Then Exit Sub
    Call helpSplash
-   
 
    On Error GoTo 0
    Exit Sub
@@ -318,10 +308,14 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub startbutton_click()
-   On Error GoTo startbutton_click_Error
+    On Error GoTo startbutton_click_Error
+   
+    Dim fileToPlay As String: fileToPlay = vbNullString
 
-    '    If PzGIgnoreMouse = "1" Then Exit Sub
-    MsgBox "start!"
+    fileToPlay = "ting.wav"
+    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
+        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+    End If
 
    On Error GoTo 0
    Exit Sub
@@ -341,8 +335,12 @@ End Sub
 Private Sub stopbutton_click()
    On Error GoTo stopbutton_click_Error
 
-    '    If PzGIgnoreMouse = "1" Then Exit Sub
-    MsgBox "stop!"
+    Dim fileToPlay As String: fileToPlay = vbNullString
+
+    fileToPlay = "mistake.wav"
+    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
+        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+    End If
 
    On Error GoTo 0
    Exit Sub
@@ -359,11 +357,14 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub switchfacesbutton_click()
-   On Error GoTo switchfacesbutton_click_Error
+Private Sub switchfacesbutton_click(Sender As Object)
+    Dim fileToPlay As String: fileToPlay = vbNullString
+    On Error GoTo switchfacesbutton_click_Error
 
-    '    If PzGIgnoreMouse = "1" Then Exit Sub
-
+    fileToPlay = "till.wav"
+    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
+        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+    End If
    On Error GoTo 0
    Exit Sub
 
@@ -387,7 +388,7 @@ Private Sub lockbutton_mouseDown(Sender As Object)
     Else
         Sender.Widget.Alpha = 1
     End If
-    Sender.Widget.Refresh
+    Sender.Widget.Refresh ' this removes the delay in the lockButton depressing
     Call lockWidget
     
    On Error GoTo 0
@@ -412,7 +413,7 @@ Private Sub prefsbutton_mouseDown(Sender As Object)
 
     Sender.Widget.Alpha = 0
     'Sender.Widget.Visible = False
-    Sender.Widget.Refresh
+    Sender.Widget.Refresh ' this removes the delay in the Button depressing
     fileToPlay = "winding.wav"
     If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
@@ -445,7 +446,7 @@ Private Sub tickbutton_mouseDown(Sender As Object)
     Else
         Sender.Widget.Alpha = 1
     End If
-    Sender.Widget.Refresh
+    Sender.Widget.Refresh ' this removes the delay in the Button depressing
     
     If overlayWidget.Ticking = True Then
         fileToPlay = "lock.wav"
@@ -465,28 +466,7 @@ tickbutton_mouseDown_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tickbutton_mouseDown of Class Module cfAlpha"
 
 End Sub
-'---------------------------------------------------------------------------------------
-' Procedure : watchface_click
-' Author    : beededea
-' Date      : 03/08/2023
-' Purpose   :
-'---------------------------------------------------------------------------------------
-'
-Private Sub watchface_click()
-   On Error GoTo watchface_click_Error
 
-    '    If PzGIgnoreMouse = "1" Then Exit Sub
-
-    MsgBox "face!"
-
-   On Error GoTo 0
-   Exit Sub
-
-watchface_click_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure watchface_click of Class Module cfAlpha"
-
-End Sub
 
 
 '---------------------------------------------------------------------------------------
