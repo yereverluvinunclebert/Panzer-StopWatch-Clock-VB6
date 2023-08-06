@@ -62,9 +62,12 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
     Dim i As Long: i = 0
     Dim W As cWidgetBase
     Dim excludeOpacity As Integer: excludeOpacity = 0
+    'Dim pngFolder As String: pngFolder = vbNullString
    
     On Error GoTo InitFromPSD_Error
 
+    'pngFolder = App.Path & "\Resources\images\PngExport\"
+    
     'create the Alpha-capable Top-Level-Form
     Set gaugeForm = Cairo.WidgetForms.Create(IIf(App.LogMode, AlphaNoTaskbarEntry, AlphaWithTaskbarEntry), "Panzer Stopwatch Gauge", True, 1, 1)
         gaugeForm.WidgetRoot.BackColor = -1
@@ -76,7 +79,8 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
     
     For i = 0 To .LayersCount - 1 ' loop through each of the Layers in the PSD
       If .LayerByteSize(i) Then  ' this is a true Alpha-Surface-Layer and not just a PSD layer 'group'
-         If .LayerAlphaPercent(i) > 0 Then ' only handles layers that have an opacity greater than 0 - need to note this for the future, this will cause a problem!
+        '.LayerSurface(i).WriteContentToPngFile pngFolder & Replace(.LayerPath(i), "/", "_") & ".png"
+        If .LayerAlphaPercent(i) > 0 Then ' only handles layers that have an opacity greater than 0 - need to note this for the future, this will cause a problem!
             
             'add each current Layer path and surface object into the global ImageList collection (using LayerPath as the ImageKey)
             Cairo.ImageList.AddSurface .LayerPath(i), .LayerSurface(i)
@@ -87,7 +91,8 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                 collPSDNonUIElements(.LayerPath(i)) = Array(.LayerX(i), .LayerY(i), Val(PzGOpacity) / 100)  'here we update the so far empty slots with the PSD-offsets
                 
             Else 'everything not in the exclude-list will get its own Widget-instance
-               Set W = gaugeForm.Widgets.Add(New_W("cwAlphaImg"), LCase$(.LayerPath(i)), .LayerX(i), .LayerY(i), .LayerWidth(i), .LayerHeight(i)).Widget
+               
+                Set W = gaugeForm.Widgets.Add(New_W("cwAlphaImg"), LCase$(.LayerPath(i)), .LayerX(i), .LayerY(i), .LayerWidth(i), .LayerHeight(i)).Widget
                    W.ImageKey = W.Key 'W.Key equals ImageList-Key, set above - and LayerPath(i) at this point ... set it also as the ImageKey of our new created Widget
                    'W.Alpha = .LayerAlphaPercent(i) 'important (to transport the PSD-LayerAlpha to this Widget-instance as well)
                    ' W.ToolTip = W.Key 'can be left out (or one can set it on specific Widgets, as shown in the Select Case below)
@@ -96,7 +101,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                 ' Note: set the Hover colour close to the original layer to avoid too much intrusion, 0 being grey
                 
                 ' set the characteristics of the interactive areas
-               Select Case LCase$(W.Key) 'demonstrates, how to influence certain Widget-Props specifically (depending on the current LayerPath-Key)
+                Select Case LCase$(W.Key) 'demonstrates, how to influence certain Widget-Props specifically (depending on the current LayerPath-Key)
                 ' set the characteristics of the indentified drag area
                 Case DragWidgetKey 'the "special DragWidgetKey" we've passed from the outside into this init-routine
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6

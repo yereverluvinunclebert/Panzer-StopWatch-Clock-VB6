@@ -788,3 +788,34 @@ loadExcludePathCollection_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure loadExcludePathCollection of Module modMain"
 
 End Sub
+
+
+''---------------------------------------------------------------------------------------
+'' Procedure : ExportPngs
+'' Author    : Olaf
+'' Date      : 06/08/2023
+'' Purpose   :
+''---------------------------------------------------------------------------------------
+''
+'Sub exportPngs(PSD_FileNameOrByteArray, ByVal pngFolder As String)
+'   On Error GoTo ExportPngs_Error
+'
+'  New_c.FSO.EnsurePath pngFolder 'make sure the PngFolder-Path "materializes itself" in the FileSystem
+'  New_c.FSO.EnsurePathEndSep pngFolder 'add a backslash to the PngFolder-param (in case it was missing)
+'
+'  With New_c.SimplePSD(PSD_FileNameOrByteArray)  'create a new PSD-Parser.instance (and load the passed content)
+'    Dim i As Long
+'    For i = 0 To .LayersCount - 1 'loop over all the Layers in the PSD
+'      If .LayerByteSize(i) Then   'this is an Alpha-Surface-Layer with "meat" (and not a group-specification)
+'         .LayerSurface(i).WriteContentToPngFile pngFolder & Replace(.LayerPath(i), "/", "_") & ".png"
+'      End If
+'    Next
+'  End With
+'
+'   On Error GoTo 0
+'   Exit Sub
+'
+'ExportPngs_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ExportPngs of Module modMain"
+'End Sub

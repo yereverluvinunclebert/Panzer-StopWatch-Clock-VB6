@@ -1853,10 +1853,6 @@ Private topIconWidth As Long
 
 
 
-Private Sub chkDpiAwareness_Click()
-
-End Sub
-
 '---------------------------------------------------------------------------------------
 ' Procedure : chkShowTaskbar_Click
 ' Author    : beededea
@@ -1909,7 +1905,6 @@ Private Sub Form_Load()
     
     btnSave.Enabled = False ' disable the save button
 
-
     If PzGDpiAwareness = "1" Then
         dynamicSizingFlg = True
         chkEnableResizing.Value = 1
@@ -1944,7 +1939,6 @@ Private Sub Form_Load()
     End If
     
     Call readPrefsPosition
-    
     
     
     startupFlg = False
