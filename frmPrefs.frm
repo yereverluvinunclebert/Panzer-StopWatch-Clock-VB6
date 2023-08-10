@@ -2690,7 +2690,7 @@ Private Sub btnSave_Click()
     
     
     PzGGaugeSize = LTrim$(Str$(sliGaugeSize.Value))
-    PzGScrollWheelDirection = cmbScrollWheelDirection.List(cmbScrollWheelDirection.ListIndex)
+    PzGScrollWheelDirection = LTrim$(Str$(cmbScrollWheelDirection.ListIndex))
     
     ' general
     PzGGaugeFunctions = LTrim$(Str$(chkGaugeFunctions.Value))

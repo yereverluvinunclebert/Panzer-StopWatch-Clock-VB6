@@ -604,7 +604,7 @@ Private Sub gaugeForm_MouseWheel(ByVal MouseKeys As Long, ByVal Rotation As Long
    
    On Error GoTo gaugeForm_MouseWheel_Error
 
-    If PzGScrollWheelDirection = "down" Then
+    If PzGScrollWheelDirection = "1" Then
         If Rotation > 0 Then
             RotationDirection = 0 - Abs(Rotation)
         Else
