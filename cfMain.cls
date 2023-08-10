@@ -34,19 +34,37 @@ Attribute helpForm.VB_VarHelpID = -1
 '
 Public Sub initAndShowStandardForms(ByVal X As Long, ByVal Y As Long, Optional ByVal dx As Long, Optional ByVal dy As Long, Optional ByVal Caption As String)
     
+    Dim aboutLeft As Long: aboutLeft = 0
+    Dim aboutTop As Long: aboutTop = 0
+    Dim aboutFormWidth As Long: aboutFormWidth = 0
+    Dim aboutFormHeight As Long: aboutFormHeight = 0
+    Dim aboutWidgetWidth As Long: aboutWidgetWidth = 0
+    Dim aboutWidgetHeight As Long: aboutWidgetHeight = 0
+    
     Const WFFStyleTool As Integer = 7 ' additional styles above the normal five  WFFStyleTool = 7 makes the taskbar button go away
     
     On Error GoTo initAndShowStandardForms_Error
     
+    aboutFormWidth = 1600
+    aboutFormHeight = 1200
+    aboutWidgetWidth = 745
+    aboutWidgetHeight = 622
+    
     ' create an invisible form using a Cairo Widget Form with the predefined caption and sizing
-    Set aboutForm = Cairo.WidgetForms.Create(WFFStyleTool, "About the " & Caption & " Widget", , 1400, 1200)
+    Set aboutForm = Cairo.WidgetForms.Create(WFFStyleTool, "About the " & Caption & " Widget", True, 1600, 1200)
     
     ' make the about form transparent
     aboutForm.WidgetRoot.BackColor = -1
-         
+    
+    aboutLeft = (aboutFormWidth / 2) - (aboutWidgetWidth / 2)
+    aboutTop = (aboutFormHeight / 2) - (aboutWidgetHeight / 2)
+    
     ' create a new globe widget with a name and location, first step of that is to run Class_Initialize
-    Set aboutWidget = aboutForm.Widgets.Add(New cwAbout, "about", 0, 0, 1100, 970)
-
+    Set aboutWidget = aboutForm.Widgets.Add(New cwAbout, "about", aboutLeft, aboutTop, aboutWidgetWidth, aboutWidgetHeight)
+    
+    
+    ' -oOo-
+    
     
     ' create an invisible form using a Cairo Widget Form with the predefined caption and sizing
     Set helpForm = Cairo.WidgetForms.Create(WFFStyleTool, Caption, , 1400, 1200)

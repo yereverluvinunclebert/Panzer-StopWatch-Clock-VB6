@@ -259,7 +259,7 @@ Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Sing
     
     On Error GoTo Draw_Error
 
-    If PzGDpiAwareness = "1" Then scaleValue = 1.4
+    If PzGDpiAwareness = "1" Then scaleValue = 1.499
     
     CC.ScaleDrawings scaleValue, scaleValue
 

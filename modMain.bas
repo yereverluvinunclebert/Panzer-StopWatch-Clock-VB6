@@ -86,7 +86,10 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     If PzGDpiAwareness = "1" Then
         Cairo.SetDPIAwareness ' this sets DPI awareness for the whole program incl. native VB6 forms, requires a program hard restart.
     End If
-        
+            
+    ' resolve VB6 sizing width bug
+    Call determineScreenDimensions
+    
     'load the collection for storing the overlay surfaces with its relevant keys direct from the PSD
     If restart = False Then Call loadExcludePathCollection ' no need to reload the collPSDNonUIElements layer name keys
     
@@ -101,9 +104,6 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     
     ' place the form at the saved location
     Call makeVisibleFormElements
-    
-    ' resolve VB6 sizing width bug
-    Call determineScreenDimensions
     
     ' run the functions that are also called at reload time.
     Call adjustMainControls ' this needs to be here after the initialisation of the Cairo forms and widgets
