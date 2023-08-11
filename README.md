@@ -45,6 +45,8 @@ I do hope you enjoy using this utility and others. Your own software
 enhancements and contributions will be gratefully received if you choose to 
 contribute.
 
+![vb6-logo](https://github.com/yereverluvinunclebert/Panzer-StopWatch-Clock-VB6/assets/2788342/ef1f1821-7850-4539-8191-d06f55f2b28f)
+
 BUILD: The program runs without any Microsoft plugins.
 
 Built using: VB6, MZ-TOOLS 3.0, VBAdvance, CodeHelp Core IDE Extender
