@@ -14,6 +14,214 @@ Begin VB.Form panzerPrefs
    ScaleWidth      =   8955
    StartUpPosition =   3  'Windows Default
    Visible         =   0   'False
+   Begin VB.Frame fraWindow 
+      Caption         =   "Window"
+      Height          =   6300
+      Left            =   405
+      TabIndex        =   10
+      Top             =   1515
+      Width           =   8280
+      Begin VB.Frame fraWindowInner 
+         BorderStyle     =   0  'None
+         Height          =   5775
+         Left            =   1095
+         TabIndex        =   14
+         Top             =   345
+         Width           =   5715
+         Begin VB.Frame fraHiding 
+            BorderStyle     =   0  'None
+            Height          =   2010
+            Left            =   480
+            TabIndex        =   124
+            Top             =   2325
+            Width           =   5130
+            Begin VB.ComboBox cmbHidingTime 
+               Height          =   315
+               Left            =   825
+               Style           =   2  'Dropdown List
+               TabIndex        =   127
+               Top             =   1680
+               Width           =   3720
+            End
+            Begin VB.CheckBox chkWidgetHidden 
+               Caption         =   "Hiding Widget *"
+               Height          =   225
+               Left            =   855
+               TabIndex        =   125
+               Top             =   225
+               Width           =   2955
+            End
+            Begin VB.Label lblWindowLevel 
+               Caption         =   "Hiding :"
+               Height          =   345
+               Index           =   2
+               Left            =   90
+               TabIndex        =   128
+               Top             =   210
+               Width           =   720
+            End
+            Begin VB.Label lblWindowLevel 
+               Caption         =   $"frmPrefs.frx":385D2
+               Height          =   975
+               Index           =   1
+               Left            =   855
+               TabIndex        =   126
+               Top             =   600
+               Width           =   3900
+            End
+         End
+         Begin VB.ComboBox cmbWindowLevel 
+            Height          =   315
+            Left            =   1305
+            Style           =   2  'Dropdown List
+            TabIndex        =   17
+            Top             =   0
+            Width           =   3720
+         End
+         Begin VB.CheckBox chkIgnoreMouse 
+            Caption         =   "Ignore Mouse *"
+            Height          =   225
+            Left            =   1335
+            TabIndex        =   15
+            ToolTipText     =   "Checking this box causes the program to ignore all mouse events."
+            Top             =   1500
+            Width           =   2535
+         End
+         Begin vb6projectCCRSlider.Slider sliOpacity 
+            Height          =   390
+            Left            =   1200
+            TabIndex        =   16
+            ToolTipText     =   "Set the transparency of the Program."
+            Top             =   4560
+            Width           =   3870
+            _ExtentX        =   6826
+            _ExtentY        =   688
+            Min             =   20
+            Max             =   100
+            Value           =   100
+            TickFrequency   =   6
+            SelStart        =   20
+         End
+         Begin VB.Label lblWindowLevel 
+            Caption         =   "This setting controls the relative layering of this widget. You may use it to place it on top of other windows or underneath. "
+            Height          =   660
+            Index           =   3
+            Left            =   1320
+            TabIndex        =   133
+            Top             =   570
+            Width           =   3810
+         End
+         Begin VB.Label lblWindowLevel 
+            Caption         =   "Window Level :"
+            Height          =   345
+            Index           =   0
+            Left            =   0
+            TabIndex        =   24
+            Top             =   60
+            Width           =   1740
+         End
+         Begin VB.Label lblWindowLevel 
+            Caption         =   "20%"
+            Height          =   315
+            Index           =   7
+            Left            =   1290
+            TabIndex        =   23
+            Top             =   5070
+            Width           =   345
+         End
+         Begin VB.Label lblWindowLevel 
+            Caption         =   "100%"
+            Height          =   315
+            Index           =   9
+            Left            =   4650
+            TabIndex        =   22
+            Top             =   5070
+            Width           =   405
+         End
+         Begin VB.Label lblWindowLevel 
+            Caption         =   "Opacity"
+            Height          =   315
+            Index           =   8
+            Left            =   2775
+            TabIndex        =   21
+            Top             =   5070
+            Width           =   840
+         End
+         Begin VB.Label lblWindowLevel 
+            Caption         =   "Opacity:"
+            Height          =   315
+            Index           =   6
+            Left            =   555
+            TabIndex        =   20
+            Top             =   4620
+            Width           =   780
+         End
+         Begin VB.Label lblWindowLevel 
+            Caption         =   "Set the program transparency level. *"
+            Height          =   330
+            Index           =   5
+            Left            =   1335
+            TabIndex        =   19
+            Top             =   5385
+            Width           =   3810
+         End
+         Begin VB.Label lblWindowLevel 
+            Caption         =   "Checking this box causes the program to ignore all mouse events except right click menu interactions."
+            Height          =   660
+            Index           =   4
+            Left            =   1320
+            TabIndex        =   18
+            Top             =   1890
+            Width           =   3810
+         End
+      End
+   End
+   Begin VB.Frame fraSounds 
+      Caption         =   "Sounds"
+      Height          =   1965
+      Left            =   240
+      TabIndex        =   13
+      Top             =   1230
+      Visible         =   0   'False
+      Width           =   7965
+      Begin VB.Frame fraSoundsInner 
+         BorderStyle     =   0  'None
+         Height          =   1755
+         Left            =   930
+         TabIndex        =   25
+         Top             =   135
+         Width           =   5160
+         Begin VB.CheckBox chkEnableSounds 
+            Caption         =   "Enable Sounds for the Animations"
+            Height          =   225
+            Left            =   1485
+            TabIndex        =   36
+            ToolTipText     =   "Check this box to enable or disable all of the sounds used during any animation on the main screen."
+            Top             =   465
+            Width           =   3405
+         End
+         Begin VB.Label lblSoundsTab 
+            Caption         =   "Audio :"
+            Height          =   255
+            Index           =   3
+            Left            =   885
+            TabIndex        =   99
+            Tag             =   "lblSharedInputFile"
+            Top             =   465
+            Width           =   765
+         End
+         Begin VB.Label lblSoundsTab 
+            Caption         =   "When checked, this box enables all the sounds used during any animation/interaction with the main program."
+            Height          =   660
+            Index           =   4
+            Left            =   1515
+            TabIndex        =   37
+            Tag             =   "lblEnableSoundsDesc"
+            Top             =   825
+            Width           =   3615
+         End
+      End
+   End
    Begin VB.Frame fraConfig 
       Caption         =   "Configuration"
       Height          =   5880
@@ -105,7 +313,7 @@ Begin VB.Form panzerPrefs
             SelStart        =   20
          End
          Begin VB.Label lblConfiguration 
-            Caption         =   $"frmPrefs.frx":385D2
+            Caption         =   $"frmPrefs.frx":38675
             Height          =   660
             Index           =   0
             Left            =   1980
@@ -248,7 +456,7 @@ Begin VB.Form panzerPrefs
                Width           =   3660
             End
             Begin VB.Label lblGitHub 
-               Caption         =   $"frmPrefs.frx":38677
+               Caption         =   $"frmPrefs.frx":3871A
                ForeColor       =   &H8000000D&
                Height          =   675
                Left            =   1560
@@ -258,7 +466,7 @@ Begin VB.Form panzerPrefs
                Width           =   5430
             End
             Begin VB.Label lblDebug 
-               Caption         =   $"frmPrefs.frx":3870F
+               Caption         =   $"frmPrefs.frx":387B2
                Height          =   930
                Index           =   9
                Left            =   1545
@@ -414,9 +622,9 @@ Begin VB.Form panzerPrefs
          End
          Begin VB.ComboBox cmbMainGaugeTimeZone 
             Height          =   315
-            ItemData        =   "frmPrefs.frx":387B3
+            ItemData        =   "frmPrefs.frx":38856
             Left            =   2010
-            List            =   "frmPrefs.frx":387B5
+            List            =   "frmPrefs.frx":38858
             Style           =   2  'Dropdown List
             TabIndex        =   148
             Top             =   2325
@@ -424,9 +632,9 @@ Begin VB.Form panzerPrefs
          End
          Begin VB.ComboBox cmbClockFaceSwitchPref 
             Height          =   315
-            ItemData        =   "frmPrefs.frx":387B7
+            ItemData        =   "frmPrefs.frx":3885A
             Left            =   1995
-            List            =   "frmPrefs.frx":387B9
+            List            =   "frmPrefs.frx":3885C
             Style           =   2  'Dropdown List
             TabIndex        =   145
             Top             =   1155
@@ -568,168 +776,6 @@ Begin VB.Form panzerPrefs
             Tag             =   "lblEnableSoundsDesc"
             Top             =   540
             Width           =   3615
-         End
-      End
-   End
-   Begin VB.Frame fraWindow 
-      Caption         =   "Window"
-      Height          =   6300
-      Left            =   405
-      TabIndex        =   10
-      Top             =   1515
-      Width           =   8280
-      Begin VB.Frame fraWindowInner 
-         BorderStyle     =   0  'None
-         Height          =   5775
-         Left            =   1095
-         TabIndex        =   14
-         Top             =   345
-         Width           =   5715
-         Begin VB.Frame fraHiding 
-            BorderStyle     =   0  'None
-            Height          =   2010
-            Left            =   480
-            TabIndex        =   124
-            Top             =   2325
-            Width           =   5130
-            Begin VB.ComboBox cmbHidingTime 
-               Height          =   315
-               Left            =   825
-               Style           =   2  'Dropdown List
-               TabIndex        =   127
-               Top             =   1680
-               Width           =   3720
-            End
-            Begin VB.CheckBox chkWidgetHidden 
-               Caption         =   "Hiding Widget *"
-               Height          =   225
-               Left            =   855
-               TabIndex        =   125
-               Top             =   225
-               Width           =   2955
-            End
-            Begin VB.Label lblWindowLevel 
-               Caption         =   "Hiding :"
-               Height          =   345
-               Index           =   2
-               Left            =   90
-               TabIndex        =   128
-               Top             =   210
-               Width           =   720
-            End
-            Begin VB.Label lblWindowLevel 
-               Caption         =   $"frmPrefs.frx":387BB
-               Height          =   975
-               Index           =   1
-               Left            =   855
-               TabIndex        =   126
-               Top             =   600
-               Width           =   3900
-            End
-         End
-         Begin VB.ComboBox cmbWindowLevel 
-            Height          =   315
-            Left            =   1305
-            Style           =   2  'Dropdown List
-            TabIndex        =   17
-            Top             =   0
-            Width           =   3720
-         End
-         Begin VB.CheckBox chkIgnoreMouse 
-            Caption         =   "Ignore Mouse *"
-            Height          =   225
-            Left            =   1335
-            TabIndex        =   15
-            ToolTipText     =   "Checking this box causes the program to ignore all mouse events."
-            Top             =   1500
-            Width           =   2535
-         End
-         Begin vb6projectCCRSlider.Slider sliOpacity 
-            Height          =   390
-            Left            =   1200
-            TabIndex        =   16
-            ToolTipText     =   "Set the transparency of the Program."
-            Top             =   4560
-            Width           =   3870
-            _ExtentX        =   6826
-            _ExtentY        =   688
-            Min             =   20
-            Max             =   100
-            Value           =   100
-            TickFrequency   =   6
-            SelStart        =   20
-         End
-         Begin VB.Label lblWindowLevel 
-            Caption         =   "This setting controls the relative layering of this widget. You may use it to place it on top of other windows or underneath. "
-            Height          =   660
-            Index           =   3
-            Left            =   1320
-            TabIndex        =   133
-            Top             =   570
-            Width           =   3810
-         End
-         Begin VB.Label lblWindowLevel 
-            Caption         =   "Window Level :"
-            Height          =   345
-            Index           =   0
-            Left            =   0
-            TabIndex        =   24
-            Top             =   60
-            Width           =   1740
-         End
-         Begin VB.Label lblWindowLevel 
-            Caption         =   "20%"
-            Height          =   315
-            Index           =   7
-            Left            =   1290
-            TabIndex        =   23
-            Top             =   5070
-            Width           =   345
-         End
-         Begin VB.Label lblWindowLevel 
-            Caption         =   "100%"
-            Height          =   315
-            Index           =   9
-            Left            =   4650
-            TabIndex        =   22
-            Top             =   5070
-            Width           =   405
-         End
-         Begin VB.Label lblWindowLevel 
-            Caption         =   "Opacity"
-            Height          =   315
-            Index           =   8
-            Left            =   2775
-            TabIndex        =   21
-            Top             =   5070
-            Width           =   840
-         End
-         Begin VB.Label lblWindowLevel 
-            Caption         =   "Opacity:"
-            Height          =   315
-            Index           =   6
-            Left            =   555
-            TabIndex        =   20
-            Top             =   4620
-            Width           =   780
-         End
-         Begin VB.Label lblWindowLevel 
-            Caption         =   "Set the program transparency level. *"
-            Height          =   330
-            Index           =   5
-            Left            =   1335
-            TabIndex        =   19
-            Top             =   5385
-            Width           =   3810
-         End
-         Begin VB.Label lblWindowLevel 
-            Caption         =   "Checking this box causes the program to ignore all mouse events except right click menu interactions."
-            Height          =   660
-            Index           =   4
-            Left            =   1320
-            TabIndex        =   18
-            Top             =   1890
-            Width           =   3810
          End
       End
    End
@@ -1039,52 +1085,6 @@ Begin VB.Form panzerPrefs
          Stretch         =   -1  'True
          Top             =   240
          Width           =   600
-      End
-   End
-   Begin VB.Frame fraSounds 
-      Caption         =   "Sounds"
-      Height          =   1965
-      Left            =   240
-      TabIndex        =   13
-      Top             =   1230
-      Visible         =   0   'False
-      Width           =   7965
-      Begin VB.Frame fraSoundsInner 
-         BorderStyle     =   0  'None
-         Height          =   1755
-         Left            =   930
-         TabIndex        =   25
-         Top             =   135
-         Width           =   5160
-         Begin VB.CheckBox chkEnableSounds 
-            Caption         =   "Enable Sounds for the Animations *"
-            Height          =   225
-            Left            =   1485
-            TabIndex        =   36
-            ToolTipText     =   "Check this box to enable or disable all of the sounds used during any animation on the main screen."
-            Top             =   465
-            Width           =   3405
-         End
-         Begin VB.Label lblSoundsTab 
-            Caption         =   "Audio :"
-            Height          =   255
-            Index           =   3
-            Left            =   885
-            TabIndex        =   99
-            Tag             =   "lblSharedInputFile"
-            Top             =   465
-            Width           =   765
-         End
-         Begin VB.Label lblSoundsTab 
-            Caption         =   "When checked, this box enables all the sounds used during any animation/interaction with the main program."
-            Height          =   660
-            Index           =   4
-            Left            =   1515
-            TabIndex        =   37
-            Tag             =   "lblEnableSoundsDesc"
-            Top             =   825
-            Width           =   3615
-         End
       End
    End
    Begin VB.Frame fraFonts 
@@ -3525,7 +3525,7 @@ End Sub
 
 Private Sub sliGaugeSize_Change()
     btnSave.Enabled = True ' enable the save button
-    'overlayWidget.Zoom = sliGaugeSize.Value / 100
+    Call fAlpha.AdjustZoom(sliGaugeSize.Value / 100)
 End Sub
 
 Private Sub sliOpacity_Change()

@@ -246,6 +246,10 @@ Private Sub gaugeForm_BubblingEvent(Sender As Object, EventName As String, P1 As
                 Call prefsbutton_mouseDown(Sender)
             Case "stopwatch/face/housing/tickbutton"
                 Call tickbutton_mouseDown(Sender)
+            Case "stopwatch/face/housing/switchfacesbutton"
+                 Call switchfacesbutton_mouseDown(Sender)
+            Case "stopwatch/face/housing/stopbutton"
+                Call stopbutton_mouseDown(Sender)
             Case Else
                 Debug.Print Sender.Widget.Key
         End Select
@@ -256,6 +260,10 @@ Private Sub gaugeForm_BubblingEvent(Sender As Object, EventName As String, P1 As
             Case "stopwatch/face/housing/prefsbutton"
                 Sender.Widget.Alpha = 1
                 Sender.Widget.Refresh
+            Case "stopwatch/face/housing/switchfacesbutton"
+                Call switchfacesbutton_mouseUp(Sender)
+            Case "stopwatch/face/housing/stopbutton"
+                Call stopbutton_mouseUp(Sender)
             Case Else
                 Debug.Print Sender.Widget.Key
         End Select
@@ -267,10 +275,7 @@ Private Sub gaugeForm_BubblingEvent(Sender As Object, EventName As String, P1 As
                  Call helpbutton_click
             Case "stopwatch/face/housing/startbutton"
                  Call startbutton_click
-            Case "stopwatch/face/housing/stopbutton"
-                 Call stopbutton_click
-            Case "stopwatch/face/housing/switchfacesbutton"
-                 Call switchfacesbutton_click(Sender)
+
             Case Else
                 Debug.Print Sender.Widget.Key
         End Select
@@ -331,17 +336,21 @@ startbutton_click_Error:
 
 End Sub
 '---------------------------------------------------------------------------------------
-' Procedure : stopbutton_click
+' Procedure : stopbutton_mouseUp
 ' Author    : beededea
 ' Date      : 03/08/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub stopbutton_click()
-   On Error GoTo stopbutton_click_Error
-
+Private Sub stopbutton_mouseUp(Sender As Object)
     Dim fileToPlay As String: fileToPlay = vbNullString
+   
+    On Error GoTo stopbutton_mouseUp_Error
 
+    Sender.Widget.Alpha = 1
+    Sender.Widget.Refresh
+           
+    
     fileToPlay = "mistake.wav"
     If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
@@ -350,22 +359,68 @@ Private Sub stopbutton_click()
    On Error GoTo 0
    Exit Sub
 
-stopbutton_click_Error:
+stopbutton_mouseUp_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure stopbutton_click of Class Module cfAlpha"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure stopbutton_mouseUp of Class Module cfAlpha"
 
 End Sub
 '---------------------------------------------------------------------------------------
-' Procedure : switchfacesbutton_click
+' Procedure : stopbutton_mouseDown
 ' Author    : beededea
 ' Date      : 03/08/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub switchfacesbutton_click(Sender As Object)
-    Dim fileToPlay As String: fileToPlay = vbNullString
-    On Error GoTo switchfacesbutton_click_Error
+Private Sub stopbutton_mouseDown(Sender As Object)
+   
+    On Error GoTo stopbutton_mouseDown_Error
 
+    Sender.Widget.Alpha = 0
+    Sender.Widget.Refresh
+           
+   On Error GoTo 0
+   Exit Sub
+
+stopbutton_mouseDown_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure stopbutton_mouseDown of Class Module cfAlpha"
+
+End Sub
+'---------------------------------------------------------------------------------------
+' Procedure : switchfacesbutton_mouseDown
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub switchfacesbutton_mouseDown(Sender As Object)
+    On Error GoTo switchfacesbutton_mouseDown_Error
+
+    Sender.Widget.Alpha = 0
+    Sender.Widget.Refresh
+    
+   On Error GoTo 0
+   Exit Sub
+
+switchfacesbutton_mouseDown_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure switchfacesbutton_mouseDown of Class Module cfAlpha"
+
+End Sub
+'---------------------------------------------------------------------------------------
+' Procedure : switchfacesbutton_mouseUp
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub switchfacesbutton_mouseUp(Sender As Object)
+    Dim fileToPlay As String: fileToPlay = vbNullString
+    On Error GoTo switchfacesbutton_mouseUp_Error
+
+    Sender.Widget.Alpha = 1
+    Sender.Widget.Refresh
+        
     fileToPlay = "till.wav"
     If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
@@ -373,9 +428,9 @@ Private Sub switchfacesbutton_click(Sender As Object)
    On Error GoTo 0
    Exit Sub
 
-switchfacesbutton_click_Error:
+switchfacesbutton_mouseUp_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure switchfacesbutton_click of Class Module cfAlpha"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure switchfacesbutton_mouseUp of Class Module cfAlpha"
 
 End Sub
 '---------------------------------------------------------------------------------------
@@ -482,17 +537,33 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Public Sub gaugeForm_DblClick()
-
+    Dim userprof As String: userprof = vbNullString
+    Dim thisCommand As String: thisCommand = vbNullString
+        
     On Error GoTo gaugeForm_DblClick_Error
 
     '    If PzGIgnoreMouse = "1" Then Exit Sub
 
     If LTrim$(PzGDblClickCommand) = vbNullString Then Exit Sub
+    
+    thisCommand = PzGDblClickCommand
+        
+    If InStr(thisCommand, "%userprofile%") Then
+        userprof = Environ$("USERPROFILE")
+        thisCommand = Replace(thisCommand, "%userprofile%", userprof)
+    End If
+    
+    ' .91 DAEB 08/12/2022 frmMain.frm SteamyDock responds to %systemroot% environment variables during runCommand
+    If InStr(thisCommand, "%systemroot%") Then
+        userprof = Environ$("SYSTEMROOT")
+        thisCommand = Replace(thisCommand, "%systemroot%", userprof)
+    End If
+    
     If SHIFT_1 = True Then
         SHIFT_1 = False
         Call ShellExecute(fAlpha.gaugeForm.hwnd, "Open", PzGOpenFile, vbNullString, App.Path, 1)
     Else
-        Call ShellExecute(fAlpha.gaugeForm.hwnd, "Open", PzGDblClickCommand, vbNullString, App.Path, 1)
+        Call ShellExecute(fAlpha.gaugeForm.hwnd, "runas", PzGDblClickCommand, vbNullString, App.Path, 1)
     End If
 
     On Error GoTo 0
@@ -655,7 +726,7 @@ Public Sub AdjustZoom(ByVal NewZoom As Single)
    On Error GoTo AdjustZoom_Error
 
   FZ = NewZoom
-  If FZ < 0.25 Then FZ = 0.25 Else If FZ > 2 Then FZ = 2 'keep FZ within a sane ZoomInterval
+  If FZ < 0.25 Then FZ = 0.25 Else If FZ > 3 Then FZ = 3 'keep FZ within a sane ZoomInterval
   gaugeForm.WidgetRoot.Zoom = FZ '* gaugeForm.WidgetRoot.CurrentMonitor.Zoom '<-- if the multiplicator is activated, we'd have DPI-awareness on high-res monitors
   gaugeForm.Move gaugeForm.Left, gaugeForm.Top, PSDWidth * gaugeForm.WidgetRoot.Zoom, PSDHeight * gaugeForm.WidgetRoot.Zoom
 
