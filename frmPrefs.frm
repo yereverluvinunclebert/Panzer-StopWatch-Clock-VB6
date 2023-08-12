@@ -57,15 +57,16 @@ Begin VB.Form panzerPrefs
             Begin VB.Label lblGitHub 
                Caption         =   $"frmPrefs.frx":385D2
                ForeColor       =   &H8000000D&
-               Height          =   675
+               Height          =   840
                Left            =   1560
                TabIndex        =   144
-               ToolTipText     =   "Click to visit github"
-               Top             =   1515
-               Width           =   5580
+               ToolTipText     =   "Double Click to visit github"
+               Top             =   1485
+               Width           =   4515
+               WordWrap        =   -1  'True
             End
             Begin VB.Label lblDebug 
-               Caption         =   $"frmPrefs.frx":38670
+               Caption         =   $"frmPrefs.frx":38671
                Height          =   930
                Index           =   9
                Left            =   1545
@@ -180,6 +181,143 @@ Begin VB.Form panzerPrefs
          End
       End
    End
+   Begin VB.Frame fraFonts 
+      Caption         =   "Fonts"
+      Height          =   4245
+      Left            =   240
+      TabIndex        =   9
+      Top             =   1230
+      Width           =   7335
+      Begin VB.Frame fraFontsInner 
+         BorderStyle     =   0  'None
+         Height          =   3750
+         Left            =   765
+         TabIndex        =   26
+         Top             =   285
+         Width           =   6105
+         Begin VB.TextBox txtPrefsFontCurrentSize 
+            Height          =   315
+            Left            =   4125
+            Locked          =   -1  'True
+            TabIndex        =   136
+            ToolTipText     =   "Disabled for manual input. Shows the current font size when form resizing is enabled."
+            Top             =   1065
+            Visible         =   0   'False
+            Width           =   600
+         End
+         Begin VB.TextBox txtPrefsFontSize 
+            Height          =   315
+            Left            =   1635
+            Locked          =   -1  'True
+            TabIndex        =   29
+            Text            =   "8"
+            ToolTipText     =   "Disabled for manual input. Choose a font size using the font selector to be used within this preferences window only"
+            Top             =   1065
+            Width           =   510
+         End
+         Begin VB.CommandButton btnPrefsFont 
+            Caption         =   "Font"
+            Height          =   300
+            Left            =   4950
+            Style           =   1  'Graphical
+            TabIndex        =   28
+            ToolTipText     =   "The Font Selector."
+            Top             =   90
+            Width           =   585
+         End
+         Begin VB.TextBox txtPrefsFont 
+            Height          =   315
+            Left            =   1635
+            Locked          =   -1  'True
+            TabIndex        =   27
+            Text            =   "Times New Roman"
+            ToolTipText     =   "Disabled for manual input. Choose a font via the font selector to be used only for this preferences window"
+            Top             =   90
+            Width           =   3285
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   "Next time you open the prefs it will revert to the default."
+            Height          =   420
+            Index           =   4
+            Left            =   1665
+            TabIndex        =   162
+            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
+            Top             =   2655
+            Width           =   4245
+         End
+         Begin VB.Label lblCurrentFontsTab 
+            Caption         =   "Resized Font"
+            Height          =   315
+            Left            =   4875
+            TabIndex        =   137
+            ToolTipText     =   "Disabled for manual input. Shows the current font size when form resizing is enabled."
+            Top             =   1110
+            Visible         =   0   'False
+            Width           =   2400
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   "My preferred font for this utility is Centurion Light SF at 12pt size."
+            Height          =   480
+            Index           =   1
+            Left            =   1665
+            TabIndex        =   101
+            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
+            Top             =   3090
+            Width           =   4185
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   $"frmPrefs.frx":38715
+            Height          =   900
+            Index           =   0
+            Left            =   1665
+            TabIndex        =   100
+            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
+            Top             =   1605
+            Width           =   4035
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   "The chosen font size *"
+            Height          =   480
+            Index           =   7
+            Left            =   2295
+            TabIndex        =   33
+            ToolTipText     =   "Choose a font size that fits the text boxes"
+            Top             =   1095
+            Width           =   2400
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   "Base Font Size :"
+            Height          =   330
+            Index           =   3
+            Left            =   300
+            TabIndex        =   32
+            Tag             =   "lblPrefsFontSize"
+            Top             =   1095
+            Width           =   1350
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   "Config Window Font:"
+            Height          =   300
+            Index           =   2
+            Left            =   15
+            TabIndex        =   31
+            Tag             =   "lblPrefsFont"
+            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
+            Top             =   120
+            Width           =   1635
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   "Choose a font to be used for the text in this preferences window alone. *"
+            Height          =   480
+            Index           =   6
+            Left            =   1620
+            TabIndex        =   30
+            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
+            Top             =   480
+            Width           =   4035
+         End
+      End
+   End
    Begin VB.Frame fraWindow 
       Caption         =   "Window"
       Height          =   6300
@@ -227,7 +365,7 @@ Begin VB.Form panzerPrefs
                Width           =   720
             End
             Begin VB.Label lblWindowLevel 
-               Caption         =   $"frmPrefs.frx":38714
+               Caption         =   $"frmPrefs.frx":387F0
                Height          =   975
                Index           =   1
                Left            =   855
@@ -479,7 +617,7 @@ Begin VB.Form panzerPrefs
             SelStart        =   20
          End
          Begin VB.Label lblConfiguration 
-            Caption         =   $"frmPrefs.frx":387B7
+            Caption         =   $"frmPrefs.frx":38893
             Height          =   660
             Index           =   0
             Left            =   1980
@@ -622,9 +760,9 @@ Begin VB.Form panzerPrefs
          End
          Begin VB.ComboBox cmbMainGaugeTimeZone 
             Height          =   315
-            ItemData        =   "frmPrefs.frx":3885C
+            ItemData        =   "frmPrefs.frx":38938
             Left            =   2010
-            List            =   "frmPrefs.frx":3885E
+            List            =   "frmPrefs.frx":3893A
             Style           =   2  'Dropdown List
             TabIndex        =   148
             Top             =   2325
@@ -632,9 +770,9 @@ Begin VB.Form panzerPrefs
          End
          Begin VB.ComboBox cmbClockFaceSwitchPref 
             Height          =   315
-            ItemData        =   "frmPrefs.frx":38860
+            ItemData        =   "frmPrefs.frx":3893C
             Left            =   1995
-            List            =   "frmPrefs.frx":38862
+            List            =   "frmPrefs.frx":3893E
             Style           =   2  'Dropdown List
             TabIndex        =   145
             Top             =   1155
@@ -812,7 +950,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgAbout 
          Height          =   600
          Left            =   160
-         Picture         =   "frmPrefs.frx":38864
+         Picture         =   "frmPrefs.frx":38940
          Stretch         =   -1  'True
          Top             =   225
          Width           =   600
@@ -820,7 +958,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgAboutClicked 
          Height          =   600
          Left            =   160
-         Picture         =   "frmPrefs.frx":38DEC
+         Picture         =   "frmPrefs.frx":38EC8
          Stretch         =   -1  'True
          Top             =   225
          Width           =   600
@@ -845,7 +983,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgConfig 
          Height          =   600
          Left            =   165
-         Picture         =   "frmPrefs.frx":392D7
+         Picture         =   "frmPrefs.frx":393B3
          Stretch         =   -1  'True
          Top             =   225
          Width           =   600
@@ -853,7 +991,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgConfigClicked 
          Height          =   600
          Left            =   165
-         Picture         =   "frmPrefs.frx":398B6
+         Picture         =   "frmPrefs.frx":39992
          Stretch         =   -1  'True
          Top             =   225
          Width           =   600
@@ -877,7 +1015,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgDevelopment 
          Height          =   600
          Left            =   150
-         Picture         =   "frmPrefs.frx":39DBB
+         Picture         =   "frmPrefs.frx":39E97
          Stretch         =   -1  'True
          Top             =   225
          Width           =   600
@@ -885,7 +1023,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgDevelopmentClicked 
          Height          =   600
          Left            =   160
-         Picture         =   "frmPrefs.frx":3A373
+         Picture         =   "frmPrefs.frx":3A44F
          Stretch         =   -1  'True
          Top             =   225
          Width           =   600
@@ -910,7 +1048,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgPosition 
          Height          =   600
          Left            =   160
-         Picture         =   "frmPrefs.frx":3A6F9
+         Picture         =   "frmPrefs.frx":3A7D5
          Stretch         =   -1  'True
          Top             =   225
          Width           =   600
@@ -918,7 +1056,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgPositionClicked 
          Height          =   600
          Left            =   160
-         Picture         =   "frmPrefs.frx":3ACCA
+         Picture         =   "frmPrefs.frx":3ADA6
          Stretch         =   -1  'True
          Top             =   225
          Width           =   600
@@ -963,7 +1101,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgSounds 
          Height          =   600
          Left            =   160
-         Picture         =   "frmPrefs.frx":3B068
+         Picture         =   "frmPrefs.frx":3B144
          Stretch         =   -1  'True
          Top             =   225
          Width           =   600
@@ -971,7 +1109,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgSoundsClicked 
          Height          =   600
          Left            =   160
-         Picture         =   "frmPrefs.frx":3B627
+         Picture         =   "frmPrefs.frx":3B703
          Stretch         =   -1  'True
          Top             =   225
          Width           =   600
@@ -1011,7 +1149,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgWindow 
          Height          =   600
          Left            =   160
-         Picture         =   "frmPrefs.frx":3BAF7
+         Picture         =   "frmPrefs.frx":3BBD3
          Stretch         =   -1  'True
          Top             =   225
          Width           =   600
@@ -1019,7 +1157,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgWindowClicked 
          Height          =   600
          Left            =   160
-         Picture         =   "frmPrefs.frx":3BFC1
+         Picture         =   "frmPrefs.frx":3C09D
          Stretch         =   -1  'True
          Top             =   225
          Width           =   600
@@ -1043,7 +1181,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgFonts 
          Height          =   600
          Left            =   180
-         Picture         =   "frmPrefs.frx":3C36D
+         Picture         =   "frmPrefs.frx":3C449
          Stretch         =   -1  'True
          Top             =   195
          Width           =   600
@@ -1051,7 +1189,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgFontsClicked 
          Height          =   600
          Left            =   180
-         Picture         =   "frmPrefs.frx":3C8C3
+         Picture         =   "frmPrefs.frx":3C99F
          Stretch         =   -1  'True
          Top             =   195
          Width           =   600
@@ -1066,7 +1204,7 @@ Begin VB.Form panzerPrefs
       Begin VB.Image imgGeneral 
          Height          =   600
          Left            =   165
-         Picture         =   "frmPrefs.frx":3CD5C
+         Picture         =   "frmPrefs.frx":3CE38
          Stretch         =   -1  'True
          Top             =   225
          Width           =   600
@@ -1086,133 +1224,6 @@ Begin VB.Form panzerPrefs
          Stretch         =   -1  'True
          Top             =   240
          Width           =   600
-      End
-   End
-   Begin VB.Frame fraFonts 
-      Caption         =   "Fonts"
-      Height          =   3615
-      Left            =   240
-      TabIndex        =   9
-      Top             =   1230
-      Width           =   7335
-      Begin VB.Frame fraFontsInner 
-         BorderStyle     =   0  'None
-         Height          =   3060
-         Left            =   765
-         TabIndex        =   26
-         Top             =   285
-         Width           =   6105
-         Begin VB.TextBox txtPrefsFontCurrentSize 
-            Height          =   315
-            Left            =   4125
-            Locked          =   -1  'True
-            TabIndex        =   136
-            ToolTipText     =   "Disabled for manual input. Shows the current font size when form resizing is enabled."
-            Top             =   1065
-            Visible         =   0   'False
-            Width           =   600
-         End
-         Begin VB.TextBox txtPrefsFontSize 
-            Height          =   315
-            Left            =   1635
-            Locked          =   -1  'True
-            TabIndex        =   29
-            Text            =   "8"
-            ToolTipText     =   "Disabled for manual input. Choose a font size using the font selector to be used within this preferences window only"
-            Top             =   1065
-            Width           =   510
-         End
-         Begin VB.CommandButton btnPrefsFont 
-            Caption         =   "Font"
-            Height          =   300
-            Left            =   4950
-            Style           =   1  'Graphical
-            TabIndex        =   28
-            ToolTipText     =   "The Font Selector."
-            Top             =   90
-            Width           =   585
-         End
-         Begin VB.TextBox txtPrefsFont 
-            Height          =   315
-            Left            =   1635
-            Locked          =   -1  'True
-            TabIndex        =   27
-            Text            =   "Times New Roman"
-            ToolTipText     =   "Disabled for manual input. Choose a font via the font selector to be used only for this preferences window"
-            Top             =   90
-            Width           =   3285
-         End
-         Begin VB.Label lblCurrentFontsTab 
-            Caption         =   "Current font"
-            Height          =   315
-            Left            =   4875
-            TabIndex        =   137
-            ToolTipText     =   "Disabled for manual input. Shows the current font size when form resizing is enabled."
-            Top             =   1110
-            Visible         =   0   'False
-            Width           =   2400
-         End
-         Begin VB.Label lblFontsTab 
-            Caption         =   "My preferred font for this utility is Centurion Light SF at 8pt size."
-            Height          =   420
-            Index           =   1
-            Left            =   1665
-            TabIndex        =   101
-            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
-            Top             =   2535
-            Width           =   4035
-         End
-         Begin VB.Label lblFontsTab 
-            Caption         =   $"frmPrefs.frx":3D1C6
-            Height          =   900
-            Index           =   0
-            Left            =   1665
-            TabIndex        =   100
-            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
-            Top             =   1605
-            Width           =   4035
-         End
-         Begin VB.Label lblFontsTab 
-            Caption         =   "The chosen font size *"
-            Height          =   480
-            Index           =   7
-            Left            =   2295
-            TabIndex        =   33
-            ToolTipText     =   "Choose a font size that fits the text boxes"
-            Top             =   1095
-            Width           =   2400
-         End
-         Begin VB.Label lblFontsTab 
-            Caption         =   "Font Size :"
-            Height          =   330
-            Index           =   3
-            Left            =   705
-            TabIndex        =   32
-            Tag             =   "lblPrefsFontSize"
-            Top             =   1095
-            Width           =   885
-         End
-         Begin VB.Label lblFontsTab 
-            Caption         =   "Config Window Font:"
-            Height          =   300
-            Index           =   2
-            Left            =   15
-            TabIndex        =   31
-            Tag             =   "lblPrefsFont"
-            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
-            Top             =   120
-            Width           =   1635
-         End
-         Begin VB.Label lblFontsTab 
-            Caption         =   "Choose a font to be used for the text in this preferences window alone. *"
-            Height          =   480
-            Index           =   6
-            Left            =   1620
-            TabIndex        =   30
-            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
-            Top             =   480
-            Width           =   4035
-         End
       End
    End
    Begin VB.Frame fraAbout 
@@ -1240,7 +1251,7 @@ Begin VB.Form panzerPrefs
          MultiLine       =   -1  'True
          ScrollBars      =   2  'Vertical
          TabIndex        =   117
-         Text            =   "frmPrefs.frx":3D281
+         Text            =   "frmPrefs.frx":3D2A2
          Top             =   2205
          Width           =   8010
       End
@@ -1699,7 +1710,7 @@ Begin VB.Form panzerPrefs
             Width           =   2205
          End
          Begin VB.Label lblPosition 
-            Caption         =   $"frmPrefs.frx":3E238
+            Caption         =   $"frmPrefs.frx":3E259
             Height          =   3120
             Index           =   12
             Left            =   5145
@@ -1719,7 +1730,7 @@ Begin VB.Form panzerPrefs
             Width           =   2040
          End
          Begin VB.Label lblPosition 
-            Caption         =   $"frmPrefs.frx":3E40A
+            Caption         =   $"frmPrefs.frx":3E42B
             Height          =   705
             Index           =   10
             Left            =   2250
@@ -1739,7 +1750,7 @@ Begin VB.Form panzerPrefs
             Width           =   2355
          End
          Begin VB.Label lblPosition 
-            Caption         =   $"frmPrefs.frx":3E4A9
+            Caption         =   $"frmPrefs.frx":3E4CA
             Height          =   3045
             Index           =   6
             Left            =   2265
@@ -3840,7 +3851,7 @@ Private Sub picButtonMouseUpEvent(ByVal thisTabName As String, ByRef thisPicName
     Dim padding As Long: padding = 0
     Dim borderWidth As Long: borderWidth = 0
     Dim captionHeight As Long: captionHeight = 0
-    
+    Dim y_scale As Single: y_scale = 0
     
     thisPicNameClicked.Visible = False
     thisPicName.Visible = True
@@ -3856,10 +3867,13 @@ Private Sub picButtonMouseUpEvent(ByVal thisTabName As String, ByRef thisPicName
 
     thisFraName.Visible = True
     thisFraButtonName.BorderStyle = 1
+
+    ' Get the form's current scale factors.
+    y_scale = ScaleHeight / m_FormHgt
     
-    btnSave.Top = thisFraName.Top + thisFraName.Height + 150
+    btnHelp.Top = fraGeneral.Top + fraGeneral.Height + (250 * y_scale)
+    btnSave.Top = btnHelp.Top
     btnCancel.Top = btnSave.Top
-    btnHelp.Top = btnSave.Top
     
     btnSave.Visible = True
     btnCancel.Visible = True
