@@ -725,10 +725,13 @@ End Sub
 Public Sub AdjustZoom(ByVal NewZoom As Single)
    On Error GoTo AdjustZoom_Error
 
-  FZ = NewZoom
-  If FZ < 0.25 Then FZ = 0.25 Else If FZ > 3 Then FZ = 3 'keep FZ within a sane ZoomInterval
-  gaugeForm.WidgetRoot.Zoom = FZ '* gaugeForm.WidgetRoot.CurrentMonitor.Zoom '<-- if the multiplicator is activated, we'd have DPI-awareness on high-res monitors
-  gaugeForm.Move gaugeForm.Left, gaugeForm.Top, PSDWidth * gaugeForm.WidgetRoot.Zoom, PSDHeight * gaugeForm.WidgetRoot.Zoom
+    FZ = NewZoom
+    If FZ < 0.25 Then FZ = 0.25 Else If FZ > 3 Then FZ = 3 'keep FZ within a sane ZoomInterval
+    gaugeForm.WidgetRoot.Zoom = FZ '* gaugeForm.WidgetRoot.CurrentMonitor.Zoom '<-- if the multiplicator is activated, we'd have DPI-awareness on high-res monitors
+    gaugeForm.Move gaugeForm.Left, gaugeForm.Top, PSDWidth * gaugeForm.WidgetRoot.Zoom, PSDHeight * gaugeForm.WidgetRoot.Zoom
+  
+    ' when resized from the gauge scroll up/down it needs to write it back so the size is correct when prefs opened.
+    PzGGaugeSize = LTrim$(Str$(NewZoom * 100))
 
    On Error GoTo 0
    Exit Sub
