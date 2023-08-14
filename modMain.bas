@@ -528,7 +528,7 @@ Public Sub validateInputs()
         If PzGEnableTooltips = vbNullString Then PzGEnableTooltips = "1"
         If PzGEnableBalloonTooltips = vbNullString Then PzGEnableBalloonTooltips = "1"
         If PzGShowTaskbar = vbNullString Then PzGShowTaskbar = "0"
-        If PzGDpiAwareness = vbNullString Then PzGDpiAwareness = "false"
+        If PzGDpiAwareness = vbNullString Then PzGDpiAwareness = "1"
         If PzGGaugeSize = vbNullString Then PzGGaugeSize = "25"
         If PzGScrollWheelDirection = vbNullString Then PzGScrollWheelDirection = "1"
                

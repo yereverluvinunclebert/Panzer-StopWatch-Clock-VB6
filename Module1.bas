@@ -2297,3 +2297,39 @@ TurnFunctionsOn_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure TurnFunctionsOn of Form menuForm"
 End Sub
+
+
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : restart
+' Author    : beededea
+' Date      : 14/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Sub restart()
+    Dim answer As VbMsgBoxResult: answer = vbNo
+    Dim thisCommand As String: thisCommand = vbNullString
+    
+    On Error GoTo restart_Error
+
+    thisCommand = App.Path & "\restart.exe"
+    
+    If fFExists(thisCommand) Then
+        
+        ' run the selected program
+        Call ShellExecute(panzerPrefs.hwnd, "open", thisCommand, "PzStopwatch.exe", "", 1)
+        
+    Else
+        answer = MsgBox(thisCommand & " is missing", vbOKOnly + vbExclamation)
+    End If
+
+   On Error GoTo 0
+   Exit Sub
+
+restart_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure restart of Module Module1"
+
+End Sub
