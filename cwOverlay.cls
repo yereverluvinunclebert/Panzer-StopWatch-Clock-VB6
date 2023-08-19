@@ -51,7 +51,7 @@ Private Sub Class_Initialize()
       W.BackColor = -1  'we don't use any BackColor here, transparent
       W.ImplementsHitTest = True 'when at False, no HitTest-Event would be triggered
       
-  Set tmrClock = New_c.Timer(200, True)
+  Set tmrClock = New_c.Timer(200, False)
 
    On Error GoTo 0
    Exit Sub
@@ -227,14 +227,32 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As Single, ByVal dx_Aligned As Single, ByVal dy_Aligned As Single, UserObj As Object)
-   Dim i As Long: i = 0
-   Dim Arr As Variant
-   Dim Key As String: Key = vbNullString
-   Dim Pat As cCairoPattern
+    Dim i As Long: i = 0
+    Dim Arr As Variant
+    Dim Key As String: Key = vbNullString
+    Dim Pat As cCairoPattern
+    Dim txtDayNumber As String: txtDayNumber = vbNullString
+    Dim txtMonthNumber As String: txtMonthNumber = vbNullString
+    Dim textDrawn As Boolean:   textDrawn = False
+    Dim thisOpacity As Double: thisOpacity = 0
+    
+    Const cream = &HFFF5F5F5
    
    On Error GoTo W_Paint_Error
-
-   For i = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
+    
+    'set some Font- and ForeColor-Properties and draw some Text on the Widget
+    W.FontName = "arial"
+    W.ForeColor = cream
+    W.FontSize = 18
+    W.FontBold = True
+    W.SelectFontSettingsInto CC
+    W.Refresh
+    thisOpacity = (Val(PzGOpacity) / 100) * 0.75
+    
+    txtDayNumber = Day(Now)
+    txtMonthNumber = Month(Now)
+    
+    For i = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
      Arr = cCollOverlayImages.ItemByIndex(i)
      Key = cCollOverlayImages.KeyByIndex(i)
      
@@ -246,6 +264,14 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
             ' for specific keys perform rotation actions, clock hands &c
             Select Case Key
                 Case "stopwatch/face/hourshadow", "stopwatch/face/hourhand" 'hours-shadow- and hour-hand
+                    
+                    ' draw the date and day in the windows just once to retain opacity
+                    If textDrawn = False Then ' has to be here to be underneath  all the hands and only run once
+                        CC.DrawText 260, 105, 200, 200, txtDayNumber, , , 2, True, , thisOpacity
+                        CC.DrawText 461, 309, 200, 200, txtMonthNumber, , , 2, True, , thisOpacity
+                        textDrawn = True
+                    End If
+                    
                    Set Pat.Matrix = Pat.Matrix.TranslateCoords(19, 160) 'shift to the "rotation-point" within the Pattern
                    CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                    CC.RotateDrawingsDeg -7 + HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)

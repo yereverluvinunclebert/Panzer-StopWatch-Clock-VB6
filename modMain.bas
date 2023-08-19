@@ -1,5 +1,5 @@
 Attribute VB_Name = "modMain"
-
+' gaugeForm_BubblingEvent ' leaving that here so I can copy/paste to find it
 Option Explicit
 
 '------------------------------------------------------ STARTS
