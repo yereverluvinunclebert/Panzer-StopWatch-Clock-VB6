@@ -23,6 +23,8 @@ Private PSDHeight As Long
 Private DragWidgetKey As String
 
 Private mGlowing As Boolean
+
+
 '---------------------------------------------------------------------------------------
 ' Procedure : Class_Initialize
 ' Author    : beededea
@@ -107,7 +109,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
                     W.MousePointer = IDC_SIZEALL
                     
-                    W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
+                    If PzGEnableTooltips = "1" Then W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
 
                 Case "stopwatch/face/housing/helpbutton" 'three Widget-Keys, picked for "special click-behaviour"
                     W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
@@ -192,7 +194,7 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
                 
                 Case Else 'all other added Layer-Widgets will be -1 or "non-hoverable" and "fully click-through"
                     W.HoverColor = -1 ' task: might change this later when new ver or RC6 arrives
-                    W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
+                    If PzGEnableTooltips = "1" Then W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
                     W.MousePointer = IDC_SIZEALL
                 
                End Select
@@ -237,6 +239,37 @@ Private Sub gaugeForm_BubblingEvent(Sender As Object, EventName As String, P1 As
    On Error GoTo gaugeForm_BubblingEvent_Error
 
     If PzGIgnoreMouse = "1" Then Exit Sub
+    
+    If EventName = "W_MouseMove" Then
+        Select Case LCase$(Sender.Widget.Key)
+            Case "stopwatch/face/housing/lockbutton"
+                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click me to lock the widget in place. This lock can be released by clicking again on the lock button, or in the preferences. A locking sound will denote the button's operation.", _
+                     TTIconInfo, widgetName & " Lock Button Help", , , , True
+            Case "stopwatch/face/housing/prefsbutton"
+                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click me to open the preferences utility. The configuration of the widget is performed using the preference utility.", _
+                     TTIconInfo, widgetName & " Prefs Button Help", , , , True
+            Case "stopwatch/face/housing/tickbutton"
+                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click here to toggle the tick type from once per second to a more fluid, continuous movement.", _
+                     TTIconInfo, widgetName & " Tick Button Help", , , , True
+            Case "stopwatch/face/housing/switchfacesbutton"
+                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button toggles the clock functionality from a normal clock to a functioning stopwatch.", _
+                     TTIconInfo, widgetName & " Switch Faces Button Help", , , , True
+            Case "stopwatch/face/housing/stopbutton"
+                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button stops all animated clock functions for this widget, hand movements &c .", _
+                     TTIconInfo, widgetName & " Stop Button Help", , , , True
+            Case "stopwatch/face/housing/startbutton"
+                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button restarts all stopped clock functions for this widget, hand movement &c .", _
+                     TTIconInfo, widgetName & " Start Button Help", , , , True
+            Case "stopwatch/face/housing/helpbutton"
+                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button opens the one-page help file for this widget. There is a further detailed CHM help file available from the right-click menu that contains all the information that you need to run this widget.", _
+                     TTIconInfo, widgetName & " Help Button Help", , , , True
+            Case Else
+                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Right Click to open the menu and the preferences. CTRL+ Mouse scrollwheel UP/DOWN to resize. " _
+                    & vbCrLf & "You can turn off the balloon tooltips in the preferences.", _
+                    TTIconInfo, widgetName & " Configuration Help", , , , True
+        End Select
+    End If
+    
     
     If EventName = "W_MouseDown" Then
         Select Case LCase$(Sender.Widget.Key)
@@ -654,7 +687,7 @@ Private Sub gaugeForm_MouseMove(Button As Integer, shift As Integer, X As Single
       FY = (Y - y0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Top
       gaugeForm.Move FX, FY
     End If
-
+    
    On Error GoTo 0
    Exit Sub
 

@@ -22,6 +22,7 @@ Public revealWidgetTimerCount As Integer
  
 Public fAlpha As New cfAlpha
 Public overlayWidget As cwOverlay
+Public widgetName As String
 
 '---------------------------------------------------------------------------------------
 ' Procedure : Main
@@ -59,6 +60,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
 
     On Error GoTo main_routine_Error
     
+    widgetName = "Pz Stopwatch"
     chosenDragLayer = "stopwatch/face/housing/surround"
     thisPSDFullPath = App.Path & "\Res\tank-clock-mk1.psd"
     fAlpha.FX = 222 'init position- and zoom-values (directly set on Public-Props of the Form-hosting Class)
@@ -192,7 +194,9 @@ Private Sub initialiseGlobalVars()
 
     ' config
     PzGEnableTooltips = vbNullString
+    PzGEnablePrefsTooltips = vbNullString
     PzGEnableBalloonTooltips = vbNullString
+    
     PzGShowTaskbar = vbNullString
     PzGDpiAwareness = False
     
@@ -434,6 +438,7 @@ Public Sub readSettingsFile(ByVal location As String, ByVal PzGSettingsFile As S
 
         ' configuration
         PzGEnableTooltips = fGetINISetting(location, "enableTooltips", PzGSettingsFile)
+        PzGEnablePrefsTooltips = fGetINISetting(location, "enablePrefsTooltips", PzGSettingsFile)
         PzGEnableBalloonTooltips = fGetINISetting(location, "enableBalloonTooltips", PzGSettingsFile)
         PzGShowTaskbar = fGetINISetting(location, "showTaskbar", PzGSettingsFile)
         PzGDpiAwareness = fGetINISetting(location, "dpiAwareness", PzGSettingsFile)
@@ -526,6 +531,7 @@ Public Sub validateInputs()
 
         ' Config
         If PzGEnableTooltips = vbNullString Then PzGEnableTooltips = "1"
+        If PzGEnablePrefsTooltips = vbNullString Then PzGEnablePrefsTooltips = "1"
         If PzGEnableBalloonTooltips = vbNullString Then PzGEnableBalloonTooltips = "1"
         If PzGShowTaskbar = vbNullString Then PzGShowTaskbar = "0"
         If PzGDpiAwareness = vbNullString Then PzGDpiAwareness = "1"
