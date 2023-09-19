@@ -283,9 +283,8 @@ Private Const VER_PLATFORM_WIN32_NT = 2
 ' general
 Public PzGStartup As String
 Public PzGGaugeFunctions As String
-'Public PzGAnimationInterval As String
-'Public 'PzGWidgetSkew As String
 
+Public PzGSmoothSecondHand As String
 
 
 Public PzGClockFaceSwitchPref As String
@@ -404,6 +403,26 @@ Private Declare Function PathFileExists Lib "shlwapi" Alias "PathFileExistsA" (B
 Private Declare Function PathIsDirectory Lib "shlwapi" Alias "PathIsDirectoryA" (ByVal pszPath As String) As Long
 Public PzGWindowLevelWasChanged As Boolean
 Public startupFlg As Boolean
+
+
+
+'------------------------------------------------------ STARTS
+Private Type TimeZoneInfo
+    bias As Long
+    StandardName(63) As Byte
+    StandardDate(7) As Integer
+    StandardBias As Long
+    DaylightName(63) As Byte
+    DaylightDate(7) As Integer
+    DaylightBias As Long
+End Type
+ 
+Private Const TIME_ZONE_ID_DAYLIGHT = 2
+Private Declare Function GetTimeZoneInformation Lib "kernel32" (uTZ As TimeZoneInfo) As Long
+'------------------------------------------------------ ENDS
+' Flag for debug mode '.06 DAEB 19/04/2021 common.bas moved to the common area so that it can be used by each of the utilities
+Private mbDebugMode As Boolean ' .30 DAEB 03/03/2021 frmMain.frm replaced the inIDE function that used a variant to one without
+
 
 '------------------------------------------------------ ENDS
                             
@@ -1545,10 +1564,28 @@ Public Sub setMainTooltips()
         overlayWidget.Widget.ToolTip = "Use CTRL+mouse scrollwheel up/down to resize."
         helpWidget.Widget.ToolTip = "Click on me to make me go away."
         aboutWidget.Widget.ToolTip = "Click on me to make me go away."
+        
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/tickbutton").Widget.ToolTip = "Choose smooth movement or regular ticks"
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/helpbutton").Widget.ToolTip = "Press for a little help"
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/startbutton").Widget.ToolTip = "Press to restart (when stopped)"
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/stopbutton").Widget.ToolTip = "Press to stop clock operation."
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/switchfacesbutton").Widget.ToolTip = "Press to do nothing at all."
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/lockbutton").Widget.ToolTip = "Press to lock the widget in place"
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/prefsbutton").Widget.ToolTip = "Press to open the widget preferences"
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/surround").Widget.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
     Else
         overlayWidget.Widget.ToolTip = vbNullString
         helpWidget.Widget.ToolTip = vbNullString
         aboutWidget.Widget.ToolTip = vbNullString
+        
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/tickbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/helpbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/startbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/stopbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/switchfacesbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/lockbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/prefsbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/surround").Widget.ToolTip = vbNullString
     End If
     
     Call ChangeToolTipWidgetDefaultSettings(Cairo.ToolTipWidget.Widget)
@@ -1781,7 +1818,7 @@ Public Sub determineScreenDimensions()
 
 determineScreenDimensions_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & " in procedure determineScreenDimensions of Form dock"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & " in procedure determineScreenDimensions of Module Module1"
 End Sub
 
 
@@ -2334,3 +2371,51 @@ restart_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure restart of Module Module1"
 
 End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : InIDE
+' Author    :
+' Date      : 09/02/2021
+' Purpose   : checks whether the code is running in the VB6 IDE or not
+'---------------------------------------------------------------------------------------
+'
+Public Function InIDE() As Boolean
+
+   On Error GoTo InIDE_Error
+
+    ' .30 DAEB 03/03/2021 frmMain.frm replaced the inIDE function that used a variant to one without
+    ' This will only be done if in the IDE
+    Debug.Assert InDebugMode
+    If mbDebugMode Then
+        InIDE = True
+    End If
+
+   On Error GoTo 0
+   Exit Function
+
+InIDE_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure InIDE of Module Module1"
+End Function
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : InDebugMode
+' Author    : beededea
+' Date      : 02/03/2021
+' Purpose   : ' .30 DAEB 03/03/2021 frmMain.frm replaced the inIDE function that used a variant to one without
+'---------------------------------------------------------------------------------------
+'
+Private Function InDebugMode() As Boolean
+   On Error GoTo InDebugMode_Error
+
+    mbDebugMode = True
+    InDebugMode = True
+
+   On Error GoTo 0
+   Exit Function
+
+InDebugMode_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure InDebugMode of Module Module1"
+End Function

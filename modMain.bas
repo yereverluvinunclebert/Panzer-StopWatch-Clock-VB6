@@ -86,7 +86,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     Call validateInputs
     
     If PzGDpiAwareness = "1" Then
-        Cairo.SetDPIAwareness ' this sets DPI awareness for the whole program incl. native VB6 forms, requires a program hard restart.
+        If Not InIDE Then Cairo.SetDPIAwareness ' this sets DPI awareness for the whole program incl. native VB6 forms, requires a program hard restart.
     End If
             
     ' resolve VB6 sizing width bug
@@ -185,6 +185,9 @@ Private Sub initialiseGlobalVars()
     PzGStartup = vbNullString
     PzGGaugeFunctions = vbNullString
 '    PzGAnimationInterval = vbNullString
+
+    PzGSmoothSecondHand = vbNullString
+
 
     PzGClockFaceSwitchPref = vbNullString
     PzGMainGaugeTimeZone = vbNullString
@@ -350,13 +353,23 @@ Public Sub adjustMainControls()
     Else
         menuForm.mnuEditWidget.Visible = False
     End If
+
+    If PzGSmoothSecondHand = "0" Then
+        overlayWidget.SmoothSecondHand = False
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/tickbutton").Widget.Alpha = Val(PzGOpacity) / 100
+    Else
+        overlayWidget.SmoothSecondHand = True
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/tickbutton").Widget.Alpha = 0
+    End If
         
     If PzGPreventDragging = "0" Then
         menuForm.mnuLockWidget.Checked = False
         overlayWidget.Locked = False
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/lockbutton").Widget.Alpha = Val(PzGOpacity) / 100
     Else
         menuForm.mnuLockWidget.Checked = True
         overlayWidget.Locked = True ' this is just here for continuity's sake, it is also set at the time the control is selected
+        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/lockbutton").Widget.Alpha = 0
     End If
     
     If PzGShowTaskbar = "0" Then
@@ -364,7 +377,51 @@ Public Sub adjustMainControls()
     Else
         fAlpha.gaugeForm.ShowInTaskbar = True
     End If
-                 
+    
+    
+    ' set the characteristics of the interactive areas
+    ' Note: set the Hover colour close to the original layer to avoid too much intrusion, 0 being grey
+    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/helpbutton").Widget
+        .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+        .MousePointer = IDC_HAND
+    End With
+     
+    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/startbutton").Widget
+        .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+        .MousePointer = IDC_HAND
+    End With
+      
+    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/stopbutton").Widget
+        .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+        .MousePointer = IDC_HAND
+    End With
+      
+    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/switchfacesbutton").Widget
+        .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+        .MousePointer = IDC_HAND
+    End With
+          
+    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/lockbutton").Widget
+        .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+        .MousePointer = IDC_HAND
+    End With
+          
+    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/prefsbutton").Widget
+        .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+        .MousePointer = IDC_HAND
+    End With
+          
+    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/tickbutton").Widget
+        .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+        .MousePointer = IDC_HAND
+    End With
+    
+    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/surround").Widget
+        .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+        .MousePointer = IDC_SIZEALL
+    End With
+    
+    
     ' set the z-ordering of the window
     Call setWindowZordering
     
@@ -427,8 +484,7 @@ Public Sub readSettingsFile(ByVal location As String, ByVal PzGSettingsFile As S
         ' general
         PzGStartup = fGetINISetting(location, "startup", PzGSettingsFile)
         PzGGaugeFunctions = fGetINISetting(location, "gaugeFunctions", PzGSettingsFile)
-'        PzGAnimationInterval = fGetINISetting(location, "animationInterval", PzGSettingsFile)
-        
+        PzGSmoothSecondHand = fGetINISetting(location, "smoothSecondHand", PzGSettingsFile)
 
         PzGClockFaceSwitchPref = fGetINISetting(location, "clockFaceSwitchPref", PzGSettingsFile)
         PzGMainGaugeTimeZone = fGetINISetting(location, "mainGaugeTimeZone", PzGSettingsFile)
@@ -522,6 +578,8 @@ Public Sub validateInputs()
         If PzGGaugeFunctions = vbNullString Then PzGGaugeFunctions = "1" ' always turn
 '        If PzGAnimationInterval = vbNullString Then PzGAnimationInterval = "130"
         If PzGStartup = vbNullString Then PzGStartup = "1"
+        If PzGSmoothSecondHand = vbNullString Then PzGSmoothSecondHand = "0"
+        
         
         If PzGClockFaceSwitchPref = vbNullString Then PzGClockFaceSwitchPref = "0"
         If PzGMainGaugeTimeZone = vbNullString Then PzGMainGaugeTimeZone = "1"

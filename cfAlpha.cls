@@ -95,119 +95,21 @@ Public Sub InitFromPSD(PSD_FileNameOrByteArray, Optional WidgetKeyForDragging As
             Else 'everything not in the exclude-list will get its own Widget-instance
                
                 Set W = gaugeForm.Widgets.Add(New_W("cwAlphaImg"), LCase$(.LayerPath(i)), .LayerX(i), .LayerY(i), .LayerWidth(i), .LayerHeight(i)).Widget
-                   W.ImageKey = W.Key 'W.Key equals ImageList-Key, set above - and LayerPath(i) at this point ... set it also as the ImageKey of our new created Widget
-                   'W.Alpha = .LayerAlphaPercent(i) 'important (to transport the PSD-LayerAlpha to this Widget-instance as well)
-                   ' W.ToolTip = W.Key 'can be left out (or one can set it on specific Widgets, as shown in the Select Case below)
-                   W.Alpha = Val(PzGOpacity) / 100
-                   
-                ' Note: set the Hover colour close to the original layer to avoid too much intrusion, 0 being grey
+                    W.ImageKey = W.Key 'W.Key equals ImageList-Key, set above - and LayerPath(i) at this point ... set it also as the ImageKey of our new created Widget
+                If PzGOpacity < 1 Then
+                    W.Alpha = Val(PzGOpacity) / 200 ' a bit of a bodge as the included/excluded layers do not 'seem' to handle alpha the same
+                Else
+                    W.Alpha = 1
+                End If
+                                   
+                ' set the default characteristics of the non-interactive areas
+                ' note: the clickable layers characteristics are set in adjustMainControls
                 
-                ' set the characteristics of the interactive areas
-                Select Case LCase$(W.Key) 'demonstrates, how to influence certain Widget-Props specifically (depending on the current LayerPath-Key)
-                ' set the characteristics of the indentified drag area
-                Case DragWidgetKey 'the "special DragWidgetKey" we've passed from the outside into this init-routine
-                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
-                    W.MousePointer = IDC_SIZEALL
-                    
-                    If PzGEnableTooltips = "1" Then W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
+                ' all non-clickable Layer-Widgets will be -1 or "non-hoverable" and "fully click-through"
+                W.HoverColor = -1 ' task: might change this later when new ver or RC6 arrives
+                If PzGEnableTooltips = "1" Then W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
+                W.MousePointer = IDC_SIZEALL
 
-                Case "stopwatch/face/housing/helpbutton" 'three Widget-Keys, picked for "special click-behaviour"
-                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
-                    W.MousePointer = IDC_HAND
-                    If PzGEnableTooltips = "1" Then
-                        W.ToolTip = "Press for a little help."
-                    Else
-                        W.ToolTip = vbNullString
-                    End If
-                    
-                Case "stopwatch/face/housing/startbutton"
-                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
-                    W.MousePointer = IDC_HAND
-                    If PzGEnableTooltips = "1" Then
-                        W.ToolTip = "Press to zero."
-                    Else
-                        W.ToolTip = vbNullString
-                    End If
-                    
-                Case "stopwatch/face/housing/stopbutton"
-                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
-                    W.MousePointer = IDC_HAND
-                   If PzGEnableTooltips = "1" Then
-                        W.ToolTip = "Press to continue the timing run. This button is active only when a timing run has been paused."
-                    Else
-                        W.ToolTip = vbNullString
-                    End If
-
-                Case "stopwatch/face/housing/switchfacesbutton"
-                    If PzGEnableTooltips = "1" Then
-                        W.ToolTip = "Press to switch the dial faces."
-                    Else
-                        W.ToolTip = vbNullString
-                    End If
-                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
-                    W.MousePointer = IDC_HAND
-                    
-                Case "stopwatch/face/housing/lockbutton"
-                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
-                    W.MousePointer = IDC_HAND
-                    If PzGEnableTooltips = "1" Then
-                        W.ToolTip = "Press to lock the widget in place"
-                    Else
-                        W.ToolTip = vbNullString
-                    End If
-                    
-                Case "stopwatch/face/housing/prefsbutton"
-                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
-
-                    W.MousePointer = IDC_HAND
-                    If PzGEnableTooltips = "1" Then
-                        W.ToolTip = "Press to open the widget preferences"
-                    Else
-                        W.ToolTip = vbNullString
-                    End If
-                    
-                Case "stopwatch/face/housing/tickbutton"
-                    W.HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
-                    W.MousePointer = IDC_HAND
-                    If PzGEnableTooltips = "1" Then
-                        W.ToolTip = "Choose smooth movement or regular ticks"
-                    Else
-                        W.ToolTip = vbNullString
-                    End If
-                 Case "stopwatch/face/stopwatchface"
-                    W.HoverColor = -1 ' set the hover colour to grey - ' task: might change this later when new ver or RC6 arrives
-                    W.MousePointer = IDC_SIZEALL
-                    If PzGEnableTooltips = "1" Then
-                        W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
-                    Else
-                        W.ToolTip = vbNullString
-                    End If
-                Case "stopwatch/face/clockface"
-                    W.Alpha = 0
-                    W.HoverColor = -1 ' set the hover colour to grey - ' task: might change this later when new ver or RC6 arrives
-                    W.MousePointer = IDC_SIZEALL
-                    If PzGEnableTooltips = "1" Then
-                        W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
-                    Else
-                        W.ToolTip = vbNullString
-                    End If
-                
-                Case Else 'all other added Layer-Widgets will be -1 or "non-hoverable" and "fully click-through"
-                    W.HoverColor = -1 ' task: might change this later when new ver or RC6 arrives
-                    If PzGEnableTooltips = "1" Then W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
-                    W.MousePointer = IDC_SIZEALL
-                
-               End Select
-               
-               ' other (unused) widgets created from the layers shown here for reference
-               
-'                .Add Empty, "stopwatch/face/4digit"
-'                .Add Empty, "stopwatch/face/2digit"
-
-'                .Add Empty, "stopwatch/face/darkfacebackground"
-'                .Add Empty, "stopwatch/face/clockface"
-'                .Add Empty, "stopwatch/face/stopwatchface"
-               
             End If
          End If
       End If
@@ -535,21 +437,22 @@ Private Sub tickbutton_mouseDown(Sender As Object)
     On Error GoTo tickbutton_mouseDown_Error
     
     If overlayWidget.Ticking = True Then
-        Sender.Widget.Alpha = 0
+        overlayWidget.SmoothSecondHand = False
+        Sender.Widget.Alpha = Val(PzGOpacity) / 100
+        PzGSmoothSecondHand = "0"
     Else
-        Sender.Widget.Alpha = 1
+        overlayWidget.SmoothSecondHand = True
+        Sender.Widget.Alpha = 0 ' sender is the referring control
+        PzGSmoothSecondHand = "1"
     End If
     Sender.Widget.Refresh ' this removes the delay in the Button depressing
-    
-    If overlayWidget.Ticking = True Then
-        fileToPlay = "lock.wav"
-        If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
-            PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
-        End If
-        Call SwitchOff
-    Else
-        Call TurnFunctionsOn
+
+    fileToPlay = "lock.wav"
+    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
+        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
+    
+    sPutINISetting "Software\PzStopwatch", "smoothSecondHand", PzGSmoothSecondHand, PzGSettingsFile
 
    On Error GoTo 0
    Exit Sub
