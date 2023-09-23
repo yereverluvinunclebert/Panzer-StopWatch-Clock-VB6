@@ -4,7 +4,7 @@ Option Explicit
 
 '------------------------------------------------------ STARTS
 ' for SetWindowPos z-ordering
-Public Declare Function SetWindowPos Lib "user32" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal X As Long, ByVal Y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
+Public Declare Function SetWindowPos Lib "user32" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal Y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
 
 Private Const HWND_TOP As Long = 0 ' for SetWindowPos z-ordering
 Private Const HWND_TOPMOST As Long = -1
@@ -17,6 +17,7 @@ Private Const OnTopFlags  As Long = SWP_NOMOVE Or SWP_NOSIZE
 Public fMain As New cfMain
 Public aboutWidget As cwAbout
 Public helpWidget As cwHelp
+Public licenceWidget As cwLicence
 
 Public revealWidgetTimerCount As Integer
  
@@ -66,6 +67,14 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     fAlpha.FX = 222 'init position- and zoom-values (directly set on Public-Props of the Form-hosting Class)
     fAlpha.FY = 111
     fAlpha.FZ = 0.4
+        
+    prefsCurrentWidth = 9075
+    prefsCurrentHeight = 16450
+    
+    msgBoxACurrentWidth = 6105
+    msgBoxACurrentHeight = 2565
+        
+    extractCommand = Command$ ' capture any parameter passed
     
     ' initialise global vars
     Call initialiseGlobalVars
@@ -129,6 +138,9 @@ Public Sub mainRoutine(ByVal restart As Boolean)
 
     ' configure any global timers here
     Call configureTimers
+            
+    'load the preferences form but don't yet show it, speeds up access to the prefs when required
+    Load panzerPrefs
     
     ' RC message pump will auto-exit when Cairo Forms > 0 so we run it only when 0, this prevents message interruption
     ' when running twice on reload.
@@ -881,3 +893,40 @@ End Sub
 '
 '    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ExportPngs of Module modMain"
 'End Sub
+
+
+' .74 DAEB 22/05/2022 rDIConConfig.frm Msgbox replacement that can be placed on top of the form instead as the middle of the screen, see Steamydock for a potential replacement?
+'---------------------------------------------------------------------------------------
+' Procedure : msgBoxA
+' Author    : beededea
+' Date      : 20/05/2022
+' Purpose   :         ans = msgBoxA("main message", vbOKOnly, "title bar message", False)
+'---------------------------------------------------------------------------------------
+'
+Public Function msgBoxA(ByVal msgBoxPrompt As String, Optional ByVal msgButton As VbMsgBoxResult, Optional ByVal msgTitle As String, Optional ByVal msgShowAgainChkBox As Boolean = False, Optional ByRef msgContext As String = "none") As Integer
+     
+    ' set the defined properties of a form
+    On Error GoTo msgBoxA_Error
+
+    frmMessage.propMessage = msgBoxPrompt
+    frmMessage.propTitle = msgTitle
+    frmMessage.propShowAgainChkBox = msgShowAgainChkBox
+    frmMessage.propButtonVal = msgButton
+    frmMessage.propMsgContext = msgContext
+    frmMessage.Display ' run a subroutine in the form that displays the form
+
+    msgBoxA = frmMessage.propReturnedValue
+
+    On Error GoTo 0
+    Exit Function
+
+msgBoxA_Error:
+
+    With Err
+         If .Number <> 0 Then
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure msgBoxA of Module mdlMain"
+            Resume Next
+          End If
+    End With
+
+End Function

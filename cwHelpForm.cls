@@ -22,10 +22,10 @@ Option Explicit
  
 Private WithEvents W As cWidgetBase '<- this is required in each cwImplementation...
 Attribute W.VB_VarHelpID = -1
-Private WithEvents tmrFadeIn As cTimer
-Attribute tmrFadeIn.VB_VarHelpID = -1
-Private WithEvents tmrFadeOut As cTimer
-Attribute tmrFadeOut.VB_VarHelpID = -1
+Private WithEvents tmrHelpFadeIn As cTimer
+Attribute tmrHelpFadeIn.VB_VarHelpID = -1
+Private WithEvents tmrHelpFadeOut As cTimer
+Attribute tmrHelpFadeOut.VB_VarHelpID = -1
 
 Private helpxo As Integer
 Private helpyo As Integer
@@ -54,8 +54,8 @@ Private Sub Class_Initialize()
 
     Set W = Cairo.WidgetBase '<- this is required in each cwImplementation...
    
-    Set tmrFadeIn = New_c.Timer(20, False)
-    Set tmrFadeOut = New_c.Timer(20, False)
+    Set tmrHelpFadeIn = New_c.Timer(20, False)
+    Set tmrHelpFadeOut = New_c.Timer(20, False)
 
    On Error GoTo 0
    Exit Sub
@@ -84,7 +84,7 @@ Private Sub W_MouseDown(Button As Integer, shift As Integer, ByVal X As Single, 
         PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
 
-    tmrFadeOut.Enabled = True ' this is not currently making the opacity reduce
+    tmrHelpFadeOut.Enabled = True ' this is not currently making the opacity reduce
 
    On Error GoTo 0
    Exit Sub
@@ -143,7 +143,7 @@ Public Property Let show(ByVal newValue As Boolean)
     On Error GoTo showLet_Error
 
     mShow = newValue
-    If mShow = True Then tmrFadeIn.Enabled = True
+    If mShow = True Then tmrHelpFadeIn.Enabled = True
     
     On Error GoTo 0
     Exit Property
@@ -174,22 +174,22 @@ End Property
 
 '
 '---------------------------------------------------------------------------------------
-' Procedure : tmrFadeIn_Timer
+' Procedure : tmrHelpFadeIn_Timer
 ' Author    : beededea
 ' Date      : 17/05/2023
 ' Purpose   : timer to make the help form or help image fade in opacity
 '---------------------------------------------------------------------------------------
 '
-Private Sub tmrFadeIn_Timer()
+Private Sub tmrHelpFadeIn_Timer()
       
-   On Error GoTo tmrFadeIn_Timer_Error
+   On Error GoTo tmrHelpFadeIn_Timer_Error
     fMain.helpForm.show
     
     opacity = opacity + 0.05
     If opacity >= 1 Then
         opacity = 1
 
-        tmrFadeIn.Enabled = False
+        tmrHelpFadeIn.Enabled = False
 
         Exit Sub
     End If
@@ -198,28 +198,28 @@ Private Sub tmrFadeIn_Timer()
    On Error GoTo 0
    Exit Sub
 
-tmrFadeIn_Timer_Error:
+tmrHelpFadeIn_Timer_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrFadeIn_Timer of Class Module cwhelp"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrHelpFadeIn_Timer of Class Module cwhelp"
 End Sub
 '
 '---------------------------------------------------------------------------------------
-' Procedure : tmrFadeOut_Timer
+' Procedure : tmrHelpFadeOut_Timer
 ' Author    : beededea
 ' Date      : 17/05/2023
 ' Purpose   : timer to make the help form or help image fade out in opacity
 '---------------------------------------------------------------------------------------
 ' < - this timer is not causing the opacity to fade out
-Private Sub tmrFadeOut_Timer()
+Private Sub tmrHelpFadeOut_Timer()
       
-   On Error GoTo tmrFadeOut_Timer_Error
+   On Error GoTo tmrHelpFadeOut_Timer_Error
 
     opacity = opacity - 0.05
     
     If opacity < 0 Then
         opacity = 0
         
-        tmrFadeOut.Enabled = False
+        tmrHelpFadeOut.Enabled = False
         fMain.helpForm.Hide
         
         Exit Sub
@@ -230,9 +230,9 @@ Private Sub tmrFadeOut_Timer()
    On Error GoTo 0
    Exit Sub
 
-tmrFadeOut_Timer_Error:
+tmrHelpFadeOut_Timer_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrFadeOut_Timer of Class Module cwhelp"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrHelpFadeOut_Timer of Class Module cwhelp"
 End Sub
 '---------------------------------------------------------------------------------------
 ' Procedure : W_Paint

@@ -6,13 +6,13 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "cwAbout"
+Attribute VB_Name = "cwLicence"
 Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
+Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 '---------------------------------------------------------------------------------------
-' Class Module      : cwAbout
+' Class Module      : cwLicence
 ' Author            : beededea
 ' Date              : 17/05/2023
 ' Purpose           :
@@ -22,19 +22,23 @@ Option Explicit
  
 Private WithEvents W As cWidgetBase '<- this is required in each cwImplementation...
 Attribute W.VB_VarHelpID = -1
-Private WithEvents tmrAboutFadeIn As cTimer
-Attribute tmrAboutFadeIn.VB_VarHelpID = -1
-Private WithEvents tmrAboutFadeOut As cTimer
-Attribute tmrAboutFadeOut.VB_VarHelpID = -1
+Private WithEvents tmrLicenceFadeIn As cTimer
+Attribute tmrLicenceFadeIn.VB_VarHelpID = -1
+Private WithEvents tmrLicenceFadeOut As cTimer
+Attribute tmrLicenceFadeOut.VB_VarHelpID = -1
 
-Private aboutxo As Integer
-Private aboutyo As Integer
+Private licencexo As Integer
+Private licenceyo As Integer
 
 Private mOpacity As Double
 Private mShowMe As Boolean
 
+Private opacityflag As Integer ' needs this var as it appears there is a bug in RC that causes the widget to lose opacity
+
+
+
 'property opacity is a property that populates mOpacity used by RenderSurfaceContent
-'property show is a property that populates mShow that triggers a fade in timer
+'property ShowMe is a property that populates mShowMe that triggers a fade in timer
 
 '---------------------------------------------------------------------------------------
 ' Procedure : Class_Initialize
@@ -47,20 +51,20 @@ Private Sub Class_Initialize()
 
    On Error GoTo Class_Initialize_Error
 
-    aboutxo = 0
-    aboutyo = 0
+    licencexo = 0
+    licenceyo = 0
 
     Set W = Cairo.WidgetBase '<- this is required in each cwImplementation...
    
-    Set tmrAboutFadeIn = New_c.Timer(20, False)
-    Set tmrAboutFadeOut = New_c.Timer(20, False)
+    Set tmrLicenceFadeIn = New_c.Timer(20, False)
+    Set tmrLicenceFadeOut = New_c.Timer(20, False)
 
    On Error GoTo 0
    Exit Sub
 
 Class_Initialize_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Class_Initialize of Class Module cwAbout"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Class_Initialize of Class Module cwLicence"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -102,17 +106,16 @@ Widgets_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Widgets of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
-' Procedure : W_MouseDown
+' Procedure : W_MouseMove
 ' Author    : beededea
 ' Date      : 17/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub W_MouseDown(Button As Integer, Shift As Integer, ByVal x As Single, ByVal Y As Single)
+Private Sub W_MouseMove(Button As Integer, Shift As Integer, ByVal x As Single, ByVal Y As Single)
    On Error GoTo W_MouseDown_Error
 
-    opacity = 1
-    ShowMe = False
+    opacityflag = 1
 
    On Error GoTo 0
    Exit Sub
@@ -138,7 +141,7 @@ Public Property Let opacity(ByVal newValue As Double)
 
 opacityLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure opacity of Class Module cwAbout"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure opacity of Class Module cwLicence"
 End Property
 '---------------------------------------------------------------------------------------
 ' Procedure : opacity
@@ -157,7 +160,7 @@ Public Property Get opacity() As Double
 
 opacityGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure opacity of Class Module cwAbout"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure opacity of Class Module cwLicence"
 End Property
 
 '---------------------------------------------------------------------------------------
@@ -171,17 +174,15 @@ Public Property Let ShowMe(ByVal newValue As Boolean)
     On Error GoTo ShowMeLet_Error
 
     mShowMe = newValue
-    
     If mShowMe = True Then
         mOpacity = 0
-        tmrAboutFadeOut.Enabled = False
-        tmrAboutFadeIn.Enabled = True
+        tmrLicenceFadeOut.Enabled = False
+        tmrLicenceFadeIn.Enabled = True
     Else
-    
-        mOpacity = 1
-        tmrAboutFadeIn.Enabled = False
-        tmrAboutFadeOut.Enabled = True
-
+        opacityflag = 0
+        tmrLicenceFadeIn.Enabled = False
+        tmrLicenceFadeOut.Enabled = True
+        mOpacity = 0
     End If
     
     On Error GoTo 0
@@ -189,7 +190,7 @@ Public Property Let ShowMe(ByVal newValue As Boolean)
 
 ShowMeLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ShowMe of Class Module cwAbout"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ShowMe of Class Module cwLicence"
 End Property
 '---------------------------------------------------------------------------------------
 ' Procedure : ShowMe
@@ -208,26 +209,26 @@ Public Property Get ShowMe() As Boolean
 
 ShowMeGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ShowMe of Class Module cwAbout"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ShowMe of Class Module cwLicence"
 End Property
 
 '
 '---------------------------------------------------------------------------------------
-' Procedure : tmrAboutFadeIn_Timer
+' Procedure : tmrLicenceFadeIn_Timer
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   : timer to make the about form or about image fade in opacity
+' Purpose   : timer to make the Licence form or Licence image fade in opacity
 '---------------------------------------------------------------------------------------
 '
-Private Sub tmrAboutFadeIn_Timer()
+Private Sub tmrLicenceFadeIn_Timer()
       
-   On Error GoTo tmrAboutFadeIn_Timer_Error
+   On Error GoTo tmrLicenceFadeIn_Timer_Error
     
-    opacity = opacity + 0.05
-    If opacity >= 1 Then
-        opacity = 1
+    opacity = opacity + 0.01
+    If opacity >= 0.2 Then
+        opacity = 0.2
 
-        tmrAboutFadeIn.Enabled = False
+        tmrLicenceFadeIn.Enabled = False
 
         Exit Sub
     End If
@@ -236,29 +237,28 @@ Private Sub tmrAboutFadeIn_Timer()
    On Error GoTo 0
    Exit Sub
 
-tmrAboutFadeIn_Timer_Error:
+tmrLicenceFadeIn_Timer_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrAboutFadeIn_Timer of Class Module cwAbout"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrLicenceFadeIn_Timer of Class Module cwLicence"
 End Sub
 '
 '---------------------------------------------------------------------------------------
-' Procedure : tmrAboutFadeOut_Timer
+' Procedure : tmrLicenceFadeOut_Timer
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   : timer to make the about form or about image fade out in opacity
+' Purpose   : timer to make the Licence form or Licence image fade out in opacity
 '---------------------------------------------------------------------------------------
-' < - this timer is not causing the opacity to fade out
-Private Sub tmrAboutFadeOut_Timer()
+Private Sub tmrLicenceFadeOut_Timer()
       
-   On Error GoTo tmrAboutFadeOut_Timer_Error
+   On Error GoTo tmrLicenceFadeOut_Timer_Error
 
     opacity = opacity - 0.05
     
     If opacity < 0 Then
         opacity = 0
         
-        tmrAboutFadeOut.Enabled = False
-        fMain.aboutForm.Hide
+        tmrLicenceFadeOut.Enabled = False
+        fMain.licenceForm.Hide
         
         Exit Sub
     End If
@@ -268,9 +268,9 @@ Private Sub tmrAboutFadeOut_Timer()
    On Error GoTo 0
    Exit Sub
 
-tmrAboutFadeOut_Timer_Error:
+tmrLicenceFadeOut_Timer_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrAboutFadeOut_Timer of Class Module cwAbout"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrLicenceFadeOut_Timer of Class Module cwLicence"
 End Sub
 '---------------------------------------------------------------------------------------
 ' Procedure : W_Paint
@@ -282,14 +282,14 @@ End Sub
 Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As Single, ByVal dx_Aligned As Single, ByVal dy_Aligned As Single, UserObj As Object)
    On Error GoTo W_Paint_Error
 
-    Draw CC, dx_Aligned, dy_Aligned, mOpacity
+    Draw CC, dx_Aligned, dy_Aligned
 
    On Error GoTo 0
    Exit Sub
 
 W_Paint_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure W_Paint of Class Module cwAbout"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure W_Paint of Class Module cwLicence"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -299,32 +299,57 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Single, ByVal mOpacity As Double)
-    Dim scaleValue As Long: scaleValue = 1
+Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Single)
+   
+    Dim scaleValue As Double: scaleValue = 0.8
+    Dim currentOpacity As Double: currentOpacity = 0
     
     On Error GoTo Draw_Error
 
     If PzGDpiAwareness = "1" Then scaleValue = 1.5
-    
+
     CC.ScaleDrawings scaleValue, scaleValue
 
-    CC.RenderSurfaceContent "about", aboutxo, aboutyo, , , , mOpacity
+    If opacityflag = 0 Then
+        currentOpacity = mOpacity
+    Else
+        currentOpacity = 1
+    End If
+    
+    CC.RenderSurfaceContent "licence", licencexo, licenceyo, , , , currentOpacity
         
     'set some Font- and ForeColor-Properties and draw some Text on the Widget
-    W.FontItalic = True
-    W.FontName = PzGPrefsFont
-    W.ForeColor = vbBlack
+    W.FontItalic = False
+    W.FontName = "Arial"
+    W.ForeColor = &H8000000F
+    W.FontSize = 8
     W.SelectFontSettingsInto CC
    
-    CC.DrawText 350, 0, dx, dy - 1020, "version " & App.Major & "." & App.Minor & "." & App.Revision & " Alpha", , , 2, True, , mOpacity
-    W.Refresh
+    CC.DrawText 30, -200, dx, dy, "Licence Agreement " & widgetName, , , 2, True, , 1
+    
+    W.FontSize = 6
+    W.SelectFontSettingsInto CC
+'
+    CC.DrawText 48, 13, dx, dy, "If you do not agree with the terms set forth above, please click the ", , , 2, True, , 1
+    CC.DrawText 48, 23, dx, dy, "Decline button below and destroy this widget and its documentation ", , , 2, True, , 1
+    
+    W.FontSize = 8
 
+    W.SelectFontSettingsInto CC
+
+    CC.DrawText 240, 50, dx, dy, "Decline", , , 2, True, , 1
+    CC.DrawText 290, 50, dx, dy, "Accept", , , 2, True, , 1
+   
+    W.Refresh
+    
    On Error GoTo 0
    Exit Sub
 
 Draw_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Draw of Class Module cwAbout"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Draw of Class Module cwLicence"
 
 End Sub
+
+
 
