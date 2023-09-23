@@ -193,7 +193,7 @@ Private Sub gaugeForm_BubblingEvent(Sender As Object, EventName As String, P1 As
     If EventName = "W_MouseUp" Then
         Select Case LCase$(Sender.Widget.Key)
             Case "stopwatch/face/housing/prefsbutton"
-                Sender.Widget.Alpha = 1
+                Sender.Widget.Alpha = Val(PzGOpacity) / 100
                 Sender.Widget.Refresh
             Case "stopwatch/face/housing/switchfacesbutton"
                 Call switchfacesbutton_mouseUp(Sender)
@@ -256,6 +256,8 @@ Private Sub startbutton_click()
     On Error GoTo startbutton_click_Error
    
     Dim fileToPlay As String: fileToPlay = vbNullString
+    
+    Call TurnFunctionsOn
 
     fileToPlay = "ting.wav"
     If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
@@ -282,11 +284,12 @@ Private Sub stopbutton_mouseUp(Sender As Object)
    
     On Error GoTo stopbutton_mouseUp_Error
 
-    Sender.Widget.Alpha = 1
+    Sender.Widget.Alpha = Val(PzGOpacity) / 100
     Sender.Widget.Refresh
            
+    Call SwitchOff
     
-    fileToPlay = "mistake.wav"
+    fileToPlay = "stop.wav"
     If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
@@ -353,7 +356,7 @@ Private Sub switchfacesbutton_mouseUp(Sender As Object)
     Dim fileToPlay As String: fileToPlay = vbNullString
     On Error GoTo switchfacesbutton_mouseUp_Error
 
-    Sender.Widget.Alpha = 1
+    Sender.Widget.Alpha = Val(PzGOpacity) / 100
     Sender.Widget.Refresh
         
     fileToPlay = "till.wav"
@@ -436,7 +439,7 @@ Private Sub tickbutton_mouseDown(Sender As Object)
    
     On Error GoTo tickbutton_mouseDown_Error
     
-    If overlayWidget.Ticking = True Then
+    If overlayWidget.SmoothSecondHand = True Then
         overlayWidget.SmoothSecondHand = False
         Sender.Widget.Alpha = Val(PzGOpacity) / 100
         PzGSmoothSecondHand = "0"
@@ -444,6 +447,7 @@ Private Sub tickbutton_mouseDown(Sender As Object)
         overlayWidget.SmoothSecondHand = True
         Sender.Widget.Alpha = 0 ' sender is the referring control
         PzGSmoothSecondHand = "1"
+        
     End If
     Sender.Widget.Refresh ' this removes the delay in the Button depressing
 
@@ -523,10 +527,10 @@ End Sub
 ' Purpose   : get F5 and SHIFT keypresses
 '---------------------------------------------------------------------------------------
 '
-Private Sub gaugeForm_KeyDown(ByRef KeyCode As Integer, ByRef shift As Integer)
+Private Sub gaugeForm_KeyDown(ByRef KeyCode As Integer, ByRef Shift As Integer)
     On Error GoTo gaugeForm_KeyDown_Error
 
-    Call getKeyPress(KeyCode, shift)
+    Call getKeyPress(KeyCode, Shift)
 
     On Error GoTo 0
     Exit Sub
@@ -543,7 +547,7 @@ End Sub
 ' Purpose   : save the form x,y position when ever the globe/form is dragged
 '---------------------------------------------------------------------------------------
 '
-Private Sub gaugeForm_MouseUp(Button As Integer, shift As Integer, X As Single, Y As Single)
+Private Sub gaugeForm_MouseUp(Button As Integer, Shift As Integer, x As Single, Y As Single)
     On Error GoTo gaugeForm_MouseUp_Error
 
     'If overlayWidget.Locked = True Then Exit Sub
@@ -576,8 +580,8 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub gaugeForm_MouseMove(Button As Integer, shift As Integer, X As Single, Y As Single)
-  Static x0 As Single, y0 As Single: If Button = 0 Then x0 = X: y0 = Y 'just store the offsets when no button is down
+Private Sub gaugeForm_MouseMove(Button As Integer, Shift As Integer, x As Single, Y As Single)
+  Static x0 As Single, y0 As Single: If Button = 0 Then x0 = x: y0 = Y 'just store the offsets when no button is down
   
    On Error GoTo gaugeForm_MouseMove_Error
     
@@ -586,7 +590,7 @@ Private Sub gaugeForm_MouseMove(Button As Integer, shift As Integer, X As Single
 
     If Button = vbLeftButton And Not gaugeForm.ActiveWidget Is Nothing Then 'Form-Dragging (under certain conditions)
 
-      FX = (X - x0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Left
+      FX = (x - x0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Left
       FY = (Y - y0) * gaugeForm.WidgetRoot.Zoom + gaugeForm.Top
       gaugeForm.Move FX, FY
     End If
@@ -683,7 +687,7 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub gaugeForm_MouseDown(Button As Integer, shift As Integer, X As Single, Y As Single)
+Private Sub gaugeForm_MouseDown(Button As Integer, Shift As Integer, x As Single, Y As Single)
    On Error GoTo W_MouseDown_Error
 
     If Button = vbRightButton Then
@@ -702,48 +706,48 @@ W_MouseDown_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure W_MouseDown of Class Module cwOverlay"
 End Sub
 
-
-'---------------------------------------------------------------------------------------
-' Procedure : Glowing
-' Author    : beededea
-' Date      : 17/05/2023
-' Purpose   :
-'---------------------------------------------------------------------------------------
 '
-Public Property Get Glowing() As Boolean
-   On Error GoTo GlowingGet_Error
-
-  Glowing = mGlowing
-
-   On Error GoTo 0
-   Exit Property
-
-GlowingGet_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Glowing of Class Module cwOverlay"
-End Property
-'---------------------------------------------------------------------------------------
-' Procedure : Glowing
-' Author    :
-' Date      : 09/05/2023
-' Purpose   :
-'---------------------------------------------------------------------------------------
+''---------------------------------------------------------------------------------------
+'' Procedure : Glowing
+'' Author    : beededea
+'' Date      : 17/05/2023
+'' Purpose   :
+''---------------------------------------------------------------------------------------
+''
+'Public Property Get Glowing() As Boolean
+'   On Error GoTo GlowingGet_Error
 '
-Public Property Let Glowing(ByVal newValue As Boolean)
-   On Error GoTo GlowingLet_Error
-
-  If mGlowing <> newValue Then mGlowing = newValue Else Exit Property
-    If mGlowing Then
-        'Set tmrClock = New_c.Timer(200, True)
-    Else
-        'Set tmrClock = Nothing
-    End If
-
-   On Error GoTo 0
-   Exit Property
-
-GlowingLet_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Glowing of Class Module cwOverlay"
-End Property ' the earth Glowing flag
-
+'  Glowing = mGlowing
+'
+'   On Error GoTo 0
+'   Exit Property
+'
+'GlowingGet_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Glowing of Class Module cwOverlay"
+'End Property
+''---------------------------------------------------------------------------------------
+'' Procedure : Glowing
+'' Author    :
+'' Date      : 09/05/2023
+'' Purpose   :
+''---------------------------------------------------------------------------------------
+''
+'Public Property Let Glowing(ByVal newValue As Boolean)
+'   On Error GoTo GlowingLet_Error
+'
+'  If mGlowing <> newValue Then mGlowing = newValue Else Exit Property
+'    If mGlowing Then
+'        'Set tmrClock = New_c.Timer(200, True)
+'    Else
+'        'Set tmrClock = Nothing
+'    End If
+'
+'   On Error GoTo 0
+'   Exit Property
+'
+'GlowingLet_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Glowing of Class Module cwOverlay"
+'End Property ' the earth Glowing flag
+'
