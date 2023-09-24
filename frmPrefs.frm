@@ -3545,8 +3545,12 @@ Private Sub Form_Resize()
     ratio = cFormHeight / cFormWidth
     
     If dynamicSizingFlg = True Then
+    
+        Call resizeControls(Me, prefsControlPositions(), prefsCurrentWidth, prefsCurrentHeight)
+        Call tweakPrefsControlPositions(Me, prefsCurrentWidth, prefsCurrentHeight)
+        
         Me.Width = Me.Height / ratio ' maintain the aspect ratio
-        Call resizeControls
+
         
         Call loadHigherResImages
     Else
@@ -3570,6 +3574,63 @@ Form_Resize_Error:
     End With
 End Sub
 
+'---------------------------------------------------------------------------------------
+' Procedure : tweakPrefsControlPositions
+' Author    : beededea
+' Date      : 22/09/2023
+' Purpose   : final tweak the bottom frame top and left positions
+'---------------------------------------------------------------------------------------
+'
+Private Sub tweakPrefsControlPositions(ByVal thisForm As Form, ByVal m_FormWid As Single, ByVal m_FormHgt)
+
+    ' not sure why but the resizeControls routine can lead to incorrect positioning of frames and buttons
+    Dim x_scale As Single: x_scale = 0
+    Dim y_scale As Single: y_scale = 0
+    
+    On Error GoTo tweakPrefsControlPositions_Error
+
+    ' Get the form's current scale factors.
+    x_scale = thisForm.ScaleWidth / m_FormWid
+    y_scale = thisForm.ScaleHeight / m_FormHgt
+
+    fraGeneral.Left = fraGeneralButton.Left
+    fraConfig.Left = fraGeneralButton.Left
+    fraSounds.Left = fraGeneralButton.Left
+    fraPosition.Left = fraGeneralButton.Left
+    fraFonts.Left = fraGeneralButton.Left
+    fraDevelopment.Left = fraGeneralButton.Left
+    fraWindow.Left = fraGeneralButton.Left
+    fraAbout.Left = fraGeneralButton.Left
+         
+    'fraGeneral.Top = fraGeneralButton.Top
+    fraConfig.Top = fraGeneral.Top
+    fraSounds.Top = fraGeneral.Top
+    fraPosition.Top = fraGeneral.Top
+    fraFonts.Top = fraGeneral.Top
+    fraDevelopment.Top = fraGeneral.Top
+    fraWindow.Top = fraGeneral.Top
+    fraAbout.Top = fraGeneral.Top
+    
+    ' final tweak the bottom button positions
+    
+    btnHelp.Top = fraGeneral.Top + fraGeneral.Height + (250 * y_scale)
+    btnSave.Top = btnHelp.Top
+    btnCancel.Top = btnHelp.Top
+    
+    btnCancel.Left = fraWindow.Left + fraWindow.Width - btnCancel.Width
+    btnSave.Left = btnCancel.Left - btnSave.Width - (150 * x_scale)
+    btnHelp.Left = fraGeneral.Left
+
+    txtPrefsFontCurrentSize.Text = y_scale * txtPrefsFontCurrentSize.FontSize
+    
+   On Error GoTo 0
+   Exit Sub
+
+tweakPrefsControlPositions_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tweakPrefsControlPositions of Form panzerPrefs"
+
+End Sub
 '---------------------------------------------------------------------------------------
 ' Procedure : Form_Unload
 ' Author    : beededea
@@ -4230,7 +4291,7 @@ Private Sub picButtonMouseUpEvent(ByVal thisTabName As String, ByRef thisPicName
     thisFraButtonName.BorderStyle = 1
 
     ' Get the form's current scale factors.
-    y_scale = ScaleHeight / m_FormHgt
+    y_scale = ScaleHeight / prefsCurrentHeight
     
     btnHelp.Top = fraGeneral.Top + fraGeneral.Height + (250 * y_scale)
     btnSave.Top = btnHelp.Top
@@ -4717,146 +4778,8 @@ setModernThemeColours_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setModernThemeColours of Module Module1"
 End Sub
 
-'---------------------------------------------------------------------------------------
-' Procedure : SaveSizes
-' Author    : Rod Stephens vb-helper.com
-' Date      : 16/04/2021
-' Purpose   : Resize controls to fit when a form resizes
-'             Save the form's and controls' dimensions.
-' Credit    : Rod Stephens vb-helper.com
-'---------------------------------------------------------------------------------------
-'
-Private Sub SaveSizes()
-    Dim i As Integer: i = 0
-    Dim a As Integer: a = 0
-    Dim Ctrl As Control
-
-    ' Save the controls' positions and sizes.
-    On Error GoTo SaveSizes_Error
-
-    ReDim m_ControlPositions(1 To Controls.Count)
-    i = 1
-    For Each Ctrl In Controls
-        With m_ControlPositions(i)
-            If (TypeOf Ctrl Is CommandButton) Or (TypeOf Ctrl Is ListBox) Or (TypeOf Ctrl Is textBox) Or (TypeOf Ctrl Is FileListBox) Or (TypeOf Ctrl Is Label) Or (TypeOf Ctrl Is ComboBox) Or (TypeOf Ctrl Is CheckBox) Or (TypeOf Ctrl Is OptionButton) Or (TypeOf Ctrl Is Frame) Or (TypeOf Ctrl Is Image) Or (TypeOf Ctrl Is PictureBox) Or (TypeOf Ctrl Is Slider) Then
-                a = 1
-                .Left = Ctrl.Left
-                .Top = Ctrl.Top
-                .Width = Ctrl.Width
-                .Height = Ctrl.Height
-                On Error Resume Next
-                .FontSize = Ctrl.Font.Size
-                On Error GoTo 0
-            End If
-        End With
-        i = i + 1
-    Next Ctrl
-
-    ' Save the form's size.
-    m_FormWid = ScaleWidth
-    m_FormHgt = ScaleHeight
-
-   On Error GoTo 0
-   Exit Sub
-
-SaveSizes_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure SaveSizes of Form formSoftwareList"
-End Sub
 
 
-'---------------------------------------------------------------------------------------
-' Procedure : ResizeControls
-' Author    : Rod Stephens vb-helper.com
-' Date      : 16/04/2021
-' Purpose   : Arrange the controls for the new size.
-'---------------------------------------------------------------------------------------
-'
-Private Sub resizeControls()
-    Dim i As Integer: i = 0
-    Dim Ctrl As Control
-    Dim x_scale As Single: x_scale = 0
-    Dim y_scale As Single: y_scale = 0
-    Dim currFontSize As Single: currFontSize = 0
-        
-    On Error GoTo ResizeControls_Error
-
-    ' Get the form's current scale factors.
-    x_scale = ScaleWidth / m_FormWid
-    y_scale = ScaleHeight / m_FormHgt
-
-    ' Position the controls.
-    i = 1
-    For Each Ctrl In Controls
-        With m_ControlPositions(i)
-            If (TypeOf Ctrl Is CommandButton) Or (TypeOf Ctrl Is ListBox) Or (TypeOf Ctrl Is textBox) Or (TypeOf Ctrl Is FileListBox) Or (TypeOf Ctrl Is Label) Or (TypeOf Ctrl Is ComboBox) Or (TypeOf Ctrl Is CheckBox) Or (TypeOf Ctrl Is OptionButton) Or (TypeOf Ctrl Is Frame) Or (TypeOf Ctrl Is Slider) Then
-                Ctrl.Left = x_scale * .Left
-                Ctrl.Top = y_scale * .Top
-                Ctrl.Width = x_scale * .Width
-                If Not (TypeOf Ctrl Is ComboBox) Then
-                    ' Cannot change height of ComboBoxes.
-                    Ctrl.Height = y_scale * .Height
-                End If
-                On Error Resume Next
-                Ctrl.Font.Size = y_scale * .FontSize
-                Ctrl.Refresh
-                On Error GoTo 0
-            ElseIf (TypeOf Ctrl Is Image) Then
-                    
-                Ctrl.Stretch = True
-                Ctrl.Left = x_scale * .Left
-                Ctrl.Top = y_scale * .Top
-                Ctrl.Width = x_scale * .Width
-                Ctrl.Height = Ctrl.Width
-                
-                Ctrl.Refresh
-            End If
-        End With
-        i = i + 1
-    Next Ctrl
-
-    
-    currFontSize = y_scale * txtPrefsFontCurrentSize.FontSize
-    txtPrefsFontCurrentSize.Text = currFontSize
-    
-    ' not sure why but the above can lead to incorrect positioning of frames and buttons
-    ' final tweak the bottom frame top and left positions
-    
-    fraGeneral.Left = fraGeneralButton.Left
-    fraConfig.Left = fraGeneralButton.Left
-    fraSounds.Left = fraGeneralButton.Left
-    fraPosition.Left = fraGeneralButton.Left
-    fraFonts.Left = fraGeneralButton.Left
-    fraDevelopment.Left = fraGeneralButton.Left
-    fraWindow.Left = fraGeneralButton.Left
-    fraAbout.Left = fraGeneralButton.Left
-         
-    'fraGeneral.Top = fraGeneralButton.Top
-    fraConfig.Top = fraGeneral.Top
-    fraSounds.Top = fraGeneral.Top
-    fraPosition.Top = fraGeneral.Top
-    fraFonts.Top = fraGeneral.Top
-    fraDevelopment.Top = fraGeneral.Top
-    fraWindow.Top = fraGeneral.Top
-    fraAbout.Top = fraGeneral.Top
-    
-    ' final tweak the bottom button positions
-    
-    btnHelp.Top = fraGeneral.Top + fraGeneral.Height + 400
-    btnSave.Top = btnHelp.Top
-    btnCancel.Top = btnHelp.Top
-    
-    btnCancel.Left = fraWindow.Left + fraWindow.Width - btnCancel.Width
-    btnSave.Left = btnCancel.Left - btnSave.Width - 150
-    btnHelp.Left = fraGeneral.Left
-  
-   On Error GoTo 0
-   Exit Sub
-
-ResizeControls_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ResizeControls of Form formSoftwareList"
-End Sub
 
 '---------------------------------------------------------------------------------------
 ' Procedure : loadHigherResImages
@@ -5009,7 +4932,8 @@ Private Sub setframeHeights()
         fraDevelopment.Width = fraAbout.Width
         fraWindow.Width = fraAbout.Width
     
-        Call SaveSizes
+        ' save the initial positions of ALL the controls on the prefs form
+        Call SaveSizes(panzerPrefs, prefsControlPositions(), prefsCurrentWidth, prefsCurrentHeight)
     Else
         fraGeneral.Height = 9278
         fraConfig.Height = 6632

@@ -27,7 +27,6 @@ Public Sub resizeControls(ByRef thisForm As Form, ByRef m_ControlPositions() As 
     Dim Ctrl As Control
     Dim x_scale As Single: x_scale = 0
     Dim y_scale As Single: y_scale = 0
-    Dim currFontSize As Single: currFontSize = 0
         
     On Error GoTo ResizeControls_Error
 
@@ -68,9 +67,6 @@ Public Sub resizeControls(ByRef thisForm As Form, ByRef m_ControlPositions() As 
         End With
         i = i + 1
     Next Ctrl
-
-    currFontSize = y_scale * panzerPrefs.txtPrefsFontCurrentSize.FontSize
-    panzerPrefs.txtPrefsFontCurrentSize.Text = currFontSize
         
    On Error GoTo 0
    Exit Sub
