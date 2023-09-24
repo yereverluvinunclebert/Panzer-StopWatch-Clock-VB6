@@ -315,6 +315,7 @@ Private Sub addImagesToImageList()
     
     Cairo.ImageList.AddImage "about", App.Path & "\Resources\images\about.png"
     Cairo.ImageList.AddImage "help", App.Path & "\Resources\images\panzergauge-help.png"
+    Cairo.ImageList.AddImage "licence", App.Path & "\Resources\images\frame.png"
     Cairo.ImageList.AddImage "frmIcon", App.Path & "\Resources\images\Icon.png"
 
    On Error GoTo 0
