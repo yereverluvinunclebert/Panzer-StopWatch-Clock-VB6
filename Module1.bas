@@ -326,7 +326,8 @@ Public PzGDefaultEditor As String
        
 ' font
 Public PzGPrefsFont  As String
-Public PzGPrefsFontSize As String
+Public PzGPrefsFontSizeHighDPI As String
+Public PzGPrefsFontSizeLowDPI As String
 Public PzGPrefsFontItalics  As String
 Public PzGPrefsFontColour  As String
 
@@ -1522,9 +1523,13 @@ End Sub
 Public Sub mnuSupport_ClickEvent()
 
     Dim answer As VbMsgBoxResult: answer = vbNo
+    Dim answerMsg As String: answerMsg = vbNullString
+
     On Error GoTo mnuSupport_ClickEvent_Error
     
-    answer = MsgBox("Visiting the support page - this button opens a browser window and connects to our Github issues page where you can send us a support query. Proceed?", vbExclamation + vbYesNo)
+    'answer = MsgBox("Visiting the support page - this button opens a browser window and connects to our Github issues page where you can send us a support query. Proceed?", vbExclamation + vbYesNo)
+    answerMsg = "Visiting the support page - this button opens a browser window and connects to our Github issues page where you can send us a support query. Proceed?"
+    answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Request to Contact Support", False)
 
     If answer = vbYes Then
         Call ShellExecute(menuForm.hwnd, "Open", "https://github.com/yereverluvinunclebert/Panzer-Earth-gauge-VB6/issues", vbNullString, App.Path, 1)
@@ -1624,7 +1629,7 @@ Public Sub ChangeToolTipWidgetDefaultSettings(My_Widget As cWidgetBase)
     With My_Widget
     
     .FontName = PzGPrefsFont
-    .FontSize = Val(PzGPrefsFontSize)
+    .FontSize = Val(PzGPrefsFontSizeLowDPI)
     
     End With
 
@@ -2397,17 +2402,18 @@ End Sub
 
 
 '---------------------------------------------------------------------------------------
-' Procedure : restart
+' Procedure : hardRestart
 ' Author    : beededea
 ' Date      : 14/08/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Sub restart()
+Public Sub hardRestart()
     Dim answer As VbMsgBoxResult: answer = vbNo
+    Dim answerMsg As String: answerMsg = vbNullString
     Dim thisCommand As String: thisCommand = vbNullString
     
-    On Error GoTo restart_Error
+    On Error GoTo hardRestart_Error
 
     thisCommand = App.Path & "\restart.exe"
     
@@ -2417,15 +2423,17 @@ Public Sub restart()
         Call ShellExecute(panzerPrefs.hwnd, "open", thisCommand, "PzStopwatch.exe", "", 1)
         
     Else
-        answer = MsgBox(thisCommand & " is missing", vbOKOnly + vbExclamation)
+        'answer = MsgBox(thisCommand & " is missing", vbOKOnly + vbExclamation)
+        answerMsg = thisCommand & " is missing"
+        answer = msgBoxA(answerMsg, vbOKOnly + vbExclamation, "Restart Error Notification", False)
     End If
 
    On Error GoTo 0
    Exit Sub
 
-restart_Error:
+hardRestart_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure restart of Module Module1"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure hardRestart of Module Module1"
 
 End Sub
 

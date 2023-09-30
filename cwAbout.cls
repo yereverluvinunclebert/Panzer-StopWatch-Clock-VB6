@@ -316,7 +316,12 @@ Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Sing
     W.ForeColor = vbBlack
     W.SelectFontSettingsInto CC
    
-    CC.DrawText 350, 0, dx, dy - 1020, "version " & App.Major & "." & App.Minor & "." & App.Revision & " Alpha", , , 2, True, , mOpacity
+   
+    If PzGDpiAwareness = "0" Then
+        CC.DrawText 350, 0, dx, dy - 275, "version " & App.Major & "." & App.Minor & "." & App.Revision & " Alpha", , , 2, True, , mOpacity
+    Else
+        CC.DrawText 350, 0, dx, dy - 1020, "version " & App.Major & "." & App.Minor & "." & App.Revision & " Alpha", , , 2, True, , mOpacity
+    End If
     W.Refresh
 
    On Error GoTo 0

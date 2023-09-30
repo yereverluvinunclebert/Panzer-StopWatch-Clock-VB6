@@ -56,13 +56,11 @@ End Sub
 '
 Public Sub mainRoutine(ByVal restart As Boolean)
     Dim extractCommand As String: extractCommand = vbNullString
-    Dim chosenDragLayer As String: chosenDragLayer = vbNullString
     Dim thisPSDFullPath As String: thisPSDFullPath = vbNullString
 
     On Error GoTo main_routine_Error
     
     widgetName = "Pz Stopwatch"
-    chosenDragLayer = "stopwatch/face/housing/surround"
     thisPSDFullPath = App.Path & "\Res\tank-clock-mk1.psd"
     fAlpha.FX = 222 'init position- and zoom-values (directly set on Public-Props of the Form-hosting Class)
     fAlpha.FY = 111
@@ -70,12 +68,10 @@ Public Sub mainRoutine(ByVal restart As Boolean)
         
     prefsCurrentWidth = 9075
     prefsCurrentHeight = 16450
-    
-    msgBoxACurrentWidth = 6105
-    msgBoxACurrentHeight = 2565
         
-    extractCommand = Command$ ' capture any parameter passed
-    
+    extractCommand = Command$ ' capture any parameter passed, remove if a soft reload
+    If restart = True Then extractCommand = vbNullString
+        
     ' initialise global vars
     Call initialiseGlobalVars
     
@@ -95,17 +91,15 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     Call validateInputs
     
     If PzGDpiAwareness = "1" Then
-        If Not InIDE Then Cairo.SetDPIAwareness ' this sets DPI awareness for the whole program incl. native VB6 forms, requires a program hard restart.
+        'If Not InIDE Then Cairo.SetDPIAwareness ' this sets DPI awareness for the whole program incl. native VB6 forms, requires a program hard restart.
+        Cairo.SetDPIAwareness
     End If
-            
-    ' resolve VB6 sizing width bug
-    Call determineScreenDimensions
-    
+                
     'load the collection for storing the overlay surfaces with its relevant keys direct from the PSD
     If restart = False Then Call loadExcludePathCollection ' no need to reload the collPSDNonUIElements layer name keys
     
     ' start the load of the PSD file using the RC6 PSD-Parser.instance
-    Call fAlpha.InitFromPSD(thisPSDFullPath, chosenDragLayer)  ' no optional close layer as 3rd param
+    Call fAlpha.InitFromPSD(thisPSDFullPath)  ' no optional close layer as 3rd param
             
     ' check first usage and display licence screen
     Call checkLicenceState
@@ -116,6 +110,9 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     ' place the form at the saved location
     Call makeVisibleFormElements
     
+    ' resolve VB6 sizing width bug
+    Call determineScreenDimensions
+
     ' run the functions that are also called at reload time.
     Call adjustMainControls ' this needs to be here after the initialisation of the Cairo forms and widgets
     
@@ -127,10 +124,11 @@ Public Sub mainRoutine(ByVal restart As Boolean)
         
     ' if the program is run in unhide mode, write the settings and exit
     Call handleUnhideMode(extractCommand)
-    
-    ' if a first time run shows prefs
-    If PzGFirstTimeRun = "true" Then     'parse the command line
+        
+    ' if the parameter states re-open prefs then shows the prefs
+    If extractCommand = "prefs" Then
         Call makeProgramPreferencesAvailable
+        extractCommand = vbNullString
     End If
     
     ' check for first time running
@@ -145,9 +143,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     ' RC message pump will auto-exit when Cairo Forms > 0 so we run it only when 0, this prevents message interruption
     ' when running twice on reload.
     If Cairo.WidgetForms.Count = 0 Then Cairo.WidgetForms.EnterMessageLoop
-  
-    'Debug.Print "App-ShutDown (one can buffer these values for the next run):"; fAlpha.FX; fAlpha.FY; fAlpha.FZ
-   
+     
    On Error GoTo 0
    Exit Sub
 
@@ -161,7 +157,7 @@ End Sub
 ' Procedure : checkFirstTime
 ' Author    : beededea
 ' Date      : 12/05/2023
-' Purpose   : check for first time running
+' Purpose   : check for first time running, first time run shows prefs
 '---------------------------------------------------------------------------------------
 '
 Private Sub checkFirstTime()
@@ -169,6 +165,8 @@ Private Sub checkFirstTime()
    On Error GoTo checkFirstTime_Error
 
     If PzGFirstTimeRun = "true" Then
+    
+        Call makeProgramPreferencesAvailable
         PzGFirstTimeRun = "false"
         sPutINISetting "Software\PzStopwatch", "firstTimeRun", PzGFirstTimeRun, PzGSettingsFile
     End If
@@ -241,7 +239,8 @@ Private Sub initialiseGlobalVars()
          
     ' font
     PzGPrefsFont = vbNullString
-    PzGPrefsFontSize = vbNullString
+    PzGPrefsFontSizeHighDPI = vbNullString
+    PzGPrefsFontSizeLowDPI = vbNullString
     PzGPrefsFontItalics = vbNullString
     PzGPrefsFontColour = vbNullString
     
@@ -530,7 +529,8 @@ Public Sub readSettingsFile(ByVal location As String, ByVal PzGSettingsFile As S
 
         ' font
         PzGPrefsFont = fGetINISetting(location, "prefsFont", PzGSettingsFile)
-        PzGPrefsFontSize = fGetINISetting(location, "prefsFontSize", PzGSettingsFile)
+        PzGPrefsFontSizeHighDPI = fGetINISetting(location, "prefsFontSizeHighDPI", PzGSettingsFile)
+        PzGPrefsFontSizeLowDPI = fGetINISetting(location, "prefsFontSizeLowDPI", PzGSettingsFile)
         PzGPrefsFontItalics = fGetINISetting(location, "prefsFontItalics", PzGSettingsFile)
         PzGPrefsFontColour = fGetINISetting(location, "prefsFontColour", PzGSettingsFile)
         
@@ -611,7 +611,8 @@ Public Sub validateInputs()
                
         ' fonts
         If PzGPrefsFont = vbNullString Then PzGPrefsFont = "times new roman" 'prefsFont", PzGSettingsFile)
-        If PzGPrefsFontSize = vbNullString Then PzGPrefsFontSize = "8" 'prefsFontSize", PzGSettingsFile)
+        If PzGPrefsFontSizeHighDPI = vbNullString Then PzGPrefsFontSizeHighDPI = "8" 'prefsFontSizeLowDPI", PzGSettingsFile)
+        If PzGPrefsFontSizeLowDPI = vbNullString Then PzGPrefsFontSizeLowDPI = "8" 'prefsFontSizeLowDPI", PzGSettingsFile)
         If PzGPrefsFontItalics = vbNullString Then PzGPrefsFontItalics = "false"
         If PzGPrefsFontColour = vbNullString Then PzGPrefsFontColour = "0"
 

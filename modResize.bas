@@ -22,7 +22,7 @@ Public msgBoxACurrentHeight As Single
 ' Purpose   : Arrange the controls for a new size.
 '---------------------------------------------------------------------------------------
 '
-Public Sub resizeControls(ByRef thisForm As Form, ByRef m_ControlPositions() As ControlPositionType, ByVal m_FormWid As Single, ByVal m_FormHgt)
+Public Sub resizeControls(ByRef thisForm As Form, ByRef m_ControlPositions() As ControlPositionType, ByVal m_FormWid As Single, ByVal m_FormHgt, ByVal formFontSize As Integer)
     Dim i As Integer: i = 0
     Dim Ctrl As Control
     Dim x_scale As Single: x_scale = 0
@@ -47,7 +47,7 @@ Public Sub resizeControls(ByRef thisForm As Form, ByRef m_ControlPositions() As 
                     Ctrl.Left = x_scale * .Left
                     Ctrl.Top = y_scale * .Top
                     Ctrl.Width = x_scale * .Width
-                    Ctrl.Height = Ctrl.Width
+                    Ctrl.Height = Ctrl.Width ' always square in our case
                     
                     Ctrl.Refresh
                 Else
@@ -59,7 +59,7 @@ Public Sub resizeControls(ByRef thisForm As Form, ByRef m_ControlPositions() As 
                         Ctrl.Height = y_scale * .Height
                     End If
                     On Error Resume Next
-                    Ctrl.Font.Size = y_scale * .FontSize
+                    Ctrl.Font.Size = y_scale * formFontSize
                     Ctrl.Refresh
                     On Error GoTo 0
                 End If
@@ -126,3 +126,4 @@ SaveSizes_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure SaveSizes of Form formSoftwareList"
 End Sub
+

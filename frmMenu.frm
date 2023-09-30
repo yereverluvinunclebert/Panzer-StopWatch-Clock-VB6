@@ -67,7 +67,7 @@ Begin VB.Form menuForm
       Begin VB.Menu blank4 
          Caption         =   ""
       End
-      Begin VB.Menu menuRestart 
+      Begin VB.Menu menuReload 
          Caption         =   "Reload Widget (F5)"
       End
       Begin VB.Menu mnuEditWidget 
@@ -129,24 +129,24 @@ End Sub
 
 
 '---------------------------------------------------------------------------------------
-' Procedure : menuRestart_Click
+' Procedure : menuReload_Click
 ' Author    : beededea
 ' Date      : 03/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub menuRestart_Click()
+Private Sub menuReload_Click()
 
-    On Error GoTo menuRestart_Click_Error
+    On Error GoTo menuReload_Click_Error
    
     Call reloadWidget
 
     On Error GoTo 0
     Exit Sub
 
-menuRestart_Click_Error:
+menuReload_Click_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure menuRestart_Click of Form menuForm"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure menuReload_Click of Form menuForm"
 End Sub
 
       
@@ -421,12 +421,15 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Public Sub mnuFacebook_Click()
-    Dim answer As VbMsgBoxResult
-
+    Dim answer As VbMsgBoxResult: answer = vbNo
+    Dim answerMsg As String: answerMsg = vbNullString
+    
     On Error GoTo mnuFacebook_Click_Error
     '''If debugflg = 1  Then msgBox "%" & "mnuFacebook_Click"
 
-    answer = MsgBox("Visiting the Facebook chat page - this button opens a browser window and connects to our Facebook chat page. Proceed?", vbExclamation + vbYesNo)
+    answerMsg = "Visiting the Facebook chat page - this button opens a browser window and connects to our Facebook chat page. Proceed?"
+    answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Visit Facebook Request", False)
+    'answer = MsgBox("Visiting the Facebook chat page - this button opens a browser window and connects to our Facebook chat page. Proceed?", vbExclamation + vbYesNo)
     If answer = vbYes Then
         Call ShellExecute(Me.hwnd, "Open", "http://www.facebook.com/profile.php?id=100012278951649", vbNullString, App.Path, 1)
     End If
@@ -441,6 +444,7 @@ End Sub
 
 
 
+
 '---------------------------------------------------------------------------------------
 ' Procedure : mnuLatest_Click
 ' Author    : beededea
@@ -450,13 +454,16 @@ End Sub
 '
 Public Sub mnuLatest_Click()
     Dim answer As VbMsgBoxResult: answer = vbNo
+    Dim answerMsg As String: answerMsg = vbNullString
 
     On Error GoTo mnuLatest_Click_Error
     '''If debugflg = 1  Then msgBox "%" & "mnuLatest_Click"
     
     'MsgBox "The download menu option is not yet enabled."
 
-    answer = MsgBox("Download latest version of the program from github - this button opens a browser window and connects to the widget download page where you can check and download the latest SETUP.EXE file). Proceed?", vbExclamation + vbYesNo)
+    answerMsg = "Download latest version of the program from github - this button opens a browser window and connects to the widget download page where you can check and download the latest SETUP.EXE file). Proceed?"
+    answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Request to Upgrade", False)
+    'answer = MsgBox("Download latest version of the program from github - this button opens a browser window and connects to the widget download page where you can check and download the latest SETUP.EXE file). Proceed?", vbExclamation + vbYesNo)
 
     If answer = vbYes Then
         Call ShellExecute(Me.hwnd, "Open", "https://github.com/yereverluvinunclebert/Panzer-StopWatch-Clock-VB6", vbNullString, App.Path, 1)
@@ -525,12 +532,15 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub mnuSweets_Click()
-    Dim answer As VbMsgBoxResult
+    Dim answer As VbMsgBoxResult: answer = vbNo
+    Dim answerMsg As String: answerMsg = vbNullString
 
     On Error GoTo mnuSweets_Click_Error
        '''If debugflg = 1  Then msgBox "%" & "mnuSweets_Click"
     
-    answer = MsgBox(" Help support the creation of more widgets like this. Buy me a Kofi! This button opens a browser window and connects to Kofi donation page). Will you be kind and proceed?", vbExclamation + vbYesNo)
+    answerMsg = " Help support the creation of more widgets like this. Buy me a Kofi! This button opens a browser window and connects to Kofi donation page). Will you be kind and proceed?"
+    answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Request to Donate a Kofi", False)
+    'answer = MsgBox(" Help support the creation of more widgets like this. Buy me a Kofi! This button opens a browser window and connects to Kofi donation page). Will you be kind and proceed?", vbExclamation + vbYesNo)
 
     If answer = vbYes Then
         Call ShellExecute(Me.hwnd, "Open", "https://www.ko-fi.com/yereverluvinunclebert", vbNullString, App.Path, 1)
@@ -597,12 +607,15 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub mnuWidgets_Click()
-    Dim answer As VbMsgBoxResult
-
+    Dim answer As VbMsgBoxResult: answer = vbNo
+    Dim answerMsg As String: answerMsg = vbNullString
+    
     On Error GoTo mnuWidgets_Click_Error
     '''If debugflg = 1  Then msgBox "%" & "mnuWidgets_Click"
 
-    answer = MsgBox(" This button opens a browser window and connects to the Steampunk widgets page on my site. Do you wish to proceed?", vbExclamation + vbYesNo)
+    answerMsg = " This button opens a browser window and connects to the Steampunk widgets page on my site. Do you wish to proceed?"
+    answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Request to connect to Steampunk widgets", False)
+    'answer = MsgBox(" This button opens a browser window and connects to the Steampunk widgets page on my site. Do you wish to proceed?", vbExclamation + vbYesNo)
 
     If answer = vbYes Then
         Call ShellExecute(Me.hwnd, "Open", "https://www.deviantart.com/yereverluvinuncleber/gallery/59981269/yahoo-widgets", vbNullString, App.Path, 1)

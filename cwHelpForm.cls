@@ -49,7 +49,7 @@ Private Sub Class_Initialize()
 
     helpxo = 0
     helpyo = 0
-    opacity = 0
+    'opacity = 0
     show = False
 
     Set W = Cairo.WidgetBase '<- this is required in each cwImplementation...
@@ -74,7 +74,7 @@ Public Property Get Widgets() As cWidgets:  Set Widgets = W.Widgets: End Propert
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub W_MouseDown(Button As Integer, shift As Integer, ByVal X As Single, ByVal Y As Single)
+Private Sub W_MouseDown(Button As Integer, Shift As Integer, ByVal x As Single, ByVal Y As Single)
    On Error GoTo W_MouseDown_Error
    
     Dim fileToPlay As String: fileToPlay = vbNullString

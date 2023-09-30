@@ -111,6 +111,12 @@ Private yesNoReturnValue As Integer
 Private formMsgContext As String
 Private formShowAgainChkBox As Boolean
 
+'Private lastFormHeight As Long
+
+Private msgBoxAdynamicSizingFlg As Boolean
+Private Const cMsgBoxAFormHeight As Long = 2565
+Private Const cMsgBoxAFormWidth  As Long = 11055
+
 '---------------------------------------------------------------------------------------
 ' Property : btnButtonTwo_Click
 ' Author    : beededea
@@ -167,7 +173,7 @@ Public Sub Display()
 
     Dim intShow As Integer
     
-   On Error GoTo Display_Error
+    On Error GoTo Display_Error
 
     If formShowAgainChkBox = True Then
     
@@ -207,11 +213,16 @@ Public Property Let propMessage(ByVal strMessage As String)
     lblMessage.Caption = strMessage
     
     ' Expand the form and move the other controls if the message is too long to show.
+      
     intDiff = lblMessage.Height - mintLabelHeight
-    Me.Height = Me.Height + intDiff
     
-    fraMessage.Height = fraMessage.Height + intDiff
+    If PzGDpiAwareness = "1" Then
+        Me.Height = 4000
+    Else
+        Me.Height = Me.Height + intDiff
+    End If
 
+    fraMessage.Height = fraMessage.Height + intDiff
     fraPicVB.Top = fraPicVB.Top + (intDiff / 2)
         
     chkShowAgain.Top = chkShowAgain.Top + intDiff
@@ -341,15 +352,7 @@ Public Property Let propButtonVal(ByVal buttonVal As Integer)
         End If
     End If
 
-    If buttonVal = 2 Then 'vbAbortRetryIgnore 2
-        btnButtonOne.Visible = True
-        btnButtonTwo.Visible = True
-        'btnButtonThree.Visible = True
-        btnButtonOne.Caption = "Abort"
-        btnButtonOne.Caption = "Retry"
-        'btnButtonThree.Caption = "Ignore"
-        picVBQuestion.Visible = True
-    End If
+
     If buttonVal = 0 Then '    vbOKOnly 0
         picVBInformation.Visible = True
         btnButtonOne.Visible = True
@@ -364,12 +367,14 @@ Public Property Let propButtonVal(ByVal buttonVal As Integer)
         btnButtonTwo.Caption = "Cancel"
         picVBQuestion.Visible = True
     End If
-    If buttonVal = 2 Then '    vbCancel 2
-        btnButtonOne.Visible = False
+    If buttonVal = 2 Then 'vbAbortRetryIgnore 2
+        btnButtonOne.Visible = True
         btnButtonTwo.Visible = True
-        btnButtonOne.Caption = ""
-        btnButtonTwo.Caption = "Cancel"
-        picVBInformation.Visible = True
+        'btnButtonThree.Visible = True
+        btnButtonOne.Caption = "Abort"
+        btnButtonOne.Caption = "Retry"
+        'btnButtonThree.Caption = "Ignore"
+        picVBQuestion.Visible = True
     End If
     If buttonVal = 3 Then '    vbYesNoCancel 3
         btnButtonOne.Visible = True
@@ -394,7 +399,20 @@ Public Property Let propButtonVal(ByVal buttonVal As Integer)
         btnButtonTwo.Caption = "Cancel"
         picVBQuestion.Visible = True
     End If
-
+    If buttonVal = 6 Then '    vbYes 6
+        'btnButtonOne.Visible = True
+        btnButtonTwo.Visible = True
+        btnButtonOne.Caption = ""
+        btnButtonTwo.Caption = "Yes"
+        picVBQuestion.Visible = True
+    End If
+    If buttonVal = 7 Then '    vbNo 7
+        'btnButtonOne.Visible = True
+        btnButtonTwo.Visible = True
+        btnButtonOne.Caption = ""
+        btnButtonTwo.Caption = "No"
+        picVBQuestion.Visible = True
+    End If
 
    On Error GoTo 0
    Exit Property
@@ -428,6 +446,8 @@ propReturnedValue_Error:
 End Property
 
 
+
+
 '---------------------------------------------------------------------------------------
 ' Procedure : Form_Load
 ' Author    : beededea
@@ -439,23 +459,34 @@ Private Sub Form_Load()
 
     Dim Ctrl As Control
 
-   On Error GoTo Form_Load_Error
+    On Error GoTo Form_Load_Error
 
     mintLabelHeight = lblMessage.Height
     
-    ' save the initial positions of ALL the controls on the msgbox form
-    Call SaveSizes(Me, msgBoxAControlPositions(), msgBoxACurrentWidth, msgBoxACurrentHeight)
-
-    frmMessage.Width = 6500
-    frmMessage.Height = 4500
+    If PzGDpiAwareness = "1" Then
+        msgBoxAdynamicSizingFlg = True
+    End If
+    
+    msgBoxACurrentWidth = cMsgBoxAFormWidth
+    msgBoxACurrentHeight = cMsgBoxAFormHeight
+    
+    If PzGDpiAwareness = "1" Then
+        ' save the initial positions of ALL the controls on the msgbox form
+        Call SaveSizes(Me, msgBoxAControlPositions(), msgBoxACurrentWidth, msgBoxACurrentHeight)
+    End If
         
     ' .TBD DAEB 05/05/2021 frmMessage.frm Added the font mod. here instead of within the changeFont tool
     '                       as each instance of the form is new, the font modification must be here.
     For Each Ctrl In Controls
          If (TypeOf Ctrl Is CommandButton) Or (TypeOf Ctrl Is textBox) Or (TypeOf Ctrl Is FileListBox) Or (TypeOf Ctrl Is Label) Or (TypeOf Ctrl Is ComboBox) Or (TypeOf Ctrl Is CheckBox) Or (TypeOf Ctrl Is OptionButton) Or (TypeOf Ctrl Is Frame) Or (TypeOf Ctrl Is ListBox) Then
-           If PzGPrefsFont <> "" Then Ctrl.Font.Name = PzGPrefsFont
-           If Val(Abs(PzGPrefsFontSize)) > 0 Then Ctrl.Font.Size = Val(Abs(PzGPrefsFontSize))
-                       'Ctrl.Font.Italic = CBool(SDSuppliedFontItalics) TBD
+            If PzGPrefsFont <> "" Then Ctrl.Font.Name = PzGPrefsFont
+           
+            If PzGDpiAwareness = "1" Then
+                If Val(Abs(PzGPrefsFontSizeHighDPI)) > 0 Then Ctrl.Font.Size = Val(Abs(PzGPrefsFontSizeHighDPI))
+            Else
+                If Val(Abs(PzGPrefsFontSizeLowDPI)) > 0 Then Ctrl.Font.Size = Val(Abs(PzGPrefsFontSizeLowDPI))
+            End If
+            'Ctrl.Font.Italic = CBool(SDSuppliedFontItalics) TBD
            'If suppliedStyle <> "" Then Ctrl.Font.Style = suppliedStyle
         End If
     Next
@@ -479,9 +510,36 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub Form_Resize()
-   On Error GoTo Form_Resize_Error
+    Dim currentFont As Integer: currentFont = 0
+    Dim ratio As Double: ratio = 0
+    
+    On Error GoTo Form_Resize_Error
+    
+    If WindowState = vbMinimized Then Exit Sub
 
-        Call resizeControls(Me, msgBoxAControlPositions(), msgBoxACurrentWidth, msgBoxACurrentHeight)
+    ratio = cMsgBoxAFormHeight / cMsgBoxAFormWidth
+    If PzGDpiAwareness = "1" Then
+        currentFont = PzGPrefsFontSizeHighDPI
+    Else
+        currentFont = PzGPrefsFontSizeLowDPI
+    End If
+    
+    If msgBoxAdynamicSizingFlg = True Then
+
+        Call resizeControls(Me, msgBoxAControlPositions(), msgBoxACurrentWidth, msgBoxACurrentHeight, currentFont)
+        
+        Me.Width = Me.Height / ratio ' maintain the aspect ratio
+
+        'Call loadHigherResImages
+    Else
+        If Me.WindowState = 0 Then
+            If Me.Width > 9090 Then Me.Width = 9090
+            If Me.Width < 6105 Then Me.Width = 6105
+            'If lastFormHeight <> 0 Then Me.Height = lastFormHeight
+        End If
+    End If
+    
+    'Call resizeControls(Me, msgBoxAControlPositions(), msgBoxACurrentWidth, msgBoxACurrentHeight, currentFont)
 
    On Error GoTo 0
    Exit Sub
@@ -495,3 +553,4 @@ End Sub
 Private Sub picVBInformation_Click()
 
 End Sub
+
