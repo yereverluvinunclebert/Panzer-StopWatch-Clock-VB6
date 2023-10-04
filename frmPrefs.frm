@@ -14,6 +14,152 @@ Begin VB.Form panzerPrefs
    ScaleWidth      =   8955
    StartUpPosition =   3  'Windows Default
    Visible         =   0   'False
+   Begin VB.Frame fraFonts 
+      Caption         =   "Fonts"
+      Height          =   4305
+      Left            =   240
+      TabIndex        =   9
+      Top             =   1230
+      Width           =   7335
+      Begin VB.Frame fraFontsInner 
+         BorderStyle     =   0  'None
+         Height          =   3885
+         Left            =   765
+         TabIndex        =   26
+         Top             =   285
+         Width           =   6105
+         Begin VB.CommandButton btnResetMessages 
+            Caption         =   "Reset"
+            Height          =   300
+            Left            =   1635
+            Style           =   1  'Graphical
+            TabIndex        =   166
+            Top             =   3480
+            Width           =   885
+         End
+         Begin VB.TextBox txtPrefsFontCurrentSize 
+            Height          =   315
+            Left            =   4125
+            Locked          =   -1  'True
+            TabIndex        =   133
+            ToolTipText     =   "Disabled for manual input. Shows the current font size when form resizing is enabled."
+            Top             =   1020
+            Visible         =   0   'False
+            Width           =   600
+         End
+         Begin VB.TextBox txtPrefsFontSize 
+            Height          =   315
+            Left            =   1635
+            Locked          =   -1  'True
+            TabIndex        =   29
+            Text            =   "8"
+            ToolTipText     =   "Disabled for manual input. Choose a font size using the font selector to be used within this preferences window only"
+            Top             =   1020
+            Width           =   510
+         End
+         Begin VB.CommandButton btnPrefsFont 
+            Caption         =   "Font"
+            Height          =   300
+            Left            =   4950
+            Style           =   1  'Graphical
+            TabIndex        =   28
+            ToolTipText     =   "The Font Selector."
+            Top             =   90
+            Width           =   585
+         End
+         Begin VB.TextBox txtPrefsFont 
+            Height          =   315
+            Left            =   1635
+            Locked          =   -1  'True
+            TabIndex        =   27
+            Text            =   "Times New Roman"
+            ToolTipText     =   "Disabled for manual input. Choose a font via the font selector to be used only for this preferences window"
+            Top             =   90
+            Width           =   3285
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   "Reset Pop ups :"
+            Height          =   300
+            Index           =   1
+            Left            =   360
+            TabIndex        =   168
+            Tag             =   "lblPrefsFont"
+            Top             =   3525
+            Width           =   1470
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   "Hidden message boxes can be reactivated by pressing this reset button."
+            Height          =   480
+            Index           =   4
+            Left            =   2625
+            TabIndex        =   167
+            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
+            Top             =   3420
+            Width           =   3360
+         End
+         Begin VB.Label lblCurrentFontsTab 
+            Caption         =   "Resized Font"
+            Height          =   315
+            Left            =   4875
+            TabIndex        =   134
+            ToolTipText     =   "Disabled for manual input. Shows the current font size when form resizing is enabled."
+            Top             =   1065
+            Visible         =   0   'False
+            Width           =   2400
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   $"frmPrefs.frx":385D2
+            Height          =   2265
+            Index           =   0
+            Left            =   1665
+            TabIndex        =   98
+            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
+            Top             =   1470
+            Width           =   4200
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   "The chosen font size *"
+            Height          =   480
+            Index           =   7
+            Left            =   2295
+            TabIndex        =   33
+            ToolTipText     =   "Choose a font size that fits the text boxes"
+            Top             =   1050
+            Width           =   2400
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   "Base Font Size :"
+            Height          =   330
+            Index           =   3
+            Left            =   300
+            TabIndex        =   32
+            Tag             =   "lblPrefsFontSize"
+            Top             =   1050
+            Width           =   1350
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   "Config Window Font:"
+            Height          =   300
+            Index           =   2
+            Left            =   15
+            TabIndex        =   31
+            Tag             =   "lblPrefsFont"
+            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
+            Top             =   120
+            Width           =   1635
+         End
+         Begin VB.Label lblFontsTab 
+            Caption         =   "Choose a font to be used for the text in this preferences window, gauge tooltips and message boxes *"
+            Height          =   480
+            Index           =   6
+            Left            =   1620
+            TabIndex        =   30
+            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
+            Top             =   480
+            Width           =   4035
+         End
+      End
+   End
    Begin VB.Frame fraConfig 
       Caption         =   "Configuration"
       Height          =   7035
@@ -98,7 +244,7 @@ Begin VB.Form panzerPrefs
             SelStart        =   20
          End
          Begin VB.Label lblConfiguration 
-            Caption         =   $"frmPrefs.frx":385D2
+            Caption         =   $"frmPrefs.frx":386AD
             Height          =   660
             Index           =   0
             Left            =   1995
@@ -217,9 +363,9 @@ Begin VB.Form panzerPrefs
          Width           =   6600
          Begin VB.ComboBox cmbTickSwitchPref 
             Height          =   315
-            ItemData        =   "frmPrefs.frx":38677
+            ItemData        =   "frmPrefs.frx":38752
             Left            =   1995
-            List            =   "frmPrefs.frx":38679
+            List            =   "frmPrefs.frx":38754
             Style           =   2  'Dropdown List
             TabIndex        =   161
             Top             =   6720
@@ -267,9 +413,9 @@ Begin VB.Form panzerPrefs
          End
          Begin VB.ComboBox cmbMainGaugeTimeZone 
             Height          =   315
-            ItemData        =   "frmPrefs.frx":3867B
+            ItemData        =   "frmPrefs.frx":38756
             Left            =   2010
-            List            =   "frmPrefs.frx":3867D
+            List            =   "frmPrefs.frx":38758
             Style           =   2  'Dropdown List
             TabIndex        =   145
             Top             =   2070
@@ -277,9 +423,9 @@ Begin VB.Form panzerPrefs
          End
          Begin VB.ComboBox cmbClockFaceSwitchPref 
             Height          =   315
-            ItemData        =   "frmPrefs.frx":3867F
+            ItemData        =   "frmPrefs.frx":3875A
             Left            =   1995
-            List            =   "frmPrefs.frx":38681
+            List            =   "frmPrefs.frx":3875C
             Style           =   2  'Dropdown List
             TabIndex        =   142
             Top             =   1095
@@ -322,7 +468,7 @@ Begin VB.Form panzerPrefs
             Width           =   3810
          End
          Begin VB.Label lblGeneral 
-            Caption         =   $"frmPrefs.frx":38683
+            Caption         =   $"frmPrefs.frx":3875E
             Height          =   660
             Index           =   12
             Left            =   2010
@@ -480,7 +626,7 @@ Begin VB.Form panzerPrefs
                Width           =   720
             End
             Begin VB.Label lblWindowLevel 
-               Caption         =   $"frmPrefs.frx":3871A
+               Caption         =   $"frmPrefs.frx":387F5
                Height          =   975
                Index           =   1
                Left            =   855
@@ -787,7 +933,7 @@ Begin VB.Form panzerPrefs
             Width           =   2205
          End
          Begin VB.Label lblPosition 
-            Caption         =   $"frmPrefs.frx":387BD
+            Caption         =   $"frmPrefs.frx":38898
             Height          =   3435
             Index           =   12
             Left            =   5145
@@ -807,7 +953,7 @@ Begin VB.Form panzerPrefs
             Width           =   2040
          End
          Begin VB.Label lblPosition 
-            Caption         =   $"frmPrefs.frx":3898F
+            Caption         =   $"frmPrefs.frx":38A6A
             Height          =   705
             Index           =   10
             Left            =   2250
@@ -827,7 +973,7 @@ Begin VB.Form panzerPrefs
             Width           =   2355
          End
          Begin VB.Label lblPosition 
-            Caption         =   $"frmPrefs.frx":38A2E
+            Caption         =   $"frmPrefs.frx":38B09
             Height          =   3045
             Index           =   6
             Left            =   2265
@@ -889,7 +1035,7 @@ Begin VB.Form panzerPrefs
                Width           =   3660
             End
             Begin VB.Label lblGitHub 
-               Caption         =   $"frmPrefs.frx":38BD3
+               Caption         =   $"frmPrefs.frx":38CAE
                ForeColor       =   &H8000000D&
                Height          =   840
                Left            =   1560
@@ -900,7 +1046,7 @@ Begin VB.Form panzerPrefs
                WordWrap        =   -1  'True
             End
             Begin VB.Label lblDebug 
-               Caption         =   $"frmPrefs.frx":38C72
+               Caption         =   $"frmPrefs.frx":38D4D
                Height          =   930
                Index           =   9
                Left            =   1545
@@ -1015,123 +1161,6 @@ Begin VB.Form panzerPrefs
          End
       End
    End
-   Begin VB.Frame fraFonts 
-      Caption         =   "Fonts"
-      Height          =   4245
-      Left            =   240
-      TabIndex        =   9
-      Top             =   1230
-      Width           =   7335
-      Begin VB.Frame fraFontsInner 
-         BorderStyle     =   0  'None
-         Height          =   3750
-         Left            =   765
-         TabIndex        =   26
-         Top             =   285
-         Width           =   6105
-         Begin VB.TextBox txtPrefsFontCurrentSize 
-            Height          =   315
-            Left            =   4125
-            Locked          =   -1  'True
-            TabIndex        =   133
-            ToolTipText     =   "Disabled for manual input. Shows the current font size when form resizing is enabled."
-            Top             =   1065
-            Visible         =   0   'False
-            Width           =   600
-         End
-         Begin VB.TextBox txtPrefsFontSize 
-            Height          =   315
-            Left            =   1635
-            Locked          =   -1  'True
-            TabIndex        =   29
-            Text            =   "8"
-            ToolTipText     =   "Disabled for manual input. Choose a font size using the font selector to be used within this preferences window only"
-            Top             =   1065
-            Width           =   510
-         End
-         Begin VB.CommandButton btnPrefsFont 
-            Caption         =   "Font"
-            Height          =   300
-            Left            =   4950
-            Style           =   1  'Graphical
-            TabIndex        =   28
-            ToolTipText     =   "The Font Selector."
-            Top             =   90
-            Width           =   585
-         End
-         Begin VB.TextBox txtPrefsFont 
-            Height          =   315
-            Left            =   1635
-            Locked          =   -1  'True
-            TabIndex        =   27
-            Text            =   "Times New Roman"
-            ToolTipText     =   "Disabled for manual input. Choose a font via the font selector to be used only for this preferences window"
-            Top             =   90
-            Width           =   3285
-         End
-         Begin VB.Label lblCurrentFontsTab 
-            Caption         =   "Resized Font"
-            Height          =   315
-            Left            =   4875
-            TabIndex        =   134
-            ToolTipText     =   "Disabled for manual input. Shows the current font size when form resizing is enabled."
-            Top             =   1110
-            Visible         =   0   'False
-            Width           =   2400
-         End
-         Begin VB.Label lblFontsTab 
-            Caption         =   $"frmPrefs.frx":38D16
-            Height          =   2265
-            Index           =   0
-            Left            =   1665
-            TabIndex        =   98
-            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
-            Top             =   1605
-            Width           =   3990
-         End
-         Begin VB.Label lblFontsTab 
-            Caption         =   "The chosen font size *"
-            Height          =   480
-            Index           =   7
-            Left            =   2295
-            TabIndex        =   33
-            ToolTipText     =   "Choose a font size that fits the text boxes"
-            Top             =   1095
-            Width           =   2400
-         End
-         Begin VB.Label lblFontsTab 
-            Caption         =   "Base Font Size :"
-            Height          =   330
-            Index           =   3
-            Left            =   300
-            TabIndex        =   32
-            Tag             =   "lblPrefsFontSize"
-            Top             =   1095
-            Width           =   1350
-         End
-         Begin VB.Label lblFontsTab 
-            Caption         =   "Config Window Font:"
-            Height          =   300
-            Index           =   2
-            Left            =   15
-            TabIndex        =   31
-            Tag             =   "lblPrefsFont"
-            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
-            Top             =   120
-            Width           =   1635
-         End
-         Begin VB.Label lblFontsTab 
-            Caption         =   "Choose a font to be used for the text in this preferences window, gauge tooltips and message boxes *"
-            Height          =   480
-            Index           =   6
-            Left            =   1620
-            TabIndex        =   30
-            ToolTipText     =   "We suggest Centurion Light SF at 8pt - which you will find in the FCW program folder"
-            Top             =   480
-            Width           =   4035
-         End
-      End
-   End
    Begin VB.Frame fraSounds 
       Caption         =   "Sounds"
       Height          =   1965
@@ -1180,7 +1209,7 @@ Begin VB.Form panzerPrefs
    End
    Begin VB.Timer positionTimer 
       Enabled         =   0   'False
-      Interval        =   10000
+      Interval        =   5000
       Left            =   1155
       Top             =   9705
    End
@@ -2046,6 +2075,51 @@ Private topIconWidth As Long
 
 
 '---------------------------------------------------------------------------------------
+' Procedure : btnResetMessages_Click
+' Author    : beededea
+' Date      : 01/10/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub btnResetMessages_Click()
+
+    On Error GoTo btnResetMessages_Click_Error
+        
+    ' Clear all the message box "show again" entries in the registry
+    Call clearAllMessageBoxRegistryEntries
+    
+    MsgBox "Message boxes fully reset, confirmation pop-ups will continue as normal."
+
+    On Error GoTo 0
+    Exit Sub
+
+btnResetMessages_Click_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnResetMessages_Click of Form panzerPrefs"
+End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : btnResetMessages_MouseMove
+' Author    : beededea
+' Date      : 01/10/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub btnResetMessages_MouseMove(Button As Integer, Shift As Integer, x As Single, Y As Single)
+    On Error GoTo btnResetMessages_MouseMove_Error
+
+    If PzGEnableBalloonTooltips = "1" Then CreateToolTip btnResetMessages.hwnd, "The various pop-up messages that this program generates can be manually hidden. This button restores them to their original visible state.", _
+                  TTIconInfo, "Help on the message reset button", , , , True
+
+    On Error GoTo 0
+    Exit Sub
+
+btnResetMessages_MouseMove_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure btnResetMessages_MouseMove of Form panzerPrefs"
+End Sub
+
+'---------------------------------------------------------------------------------------
 ' Procedure : chkDpiAwareness_Click
 ' Author    : beededea
 ' Date      : 14/08/2023
@@ -2082,7 +2156,7 @@ Private Sub chkDpiAwareness_Click()
             Exit Sub
         Else
 
-            sPutINISetting "Software\PzJustClock", "dpiAwareness", PzGDpiAwareness, PzGSettingsFile
+            sPutINISetting "Software\PzStopwatch", "dpiAwareness", PzGDpiAwareness, PzGSettingsFile
             'Call reloadWidget ' this is insufficient, image controls still fail to resize and autoscale correctly
             Call hardRestart
         End If
@@ -2187,8 +2261,13 @@ Private Sub Form_Load()
     startupFlg = True ' this is used to prevent some control initialisations from running code at startup
     lastFormHeight = 0
     topIconWidth = 600 '40 pixels
-    PzGFormXPosTwips = ""
-    PzGFormYPosTwips = ""
+
+    PzGFormHighDpiXPosTwips = ""
+    PzGFormHighDpiYPosTwips = ""
+    
+    PzGFormLowDpiXPosTwips = ""
+    PzGFormLowDpiYPosTwips = ""
+    
     PzGPrefsLoadedFlg = True ' this is a variable tested by an added form property to indicate whether the form is loaded or not
     PzGWindowLevelWasChanged = False
     prefsFormHeight = 16450
@@ -3087,8 +3166,8 @@ Private Sub btnSave_Click()
         sPutINISetting "Software\PzStopwatch", "widgetPortrait", PzGWidgetPortrait, PzGSettingsFile
 
         sPutINISetting "Software\PzStopwatch", "prefsFont", PzGPrefsFont, PzGSettingsFile
-        sPutINISetting "Software\PzJustClock", "prefsFontSizeHighDPI", PzGPrefsFontSizeHighDPI, PzGSettingsFile
-        sPutINISetting "Software\PzJustClock", "prefsFontSizeLowDPI", PzGPrefsFontSizeLowDPI, PzGSettingsFile
+        sPutINISetting "Software\PzStopwatch", "prefsFontSizeHighDPI", PzGPrefsFontSizeHighDPI, PzGSettingsFile
+        sPutINISetting "Software\PzStopwatch", "prefsFontSizeLowDPI", PzGPrefsFontSizeLowDPI, PzGSettingsFile
         sPutINISetting "Software\PzStopwatch", "prefsFontItalics", PzGPrefsFontItalics, PzGSettingsFile
         sPutINISetting "Software\PzStopwatch", "prefsFontColour", PzGPrefsFontColour, PzGSettingsFile
 
@@ -3111,8 +3190,12 @@ Private Sub btnSave_Click()
         sPutINISetting "Software\PzStopwatch", "openFile", PzGOpenFile, PzGSettingsFile
         sPutINISetting "Software\PzStopwatch", "defaultEditor", PzGDefaultEditor, PzGSettingsFile
         
-        sPutINISetting "Software\PzStopwatch", "maximiseFormX", PzGMaximiseFormX, PzGSettingsFile
-        sPutINISetting "Software\PzStopwatch", "maximiseFormY", PzGMaximiseFormY, PzGSettingsFile
+        
+        sPutINISetting "Software\PzStopwatch", "clockHighDpiXPos", PzGClockHighDpiXPos, PzGSettingsFile
+        sPutINISetting "Software\PzStopwatch", "clockHighDpiYPos", PzGClockHighDpiYPos, PzGSettingsFile
+        
+        sPutINISetting "Software\PzStopwatch", "clockLowDpiXPos", PzGClockLowDpiXPos, PzGSettingsFile
+        sPutINISetting "Software\PzStopwatch", "clockLowDpiYPos", PzGClockLowDpiYPos, PzGSettingsFile
 
         'save the values from the Text Items
 
@@ -3247,8 +3330,8 @@ Private Sub btnPrefsFont_Click()
 
     If fFExists(PzGSettingsFile) Then ' does the tool's own settings.ini exist?
         sPutINISetting "Software\PzStopwatch", "prefsFont", PzGPrefsFont, PzGSettingsFile
-        sPutINISetting "Software\PzJustClock", "prefsFontSizeHighDPI", PzGPrefsFontSizeHighDPI, PzGSettingsFile
-        sPutINISetting "Software\PzJustClock", "prefsFontSizeLowDPI", PzGPrefsFontSizeLowDPI, PzGSettingsFile
+        sPutINISetting "Software\PzStopwatch", "prefsFontSizeHighDPI", PzGPrefsFontSizeHighDPI, PzGSettingsFile
+        sPutINISetting "Software\PzStopwatch", "prefsFontSizeLowDPI", PzGPrefsFontSizeLowDPI, PzGSettingsFile
         sPutINISetting "Software\PzStopwatch", "prefsFontItalics", PzGPrefsFontItalics, PzGSettingsFile
         sPutINISetting "Software\PzStopwatch", "PrefsFontColour", PzGPrefsFontColour, PzGSettingsFile
     End If
@@ -3351,13 +3434,23 @@ Private Sub adjustPrefsControls()
         If aspectRatio = "landscape" Then
 '            txtLandscapeHoffset.Text = fAlpha.gaugeForm.Left
 '            txtLandscapeVoffset.Text = fAlpha.gaugeForm.Top
-            txtLandscapeHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGMaximiseFormX & "px"
-            txtLandscapeVoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGMaximiseFormY & "px"
+            If PzGDpiAwareness = "1" Then
+                txtLandscapeHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGClockHighDpiXPos & "px"
+                txtLandscapeVoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGClockHighDpiYPos & "px"
+            Else
+                txtLandscapeHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGClockLowDpiXPos & "px"
+                txtLandscapeVoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGClockLowDpiYPos & "px"
+            End If
         Else
 '            txtPortraitHoffset.Text = fAlpha.gaugeForm.Left
 '            txtPortraitYoffset.Text = fAlpha.gaugeForm.Top
-            txtPortraitHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGMaximiseFormX & "px"
-            txtPortraitYoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGMaximiseFormY & "px"
+            If PzGDpiAwareness = "1" Then
+                txtPortraitHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGClockHighDpiXPos & "px"
+                txtPortraitYoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGClockHighDpiYPos & "px"
+            Else
+                txtPortraitHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGClockLowDpiXPos & "px"
+                txtPortraitYoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGClockLowDpiYPos & "px"
+            End If
         End If
     End If
     
@@ -5056,11 +5149,11 @@ Private Sub setframeHeights()
         ' save the initial positions of ALL the controls on the prefs form
         Call SaveSizes(panzerPrefs, prefsControlPositions(), prefsCurrentWidth, prefsCurrentHeight)
     Else
-        fraGeneral.Height = 9278
+        fraGeneral.Height = 7757
         fraConfig.Height = 6632
         fraSounds.Height = 1992
         fraPosition.Height = 7544
-        fraFonts.Height = 4304
+        fraFonts.Height = 4481
         fraWindow.Height = 6388
         fraDevelopment.Height = 6297
         fraAbout.Height = 8700

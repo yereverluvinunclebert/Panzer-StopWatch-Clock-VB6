@@ -256,8 +256,12 @@ Private Sub initialiseGlobalVars()
     ' general storage variables declared
     PzGSettingsDir = vbNullString
     PzGSettingsFile = vbNullString
-    PzGMaximiseFormX = vbNullString
-    PzGMaximiseFormY = vbNullString
+    PzGClockHighDpiXPos = vbNullString
+    PzGClockHighDpiYPos = vbNullString
+    
+    PzGClockLowDpiXPos = vbNullString
+    PzGClockLowDpiYPos = vbNullString
+    
     PzGLastSelectedTab = vbNullString
     PzGSkinTheme = vbNullString
     
@@ -544,8 +548,11 @@ Public Sub readSettingsFile(ByVal location As String, ByVal PzGSettingsFile As S
         PzGDefaultEditor = fGetINISetting(location, "defaultEditor", PzGSettingsFile)
         
         ' other
-        PzGMaximiseFormX = fGetINISetting("Software\PzStopwatch", "maximiseFormX", PzGSettingsFile)
-        PzGMaximiseFormY = fGetINISetting("Software\PzStopwatch", "maximiseFormY", PzGSettingsFile)
+        PzGClockHighDpiXPos = fGetINISetting("Software\PzStopwatch", "clockHighDpiXPos", PzGSettingsFile)
+        PzGClockHighDpiYPos = fGetINISetting("Software\PzStopwatch", "clockHighDpiYPos", PzGSettingsFile)
+        
+        PzGClockLowDpiXPos = fGetINISetting("Software\PzStopwatch", "clockLowDpiXPos", PzGSettingsFile)
+        PzGClockLowDpiYPos = fGetINISetting("Software\PzStopwatch", "clockLowDpiYPos", PzGSettingsFile)
         PzGLastSelectedTab = fGetINISetting(location, "lastSelectedTab", PzGSettingsFile)
         PzGSkinTheme = fGetINISetting(location, "skinTheme", PzGSettingsFile)
         

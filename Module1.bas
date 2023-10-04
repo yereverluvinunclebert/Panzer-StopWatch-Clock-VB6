@@ -343,15 +343,22 @@ Public PzGFirstTimeRun  As String
 ' General storage variables declared
 Public PzGSettingsDir As String
 Public PzGSettingsFile As String
-Public PzGMaximiseFormX As String
-Public PzGMaximiseFormY As String
+Public PzGClockHighDpiXPos As String
+Public PzGClockHighDpiYPos As String
+Public PzGClockLowDpiXPos As String
+Public PzGClockLowDpiYPos As String
 Public PzGLastSelectedTab As String
 Public PzGSkinTheme As String
 Public PzGUnhide As String
 
+
 ' vars stored for positioning the prefs form
-Public PzGFormXPosTwips As String
-Public PzGFormYPosTwips As String
+Public PzGFormHighDpiXPosTwips As String
+Public PzGFormHighDpiYPosTwips As String
+
+Public PzGFormLowDpiXPosTwips As String
+Public PzGFormLowDpiYPosTwips As String
+
 '------------------------------------------------------ ENDS
 
 
@@ -1658,8 +1665,13 @@ Public Sub makeVisibleFormElements()
 '     PzGMaximiseFormX = fGetINISetting("Software\PzStopwatch", "maximiseFormX", PzGSettingsFile)
 '     PzGMaximiseFormY = fGetINISetting("Software\PzStopwatch", "maximiseFormY", PzGSettingsFile)
 
-    fAlpha.gaugeForm.Left = Val(PzGMaximiseFormX)
-    fAlpha.gaugeForm.Top = Val(PzGMaximiseFormY)
+    If PzGDpiAwareness = "1" Then
+        fAlpha.gaugeForm.Left = Val(PzGClockHighDpiXPos)
+        fAlpha.gaugeForm.Top = Val(PzGClockHighDpiYPos)
+    Else
+        fAlpha.gaugeForm.Left = Val(PzGClockLowDpiXPos)
+        fAlpha.gaugeForm.Top = Val(PzGClockLowDpiYPos)
+    End If
     
     ' The RC forms are measured in pixels, do remember that...
 
@@ -2036,12 +2048,19 @@ Public Sub savePosition()
 
    On Error GoTo savePosition_Error
 
-    PzGMaximiseFormX = Str$(fAlpha.gaugeForm.Left) ' saving in pixels
-    PzGMaximiseFormY = Str$(fAlpha.gaugeForm.Top)
+    If PzGDpiAwareness = "1" Then
+        PzGClockHighDpiXPos = Str$(fAlpha.gaugeForm.Left) ' saving in pixels
+        PzGClockHighDpiYPos = Str$(fAlpha.gaugeForm.Top)
+        sPutINISetting "Software\PzStopwatch", "clockHighDpiXPos", PzGClockHighDpiXPos, PzGSettingsFile
+        sPutINISetting "Software\PzStopwatch", "clockHighDpiYPos", PzGClockHighDpiYPos, PzGSettingsFile
+    Else
+        PzGClockLowDpiXPos = Str$(fAlpha.gaugeForm.Left) ' saving in pixels
+        PzGClockLowDpiYPos = Str$(fAlpha.gaugeForm.Top)
+        sPutINISetting "Software\PzStopwatch", "clockLowDpiXPos", PzGClockLowDpiXPos, PzGSettingsFile
+        sPutINISetting "Software\PzStopwatch", "clockLowDpiYPos", PzGClockLowDpiYPos, PzGSettingsFile
+    End If
+    
     PzGGaugeSize = Str$(fAlpha.gaugeForm.WidgetRoot.Zoom * 100)
-
-    sPutINISetting "Software\PzStopwatch", "maximiseFormX", PzGMaximiseFormX, PzGSettingsFile
-    sPutINISetting "Software\PzStopwatch", "maximiseFormY", PzGMaximiseFormY, PzGSettingsFile
     sPutINISetting "Software\PzStopwatch", "gaugeSize", PzGGaugeSize, PzGSettingsFile
 
    On Error GoTo 0
@@ -2111,20 +2130,38 @@ Public Sub readPrefsPosition()
             
    On Error GoTo readPrefsPosition_Error
 
-    PzGFormXPosTwips = fGetINISetting("Software\PzStopwatch", "formXPos", PzGSettingsFile)
-    PzGFormYPosTwips = fGetINISetting("Software\PzStopwatch", "formYPos", PzGSettingsFile)
-
-    ' if a current location not stored then position to the middle of the screen
-    If PzGFormXPosTwips <> "" Then
-        panzerPrefs.Left = Val(PzGFormXPosTwips)
+    If PzGDpiAwareness = "1" Then
+        PzGFormHighDpiXPosTwips = fGetINISetting("Software\PzStopwatch", "formHighDpiXPosTwips", PzGSettingsFile)
+        PzGFormHighDpiYPosTwips = fGetINISetting("Software\PzStopwatch", "formHighDpiYPosTwips", PzGSettingsFile)
+        
+        ' if a current location not stored then position to the middle of the screen
+        If PzGFormHighDpiXPosTwips <> "" Then
+            panzerPrefs.Left = Val(PzGFormHighDpiXPosTwips)
+        Else
+            panzerPrefs.Left = screenWidthTwips / 2 - panzerPrefs.Width / 2
+        End If
+        
+        If PzGFormHighDpiYPosTwips <> "" Then
+            panzerPrefs.Top = Val(PzGFormHighDpiYPosTwips)
+        Else
+            panzerPrefs.Top = Screen.Height / 2 - panzerPrefs.Height / 2
+        End If
     Else
-        panzerPrefs.Left = screenWidthTwips / 2 - panzerPrefs.Width / 2
-    End If
-
-    If PzGFormYPosTwips <> "" Then
-        panzerPrefs.Top = Val(PzGFormYPosTwips)
-    Else
-        panzerPrefs.Top = Screen.Height / 2 - panzerPrefs.Height / 2
+        PzGFormLowDpiXPosTwips = fGetINISetting("Software\PzStopwatch", "formLowDpiXPosTwips", PzGSettingsFile)
+        PzGFormLowDpiYPosTwips = fGetINISetting("Software\PzStopwatch", "formLowDpiYPosTwips", PzGSettingsFile)
+        
+        ' if a current location not stored then position to the middle of the screen
+        If PzGFormLowDpiXPosTwips <> "" Then
+            panzerPrefs.Left = Val(PzGFormLowDpiXPosTwips)
+        Else
+            panzerPrefs.Left = screenWidthTwips / 2 - panzerPrefs.Width / 2
+        End If
+        
+        If PzGFormLowDpiYPosTwips <> "" Then
+            panzerPrefs.Top = Val(PzGFormLowDpiYPosTwips)
+        Else
+            panzerPrefs.Top = Screen.Height / 2 - panzerPrefs.Height / 2
+        End If
     End If
 
    On Error GoTo 0
@@ -2146,12 +2183,23 @@ Public Sub writePrefsPosition()
    On Error GoTo writePrefsPosition_Error
 
     If panzerPrefs.WindowState = vbNormal Then ' when vbMinimised the value = -48000  !
-        PzGFormXPosTwips = Str$(panzerPrefs.Left)
-        PzGFormYPosTwips = Str$(panzerPrefs.Top)
+        If PzGDpiAwareness = "1" Then
+            PzGFormHighDpiXPosTwips = Str$(panzerPrefs.Left)
+            PzGFormHighDpiYPosTwips = Str$(panzerPrefs.Top)
+            
+            ' now write those params to the toolSettings.ini
+            sPutINISetting "Software\PzStopwatch", "formHighDpiXPosTwips", PzGFormHighDpiXPosTwips, PzGSettingsFile
+            sPutINISetting "Software\PzStopwatch", "formHighDpiYPosTwips", PzGFormHighDpiYPosTwips, PzGSettingsFile
+        Else
+            PzGFormLowDpiXPosTwips = Str$(panzerPrefs.Left)
+            PzGFormLowDpiYPosTwips = Str$(panzerPrefs.Top)
+            
+            ' now write those params to the toolSettings.ini
+            sPutINISetting "Software\PzStopwatch", "formLowDpiXPosTwips", PzGFormLowDpiXPosTwips, PzGSettingsFile
+            sPutINISetting "Software\PzStopwatch", "formLowDpiYPosTwips", PzGFormLowDpiYPosTwips, PzGSettingsFile
+            
+        End If
         
-        ' now write those params to the toolSettings.ini
-        sPutINISetting "Software\PzStopwatch", "formXPos", PzGFormXPosTwips, PzGSettingsFile
-        sPutINISetting "Software\PzStopwatch", "formYPos", PzGFormYPosTwips, PzGSettingsFile
     End If
     
     On Error GoTo 0
@@ -2483,4 +2531,90 @@ Private Function InDebugMode() As Boolean
 InDebugMode_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure InDebugMode of Module Module1"
+End Function
+
+'---------------------------------------------------------------------------------------
+' Procedure : clearAllMessageBoxRegistryEntries
+' Author    : beededea
+' Date      : 11/04/2023
+' Purpose   : Clear all the message box "show again" entries in the registry
+'---------------------------------------------------------------------------------------
+'
+Public Sub clearAllMessageBoxRegistryEntries()
+    On Error GoTo clearAllMessageBoxRegistryEntries_Error
+
+    SaveSetting App.EXEName, "Options", "Show message" & "mnuFacebookClick", 0
+    SaveSetting App.EXEName, "Options", "Show message" & "mnuLatestClick", 0
+    SaveSetting App.EXEName, "Options", "Show message" & "mnuSweetsClick", 0
+    SaveSetting App.EXEName, "Options", "Show message" & "mnuWidgetsClick", 0
+    SaveSetting App.EXEName, "Options", "Show message" & "mnuCoffeeClickEvent", 0
+    SaveSetting App.EXEName, "Options", "Show message" & "mnuSupportClickEvent", 0
+    SaveSetting App.EXEName, "Options", "Show message" & "chkDpiAwarenessRestart", 0
+    SaveSetting App.EXEName, "Options", "Show message" & "chkDpiAwarenessAbnormal", 0
+    SaveSetting App.EXEName, "Options", "Show message" & "chkEnableTooltipsClick", 0
+    SaveSetting App.EXEName, "Options", "Show message" & "lblGitHubDblClick", 0
+    SaveSetting App.EXEName, "Options", "Show message" & "sliOpacityClick", 0
+
+    On Error GoTo 0
+    Exit Sub
+
+clearAllMessageBoxRegistryEntries_Error:
+
+    With Err
+         If .Number <> 0 Then
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure clearAllMessageBoxRegistryEntries of Form dock"
+            Resume Next
+          End If
+    End With
+    
+End Sub
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : determineIconWidth
+' Author    : beededea
+' Date      : 02/10/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Function determineIconWidth(ByRef thisForm As Form, ByVal thisDynamicSizingFlg As Boolean) As Long
+
+    Dim topIconWidth As Long: topIconWidth = 0
+    
+    On Error GoTo determineIconWidth_Error
+    
+    If thisDynamicSizingFlg = False Then
+        'Exit Function
+    End If
+    
+    If thisForm.Width < 10500 Then
+        topIconWidth = 600 '40 pixels
+    End If
+    
+    If thisForm.Width >= 10500 And thisForm.Width < 12000 Then
+        topIconWidth = 730
+    End If
+            
+    If thisForm.Width >= 12000 And thisForm.Width < 13500 Then
+        topIconWidth = 834
+    End If
+            
+    If thisForm.Width >= 13500 And thisForm.Width < 15000 Then
+        topIconWidth = 940
+    End If
+            
+    If thisForm.Width >= 15000 Then
+        topIconWidth = 1010
+    End If
+    'topIconWidth = 2000
+    determineIconWidth = topIconWidth
+    
+    On Error GoTo 0
+    Exit Function
+
+determineIconWidth_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure determineIconWidth of Form panzerPrefs"
+Exit Function
+
 End Function
