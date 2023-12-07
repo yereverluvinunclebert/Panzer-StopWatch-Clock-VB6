@@ -34,6 +34,7 @@ Attribute tmrClock.VB_VarHelpID = -1
 Private HDeg As Double
 Private MDeg As Double
 Private SDeg As Double
+Private Sec As Integer
 Private MsDeg As Double
 
 '------------------------------------------------------ STARTS
@@ -65,6 +66,8 @@ Private mTicking As Boolean ' property Ticking
 Private mSmoothSecondHand As Boolean ' property SmoothSecondHand
 Private mLocked As Boolean ' property Locked
 Private mHidden As Boolean ' property Hidden
+
+Private storeTxtDayNumber As String
 
 '---------------------------------------------------------------------------------------
 ' Procedure : Class_Initialize
@@ -329,7 +332,7 @@ End Property
 '             For this Overlay-Widget alone, we make everything "fully click-through"
 '---------------------------------------------------------------------------------------------
 '
-Private Sub W_HitTest(ByVal x As Single, ByVal Y As Single, HitResultHit As Boolean) 'ensure ClickThrough-behaviour in ImagePixels which are "fully Alpha"
+Private Sub W_HitTest(ByVal x As Single, ByVal y As Single, HitResultHit As Boolean) 'ensure ClickThrough-behaviour in ImagePixels which are "fully Alpha"
    On Error GoTo W_HitTest_Error
 
    HitResultHit = False
@@ -373,7 +376,10 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     W.Refresh
     thisOpacity = (Val(PzGOpacity) / 100) * 0.75
     
+    storeTxtDayNumber = txtDayNumber
     txtDayNumber = Day(DateAdd("m", tzDelta, Now))
+    If storeTxtDayNumber <> txtDayNumber Then textDrawn = False ' trigger a redraw of the day and month within the boxes
+    
     txtMonthNumber = Month(DateAdd("m", tzDelta, Now))
 
     For I = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
@@ -391,8 +397,13 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                     
                     ' draw the date and day in the windows just once to retain opacity
                     If textDrawn = False Then ' has to be here to be underneath  all the hands and only run once
-                        CC.DrawText 260, 105, 200, 200, txtDayNumber, , , 2, True, , thisOpacity
-                        CC.DrawText 461, 309, 200, 200, txtMonthNumber, , , 2, True, , thisOpacity
+                        If PzGClockFaceSwitchPref = "1" Then
+                            CC.DrawText 260, 105, 200, 200, txtDayNumber, , , 2, True, , thisOpacity
+                            CC.DrawText 461, 309, 200, 200, txtMonthNumber, , , 2, True, , thisOpacity
+                        Else
+                            CC.DrawText 187, 212, 200, 200, Str$(Sec), , , 2, True, , thisOpacity
+                        End If
+                            
                         textDrawn = True
                     End If
                     
@@ -457,8 +468,11 @@ Private Sub tmrClock_Timer() 'update the private "Degree-Variables" for Hour-, M
     HDeg = 30 * (Hour(T) Mod 12 + (Minute(T) + tzDelta) / 60)
     MDeg = 6 * ((Minute(T) + tzDelta) + (Second(T) / 60))
 
+    Sec = Second(T)
+
     If mSmoothSecondHand = True Then
-        SDeg = 6 * Second(T)
+
+        SDeg = 6 * Sec
 
         With currentLocaltime
             MsDeg = 6 * (.wMilliseconds / 1000)
@@ -466,8 +480,8 @@ Private Sub tmrClock_Timer() 'update the private "Degree-Variables" for Hour-, M
         
         ' always refresh
     Else
-        If SDeg <> 6 * Second(T) Then
-            SDeg = 6 * Second(T)
+        If SDeg <> 6 * Sec Then
+            SDeg = 6 * Sec
             
             MsDeg = 0
         Else

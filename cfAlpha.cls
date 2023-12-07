@@ -153,7 +153,7 @@ Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As S
                 If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click here to toggle the tick type from once per second to a more fluid, continuous movement.", _
                      TTIconInfo, widgetName & " Tick Button Help", , , , True
             Case "housing/switchfacesbutton"
-                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button is not allocated a function in this particular widget.", _
+                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button switches the face from the standard clock to the stopwatch.", _
                      TTIconInfo, widgetName & " Switch Faces Button Help", , , , True
             Case "housing/stopbutton"
                 If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button stops all animated clock functions for this widget, hand movements &c .", _
@@ -347,6 +347,8 @@ Private Sub switchfacesbutton_mouseDown(ByRef Sender As Object)
         fAlpha.gaugeForm.Widgets("clockface").Widget.Refresh
     End If
     
+    sPutINISetting "Software\PzStopWatch", "clockFaceSwitchPref", PzGClockFaceSwitchPref, PzGSettingsFile
+    
    On Error GoTo 0
    Exit Sub
 
@@ -369,7 +371,6 @@ Private Sub switchfacesbutton_mouseUp(ByRef Sender As Object)
     Sender.Widget.Alpha = Val(PzGOpacity) / 100
     Sender.Widget.Refresh
         
-
     fileToPlay = "till.wav"
     If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
