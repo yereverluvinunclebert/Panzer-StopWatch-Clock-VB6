@@ -2117,6 +2117,12 @@ Private gblAllowSizeChangeFlg As Boolean
 
 
 
+Private Sub cmbClockFaceSwitchPref_Click()
+    If prefsStartupFlg = False Then ' don't run this on startup
+        btnSave.Enabled = True ' enable the save button
+    End If
+End Sub
+
 '---------------------------------------------------------------------------------------
 ' Procedure : cmbMainGaugeTimeZone_Click
 ' Author    : beededea

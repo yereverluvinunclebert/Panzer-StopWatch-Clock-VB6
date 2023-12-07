@@ -335,6 +335,18 @@ Private Sub switchfacesbutton_mouseDown(ByRef Sender As Object)
     Sender.Widget.Alpha = 0
     Sender.Widget.Refresh
     
+    If PzGClockFaceSwitchPref = "1" Then
+        PzGClockFaceSwitchPref = "0"
+        fAlpha.gaugeForm.Widgets("clockface").Widget.Alpha = 0
+        fAlpha.gaugeForm.Widgets("stopwatchface").Widget.Alpha = Val(PzGOpacity) / 100
+        fAlpha.gaugeForm.Widgets("stopwatchface").Widget.Refresh
+    Else
+        PzGClockFaceSwitchPref = "1"
+        fAlpha.gaugeForm.Widgets("stopwatchface").Widget.Alpha = 0
+        fAlpha.gaugeForm.Widgets("clockface").Widget.Alpha = Val(PzGOpacity) / 100
+        fAlpha.gaugeForm.Widgets("clockface").Widget.Refresh
+    End If
+    
    On Error GoTo 0
    Exit Sub
 
@@ -357,6 +369,7 @@ Private Sub switchfacesbutton_mouseUp(ByRef Sender As Object)
     Sender.Widget.Alpha = Val(PzGOpacity) / 100
     Sender.Widget.Refresh
         
+
     fileToPlay = "till.wav"
     If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
