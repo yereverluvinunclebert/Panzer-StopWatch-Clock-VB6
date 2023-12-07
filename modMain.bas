@@ -1,17 +1,32 @@
 Attribute VB_Name = "modMain"
+'@IgnoreModule IntegerDataType, ModuleWithoutFolder
 ' gaugeForm_BubblingEvent ' leaving that here so I can copy/paste to find it
+
 Option Explicit
 
 '------------------------------------------------------ STARTS
 ' for SetWindowPos z-ordering
-Public Declare Function SetWindowPos Lib "user32" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal Y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
+Public Declare Function SetWindowPos Lib "user32" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
 
-Private Const HWND_TOP As Long = 0 ' for SetWindowPos z-ordering
-Private Const HWND_TOPMOST As Long = -1
-Private Const HWND_BOTTOM As Long = 1
+Public Const HWND_TOP As Long = 0 ' for SetWindowPos z-ordering
+Public Const HWND_TOPMOST As Long = -1
+Public Const HWND_BOTTOM As Long = 1
 Private Const SWP_NOMOVE  As Long = &H2
 Private Const SWP_NOSIZE  As Long = &H1
-Private Const OnTopFlags  As Long = SWP_NOMOVE Or SWP_NOSIZE
+Public Const OnTopFlags  As Long = SWP_NOMOVE Or SWP_NOSIZE
+'------------------------------------------------------ ENDS
+
+
+'------------------------------------------------------ STARTS
+' to set the full window Opacity
+Private Declare Function SetLayeredWindowAttributes Lib "user32" (ByVal hwnd As Long, ByVal crKey As Long, ByVal bAlpha As Byte, ByVal dwFlags As Long) As Long
+Private Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long) As Long
+Private Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long
+
+Private Const WS_EX_LAYERED  As Long = &H80000
+Private Const GWL_EXSTYLE  As Long = (-20)
+Private Const LWA_COLORKEY  As Long = &H1       'to transparent
+Private Const LWA_ALPHA  As Long = &H2          'to semi transparent
 '------------------------------------------------------ ENDS
 
 Public fMain As New cfMain
@@ -25,6 +40,7 @@ Public fAlpha As New cfAlpha
 Public overlayWidget As cwOverlay
 Public widgetName As String
 
+
 '---------------------------------------------------------------------------------------
 ' Procedure : Main
 ' Author    : beededea
@@ -33,9 +49,9 @@ Public widgetName As String
 '---------------------------------------------------------------------------------------
 '
 Private Sub Main()
-    On Error GoTo Main_Error
+   On Error GoTo Main_Error
     
-    Call mainRoutine(False)
+   Call mainRoutine(False)
 
    On Error GoTo 0
    Exit Sub
@@ -57,21 +73,25 @@ End Sub
 Public Sub mainRoutine(ByVal restart As Boolean)
     Dim extractCommand As String: extractCommand = vbNullString
     Dim thisPSDFullPath As String: thisPSDFullPath = vbNullString
+    Dim licenceState As Integer: licenceState = 0
 
     On Error GoTo main_routine_Error
     
-    widgetName = "Pz Stopwatch"
-    thisPSDFullPath = App.Path & "\Res\tank-clock-mk1.psd"
+    widgetName = "Panzer StopWatch Gauge"
+    thisPSDFullPath = App.path & "\Res\tank-clock-mk1.psd"
     fAlpha.FX = 222 'init position- and zoom-values (directly set on Public-Props of the Form-hosting Class)
     fAlpha.FY = 111
     fAlpha.FZ = 0.4
-        
+    
     prefsCurrentWidth = 9075
     prefsCurrentHeight = 16450
-        
+    
+    tzDelta = 0
+    tzDelta1 = 0
+    
     extractCommand = Command$ ' capture any parameter passed, remove if a soft reload
     If restart = True Then extractCommand = vbNullString
-        
+    
     ' initialise global vars
     Call initialiseGlobalVars
     
@@ -85,61 +105,67 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     Call getToolSettingsFile
     
     ' read the dock settings from the new configuration file
-    Call readSettingsFile("Software\PzStopwatch", PzGSettingsFile)
+    Call readSettingsFile("Software\PzStopWatch", PzGSettingsFile)
     
     ' validate the inputs of any data from the input settings file
     Call validateInputs
     
-    If PzGDpiAwareness = "1" Then
-        'If Not InIDE Then Cairo.SetDPIAwareness ' this sets DPI awareness for the whole program incl. native VB6 forms, requires a program hard restart.
-        Cairo.SetDPIAwareness
+    ' check first usage via licence acceptance value and then set initial DPI awareness
+    licenceState = fLicenceState()
+    If licenceState = 0 Then
+        Call testDPIAndSetInitialAwareness ' determine High DPI awareness or not by default on first run
+    Else
+        Call setDPIaware ' determine the user settings for DPI awareness, for this program and all its forms.
     End If
-                
+
     'load the collection for storing the overlay surfaces with its relevant keys direct from the PSD
-    If restart = False Then Call loadExcludePathCollection ' no need to reload the collPSDNonUIElements layer name keys
+    If restart = False Then Call loadExcludePathCollection ' no need to reload the collPSDNonUIElements layer name keys on a reload
     
     ' start the load of the PSD file using the RC6 PSD-Parser.instance
     Call fAlpha.InitFromPSD(thisPSDFullPath)  ' no optional close layer as 3rd param
-            
-    ' check first usage and display licence screen
-    Call checkLicenceState
 
-    ' initialise and create the main forms on the current display
-    Call createStandardFormsOnCurrentDisplay
+    ' resolve VB6 sizing width bug
+    Call determineScreenDimensions
+            
+    ' initialise and create the three main RC forms on the current display
+    Call createRCFormsOnCurrentDisplay
+    
+    ' check the selected monitor properties
+    Call monitorProperties(fAlpha.gaugeForm)  ' might use RC6 for this?
     
     ' place the form at the saved location
     Call makeVisibleFormElements
     
-    ' resolve VB6 sizing width bug
-    Call determineScreenDimensions
-
     ' run the functions that are also called at reload time.
     Call adjustMainControls ' this needs to be here after the initialisation of the Cairo forms and widgets
-    
-    ' check the selected monitor properties to determine form placement
-    'Call monitorProperties(frmHidden) - might use RC6 for this?
     
     ' move/hide onto/from the main screen
     Call mainScreen
         
     ' if the program is run in unhide mode, write the settings and exit
     Call handleUnhideMode(extractCommand)
-        
+    
     ' if the parameter states re-open prefs then shows the prefs
     If extractCommand = "prefs" Then
         Call makeProgramPreferencesAvailable
         extractCommand = vbNullString
     End If
     
-    ' check for first time running
-    Call checkFirstTime
-
-    ' configure any global timers here
-    Call configureTimers
-            
-    'load the preferences form but don't yet show it, speeds up access to the prefs when required
+    'load the preferences form but don't yet show it, speeds up access to the prefs via the menu
     Load panzerPrefs
     
+    'load the message form but don't yet show it, speeds up access to the message form when needed.
+    Load frmMessage
+    
+    ' display licence screen on first usage
+    Call showLicence(fLicenceState)
+    
+    ' make the prefs appear on the first time running
+    Call checkFirstTime
+ 
+    ' configure any global timers here
+    Call configureTimers
+        
     ' RC message pump will auto-exit when Cairo Forms > 0 so we run it only when 0, this prevents message interruption
     ' when running twice on reload.
     If Cairo.WidgetForms.Count = 0 Then Cairo.WidgetForms.EnterMessageLoop
@@ -149,7 +175,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
 
 main_routine_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure main_routine of Module modMain"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure main_routine of Module modMain at "
     
 End Sub
  
@@ -165,10 +191,11 @@ Private Sub checkFirstTime()
    On Error GoTo checkFirstTime_Error
 
     If PzGFirstTimeRun = "true" Then
-    
+        'MsgBox "checkFirstTime"
+
         Call makeProgramPreferencesAvailable
         PzGFirstTimeRun = "false"
-        sPutINISetting "Software\PzStopwatch", "firstTimeRun", PzGFirstTimeRun, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "firstTimeRun", PzGFirstTimeRun, PzGSettingsFile
     End If
 
    On Error GoTo 0
@@ -194,10 +221,7 @@ Private Sub initialiseGlobalVars()
     ' general
     PzGStartup = vbNullString
     PzGGaugeFunctions = vbNullString
-'    PzGAnimationInterval = vbNullString
-
     PzGSmoothSecondHand = vbNullString
-
 
     PzGClockFaceSwitchPref = vbNullString
     PzGMainGaugeTimeZone = vbNullString
@@ -209,9 +233,8 @@ Private Sub initialiseGlobalVars()
     PzGEnableTooltips = vbNullString
     PzGEnablePrefsTooltips = vbNullString
     PzGEnableBalloonTooltips = vbNullString
-    
     PzGShowTaskbar = vbNullString
-    PzGDpiAwareness = False
+    PzGDpiAwareness = vbNullString
     
     PzGGaugeSize = vbNullString
     PzGScrollWheelDirection = vbNullString
@@ -238,6 +261,7 @@ Private Sub initialiseGlobalVars()
     PzGDefaultEditor = vbNullString
          
     ' font
+    PzGClockFont = vbNullString
     PzGPrefsFont = vbNullString
     PzGPrefsFontSizeHighDPI = vbNullString
     PzGPrefsFontSizeLowDPI = vbNullString
@@ -266,7 +290,7 @@ Private Sub initialiseGlobalVars()
     PzGSkinTheme = vbNullString
     
     ' general variables declared
-    toolSettingsFile = vbNullString
+    'toolSettingsFile = vbNullString
     classicThemeCapable = False
     storeThemeColour = 0
     windowsVer = vbNullString
@@ -286,7 +310,7 @@ Private Sub initialiseGlobalVars()
     SHIFT_1 = False
     
     ' other globals
-    debugflg = 0
+    debugFlg = 0
     minutesToHide = 0
     aspectRatio = vbNullString
     revealWidgetTimerCount = 0
@@ -310,17 +334,53 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub addImagesToImageList()
-    Dim useloop As Integer: useloop = 0
+    'Dim useloop As Integer: useloop = 0
     
     On Error GoTo addImagesToImageList_Error
 
 '    add Resources to the global ImageList that are not being pulled from the PSD directly
     
-    Cairo.ImageList.AddImage "about", App.Path & "\Resources\images\about.png"
-    Cairo.ImageList.AddImage "help", App.Path & "\Resources\images\panzergauge-help.png"
-    Cairo.ImageList.AddImage "licence", App.Path & "\Resources\images\frame.png"
-    Cairo.ImageList.AddImage "frmIcon", App.Path & "\Resources\images\Icon.png"
-
+    Cairo.ImageList.AddImage "about", App.path & "\Resources\images\about.png"
+    Cairo.ImageList.AddImage "help", App.path & "\Resources\images\panzergauge-help.png"
+    Cairo.ImageList.AddImage "licence", App.path & "\Resources\images\frame.png"
+    
+    ' prefs icons
+    
+    Cairo.ImageList.AddImage "about-icon-dark", App.path & "\Resources\images\about-icon-dark-1010.jpg"
+    Cairo.ImageList.AddImage "about-icon-light", App.path & "\Resources\images\about-icon-light-1010.jpg"
+    Cairo.ImageList.AddImage "config-icon-dark", App.path & "\Resources\images\config-icon-dark-1010.jpg"
+    Cairo.ImageList.AddImage "config-icon-light", App.path & "\Resources\images\config-icon-light-1010.jpg"
+    Cairo.ImageList.AddImage "development-icon-light", App.path & "\Resources\images\development-icon-light-1010.jpg"
+    Cairo.ImageList.AddImage "development-icon-dark", App.path & "\Resources\images\development-icon-dark-1010.jpg"
+    Cairo.ImageList.AddImage "general-icon-dark", App.path & "\Resources\images\general-icon-dark-1010.jpg"
+    Cairo.ImageList.AddImage "general-icon-light", App.path & "\Resources\images\general-icon-light-1010.jpg"
+    Cairo.ImageList.AddImage "sounds-icon-light", App.path & "\Resources\images\sounds-icon-light-1010.jpg"
+    Cairo.ImageList.AddImage "sounds-icon-dark", App.path & "\Resources\images\sounds-icon-dark-1010.jpg"
+    Cairo.ImageList.AddImage "windows-icon-light", App.path & "\Resources\images\windows-icon-light-1010.jpg"
+    Cairo.ImageList.AddImage "windows-icon-dark", App.path & "\Resources\images\windows-icon-dark-1010.jpg"
+    Cairo.ImageList.AddImage "font-icon-dark", App.path & "\Resources\images\font-icon-dark-1010.jpg"
+    Cairo.ImageList.AddImage "font-icon-light", App.path & "\Resources\images\font-icon-light-1010.jpg"
+    Cairo.ImageList.AddImage "position-icon-light", App.path & "\Resources\images\position-icon-light-1010.jpg"
+    Cairo.ImageList.AddImage "position-icon-dark", App.path & "\Resources\images\position-icon-dark-1010.jpg"
+    
+    Cairo.ImageList.AddImage "general-icon-dark-clicked", App.path & "\Resources\images\general-icon-dark-600-clicked.jpg"
+    Cairo.ImageList.AddImage "config-icon-dark-clicked", App.path & "\Resources\images\config-icon-dark-600-clicked.jpg"
+    Cairo.ImageList.AddImage "font-icon-dark-clicked", App.path & "\Resources\images\font-icon-dark-600-clicked.jpg"
+    Cairo.ImageList.AddImage "sounds-icon-dark-clicked", App.path & "\Resources\images\sounds-icon-dark-600-clicked.jpg"
+    Cairo.ImageList.AddImage "position-icon-dark-clicked", App.path & "\Resources\images\position-icon-dark-600-clicked.jpg"
+    Cairo.ImageList.AddImage "development-icon-dark-clicked", App.path & "\Resources\images\development-icon-dark-600-clicked.jpg"
+    Cairo.ImageList.AddImage "windows-icon-dark-clicked", App.path & "\Resources\images\windows-icon-dark-600-clicked.jpg"
+    Cairo.ImageList.AddImage "about-icon-dark-clicked", App.path & "\Resources\images\about-icon-dark-600-clicked.jpg"
+    
+    Cairo.ImageList.AddImage "general-icon-light-clicked", App.path & "\Resources\images\general-icon-light-600-clicked.jpg"
+    Cairo.ImageList.AddImage "config-icon-light-clicked", App.path & "\Resources\images\config-icon-light-600-clicked.jpg"
+    Cairo.ImageList.AddImage "font-icon-light-clicked", App.path & "\Resources\images\font-icon-light-600-clicked.jpg"
+    Cairo.ImageList.AddImage "sounds-icon-light-clicked", App.path & "\Resources\images\sounds-icon-light-600-clicked.jpg"
+    Cairo.ImageList.AddImage "position-icon-light-clicked", App.path & "\Resources\images\position-icon-light-600-clicked.jpg"
+    Cairo.ImageList.AddImage "development-icon-light-clicked", App.path & "\Resources\images\development-icon-light-600-clicked.jpg"
+    Cairo.ImageList.AddImage "windows-icon-light-clicked", App.path & "\Resources\images\windows-icon-light-600-clicked.jpg"
+    Cairo.ImageList.AddImage "about-icon-light-clicked", App.path & "\Resources\images\about-icon-light-600-clicked.jpg"
+    
    On Error GoTo 0
    Exit Sub
 
@@ -333,7 +393,7 @@ End Sub
 ' Procedure : adjustMainControls
 ' Author    : beededea
 ' Date      : 27/04/2023
-' Purpose   : called at runtime and on restart, sets the characteristics of the globe and menus
+' Purpose   : called at runtime and on restart, sets the characteristics of the gauge, individual controls and menus
 '---------------------------------------------------------------------------------------
 '
 Public Sub adjustMainControls()
@@ -345,7 +405,7 @@ Public Sub adjustMainControls()
     
     fAlpha.AdjustZoom Val(PzGGaugeSize) / 100
     
-'    'overlayWidget.ZoomDirection = PzGScrollWheelDirection
+'    overlayWidget.ZoomDirection = PzGScrollWheelDirection
 
 'PzGClockFaceSwitchPref
 'PzGMainGaugeTimeZone
@@ -369,24 +429,7 @@ Public Sub adjustMainControls()
     Else
         menuForm.mnuEditWidget.Visible = False
     End If
-
-    If PzGSmoothSecondHand = "0" Then
-        overlayWidget.SmoothSecondHand = False
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/tickbutton").Widget.Alpha = Val(PzGOpacity) / 100
-    Else
-        overlayWidget.SmoothSecondHand = True
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/tickbutton").Widget.Alpha = 0
-    End If
-        
-    If PzGPreventDragging = "0" Then
-        menuForm.mnuLockWidget.Checked = False
-        overlayWidget.Locked = False
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/lockbutton").Widget.Alpha = Val(PzGOpacity) / 100
-    Else
-        menuForm.mnuLockWidget.Checked = True
-        overlayWidget.Locked = True ' this is just here for continuity's sake, it is also set at the time the control is selected
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/lockbutton").Widget.Alpha = 0
-    End If
+    
     
     If PzGShowTaskbar = "0" Then
         fAlpha.gaugeForm.ShowInTaskbar = False
@@ -394,52 +437,80 @@ Public Sub adjustMainControls()
         fAlpha.gaugeForm.ShowInTaskbar = True
     End If
     
-    
     ' set the characteristics of the interactive areas
     ' Note: set the Hover colour close to the original layer to avoid too much intrusion, 0 being grey
-    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/helpbutton").Widget
+    With fAlpha.gaugeForm.Widgets("housing/helpbutton").Widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
+        .Alpha = Val(PzGOpacity) / 100
     End With
      
-    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/startbutton").Widget
+    With fAlpha.gaugeForm.Widgets("housing/startbutton").Widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
+        .Alpha = Val(PzGOpacity) / 100
+        .Tag = 0.25
     End With
       
-    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/stopbutton").Widget
+    With fAlpha.gaugeForm.Widgets("housing/stopbutton").Widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
+        .Alpha = Val(PzGOpacity) / 100
+        .Tag = 0.25
     End With
       
-    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/switchfacesbutton").Widget
+    With fAlpha.gaugeForm.Widgets("housing/switchfacesbutton").Widget
+        .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
+        .MousePointer = IDC_HAND
+        .Alpha = Val(PzGOpacity) / 100
+    End With
+          
+    With fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
     End With
           
-    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/lockbutton").Widget
+    With fAlpha.gaugeForm.Widgets("housing/prefsbutton").Widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
+        .Alpha = Val(PzGOpacity) / 100
     End With
           
-    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/prefsbutton").Widget
-        .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
-        .MousePointer = IDC_HAND
-    End With
-          
-    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/tickbutton").Widget
+    With fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
     End With
     
-    With fAlpha.gaugeForm.Widgets("stopwatch/face/housing/surround").Widget
+    With fAlpha.gaugeForm.Widgets("housing/surround").Widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_SIZEALL
+        .Alpha = Val(PzGOpacity) / 100
+
     End With
     
-    
+    If PzGSmoothSecondHand = "0" Then
+        overlayWidget.SmoothSecondHand = False
+        fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget.Alpha = Val(PzGOpacity) / 100
+    Else
+        overlayWidget.SmoothSecondHand = True
+        fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget.Alpha = 0
+    End If
+        
+    If PzGPreventDragging = "0" Then
+        menuForm.mnuLockWidget.Checked = False
+        overlayWidget.Locked = False
+        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.Alpha = Val(PzGOpacity) / 100
+    Else
+        menuForm.mnuLockWidget.Checked = True
+        overlayWidget.Locked = True ' this is just here for continuity's sake, it is also set at the time the control is selected
+        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.Alpha = 0
+    End If
+
+    ' determine the time bias
+    Call obtainDaylightSavings
+               
     ' set the z-ordering of the window
-    Call setWindowZordering
+    Call setAlphaFormZordering
     
     ' set the tooltips on the main screen
     Call setMainTooltips
@@ -459,15 +530,15 @@ adjustMainControls_Error:
 End Sub
 
 '---------------------------------------------------------------------------------------
-' Procedure : setWindowZordering
+' Procedure : setAlphaFormZordering
 ' Author    : beededea
 ' Date      : 02/05/2023
 ' Purpose   : set the z-ordering of the window
 '---------------------------------------------------------------------------------------
 '
-Public Sub setWindowZordering()
+Public Sub setAlphaFormZordering()
 
-   On Error GoTo setWindowZordering_Error
+   On Error GoTo setAlphaFormZordering_Error
 
     If Val(PzGWindowLevel) = 0 Then
         Call SetWindowPos(fAlpha.gaugeForm.hwnd, HWND_BOTTOM, 0&, 0&, 0&, 0&, OnTopFlags)
@@ -480,9 +551,9 @@ Public Sub setWindowZordering()
    On Error GoTo 0
    Exit Sub
 
-setWindowZordering_Error:
+setAlphaFormZordering_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setWindowZordering of Module modMain"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setAlphaFormZordering of Module modMain"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -501,6 +572,7 @@ Public Sub readSettingsFile(ByVal location As String, ByVal PzGSettingsFile As S
         PzGStartup = fGetINISetting(location, "startup", PzGSettingsFile)
         PzGGaugeFunctions = fGetINISetting(location, "gaugeFunctions", PzGSettingsFile)
         PzGSmoothSecondHand = fGetINISetting(location, "smoothSecondHand", PzGSettingsFile)
+        
 
         PzGClockFaceSwitchPref = fGetINISetting(location, "clockFaceSwitchPref", PzGSettingsFile)
         PzGMainGaugeTimeZone = fGetINISetting(location, "mainGaugeTimeZone", PzGSettingsFile)
@@ -532,6 +604,7 @@ Public Sub readSettingsFile(ByVal location As String, ByVal PzGSettingsFile As S
         PzGhLocationPercPrefValue = fGetINISetting(location, "hLocationPercPrefValue", PzGSettingsFile)
 
         ' font
+        PzGClockFont = fGetINISetting(location, "clockFont", PzGSettingsFile)
         PzGPrefsFont = fGetINISetting(location, "prefsFont", PzGSettingsFile)
         PzGPrefsFontSizeHighDPI = fGetINISetting(location, "prefsFontSizeHighDPI", PzGSettingsFile)
         PzGPrefsFontSizeLowDPI = fGetINISetting(location, "prefsFontSizeLowDPI", PzGSettingsFile)
@@ -548,11 +621,12 @@ Public Sub readSettingsFile(ByVal location As String, ByVal PzGSettingsFile As S
         PzGDefaultEditor = fGetINISetting(location, "defaultEditor", PzGSettingsFile)
         
         ' other
-        PzGClockHighDpiXPos = fGetINISetting("Software\PzStopwatch", "clockHighDpiXPos", PzGSettingsFile)
-        PzGClockHighDpiYPos = fGetINISetting("Software\PzStopwatch", "clockHighDpiYPos", PzGSettingsFile)
+        PzGClockHighDpiXPos = fGetINISetting("Software\PzStopWatch", "clockHighDpiXPos", PzGSettingsFile)
+        PzGClockHighDpiYPos = fGetINISetting("Software\PzStopWatch", "clockHighDpiYPos", PzGSettingsFile)
         
-        PzGClockLowDpiXPos = fGetINISetting("Software\PzStopwatch", "clockLowDpiXPos", PzGSettingsFile)
-        PzGClockLowDpiYPos = fGetINISetting("Software\PzStopwatch", "clockLowDpiYPos", PzGSettingsFile)
+        PzGClockLowDpiXPos = fGetINISetting("Software\PzStopWatch", "clockLowDpiXPos", PzGSettingsFile)
+        PzGClockLowDpiYPos = fGetINISetting("Software\PzStopWatch", "clockLowDpiYPos", PzGSettingsFile)
+        
         PzGLastSelectedTab = fGetINISetting(location, "lastSelectedTab", PzGSettingsFile)
         PzGSkinTheme = fGetINISetting(location, "skinTheme", PzGSettingsFile)
         
@@ -600,26 +674,27 @@ Public Sub validateInputs()
         If PzGStartup = vbNullString Then PzGStartup = "1"
         If PzGSmoothSecondHand = vbNullString Then PzGSmoothSecondHand = "0"
         
-        
         If PzGClockFaceSwitchPref = vbNullString Then PzGClockFaceSwitchPref = "0"
-        If PzGMainGaugeTimeZone = vbNullString Then PzGMainGaugeTimeZone = "1"
-        If PzGMainDaylightSaving = vbNullString Then PzGMainDaylightSaving = "1"
+        If PzGMainGaugeTimeZone = vbNullString Then PzGMainGaugeTimeZone = "0"
+        If PzGMainDaylightSaving = vbNullString Then PzGMainDaylightSaving = "0"
+
         If PzGSecondaryGaugeTimeZone = vbNullString Then PzGSecondaryGaugeTimeZone = "1"
         If PzGSecondaryDaylightSaving = vbNullString Then PzGSecondaryDaylightSaving = "1"
 
-        ' Config
-        If PzGEnableTooltips = vbNullString Then PzGEnableTooltips = "1"
+        ' Configuration
+        If PzGEnableTooltips = vbNullString Then PzGEnableTooltips = "0"
         If PzGEnablePrefsTooltips = vbNullString Then PzGEnablePrefsTooltips = "1"
         If PzGEnableBalloonTooltips = vbNullString Then PzGEnableBalloonTooltips = "1"
         If PzGShowTaskbar = vbNullString Then PzGShowTaskbar = "0"
-        If PzGDpiAwareness = vbNullString Then PzGDpiAwareness = "1"
+        If PzGDpiAwareness = vbNullString Then PzGDpiAwareness = "0"
         If PzGGaugeSize = vbNullString Then PzGGaugeSize = "25"
         If PzGScrollWheelDirection = vbNullString Then PzGScrollWheelDirection = "1"
                
         ' fonts
-        If PzGPrefsFont = vbNullString Then PzGPrefsFont = "times new roman" 'prefsFont", PzGSettingsFile)
-        If PzGPrefsFontSizeHighDPI = vbNullString Then PzGPrefsFontSizeHighDPI = "8" 'prefsFontSizeLowDPI", PzGSettingsFile)
-        If PzGPrefsFontSizeLowDPI = vbNullString Then PzGPrefsFontSizeLowDPI = "8" 'prefsFontSizeLowDPI", PzGSettingsFile)
+        If PzGPrefsFont = vbNullString Then PzGPrefsFont = "times new roman"
+        If PzGClockFont = vbNullString Then PzGClockFont = PzGPrefsFont
+        If PzGPrefsFontSizeHighDPI = vbNullString Then PzGPrefsFontSizeHighDPI = "8"
+        If PzGPrefsFontSizeLowDPI = vbNullString Then PzGPrefsFontSizeLowDPI = "8"
         If PzGPrefsFontItalics = vbNullString Then PzGPrefsFontItalics = "false"
         If PzGPrefsFontColour = vbNullString Then PzGPrefsFontColour = "0"
 
@@ -640,10 +715,9 @@ Public Sub validateInputs()
                 
         ' development
         If PzGDebug = vbNullString Then PzGDebug = "0"
-        If PzGDblClickCommand = vbNullString Then PzGDblClickCommand = vbNullString
+        If PzGDblClickCommand = vbNullString Then PzGDblClickCommand = "%systemroot%\system32\timedate.cpl"
         If PzGOpenFile = vbNullString Then PzGOpenFile = vbNullString
         If PzGDefaultEditor = vbNullString Then PzGDefaultEditor = vbNullString
-        If PzGPreventDragging = vbNullString Then PzGPreventDragging = "0"
         
         ' window
         If PzGWindowLevel = vbNullString Then PzGWindowLevel = "1" 'WindowLevel", PzGSettingsFile)
@@ -651,6 +725,7 @@ Public Sub validateInputs()
         If PzGWidgetHidden = vbNullString Then PzGWidgetHidden = "0"
         If PzGHidingTime = vbNullString Then PzGHidingTime = "0"
         If PzGIgnoreMouse = vbNullString Then PzGIgnoreMouse = "0"
+        If PzGPreventDragging = vbNullString Then PzGPreventDragging = "0"
         
         ' other
         If PzGFirstTimeRun = vbNullString Then PzGFirstTimeRun = "true"
@@ -678,7 +753,7 @@ Private Sub getToolSettingsFile()
     
     Dim iFileNo As Integer: iFileNo = 0
     
-    PzGSettingsDir = fSpecialFolder(feUserAppData) & "\PzStopwatch" ' just for this user alone
+    PzGSettingsDir = fSpecialFolder(feUserAppData) & "\PzStopWatch" ' just for this user alone
     PzGSettingsFile = PzGSettingsDir & "\settings.ini"
         
     'if the folder does not exist then create the folder
@@ -771,27 +846,35 @@ setHidingTime_Error:
 End Sub
 
 '---------------------------------------------------------------------------------------
-' Procedure : createStandardFormsOnCurrentDisplay
+' Procedure : createRCFormsOnCurrentDisplay
 ' Author    : beededea
 ' Date      : 07/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub createStandardFormsOnCurrentDisplay()
-    On Error GoTo createStandardFormsOnCurrentDisplay_Error
+Private Sub createRCFormsOnCurrentDisplay()
+    On Error GoTo createRCFormsOnCurrentDisplay_Error
 
     With New_c.Displays(1) 'get the current Display
-      fMain.initAndShowStandardForms .WorkLeft, .WorkTop, 1000, 1000, "Panzer Stopwatch Gauge"
+      Call fMain.initAndShowAboutForm(.WorkLeft, .WorkTop, 1000, 1000, widgetName)
+    End With
+    
+    With New_c.Displays(1) 'get the current Display
+      Call fMain.initAndShowHelpForm(.WorkLeft, .WorkTop, 1000, 1000, widgetName)
     End With
 
-    On Error GoTo 0
+    With New_c.Displays(1) 'get the current Display
+      Call fMain.initAndShowLicenceForm(.WorkLeft, .WorkTop, 1000, 1000, widgetName)
+    End With
+    
+        On Error GoTo 0
     Exit Sub
 
-createStandardFormsOnCurrentDisplay_Error:
+createRCFormsOnCurrentDisplay_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure createStandardFormsOnCurrentDisplay of Module modMain"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure createRCFormsOnCurrentDisplay of Module modMain"
             Resume Next
           End If
     End With
@@ -812,7 +895,7 @@ Private Sub handleUnhideMode(ByVal thisUnhideMode As String)
 
     If thisUnhideMode = "unhide" Then     'parse the command line
         PzGUnhide = "true"
-        sPutINISetting "Software\PzStopwatch", "unhide", PzGUnhide, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "unhide", PzGUnhide, PzGSettingsFile
         Call thisForm_Unload
         End
     End If
@@ -844,22 +927,27 @@ Private Sub loadExcludePathCollection()
     On Error GoTo loadExcludePathCollection_Error
 
     With fAlpha.collPSDNonUIElements ' the exclude list
-       
-        .Add Empty, "stopwatch/face/swsecondhand" 'arrow-hand-top
-        .Add Empty, "stopwatch/face/swminutehand" 'arrow-hand-right
-        .Add Empty, "stopwatch/face/swhourhand"   'arrow-hand-bottom
+        .Add Empty, "stopwatchface"
+        .Add Empty, "clockface"
+        .Add Empty, "faceweathering"
+
+        .Add Empty, "swsecondhand" 'arrow-hand-top
+        .Add Empty, "swminutehand" 'arrow-hand-right
+        .Add Empty, "swhourhand"   'arrow-hand-bottom
         
-        .Add Empty, "stopwatch/face/hourshadow"   'clock-hand-hours-shadow
-        .Add Empty, "stopwatch/face/hourhand"     'clock-hand-hours
+        .Add Empty, "hourshadow"   'clock-hand-hours-shadow
+        .Add Empty, "hourhand"     'clock-hand-hours
         
-        .Add Empty, "stopwatch/face/minuteshadow" 'clock-hand-minutes-shadow
-        .Add Empty, "stopwatch/face/minutehand"   'clock-hand-minutes
+        .Add Empty, "minuteshadow" 'clock-hand-minutes-shadow
+        .Add Empty, "minutehand"   'clock-hand-minutes
         
-        .Add Empty, "stopwatch/face/secondshadow" 'clock-hand-seconds-shadow
-        .Add Empty, "stopwatch/face/secondhand"   'clock-hand-seconds
-        
-        .Add Empty, "stopwatch/bigreflection"     'all reflections
-        .Add Empty, "stopwatch/windowreflection"
+        .Add Empty, "secondshadow" 'clock-hand-seconds-shadow
+        .Add Empty, "secondhand"   'clock-hand-seconds
+
+        .Add Empty, "bigreflection Copy"     'all reflections
+        .Add Empty, "bigreflection"     'all reflections
+        .Add Empty, "windowreflection"
+
 
     End With
 
@@ -904,12 +992,21 @@ End Sub
 'End Sub
 
 
+
+
+
+
+
+     
+
+
+
 ' .74 DAEB 22/05/2022 rDIConConfig.frm Msgbox replacement that can be placed on top of the form instead as the middle of the screen, see Steamydock for a potential replacement?
 '---------------------------------------------------------------------------------------
 ' Procedure : msgBoxA
 ' Author    : beededea
 ' Date      : 20/05/2022
-' Purpose   :         ans = msgBoxA("main message", vbOKOnly, "title bar message", False)
+' Purpose   : ans = msgBoxA("main message", vbOKOnly, "title bar message", False)
 '---------------------------------------------------------------------------------------
 '
 Public Function msgBoxA(ByVal msgBoxPrompt As String, Optional ByVal msgButton As VbMsgBoxResult, Optional ByVal msgTitle As String, Optional ByVal msgShowAgainChkBox As Boolean = False, Optional ByRef msgContext As String = "none") As Integer
@@ -922,7 +1019,7 @@ Public Function msgBoxA(ByVal msgBoxPrompt As String, Optional ByVal msgButton A
     frmMessage.propShowAgainChkBox = msgShowAgainChkBox
     frmMessage.propButtonVal = msgButton
     frmMessage.propMsgContext = msgContext
-    frmMessage.Display ' run a subroutine in the form that displays the form
+    Call frmMessage.Display ' run a subroutine in the form that displays the form
 
     msgBoxA = frmMessage.propReturnedValue
 
@@ -939,3 +1036,9 @@ msgBoxA_Error:
     End With
 
 End Function
+
+
+
+
+
+

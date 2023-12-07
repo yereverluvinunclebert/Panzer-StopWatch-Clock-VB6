@@ -1,4 +1,5 @@
 Attribute VB_Name = "modTooltips"
+'@IgnoreModule ModuleWithoutFolder
 '---------------------------------------------------------------------------------------
 ' Module    : modTooltips
 ' Author    : Elroy
@@ -29,7 +30,7 @@ Private Type TOOLINFO
 End Type
 '
 Private Declare Sub InitCommonControls Lib "comctl32" ()
-Private Declare Function CreateWindowExW Lib "user32" (ByVal dwExStyle As Long, ByVal lpClassName As Long, ByVal lpWindowName As Long, ByVal dwStyle As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hWndParent As Long, ByVal hMenu As Long, ByVal hInstance As Long, lpParam As Any) As Long
+Private Declare Function CreateWindowExW Lib "user32" (ByVal dwExStyle As Long, ByVal lpClassName As Long, ByVal lpWindowName As Long, ByVal dwStyle As Long, ByVal x As Long, ByVal Y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hWndParent As Long, ByVal hMenu As Long, ByVal hInstance As Long, lpParam As Any) As Long
 Public Declare Function DestroyWindow Lib "user32" (ByVal hwnd As Long) As Long
 '
 Private Const WM_USER               As Long = &H400&
@@ -197,7 +198,7 @@ End Sub
 Private Sub FormatTooltipText(ByRef TipText As String, ByRef lLen As Long)
     Dim s       As String
     Dim ss()    As String
-    Dim i       As Long
+    Dim I       As Long
     Dim j       As Long
     '
     ' Make sure we need to do anything.
@@ -212,13 +213,13 @@ Private Sub FormatTooltipText(ByRef TipText As String, ByRef lLen As Long)
         If Len(ss(j)) > lLen Then
             s = vbNullString
             Do
-                i = InStrRev(ss(j), " ", lLen + 1&)
-                If i = 0& Then
+                I = InStrRev(ss(j), " ", lLen + 1&)
+                If I = 0& Then
                     s = s & Left$(ss(j), lLen) & vbCrLf ' Build "s" and trim from TipText.
                     ss(j) = Mid$(ss(j), lLen + 1&)
                 Else
-                    s = s & Left$(ss(j), i - 1&) & vbCrLf ' Build "s" and trim from TipText.
-                    ss(j) = Mid$(ss(j), i + 1&)
+                    s = s & Left$(ss(j), I - 1&) & vbCrLf ' Build "s" and trim from TipText.
+                    ss(j) = Mid$(ss(j), I + 1&)
                 End If
                 If Len(ss(j)) <= lLen Then
                     ss(j) = s & ss(j) ' Place "s" back into ss(j) and get out.

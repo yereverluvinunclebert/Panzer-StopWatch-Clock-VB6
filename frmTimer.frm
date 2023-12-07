@@ -68,6 +68,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+'@IgnoreModule ModuleWithoutFolder
 Option Explicit
 
 
@@ -94,11 +95,11 @@ Private Sub revealWidgetTimer_Timer()
     revealWidgetTimerCount = revealWidgetTimerCount + 1
     If revealWidgetTimerCount >= (minutesToHide * 12) Then
         revealWidgetTimerCount = 0
-        'overlayWidget.Hidden = False
+
         fAlpha.gaugeForm.Visible = True
         revealWidgetTimer.Enabled = False
         PzGWidgetHidden = "0"
-        sPutINISetting "Software\PzStopwatch", "widgetHidden", PzGWidgetHidden, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "widgetHidden", PzGWidgetHidden, PzGSettingsFile
     End If
 
     On Error GoTo 0
@@ -164,12 +165,12 @@ Private Sub settingsTimer_Timer()
     
     On Error GoTo settingsTimer_Timer_Error
 
-    PzGUnhide = fGetINISetting("Software\PzStopwatch", "unhide", PzGSettingsFile)
+    PzGUnhide = fGetINISetting("Software\PzStopWatch", "unhide", PzGSettingsFile)
 
     If PzGUnhide = "true" Then
         'overlayWidget.Hidden = False
         fAlpha.gaugeForm.Visible = True
-        sPutINISetting "Software\PzStopwatch", "unhide", vbNullString, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "unhide", vbNullString, PzGSettingsFile
     End If
 
     On Error GoTo 0
@@ -184,5 +185,4 @@ settingsTimer_Timer_Error:
           End If
     End With
 End Sub
-
 

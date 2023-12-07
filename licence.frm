@@ -120,7 +120,7 @@ Private Sub declineLabel_Click()
 
     Call thisForm_Unload
     
-    sPutINISetting "Software\PzStopwatch", "Licence", slicence, toolSettingsFile
+    sPutINISetting "Software\PzJustClock", "Licence", slicence, toolSettingsFile
     End
 
    On Error GoTo 0
@@ -154,7 +154,7 @@ Private Sub Label2_Click()
     frmLicence.Hide
     slicence = "1"
     
-    sPutINISetting "Software\PzStopwatch", "Licence", slicence, PzGSettingsFile
+    sPutINISetting "Software\PzJustClock", "Licence", slicence, PzGSettingsFile
 
    On Error GoTo 0
    Exit Sub

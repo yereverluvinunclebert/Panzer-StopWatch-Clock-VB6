@@ -11,6 +11,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+'@IgnoreModule IntegerDataType, ModuleWithoutFolder
 '---------------------------------------------------------------------------------------
 ' Module    : cwOverlay
 ' Author    : beededea
@@ -21,6 +22,7 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+'these Public Properties are set in the Parent (here, cfAlpha)
 Public cCollOverlayImages As cCollection
 Public cxPerc As Single
 Public cyPerc As Single
@@ -59,16 +61,14 @@ End Type
 Private Declare Sub GetSystemTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 '------------------------------------------------------ ENDS
 
-
 Private mTicking As Boolean ' property Ticking
 Private mSmoothSecondHand As Boolean ' property SmoothSecondHand
 Private mLocked As Boolean ' property Locked
 Private mHidden As Boolean ' property Hidden
 
- 
 '---------------------------------------------------------------------------------------
 ' Procedure : Class_Initialize
-' Author    : beededea
+' Author    : olaf schmidt
 ' Date      : 31/07/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
@@ -78,11 +78,11 @@ Private Sub Class_Initialize()
     On Error GoTo Class_Initialize_Error
 
     Set W = Cairo.WidgetBase
-      W.BackColor = -1  'we don't use any BackColor here, transparent
-      W.ImplementsHitTest = True 'when at False, no HitTest-Event would be triggered
+        W.BackColor = -1  'we don't use any BackColor here, transparent
+        W.ImplementsHitTest = True 'when at False, no HitTest-Event would be triggered
                     
     intervalValue = 500
-      
+
     Set tmrClock = Nothing
     Set tmrClock = New_c.Timer(intervalValue, mTicking)
 
@@ -161,17 +161,17 @@ End Property
 '---------------------------------------------------------------------------------------
 '
 Public Property Let Ticking(ByVal newValue As Boolean)
-    Dim intervalValue As Integer: intervalValue = 0
+    'Dim intervalValue As Integer: intervalValue = 0
     On Error GoTo TickingLet_Error
 
     If mTicking <> newValue Then mTicking = newValue Else Exit Property
     
     If mTicking Then
-        If mSmoothSecondHand Then
-            intervalValue = 100
-        Else
-            intervalValue = 500
-        End If
+'        If mSmoothSecondHand Then
+'            'intervalValue = 100
+'        Else
+'            'intervalValue = 500
+'        End If
 
         tmrClock.Enabled = True
     Else
@@ -185,6 +185,7 @@ TickingLet_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Ticking of Class Module cwOverlay"
 End Property ' the earth Ticking flag
+
 '---------------------------------------------------------------------------------------
 ' Property : SmoothSecondHand
 ' Author    : beededea
@@ -243,7 +244,7 @@ End Property ' the earth SmoothSecondHand flag
 Public Property Get Locked() As Boolean
    On Error GoTo LockedGet_Error
 
-  Locked = mLocked
+   Locked = mLocked
 
    On Error GoTo 0
    Exit Property
@@ -262,7 +263,7 @@ End Property
 Public Property Let Locked(ByVal newValue As Boolean)
    On Error GoTo LockedLet_Error
 
-  If mLocked <> newValue Then mLocked = newValue Else Exit Property
+   If mLocked <> newValue Then mLocked = newValue Else Exit Property
 
    On Error GoTo 0
    Exit Property
@@ -282,7 +283,7 @@ End Property
 Public Property Get Hidden() As Boolean
    On Error GoTo HiddenGet_Error
 
-  Hidden = mHidden
+   Hidden = mHidden
 
    On Error GoTo 0
    Exit Property
@@ -322,7 +323,7 @@ End Property
 '
 '---------------------------------------------------------------------------------------------
 ' Procedure : W_HitTest
-' Author    : beededea
+' Author    : olaf schmidt
 ' Date      : 01/08/2023
 ' Purpose   : This is run continuously for the whole widget.
 '             For this Overlay-Widget alone, we make everything "fully click-through"
@@ -344,13 +345,13 @@ End Sub
 
 '---------------------------------------------------------------------------------------
 ' Procedure : W_Paint
-' Author    : beededea
+' Author    : olaf schmidt
 ' Date      : 01/08/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
 Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As Single, ByVal dx_Aligned As Single, ByVal dy_Aligned As Single, UserObj As Object)
-    Dim i As Long: i = 0
+    Dim I As Long: I = 0
     Dim Arr As Variant
     Dim Key As String: Key = vbNullString
     Dim Pat As cCairoPattern
@@ -359,9 +360,9 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     Dim textDrawn As Boolean:   textDrawn = False
     Dim thisOpacity As Double: thisOpacity = 0
     
-    Const cream = &HFFF5F5F5
+    Const cream As String = "&HFFF5F5F5"
    
-   On Error GoTo W_Paint_Error
+    On Error GoTo W_Paint_Error
     
     'set some Font- and ForeColor-Properties and draw some Text on the Widget
     W.FontName = "arial"
@@ -372,21 +373,21 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     W.Refresh
     thisOpacity = (Val(PzGOpacity) / 100) * 0.75
     
-    txtDayNumber = Day(Now)
-    txtMonthNumber = Month(Now)
-    
-    For i = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
-     Arr = cCollOverlayImages.ItemByIndex(i)
-     Key = cCollOverlayImages.KeyByIndex(i)
-     
-     If IsArray(Arr) Then
-            CC.Save
-            'derive a Pattern-Obj from each retrieved ImageList-Surface-reference
-            Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
+    txtDayNumber = Day(DateAdd("m", tzDelta, Now))
+    txtMonthNumber = Month(DateAdd("m", tzDelta, Now))
+
+    For I = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
+      Arr = cCollOverlayImages.ItemByIndex(I)
+      Key = cCollOverlayImages.KeyByIndex(I)
+      
+      If IsArray(Arr) Then
+             CC.Save
+             'derive a Pattern-Obj from each retrieved ImageList-Surface-reference
+             Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
             
             ' for specific keys perform rotation actions, clock hands &c
-            Select Case Key
-                Case "stopwatch/face/hourshadow", "stopwatch/face/hourhand" 'hours-shadow- and hour-hand
+             Select Case Key
+                 Case "hourshadow", "hourhand" 'hours-shadow- and hour-hand
                     
                     ' draw the date and day in the windows just once to retain opacity
                     If textDrawn = False Then ' has to be here to be underneath  all the hands and only run once
@@ -395,29 +396,30 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                         textDrawn = True
                     End If
                     
-                   Set Pat.Matrix = Pat.Matrix.TranslateCoords(19, 160) 'shift to the "rotation-point" within the Pattern
-                   CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
-                   CC.RotateDrawingsDeg -7 + HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
-                   
-                Case "stopwatch/face/minuteshadow", "stopwatch/face/minutehand" 'minutes-shadow- and minutes-hand
-                   Set Pat.Matrix = Pat.Matrix.TranslateCoords(44, 105) 'shift to the "rotation-point" within the Pattern
-                   CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
-                   CC.RotateDrawingsDeg -61 + MDeg
-                   
-                Case "stopwatch/face/secondshadow", "stopwatch/face/secondhand" 'seconds-shadow- and seconds-hand
+                    Set Pat.Matrix = Pat.Matrix.TranslateCoords(19, 160) 'shift to the "rotation-point" within the Pattern
+                    CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
+                    CC.RotateDrawingsDeg -7 + HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                    
+                 Case "minuteshadow", "minutehand" 'minutes-shadow- and minutes-hand
+                    Set Pat.Matrix = Pat.Matrix.TranslateCoords(44, 105) 'shift to the "rotation-point" within the Pattern
+                    CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
+                    CC.RotateDrawingsDeg -61 + MDeg
+                    
+                 Case "secondshadow", "secondhand" 'seconds-shadow- and seconds-hand
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(60, 160) 'shift to the "rotation-point" within the Pattern
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
+                    
                     CC.RotateDrawingsDeg -50 + SDeg + MsDeg
     
-                Case Else 'plain output for everything else ... this includes the reflection-layers,
-                    'Task: add the little arrow-hands which are not dynamically handled currently
+                 Case Else 'plain output for everything else ... this includes the reflection-layers,
+                     
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'here we only shift the Pattern via the original PSD-Offsets (stored in Arr(0) and Arr(1))
-            End Select
-            CC.Paint Arr(2), Pat 'finally we render the Pattern with the current PSD-LayerAlpha, present in Arr(2)
-            
-            CC.Restore
-     End If
-   Next
+             End Select
+             CC.Paint Arr(2), Pat 'finally we render the Pattern with the current PSD-LayerAlpha, present in Arr(2)
+             
+             CC.Restore
+      End If
+     Next
 
    On Error GoTo 0
    Exit Sub
@@ -427,9 +429,12 @@ W_Paint_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure W_Paint of Class Module cwOverlay"
 End Sub
  
+ 
+
+    
 '---------------------------------------------------------------------------------------
 ' Procedure : tmrClock_Timer
-' Author    : beededea
+' Author    : olaf schmidt
 ' Date      : 30/07/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
@@ -441,9 +446,16 @@ Private Sub tmrClock_Timer() 'update the private "Degree-Variables" for Hour-, M
     On Error GoTo tmrClock_Timer_Error
     
     GetSystemTime currentLocaltime
+    
+    ' every 15 mins approx. update DaylightSavings and determine the time bias
+    If (Minute(T) Mod 15 = 0) And (Second(T) = 0) And (currentLocaltime.wMilliseconds < 100) Then
+        Call obtainDaylightSavings
+    End If
+        
+    ' Debug.Print ("%updateTime-I tzDelta " & tzDelta)
 
-    HDeg = 30 * (Hour(T) Mod 12 + Minute(T) / 60)
-    MDeg = 6 * (Minute(T) + Second(T) / 60)
+    HDeg = 30 * (Hour(T) Mod 12 + (Minute(T) + tzDelta) / 60)
+    MDeg = 6 * ((Minute(T) + tzDelta) + (Second(T) / 60))
 
     If mSmoothSecondHand = True Then
         SDeg = 6 * Second(T)
@@ -465,12 +477,11 @@ Private Sub tmrClock_Timer() 'update the private "Degree-Variables" for Hour-, M
     
     W.Parent.Refresh
 
-    On Error GoTo 0
-    Exit Sub
+   On Error GoTo 0
+   Exit Sub
 
 tmrClock_Timer_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrClock_Timer of Class Module cwOverlay"
 End Sub
-
 

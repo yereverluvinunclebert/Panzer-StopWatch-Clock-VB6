@@ -1,4 +1,5 @@
 Attribute VB_Name = "Module2"
+'@IgnoreModule IntegerDataType, ModuleWithoutFolder
     ' 23/01/2021 .01 monitorModule.bas DAEB added if then else if you can't get device context
 
 Option Explicit
@@ -10,9 +11,9 @@ Public Enum dwFlags
     MONITOR_DEFAULTTONEAREST = &H2    'If the monitor is not found, return the nearest monitor
 End Enum
 
-'Public Const MONITORINFOF_PRIMARY As Integer = 1
+Public Const MONITORINFOF_PRIMARY As Integer = 1
 
-Private Type UDTMonitor
+Public Type UDTMonitor
     handle As Long
     Left As Long
     Right As Long
@@ -49,14 +50,14 @@ Private Type tagMONITORINFO
 End Type
 
 Private Declare Function EnumDisplayMonitors Lib "user32" (ByVal hdc As Long, lprcClip As Any, ByVal lpfnEnum As Long, dwData As Long) As Long
-Private Declare Function GetSystemMetrics Lib "user32" (ByVal nIndex As Long) As Long
+'Private Declare Function GetSystemMetrics Lib "user32" (ByVal nIndex As Long) As Long
 Public Declare Function GetDC Lib "user32" (ByVal hwnd As Long) As Long
 Public Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, ByVal hdc As Long) As Long
 Public Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
-Private Declare Function CreateDC Lib "gdi32" Alias "CreateDCA" (ByVal lpDriverName As String, ByVal lpDeviceName As String, ByVal lpOutput As String, ByVal lpInitData As Long) As Long
+'Private Declare Function CreateDC Lib "gdi32" Alias "CreateDCA" (ByVal lpDriverName As String, ByVal lpDeviceName As String, ByVal lpOutput As String, ByVal lpInitData As Long) As Long
 Private Declare Function UnionRect Lib "user32" (lprcDst As RECT, lprcSrc1 As RECT, lprcSrc2 As RECT) As Long
-Private Declare Function OffsetRect Lib "user32" (lpRect As RECT, ByVal X As Long, ByVal Y As Long) As Long
-Private Declare Function MoveWindow Lib "user32" (ByVal hwnd As Long, ByVal X As Long, ByVal Y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal bRepaint As Long) As Long
+Private Declare Function OffsetRect Lib "user32" (lpRect As RECT, ByVal x As Long, ByVal Y As Long) As Long
+Private Declare Function MoveWindow Lib "user32" (ByVal hwnd As Long, ByVal x As Long, ByVal Y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal bRepaint As Long) As Long
 Private Declare Function GetWindowRect Lib "user32.dll" (ByVal hwnd As Long, lpRect As RECT) As Long
 Private Declare Function MonitorFromRect Lib "user32" (rc As RECT, ByVal dwFlags As dwFlags) As Long
 Private Declare Function GetMonitorInfo Lib "user32" Alias "GetMonitorInfoA" (ByVal hMonitor As Long, MonInfo As tagMONITORINFO) As Long
@@ -150,6 +151,33 @@ Public screenTwipsPerPixelY As Long ' .07 DAEB 26/04/2021 common.bas changed to 
 '    End If
 'End Function
 
+'---------------------------------------------------------------------------------------
+' Procedure : fPixelsPerInchX
+' Author    : Elroy from Vbforums
+' Date      : 23/01/2021
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Function fPixelsPerInchX() As Long
+    Dim hdc As Long: hdc = 0
+    
+    Const LOGPIXELSX As Integer = 88       '  Logical pixels/inch in X
+
+    On Error GoTo fPixelsPerInchX_Error
+    
+    hdc = GetDC(0)
+    If hdc <> 0 Then
+        fPixelsPerInchX = GetDeviceCaps(hdc, LOGPIXELSX)
+        ReleaseDC 0, hdc
+    End If
+
+   On Error GoTo 0
+   Exit Function
+
+fPixelsPerInchX_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fPixelsPerInchX of Module Module1"
+End Function
 
 
 '---------------------------------------------------------------------------------------
@@ -227,12 +255,28 @@ Public Function fGetMonitorCount() As Long
     EnumDisplayMonitors 0, ByVal 0&, AddressOf MonitorEnumProc, fGetMonitorCount
 End Function
 
+'---------------------------------------------------------------------------------------
+' Procedure : MonitorEnumProc
+' Author    : beededea
+' Date      : 06/10/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
 Private Function MonitorEnumProc(ByVal hMonitor As Long, ByVal hdcMonitor As Long, ByRef lprcMonitor As RECT, ByRef dwData As Long) As Long
+    On Error GoTo MonitorEnumProc_Error
+
     ReDim Preserve rcMonitors(dwData)
     rcMonitors(dwData) = lprcMonitor
     UnionRect rcVS, rcVS, lprcMonitor 'merge all monitors together to get the virtual screen coordinates
     dwData = dwData + 1 'increase monitor count
     MonitorEnumProc = 1 'continue
+
+    On Error GoTo 0
+    Exit Function
+
+MonitorEnumProc_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure MonitorEnumProc of Module Module2"
 End Function
 
 '---------------------------------------------------------------------------------------
@@ -295,67 +339,57 @@ End Sub
 '             all the other stuff is currently commented out. Might need it later.
 '---------------------------------------------------------------------------------------
 '
-Public Function monitorProperties(ByVal frm As Form) As UDTMonitor
+Public Function monitorProperties(ByVal frm As cWidgetForm) As UDTMonitor
     
     'Return the properties (in Twips) of the monitor on which most of Frm is mapped
     
-'    Dim hMonitor As Long: hMonitor = 0
-'    Dim MONITORINFO As tagMONITORINFO
-'    Dim Frect As RECT
-'    Dim ad As Double: ad = 0
+    Dim hMonitor As Long: hMonitor = 0
+    Dim MONITORINFO As tagMONITORINFO
+    Dim Frect As RECT
+    Dim ad As Double: ad = 0
     
     ' reads the size and position of the window
     On Error GoTo monitorProperties_Error
    
-    If debugflg = 1 Then MsgBox "%" & " func monitorProperties"
+    If debugFlg = 1 Then MsgBox "%" & " func monitorProperties"
 
-'    GetWindowRect frm.hwnd, Frect
-'    hMonitor = MonitorFromRect(Frect, MONITOR_DEFAULTTOPRIMARY) ' get handle for monitor containing most of Frm
+    GetWindowRect frm.hwnd, Frect
+    hMonitor = MonitorFromRect(Frect, MONITOR_DEFAULTTOPRIMARY) ' get handle for monitor containing most of Frm
                                                                 ' if disconnected return handle (and properties) for primary monitor
-    ' STARTS 23/01/2021 .01 common.bas DAEB calls twipsperpixelsX/Y function when determining the twips for high DPI screens
-
-    ' only calling TwipsPerPixelX/Y once on startup
-    screenTwipsPerPixelX = fTwipsPerPixelX
-    screenTwipsPerPixelY = fTwipsPerPixelY
-    
-    'MsgBox "Harry - send me this please screenTwipsPerPixelX - " & screenTwipsPerPixelX
-    
-    ' ENDS 23/01/2021 .01 common.bas DAEB calls twipsperpixelsX/Y function when determining the twips for high DPI screens
-    
     On Error GoTo GetMonitorInformation_Err
-'    MONITORINFO.cbSize = Len(MONITORINFO)
-'    GetMonitorInfo hMonitor, MONITORINFO
-'    With monitorProperties
-'        .handle = hMonitor
-'        'convert all dimensions from pixels to twips
-'        .Left = MONITORINFO.rcMonitor.Left * screenTwipsPerPixelX
-'        .Right = MONITORINFO.rcMonitor.Right * screenTwipsPerPixelX
-'        .Top = MONITORINFO.rcMonitor.Top * screenTwipsPerPixelY
-'        .Bottom = MONITORINFO.rcMonitor.Bottom * screenTwipsPerPixelY
-'
-'        .WorkLeft = MONITORINFO.rcWork.Left * screenTwipsPerPixelX
-'        .WorkRight = MONITORINFO.rcWork.Right * screenTwipsPerPixelX
-'        .WorkTop = MONITORINFO.rcWork.Top * screenTwipsPerPixelY
-'        .Workbottom = MONITORINFO.rcWork.Bottom * screenTwipsPerPixelY
-'
-'        .Height = (MONITORINFO.rcMonitor.Bottom - MONITORINFO.rcMonitor.Top) * screenTwipsPerPixelY
-'        .Width = (MONITORINFO.rcMonitor.Right - MONITORINFO.rcMonitor.Left) * screenTwipsPerPixelX
-'
-'        .WorkHeight = (MONITORINFO.rcWork.Bottom - MONITORINFO.rcWork.Top) * screenTwipsPerPixelY
-'        .WorkWidth = (MONITORINFO.rcWork.Right - MONITORINFO.rcWork.Left) * screenTwipsPerPixelX
-'
-'        .IsPrimary = MONITORINFO.dwFlags And MONITORINFOF_PRIMARY
-'    End With
+    MONITORINFO.cbSize = Len(MONITORINFO)
+    GetMonitorInfo hMonitor, MONITORINFO
+    With monitorProperties
+        .handle = hMonitor
+        'convert all dimensions from pixels to twips
+        .Left = MONITORINFO.rcMonitor.Left * screenTwipsPerPixelX
+        .Right = MONITORINFO.rcMonitor.Right * screenTwipsPerPixelX
+        .Top = MONITORINFO.rcMonitor.Top * screenTwipsPerPixelY
+        .Bottom = MONITORINFO.rcMonitor.Bottom * screenTwipsPerPixelY
+
+        .WorkLeft = MONITORINFO.rcWork.Left * screenTwipsPerPixelX
+        .WorkRight = MONITORINFO.rcWork.Right * screenTwipsPerPixelX
+        .WorkTop = MONITORINFO.rcWork.Top * screenTwipsPerPixelY
+        .Workbottom = MONITORINFO.rcWork.Bottom * screenTwipsPerPixelY
+
+        .Height = (MONITORINFO.rcMonitor.Bottom - MONITORINFO.rcMonitor.Top) * screenTwipsPerPixelY
+        .Width = (MONITORINFO.rcMonitor.Right - MONITORINFO.rcMonitor.Left) * screenTwipsPerPixelX
+
+        .WorkHeight = (MONITORINFO.rcWork.Bottom - MONITORINFO.rcWork.Top) * screenTwipsPerPixelY
+        .WorkWidth = (MONITORINFO.rcWork.Right - MONITORINFO.rcWork.Left) * screenTwipsPerPixelX
+
+        .IsPrimary = MONITORINFO.dwFlags And MONITORINFOF_PRIMARY
+    End With
 '
     Exit Function
 GetMonitorInformation_Err:
-    'Beep
-'    If Err.Number = 453 Then
-'        'should be handled if pre win2k compatibility is required
-'        'Non-Multimonitor OS, return -1
-'        'GetMonitorInformation = -1
-'        'etc
-'    End If
+    Beep
+    If Err.Number = 453 Then
+        'should be handled if pre win2k compatibility is required
+        'Non-Multimonitor OS, return -1
+        'GetMonitorInformation = -1
+        'etc
+    End If
 
    On Error GoTo 0
    Exit Function
@@ -364,7 +398,5 @@ monitorProperties_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure monitorProperties of Module common"
 End Function
-
-
 
 

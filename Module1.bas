@@ -1,4 +1,7 @@
 Attribute VB_Name = "Module1"
+'@IgnoreModule IntegerDataType, ModuleWithoutFolder
+' gaugeForm_BubblingEvent ' leaving that here so I can copy/paste to find it
+
 '---------------------------------------------------------------------------------------
 ' Module    : Module1
 ' Author    : beededea
@@ -179,6 +182,9 @@ Private Declare Function RegSetValueEx Lib "advapi32.dll" Alias "RegSetValueExA"
 '------------------------------------------------------ ENDS
 
 
+
+
+
 '------------------------------------------------------ STARTS
 ' Enums defined for opening a common dialog box to select files without OCX dependencies
 Private Enum FileOpenConstants
@@ -241,10 +247,10 @@ Private x_OpenFilename As OPENFILENAME
 
 ' APIs declared for opening a common dialog box to select files without OCX dependencies
 Private Declare Function GetOpenFileName Lib "comdlg32" Alias "GetOpenFileNameA" (lpofn As OPENFILENAME) As Long
-Private Declare Function SHBrowseForFolderA Lib "Shell32.dll" (bInfo As BROWSEINFO) As Long
-Private Declare Function SHGetPathFromIDListA Lib "Shell32.dll" (ByVal pidl As Long, ByVal szPath As String) As Long
-Private Declare Function CoTaskMemFree Lib "ole32.dll" (lp As Any) As Long
-Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
+'Private Declare Function SHBrowseForFolderA Lib "Shell32.dll" (bInfo As BROWSEINFO) As Long
+'Private Declare Function SHGetPathFromIDListA Lib "Shell32.dll" (ByVal pidl As Long, ByVal szPath As String) As Long
+'Private Declare Function CoTaskMemFree Lib "ole32.dll" (lp As Any) As Long
+'Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
 '------------------------------------------------------ ENDS
 
 
@@ -272,9 +278,9 @@ Private Type OSVERSIONINFO
   szCSDVersion    As String * 128
 End Type
 
-Private Const VER_PLATFORM_WIN32s = 0
-Private Const VER_PLATFORM_WIN32_WINDOWS = 1
-Private Const VER_PLATFORM_WIN32_NT = 2
+Private Const VER_PLATFORM_WIN32s As Long = 0
+Private Const VER_PLATFORM_WIN32_WINDOWS As Long = 1
+Private Const VER_PLATFORM_WIN32_NT As Long = 2
 '------------------------------------------------------ ENDS
 
 '------------------------------------------------------ STARTS
@@ -283,7 +289,7 @@ Private Const VER_PLATFORM_WIN32_NT = 2
 ' general
 Public PzGStartup As String
 Public PzGGaugeFunctions As String
-
+'Public PzGAnimationInterval As String
 Public PzGSmoothSecondHand As String
 
 
@@ -297,6 +303,7 @@ Public PzGSecondaryDaylightSaving As String
 Public PzGEnableTooltips As String
 Public PzGEnablePrefsTooltips As String
 Public PzGEnableBalloonTooltips As String
+
 Public PzGShowTaskbar As String
 Public PzGDpiAwareness As String
 
@@ -325,7 +332,8 @@ Public PzGOpenFile As String
 Public PzGDefaultEditor As String
        
 ' font
-Public PzGPrefsFont  As String
+Public PzGClockFont As String
+Public PzGPrefsFont As String
 Public PzGPrefsFontSizeHighDPI As String
 Public PzGPrefsFontSizeLowDPI As String
 Public PzGPrefsFontItalics  As String
@@ -351,7 +359,6 @@ Public PzGLastSelectedTab As String
 Public PzGSkinTheme As String
 Public PzGUnhide As String
 
-
 ' vars stored for positioning the prefs form
 Public PzGFormHighDpiXPosTwips As String
 Public PzGFormHighDpiYPosTwips As String
@@ -359,12 +366,13 @@ Public PzGFormHighDpiYPosTwips As String
 Public PzGFormLowDpiXPosTwips As String
 Public PzGFormLowDpiYPosTwips As String
 
+
 '------------------------------------------------------ ENDS
 
 
 '------------------------------------------------------ STARTS
 ' General variables declared
-Public toolSettingsFile  As String
+'Public toolSettingsFile  As String
 Public classicThemeCapable As Boolean
 Public storeThemeColour As Long
 Public windowsVer As String
@@ -382,7 +390,7 @@ Public CTRL_1 As Boolean
 Public SHIFT_1 As Boolean
 
 ' other globals
-Public debugflg As Integer
+Public debugFlg As Integer
 Public minutesToHide As Integer
 Public aspectRatio As String
   
@@ -410,31 +418,23 @@ Private Declare Function OpenFile Lib "kernel32" (ByVal lpFileName As String, _
 Private Declare Function PathFileExists Lib "shlwapi" Alias "PathFileExistsA" (ByVal pszPath As String) As Long
 Private Declare Function PathIsDirectory Lib "shlwapi" Alias "PathIsDirectoryA" (ByVal pszPath As String) As Long
 Public PzGWindowLevelWasChanged As Boolean
-Public startupFlg As Boolean
-
-
-
-'------------------------------------------------------ STARTS
-Private Type TimeZoneInfo
-    bias As Long
-    StandardName(63) As Byte
-    StandardDate(7) As Integer
-    StandardBias As Long
-    DaylightName(63) As Byte
-    DaylightDate(7) As Integer
-    DaylightBias As Long
-End Type
- 
-Private Const TIME_ZONE_ID_DAYLIGHT = 2
-Private Declare Function GetTimeZoneInformation Lib "kernel32" (uTZ As TimeZoneInfo) As Long
-'------------------------------------------------------ ENDS
-' Flag for debug mode '.06 DAEB 19/04/2021 common.bas moved to the common area so that it can be used by each of the utilities
-Private mbDebugMode As Boolean ' .30 DAEB 03/03/2021 frmMain.frm replaced the inIDE function that used a variant to one without
-
 
 '------------------------------------------------------ ENDS
                             
-     
+
+
+
+' Flag for debug mode '.06 DAEB 19/04/2021 common.bas moved to the common area so that it can be used by each of the utilities
+Private mbDebugMode As Boolean ' .30 DAEB 03/03/2021 frmMain.frm replaced the inIDE function that used a variant to one without
+
+Public tzDelta As Long
+Public tzDelta1 As Long
+
+Public msgBoxADynamicSizingFlg As Boolean
+
+
+
+
 '---------------------------------------------------------------------------------------
 ' Procedure : fFExists
 ' Author    : RobDog888 https://www.vbforums.com/member.php?17511-RobDog888
@@ -544,35 +544,35 @@ End Function
 ' Purpose   : extract the suffix from a filename
 '---------------------------------------------------------------------------------------
 '
-Public Function fExtractSuffix(ByVal strPath As String) As String
-
-    
-    Dim stringBits() As String ' string array
-    Dim upperBit As Integer: upperBit = 0
-    
-    On Error GoTo fExtractSuffix_Error
-    '''If debugflg = 1  Then DebugPrint "%" & "fnExtractSuffix"
-   
-    If strPath = vbNullString Then
-        fExtractSuffix = vbNullString
-        Exit Function
-    End If
-        
-    If InStr(strPath, ".") <> 0 Then
-        stringBits = Split(strPath, ".")
-        upperBit = UBound(stringBits)
-        fExtractSuffix = stringBits(upperBit)
-    Else
-        fExtractSuffix = strPath
-    End If
-
-   On Error GoTo 0
-   Exit Function
-
-fExtractSuffix_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fExtractSuffix of module module1"
-End Function
+'Public Function fExtractSuffix(ByVal strPath As String) As String
+'
+'
+'    Dim stringBits() As String ' string array
+'    Dim upperBit As Integer: upperBit = 0
+'
+'    On Error GoTo fExtractSuffix_Error
+'    '''If debugflg = 1  Then DebugPrint "%" & "fnExtractSuffix"
+'
+'    If strPath = vbNullString Then
+'        fExtractSuffix = vbNullString
+'        Exit Function
+'    End If
+'
+'    If InStr(strPath, ".") <> 0 Then
+'        stringBits = Split(strPath, ".")
+'        upperBit = UBound(stringBits)
+'        fExtractSuffix = stringBits(upperBit)
+'    Else
+'        fExtractSuffix = strPath
+'    End If
+'
+'   On Error GoTo 0
+'   Exit Function
+'
+'fExtractSuffix_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fExtractSuffix of module module1"
+'End Function
 '---------------------------------------------------------------------------------------
 ' Procedure : fExtractSuffixWithDot
 ' Author    : beededea
@@ -580,34 +580,34 @@ End Function
 ' Purpose   : extract the suffix from a filename
 '---------------------------------------------------------------------------------------
 '
-Public Function fExtractSuffixWithDot(ByVal strPath As String) As String
-    
-    Dim stringBits() As String ' string array
-    Dim upperBit As Integer:    upperBit = 0
-    
-    On Error GoTo fExtractSuffixWithDot_Error
-    '''If debugflg = 1  Then DebugPrint "%" & "fExtractSuffixWithDot"
-   
-    If strPath = vbNullString Then
-        fExtractSuffixWithDot = vbNullString
-        Exit Function
-    End If
-        
-    If InStr(strPath, ".") <> 0 Then
-        stringBits = Split(strPath, ".")
-        upperBit = UBound(stringBits)
-        fExtractSuffixWithDot = "." & stringBits(upperBit)
-    Else
-        fExtractSuffixWithDot = vbNullString
-    End If
-
-   On Error GoTo 0
-   Exit Function
-
-fExtractSuffixWithDot_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fExtractSuffixWithDot of module module1"
-End Function
+'Public Function fExtractSuffixWithDot(ByVal strPath As String) As String
+'
+'    Dim stringBits() As String ' string array
+'    Dim upperBit As Integer:    upperBit = 0
+'
+'    On Error GoTo fExtractSuffixWithDot_Error
+'    '''If debugflg = 1  Then DebugPrint "%" & "fExtractSuffixWithDot"
+'
+'    If strPath = vbNullString Then
+'        fExtractSuffixWithDot = vbNullString
+'        Exit Function
+'    End If
+'
+'    If InStr(strPath, ".") <> 0 Then
+'        stringBits = Split(strPath, ".")
+'        upperBit = UBound(stringBits)
+'        fExtractSuffixWithDot = "." & stringBits(upperBit)
+'    Else
+'        fExtractSuffixWithDot = vbNullString
+'    End If
+'
+'   On Error GoTo 0
+'   Exit Function
+'
+'fExtractSuffixWithDot_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fExtractSuffixWithDot of module module1"
+'End Function
 
 '---------------------------------------------------------------------------------------
 ' Procedure : fExtractFileNameNoSuffix
@@ -616,67 +616,145 @@ End Function
 ' Purpose   : extract the filename without a suffix
 '---------------------------------------------------------------------------------------
 '
-Public Function fExtractFileNameNoSuffix(ByVal strPath As String) As String
-    
-    Dim stringBits() As String ' string array
-    Dim lowerBit As Integer:    lowerBit = 0
-    
-    On Error GoTo fExtractFileNameNoSuffix_Error
-    '''If debugflg = 1  Then DebugPrint "%" & "fnExtractFileNameNoSuffix"
-   
-    If strPath = vbNullString Then
-        fExtractFileNameNoSuffix = vbNullString
-        Exit Function
-    End If
-        
-    If InStr(strPath, ".") <> 0 Then
-        stringBits = Split(strPath, ".")
-        lowerBit = LBound(stringBits)
-        fExtractFileNameNoSuffix = stringBits(lowerBit)
-    Else
-        fExtractFileNameNoSuffix = strPath
-    End If
-
-   On Error GoTo 0
-   Exit Function
-
-fExtractFileNameNoSuffix_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fExtractFileNameNoSuffix of module module1"
-End Function
+'Public Function fExtractFileNameNoSuffix(ByVal strPath As String) As String
+'
+'    Dim stringBits() As String ' string array
+'    Dim lowerBit As Integer:    lowerBit = 0
+'
+'    On Error GoTo fExtractFileNameNoSuffix_Error
+'    '''If debugflg = 1  Then DebugPrint "%" & "fnExtractFileNameNoSuffix"
+'
+'    If strPath = vbNullString Then
+'        fExtractFileNameNoSuffix = vbNullString
+'        Exit Function
+'    End If
+'
+'    If InStr(strPath, ".") <> 0 Then
+'        stringBits = Split(strPath, ".")
+'        lowerBit = LBound(stringBits)
+'        fExtractFileNameNoSuffix = stringBits(lowerBit)
+'    Else
+'        fExtractFileNameNoSuffix = strPath
+'    End If
+'
+'   On Error GoTo 0
+'   Exit Function
+'
+'fExtractFileNameNoSuffix_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fExtractFileNameNoSuffix of module module1"
+'End Function
 '
 '---------------------------------------------------------------------------------------
-' Procedure : checkLicenceState
+' Procedure : fLicenceState
 ' Author    : beededea
 ' Date      : 20/06/2019
 ' Purpose   : check the state of the licence
 '---------------------------------------------------------------------------------------
 '
-Public Sub checkLicenceState()
+Public Function fLicenceState() As Integer
     Dim slicence As String: slicence = "0"
-    On Error GoTo checkLicenceState_Error
-    ''If debugflg = 1  Then DebugPrint "%" & "checkLicenceState"
     
+    On Error GoTo fLicenceState_Error
+    ''If debugflg = 1  Then DebugPrint "%" & "fLicenceState"
+    
+    fLicenceState = 0
     ' read the tool's own settings file
     If fFExists(PzGSettingsFile) Then ' does the tool's own settings.ini exist?
-        slicence = fGetINISetting("Software\PzStopwatch", "Licence", PzGSettingsFile)
+        slicence = fGetINISetting("Software\PzStopWatch", "licence", PzGSettingsFile)
         ' if the licence state is not already accepted then display the licence form
-        If slicence = "0" Or slicence = "" Then
-            'Call LoadFileToTB(frmLicence.txtLicenceTextBox, App.Path & "\Resources\txt\licence.txt", False)
-            
-            Call licenceSplash
-            'frmLicence.show vbModal ' show the licence screen in VB modal mode (ie. on its own)
-            ' on the licence box change the state fo the licence acceptance
-        End If
+        If slicence = "1" Then fLicenceState = 1
+    End If
+
+   On Error GoTo 0
+   Exit Function
+
+fLicenceState_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fLicenceState of Form common"
+
+End Function
+'---------------------------------------------------------------------------------------
+' Procedure : showLicence
+' Author    : beededea
+' Date      : 20/06/2019
+' Purpose   : check the state of the licence
+'---------------------------------------------------------------------------------------
+'
+Public Sub showLicence(ByVal licenceState As Integer)
+    Dim slicence As String: slicence = "0"
+    On Error GoTo showLicence_Error
+    ''If debugflg = 1  Then DebugPrint "%" & "showLicence"
+    
+    ' if the licence state is not already accepted then display the licence form
+    If licenceState = 0 Then
+        'Call LoadFileToTB(frmLicence.txtLicenceTextBox, App.Path & "\Resources\txt\licence.txt", False)
+        Call licenceSplash
     End If
 
    On Error GoTo 0
    Exit Sub
 
-checkLicenceState_Error:
+showLicence_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure checkLicenceState of Form common"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure showLicence of Form common"
 
+End Sub
+    
+    
+    
+
+'---------------------------------------------------------------------------------------
+' Procedure : setDPIaware
+' Author    : beededea
+' Date      : 29/10/2023
+' Purpose   : This sets DPI awareness for the whole program incl. native VB6 forms, requires a program hard restart.
+'---------------------------------------------------------------------------------------
+'
+Public Sub setDPIaware()
+    On Error GoTo setDPIaware_Error
+    
+'    Cairo.SetDPIAwareness ' for debugging
+'    msgBoxADynamicSizingFlg = True
+    
+    If PzGDpiAwareness = "1" Then
+        If Not InIDE Then
+            Cairo.SetDPIAwareness ' this way avoids the VB6 IDE shrinking (sadly, VB6 has a high DPI unaware IDE)
+            msgBoxADynamicSizingFlg = True
+        End If
+    End If
+
+
+    On Error GoTo 0
+    Exit Sub
+
+setDPIaware_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setDPIaware of Module modMain"
+End Sub
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : testDPIAndSetInitialAwareness
+' Author    : beededea
+' Date      : 29/10/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Sub testDPIAndSetInitialAwareness()
+    On Error GoTo testDPIAndSetInitialAwareness_Error
+
+    If fPixelsPerInchX() > 96 Then ' only DPI aware by default when greater than 'standard'
+        PzGDpiAwareness = "1"
+        Call setDPIaware
+    End If
+
+    On Error GoTo 0
+    Exit Sub
+
+testDPIAndSetInitialAwareness_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure testDPIAndSetInitialAwareness of Module Module1"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -862,7 +940,7 @@ Public Sub addTargetFile(ByVal fieldValue As String, ByRef retFileName As String
             ' set the default folder to the existing reference
             dialogInitDir = fieldValue 'start dir, might be "C:\" or so also
         Else
-            dialogInitDir = App.Path 'start dir, might be "C:\" or so also
+            dialogInitDir = App.path 'start dir, might be "C:\" or so also
         End If
     End If
     
@@ -901,16 +979,16 @@ End Sub
 ' Purpose   : get the folder or directory path as a string not including the last backslash
 '---------------------------------------------------------------------------------------
 '
-Public Function fGetDirectory(ByRef Path As String) As String
+Public Function fGetDirectory(ByRef path As String) As String
 
    On Error GoTo fGetDirectory_Error
    ''If debugflg = 1  Then DebugPrint "%" & "fnGetDirectory"
 
-    If InStrRev(Path, "\") = 0 Then
+    If InStrRev(path, "\") = 0 Then
         fGetDirectory = vbNullString
         Exit Function
     End If
-    fGetDirectory = Left$(Path, InStrRev(Path, "\") - 1)
+    fGetDirectory = Left$(path, InStrRev(path, "\") - 1)
 
    On Error GoTo 0
    Exit Function
@@ -964,26 +1042,26 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Public Function GetWindowsVersion() As String
-    Dim osv As OSVERSIONINFO
+    Dim OSV As OSVERSIONINFO
     
     On Error GoTo GetWindowsVersion_Error
 
-    osv.OSVSize = Len(osv)
+    OSV.OSVSize = Len(OSV)
 
-    If GetVersionEx(osv) = 1 Then
-        Select Case osv.PlatformID
+    If GetVersionEx(OSV) = 1 Then
+        Select Case OSV.PlatformID
             Case VER_PLATFORM_WIN32s
                 GetWindowsVersion = "Win32s on Windows 3.1"
             Case VER_PLATFORM_WIN32_NT
                 GetWindowsVersion = "Windows NT"
                 
-                Select Case osv.dwVerMajor
+                Select Case OSV.dwVerMajor
                     Case 3
                         GetWindowsVersion = "Windows NT 3.5"
                     Case 4
                         GetWindowsVersion = "Windows NT 4.0"
                     Case 5
-                        Select Case osv.dwVerMinor
+                        Select Case OSV.dwVerMinor
                             Case 0
                                 GetWindowsVersion = "Windows 2000"
                             Case 1
@@ -992,7 +1070,7 @@ Public Function GetWindowsVersion() As String
                                 GetWindowsVersion = "Windows Server 2003"
                         End Select
                     Case 6
-                        Select Case osv.dwVerMinor
+                        Select Case OSV.dwVerMinor
                             Case 0
                                 GetWindowsVersion = "Windows Vista"
                             Case 1
@@ -1007,7 +1085,7 @@ Public Function GetWindowsVersion() As String
                 End Select
         
             Case VER_PLATFORM_WIN32_WINDOWS:
-                Select Case osv.dwVerMinor
+                Select Case OSV.dwVerMinor
                     Case 0
                         GetWindowsVersion = "Windows 95"
                     Case 90
@@ -1255,10 +1333,11 @@ Public Sub changeFormFont(ByVal formName As Object, ByVal suppliedFont As String
     ' loop through all the controls and identify the labels and text boxes
     For Each Ctrl In formName.Controls
         If (TypeOf Ctrl Is CommandButton) Or (TypeOf Ctrl Is textBox) Or (TypeOf Ctrl Is FileListBox) Or (TypeOf Ctrl Is Label) Or (TypeOf Ctrl Is ComboBox) Or (TypeOf Ctrl Is CheckBox) Or (TypeOf Ctrl Is OptionButton) Or (TypeOf Ctrl Is Frame) Or (TypeOf Ctrl Is ListBox) Then
-            If suppliedFont <> vbNullString Then Ctrl.Font.Name = suppliedFont
-            If suppliedSize > 0 Then Ctrl.Font.Size = suppliedSize
-            Ctrl.Font.Italic = suppliedItalics
-            
+            If Ctrl.Name <> "lblDragCorner" Then
+                If suppliedFont <> vbNullString Then Ctrl.Font.Name = suppliedFont
+                If suppliedSize > 0 Then Ctrl.Font.Size = suppliedSize
+                Ctrl.Font.Italic = suppliedItalics
+            End If
             Select Case True
                 Case (TypeOf Ctrl Is CommandButton)
                     ' stupif fecking VB6 will not let you change the font of the forecolour on a button!
@@ -1460,29 +1539,32 @@ End Function
 '
 Public Sub aboutClickEvent()
     Dim fileToPlay As String: fileToPlay = vbNullString
-    
-    ' The RC forms are measured in pixels so the positioning needs to turn the twips into pixels
+
     On Error GoTo aboutClickEvent_Error
     
     fileToPlay = "till.wav"
-    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
-        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+    If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+        PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
+    
+    ' The RC forms are measured in pixels so the positioning needs to pre-convert the twips into pixels
    
     fMain.aboutForm.Top = (screenHeightPixels / 2) - (fMain.aboutForm.Height / 2)
     fMain.aboutForm.Left = (screenWidthPixels / 2) - (fMain.aboutForm.Width / 2)
+     
+    fMain.aboutForm.Load
+    fMain.aboutForm.Show
     
-    aboutWidget.opacity = 0
+    'aboutWidget.opacity = 0
     aboutWidget.ShowMe = True
-    'aboutWidget.Widget.Refresh
+    aboutWidget.Widget.Refresh
     
     'fMain.aboutForm.Load
-    fMain.aboutForm.show
+    'fMain.aboutForm.show
       
-    
-     If (fMain.aboutForm.WindowState = 1) Then
-         fMain.aboutForm.WindowState = 0
-     End If
+    If (fMain.aboutForm.WindowState = 1) Then
+        fMain.aboutForm.WindowState = 0
+    End If
 
    On Error GoTo 0
    Exit Sub
@@ -1491,6 +1573,91 @@ aboutClickEvent_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure aboutClickEvent of Module Module1"
 End Sub
+'---------------------------------------------------------------------------------------
+' Procedure : helpSplash
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Sub helpSplash()
+
+    Dim fileToPlay As String: fileToPlay = vbNullString
+
+    On Error GoTo helpSplash_Error
+
+    fileToPlay = "till.wav"
+    If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+        PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+    End If
+
+    fMain.helpForm.Top = (screenHeightPixels / 2) - (fMain.helpForm.Height / 2)
+    fMain.helpForm.Left = (screenWidthPixels / 2) - (fMain.helpForm.Width / 2)
+     
+    'helpWidget.MyOpacity = 0
+    helpWidget.ShowMe = True
+    helpWidget.Widget.Refresh
+    
+    fMain.helpForm.Load
+    fMain.helpForm.Show
+    
+     If (fMain.helpForm.WindowState = 1) Then
+         fMain.helpForm.WindowState = 0
+     End If
+
+   On Error GoTo 0
+   Exit Sub
+
+helpSplash_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure helpSplash of Form menuForm"
+     
+End Sub
+'---------------------------------------------------------------------------------------
+' Procedure : licenceSplash
+' Author    : beededea
+' Date      : 03/08/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Sub licenceSplash()
+
+    Dim fileToPlay As String: fileToPlay = vbNullString
+
+    On Error GoTo licenceSplash_Error
+
+    fileToPlay = "till.wav"
+    If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+        PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+    End If
+    
+    
+    fMain.licenceForm.Top = (screenHeightPixels / 2) - (fMain.licenceForm.Height / 2)
+    fMain.licenceForm.Left = (screenWidthPixels / 2) - (fMain.licenceForm.Width / 2)
+     
+    'licenceWidget.opacity = 0
+    'opacityflag = 0
+    licenceWidget.ShowMe = True
+    licenceWidget.Widget.Refresh
+    
+    fMain.licenceForm.Load
+    fMain.licenceForm.Show
+
+    ' the btnDecline_Click and btnAccept_Click are in modmain.bas
+    
+     If (fMain.licenceForm.WindowState = 1) Then
+         fMain.licenceForm.WindowState = 0
+     End If
+
+   On Error GoTo 0
+   Exit Sub
+
+licenceSplash_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure licenceSplash of Form menuForm"
+     
+End Sub
+
 
 '---------------------------------------------------------------------------------------
 ' Procedure : mnuCoffee_ClickEvent
@@ -1504,12 +1671,12 @@ Public Sub mnuCoffee_ClickEvent()
     Dim answerMsg As String: answerMsg = vbNullString
     On Error GoTo mnuCoffee_ClickEvent_Error
     
-    'answer = MsgBox(" Help support the creation of more widgets like this, DO send us a coffee! This button opens a browser window and connects to the Kofi donate page for this widget). Will you be kind and proceed?", vbExclamation + vbYesNo)
+    answer = vbYes
     answerMsg = " Help support the creation of more widgets like this, DO send us a coffee! This button opens a browser window and connects to the Kofi donate page for this widget). Will you be kind and proceed?"
-    answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Request to Donate a Kofi", False)
+    answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Request to Donate a Kofi", True, "mnuCoffeeClickEvent")
 
     If answer = vbYes Then
-        Call ShellExecute(menuForm.hwnd, "Open", "https://www.ko-fi.com/yereverluvinunclebert", vbNullString, App.Path, 1)
+        Call ShellExecute(menuForm.hwnd, "Open", "https://www.ko-fi.com/yereverluvinunclebert", vbNullString, App.path, 1)
     End If
 
    On Error GoTo 0
@@ -1534,12 +1701,12 @@ Public Sub mnuSupport_ClickEvent()
 
     On Error GoTo mnuSupport_ClickEvent_Error
     
-    'answer = MsgBox("Visiting the support page - this button opens a browser window and connects to our Github issues page where you can send us a support query. Proceed?", vbExclamation + vbYesNo)
+    answer = vbYes
     answerMsg = "Visiting the support page - this button opens a browser window and connects to our Github issues page where you can send us a support query. Proceed?"
-    answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Request to Contact Support", False)
+    answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Request to Contact Support", True, "mnuSupportClickEvent")
 
     If answer = vbYes Then
-        Call ShellExecute(menuForm.hwnd, "Open", "https://github.com/yereverluvinunclebert/Panzer-Earth-gauge-VB6/issues", vbNullString, App.Path, 1)
+        Call ShellExecute(menuForm.hwnd, "Open", "https://github.com/yereverluvinunclebert/Panzer-StopWatch-VB6/issues", vbNullString, App.path, 1)
     End If
 
    On Error GoTo 0
@@ -1561,9 +1728,8 @@ Public Sub mnuLicence_ClickEvent()
 
    On Error GoTo mnuLicence_ClickEvent_Error
 
-'    Call LoadFileToTB(frmLicence.txtLicenceTextBox, App.Path & "\Resources\txt\licence.txt", False)
-'    frmLicence.show
-
+    'Call LoadFileToTB(frmLicence.txtLicenceTextBox, App.Path & "\Resources\txt\licence.txt", False)
+    
     Call licenceSplash
 
    On Error GoTo 0
@@ -1585,32 +1751,34 @@ Public Sub setMainTooltips()
    On Error GoTo setMainTooltips_Error
 
     If PzGEnableTooltips = "1" Then
-        overlayWidget.Widget.FontName = PzGPrefsFont ' does not apply to the tooltip
+
         overlayWidget.Widget.ToolTip = "Use CTRL+mouse scrollwheel up/down to resize."
         helpWidget.Widget.ToolTip = "Click on me to make me go away."
         aboutWidget.Widget.ToolTip = "Click on me to make me go away."
         
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/tickbutton").Widget.ToolTip = "Choose smooth movement or regular ticks"
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/helpbutton").Widget.ToolTip = "Press for a little help"
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/startbutton").Widget.ToolTip = "Press to restart (when stopped)"
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/stopbutton").Widget.ToolTip = "Press to stop clock operation."
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/switchfacesbutton").Widget.ToolTip = "Press to do nothing at all."
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/lockbutton").Widget.ToolTip = "Press to lock the widget in place"
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/prefsbutton").Widget.ToolTip = "Press to open the widget preferences"
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/surround").Widget.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
+        fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget.ToolTip = "Choose smooth movement or regular ticks"
+        fAlpha.gaugeForm.Widgets("housing/helpbutton").Widget.ToolTip = "Press for a little help"
+        fAlpha.gaugeForm.Widgets("housing/startbutton").Widget.ToolTip = "Press to restart (when stopped)"
+        fAlpha.gaugeForm.Widgets("housing/stopbutton").Widget.ToolTip = "Press to stop clock operation."
+        fAlpha.gaugeForm.Widgets("housing/switchfacesbutton").Widget.ToolTip = "Press to do nothing at all."
+        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.ToolTip = "Press to lock the widget in place"
+        fAlpha.gaugeForm.Widgets("housing/prefsbutton").Widget.ToolTip = "Press to open the widget preferences"
+        fAlpha.gaugeForm.Widgets("housing/surround").Widget.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
+        
     Else
         overlayWidget.Widget.ToolTip = vbNullString
         helpWidget.Widget.ToolTip = vbNullString
         aboutWidget.Widget.ToolTip = vbNullString
         
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/tickbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/helpbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/startbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/stopbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/switchfacesbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/lockbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/prefsbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("stopwatch/face/housing/surround").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/helpbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/startbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/stopbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/switchfacesbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/prefsbutton").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/surround").Widget.ToolTip = vbNullString
+        
     End If
     
     Call ChangeToolTipWidgetDefaultSettings(Cairo.ToolTipWidget.Widget)
@@ -1629,14 +1797,14 @@ End Sub
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Sub ChangeToolTipWidgetDefaultSettings(My_Widget As cWidgetBase)
+Public Sub ChangeToolTipWidgetDefaultSettings(ByRef My_Widget As cWidgetBase)
 
    On Error GoTo ChangeToolTipWidgetDefaultSettings_Error
 
     With My_Widget
     
-    .FontName = PzGPrefsFont
-    .FontSize = Val(PzGPrefsFontSizeLowDPI)
+        .FontName = PzGClockFont
+        .FontSize = Val(PzGPrefsFontSizeLowDPI)
     
     End With
 
@@ -1657,25 +1825,34 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Public Sub makeVisibleFormElements()
+
+    Dim formLeftPixels As Long: formLeftPixels = 0
+    Dim formTopPixels As Long: formTopPixels = 0
+    Dim monitorCount As Long: monitorCount = 0
     
     On Error GoTo makeVisibleFormElements_Error
 
     'NOTE that when you position a widget you are positioning the form it is drawn upon.
-    
-'     PzGMaximiseFormX = fGetINISetting("Software\PzStopwatch", "maximiseFormX", PzGSettingsFile)
-'     PzGMaximiseFormY = fGetINISetting("Software\PzStopwatch", "maximiseFormY", PzGSettingsFile)
 
     If PzGDpiAwareness = "1" Then
-        fAlpha.gaugeForm.Left = Val(PzGClockHighDpiXPos)
-        fAlpha.gaugeForm.Top = Val(PzGClockHighDpiYPos)
+        formLeftPixels = Val(PzGClockHighDpiXPos)
+        formTopPixels = Val(PzGClockHighDpiYPos)
     Else
-        fAlpha.gaugeForm.Left = Val(PzGClockLowDpiXPos)
-        fAlpha.gaugeForm.Top = Val(PzGClockLowDpiYPos)
+        formLeftPixels = Val(PzGClockLowDpiXPos)
+        formTopPixels = Val(PzGClockLowDpiYPos)
     End If
     
-    ' The RC forms are measured in pixels, do remember that...
+    ' The RC forms are measured in pixels, whereas the native forms are in twips, do remember that...
 
-    fAlpha.gaugeForm.show
+    monitorCount = fGetMonitorCount
+    If monitorCount > 1 Then
+        Call adjustFormPositionToCorrectMonitor(fAlpha.gaugeForm.hwnd, formLeftPixels, formTopPixels)
+    Else
+        fAlpha.gaugeForm.Left = formLeftPixels
+        fAlpha.gaugeForm.Top = formTopPixels
+    End If
+    
+    fAlpha.gaugeForm.Show
 
     On Error GoTo 0
     Exit Sub
@@ -1802,6 +1979,8 @@ Public Sub getKeyPress(ByVal KeyCode As Integer, ByVal Shift As Integer)
             CTRL_1 = True
         Case vbKeyShift
             SHIFT_1 = True
+        Case 82 ' R
+            If Shift = 1 Then Call hardRestart
         Case 116
             Call reloadWidget 'f5 refresh button as per all browsers
     End Select
@@ -1878,8 +2057,8 @@ Public Sub mainScreen()
             End If
         End If
         If PzGAspectHidden = "2" Then
-            'Print "Hiding the widget for landscape mode"
-            'overlayWidget.opacity = 0
+            Debug.Print "Hiding the widget for landscape mode"
+            fAlpha.gaugeForm.Visible = False
         End If
     End If
     
@@ -1890,8 +2069,8 @@ Public Sub mainScreen()
             fAlpha.gaugeForm.Top = Val(PzGPortraitYoffset)
         End If
         If PzGAspectHidden = "1" Then
-            'Print "Hiding the widget for portrait mode"
-            'overlayWidget.opacity = 0
+            Debug.Print "Hiding the widget for portrait mode"
+            fAlpha.gaugeForm.Visible = False
         End If
     End If
 
@@ -2051,17 +2230,17 @@ Public Sub savePosition()
     If PzGDpiAwareness = "1" Then
         PzGClockHighDpiXPos = Str$(fAlpha.gaugeForm.Left) ' saving in pixels
         PzGClockHighDpiYPos = Str$(fAlpha.gaugeForm.Top)
-        sPutINISetting "Software\PzStopwatch", "clockHighDpiXPos", PzGClockHighDpiXPos, PzGSettingsFile
-        sPutINISetting "Software\PzStopwatch", "clockHighDpiYPos", PzGClockHighDpiYPos, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "clockHighDpiXPos", PzGClockHighDpiXPos, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "clockHighDpiYPos", PzGClockHighDpiYPos, PzGSettingsFile
     Else
         PzGClockLowDpiXPos = Str$(fAlpha.gaugeForm.Left) ' saving in pixels
         PzGClockLowDpiYPos = Str$(fAlpha.gaugeForm.Top)
-        sPutINISetting "Software\PzStopwatch", "clockLowDpiXPos", PzGClockLowDpiXPos, PzGSettingsFile
-        sPutINISetting "Software\PzStopwatch", "clockLowDpiYPos", PzGClockLowDpiYPos, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "clockLowDpiXPos", PzGClockLowDpiXPos, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "clockLowDpiYPos", PzGClockLowDpiYPos, PzGSettingsFile
     End If
     
     PzGGaugeSize = Str$(fAlpha.gaugeForm.WidgetRoot.Zoom * 100)
-    sPutINISetting "Software\PzStopwatch", "gaugeSize", PzGGaugeSize, PzGSettingsFile
+    sPutINISetting "Software\PzStopWatch", "gaugeSize", PzGGaugeSize, PzGSettingsFile
 
    On Error GoTo 0
    Exit Sub
@@ -2083,30 +2262,28 @@ End Sub
 '
 Public Sub makeProgramPreferencesAvailable()
     On Error GoTo makeProgramPreferencesAvailable_Error
+'    Dim debugFlg As Integer: debugFlg = 1
+    
+'    If debugFlg = 1 Then
+'
+'        MsgBox "panzerPrefs.Visible " & panzerPrefs.Visible
+'        MsgBox "panzerPrefs.WindowState " & panzerPrefs.WindowState
+'
+'    End If
     
     If panzerPrefs.IsVisible = False Then
-    
+        panzerPrefs.Visible = True
+        panzerPrefs.Show  ' show it again
+        panzerPrefs.SetFocus
+
         If panzerPrefs.WindowState = vbMinimized Then
             panzerPrefs.WindowState = vbNormal
-            Call readPrefsPosition
         End If
-        
-        ' set the current position of the utility according to previously stored positions
 
-        If panzerPrefs.WindowState = vbNormal Then
+        ' set the current position of the utility according to previously stored positions
         
-            Call readPrefsPosition
-            
-            If ((fAlpha.gaugeForm.Left + fAlpha.gaugeForm.Width) * screenTwipsPerPixelX) + 200 + panzerPrefs.Width > screenWidthTwips Then
-                panzerPrefs.Left = (fAlpha.gaugeForm.Left * screenTwipsPerPixelX) - (panzerPrefs.Width + 200)
-            End If
-            
-            If panzerPrefs.Left < 0 Then panzerPrefs.Left = 0
-            If panzerPrefs.Top < 0 Then panzerPrefs.Top = 0
-            
-            panzerPrefs.show  ' show it again
-            panzerPrefs.SetFocus
-        End If
+        Call readPrefsPosition
+        Call panzerPrefs.positionPrefsMonitor
     End If
     
 
@@ -2115,7 +2292,7 @@ Public Sub makeProgramPreferencesAvailable()
 
 makeProgramPreferencesAvailable_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure makeProgramPreferencesAvailable of Form menuForm"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure makeProgramPreferencesAvailable of module module1.bas"
 End Sub
     
 
@@ -2131,39 +2308,39 @@ Public Sub readPrefsPosition()
    On Error GoTo readPrefsPosition_Error
 
     If PzGDpiAwareness = "1" Then
-        PzGFormHighDpiXPosTwips = fGetINISetting("Software\PzStopwatch", "formHighDpiXPosTwips", PzGSettingsFile)
-        PzGFormHighDpiYPosTwips = fGetINISetting("Software\PzStopwatch", "formHighDpiYPosTwips", PzGSettingsFile)
+        PzGFormHighDpiXPosTwips = fGetINISetting("Software\PzStopWatch", "formHighDpiXPosTwips", PzGSettingsFile)
+        PzGFormHighDpiYPosTwips = fGetINISetting("Software\PzStopWatch", "formHighDpiYPosTwips", PzGSettingsFile)
         
-        ' if a current location not stored then position to the middle of the screen
-        If PzGFormHighDpiXPosTwips <> "" Then
-            panzerPrefs.Left = Val(PzGFormHighDpiXPosTwips)
-        Else
-            panzerPrefs.Left = screenWidthTwips / 2 - panzerPrefs.Width / 2
-        End If
-        
-        If PzGFormHighDpiYPosTwips <> "" Then
-            panzerPrefs.Top = Val(PzGFormHighDpiYPosTwips)
-        Else
-            panzerPrefs.Top = Screen.Height / 2 - panzerPrefs.Height / 2
-        End If
+'        ' if a current location not stored then position to the middle of the screen
+'        If PzGFormHighDpiXPosTwips <> "" Then
+'            panzerPrefs.Left = Val(PzGFormHighDpiXPosTwips)
+'        Else
+'            panzerPrefs.Left = screenWidthTwips / 2 - panzerPrefs.Width / 2
+'        End If
+'
+'        If PzGFormHighDpiYPosTwips <> "" Then
+'            panzerPrefs.Top = Val(PzGFormHighDpiYPosTwips)
+'        Else
+'            panzerPrefs.Top = Screen.Height / 2 - panzerPrefs.Height / 2
+'        End If
     Else
-        PzGFormLowDpiXPosTwips = fGetINISetting("Software\PzStopwatch", "formLowDpiXPosTwips", PzGSettingsFile)
-        PzGFormLowDpiYPosTwips = fGetINISetting("Software\PzStopwatch", "formLowDpiYPosTwips", PzGSettingsFile)
+        PzGFormLowDpiXPosTwips = fGetINISetting("Software\PzStopWatch", "formLowDpiXPosTwips", PzGSettingsFile)
+        PzGFormLowDpiYPosTwips = fGetINISetting("Software\PzStopWatch", "formLowDpiYPosTwips", PzGSettingsFile)
         
-        ' if a current location not stored then position to the middle of the screen
-        If PzGFormLowDpiXPosTwips <> "" Then
-            panzerPrefs.Left = Val(PzGFormLowDpiXPosTwips)
-        Else
-            panzerPrefs.Left = screenWidthTwips / 2 - panzerPrefs.Width / 2
-        End If
-        
-        If PzGFormLowDpiYPosTwips <> "" Then
-            panzerPrefs.Top = Val(PzGFormLowDpiYPosTwips)
-        Else
-            panzerPrefs.Top = Screen.Height / 2 - panzerPrefs.Height / 2
-        End If
+'        ' if a current location not stored then position to the middle of the screen
+'        If PzGFormLowDpiXPosTwips <> "" Then
+'            panzerPrefs.Left = Val(PzGFormLowDpiXPosTwips)
+'        Else
+'            panzerPrefs.Left = screenWidthTwips / 2 - panzerPrefs.Width / 2
+'        End If
+'
+'        If PzGFormLowDpiYPosTwips <> "" Then
+'            panzerPrefs.Top = Val(PzGFormLowDpiYPosTwips)
+'        Else
+'            panzerPrefs.Top = Screen.Height / 2 - panzerPrefs.Height / 2
+'        End If
     End If
-
+   
    On Error GoTo 0
    Exit Sub
 
@@ -2188,15 +2365,15 @@ Public Sub writePrefsPosition()
             PzGFormHighDpiYPosTwips = Str$(panzerPrefs.Top)
             
             ' now write those params to the toolSettings.ini
-            sPutINISetting "Software\PzStopwatch", "formHighDpiXPosTwips", PzGFormHighDpiXPosTwips, PzGSettingsFile
-            sPutINISetting "Software\PzStopwatch", "formHighDpiYPosTwips", PzGFormHighDpiYPosTwips, PzGSettingsFile
+            sPutINISetting "Software\PzStopWatch", "formHighDpiXPosTwips", PzGFormHighDpiXPosTwips, PzGSettingsFile
+            sPutINISetting "Software\PzStopWatch", "formHighDpiYPosTwips", PzGFormHighDpiYPosTwips, PzGSettingsFile
         Else
             PzGFormLowDpiXPosTwips = Str$(panzerPrefs.Left)
             PzGFormLowDpiYPosTwips = Str$(panzerPrefs.Top)
             
             ' now write those params to the toolSettings.ini
-            sPutINISetting "Software\PzStopwatch", "formLowDpiXPosTwips", PzGFormLowDpiXPosTwips, PzGSettingsFile
-            sPutINISetting "Software\PzStopwatch", "formLowDpiYPosTwips", PzGFormLowDpiYPosTwips, PzGSettingsFile
+            sPutINISetting "Software\PzStopWatch", "formLowDpiXPosTwips", PzGFormLowDpiXPosTwips, PzGSettingsFile
+            sPutINISetting "Software\PzStopWatch", "formLowDpiYPosTwips", PzGFormLowDpiYPosTwips, PzGSettingsFile
             
         End If
         
@@ -2275,23 +2452,30 @@ Public Sub lockWidget()
     On Error GoTo lockWidget_Error
 
     fileToPlay = "lock.wav"
-    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
-        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
-    End If
     
     If PzGPreventDragging = "1" Then
         menuForm.mnuLockWidget.Checked = False
+        panzerPrefs.chkPreventDragging.Value = 0
         PzGPreventDragging = "0"
         overlayWidget.Locked = False
+        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.Alpha = Val(PzGOpacity) / 100
     Else
         menuForm.mnuLockWidget.Checked = True
-        overlayWidget.Locked = 1
+        panzerPrefs.chkPreventDragging.Value = 1
+        overlayWidget.Locked = True
         PzGPreventDragging = "1"
+        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.Alpha = 0
     End If
-
-    sPutINISetting "Software\PzStopwatch", "preventDragging", PzGPreventDragging, PzGSettingsFile
-
-   On Error GoTo 0
+    
+    fAlpha.gaugeForm.Refresh
+    
+    sPutINISetting "Software\PzStopWatch", "preventDragging", PzGPreventDragging, PzGSettingsFile
+   
+    If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+        PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+    End If
+    
+    On Error GoTo 0
    Exit Sub
 
 lockWidget_Error:
@@ -2301,89 +2485,7 @@ lockWidget_Error:
 End Sub
 
 
-'---------------------------------------------------------------------------------------
-' Procedure : helpSplash
-' Author    : beededea
-' Date      : 03/08/2023
-' Purpose   :
-'---------------------------------------------------------------------------------------
-'
-Public Sub helpSplash()
 
-    Dim fileToPlay As String: fileToPlay = vbNullString
-
-    On Error GoTo helpSplash_Error
-
-    fileToPlay = "till.wav"
-    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
-        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
-    End If
-
-
-    fMain.helpForm.Top = (screenHeightPixels / 2) - (fMain.helpForm.Height / 2)
-    fMain.helpForm.Left = (screenWidthPixels / 2) - (fMain.helpForm.Width / 2)
-     
-    fMain.helpForm.Load
-    fMain.helpForm.show
-    
-    helpWidget.opacity = 0
-    helpWidget.show = True
-    helpWidget.Widget.Refresh
-    
-     If (fMain.helpForm.WindowState = 1) Then
-         fMain.helpForm.WindowState = 0
-     End If
-
-   On Error GoTo 0
-   Exit Sub
-
-helpSplash_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure helpSplash of Form menuForm"
-     
-End Sub
-'---------------------------------------------------------------------------------------
-' Procedure : licenceSplash
-' Author    : beededea
-' Date      : 03/08/2023
-' Purpose   :
-'---------------------------------------------------------------------------------------
-'
-Public Sub licenceSplash()
-
-    Dim fileToPlay As String: fileToPlay = vbNullString
-
-    On Error GoTo licenceSplash_Error
-
-    fileToPlay = "till.wav"
-    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
-        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
-    End If
-
-    fMain.licenceForm.Top = (screenHeightPixels / 2) - (fMain.licenceForm.Height / 2)
-    fMain.licenceForm.Left = (screenWidthPixels / 2) - (fMain.licenceForm.Width / 2)
-     
-    licenceWidget.opacity = 0
-    'opacityflag = 0
-    licenceWidget.ShowMe = True
-    'licenceWidget.Widget.Refresh
-    
-    'fMain.licenceForm.Load
-    fMain.licenceForm.show
-
-    
-     If (fMain.licenceForm.WindowState = 1) Then
-         fMain.licenceForm.WindowState = 0
-     End If
-
-   On Error GoTo 0
-   Exit Sub
-
-licenceSplash_Error:
-
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure licenceSplash of Form menuForm"
-     
-End Sub
 
 '---------------------------------------------------------------------------------------
 ' Procedure : SwitchOff
@@ -2401,7 +2503,7 @@ Public Sub SwitchOff()
     menuForm.mnuTurnFunctionsOn.Checked = False
     
     PzGGaugeFunctions = "0"
-    sPutINISetting "Software\PzStopwatch", "gaugeFunctions", PzGGaugeFunctions, PzGSettingsFile
+    sPutINISetting "Software\PzStopWatch", "gaugeFunctions", PzGGaugeFunctions, PzGSettingsFile
 
    On Error GoTo 0
    Exit Sub
@@ -2427,8 +2529,8 @@ Public Sub TurnFunctionsOn()
    On Error GoTo TurnFunctionsOn_Error
 
     fileToPlay = "ting.wav"
-    If PzGEnableSounds = "1" And fFExists(App.Path & "\resources\sounds\" & fileToPlay) Then
-        PlaySound App.Path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+    If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+        PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
 
     overlayWidget.Ticking = True
@@ -2436,7 +2538,7 @@ Public Sub TurnFunctionsOn()
     menuForm.mnuTurnFunctionsOn.Checked = True
     
     PzGGaugeFunctions = "1"
-    sPutINISetting "Software\PzStopwatch", "gaugeFunctions", PzGGaugeFunctions, PzGSettingsFile
+    sPutINISetting "Software\PzStopWatch", "gaugeFunctions", PzGGaugeFunctions, PzGSettingsFile
 
    On Error GoTo 0
    Exit Sub
@@ -2445,6 +2547,35 @@ TurnFunctionsOn_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure TurnFunctionsOn of Form menuForm"
 End Sub
+
+
+'''---------------------------------------------------------------------------------------
+''' Procedure : IsDLSavings
+''' Author    : beededea
+''' Date      : 13/08/2023
+''' Purpose   :
+'''---------------------------------------------------------------------------------------
+'''
+'Public Function IsDLSavings() As Boolean
+'
+'    Dim uInfo As TimeZoneInfo, lReturn As Long
+'
+'    On Error GoTo IsDLSavings_Error
+'
+'    lReturn = GetTimeZoneInformation(uInfo)
+'
+'    If lReturn = TIME_ZONE_ID_DAYLIGHT Then
+'        IsDLSavings = True
+'    End If
+'
+'   On Error GoTo 0
+'   Exit Function
+'
+'IsDLSavings_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure IsDLSavings of Module Module1"
+'
+'End Function
 
 
 
@@ -2463,13 +2594,12 @@ Public Sub hardRestart()
     
     On Error GoTo hardRestart_Error
 
-    thisCommand = App.Path & "\restart.exe"
+    thisCommand = App.path & "\restart.exe"
     
     If fFExists(thisCommand) Then
         
         ' run the selected program
-        Call ShellExecute(panzerPrefs.hwnd, "open", thisCommand, "PzStopwatch.exe", "", 1)
-        
+        Call ShellExecute(panzerPrefs.hwnd, "open", thisCommand, "Panzer StopWatch.exe prefs", "", 1)
     Else
         'answer = MsgBox(thisCommand & " is missing", vbOKOnly + vbExclamation)
         answerMsg = thisCommand & " is missing"
@@ -2484,6 +2614,7 @@ hardRestart_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure hardRestart of Module Module1"
 
 End Sub
+
 
 '---------------------------------------------------------------------------------------
 ' Procedure : InIDE
@@ -2532,6 +2663,7 @@ InDebugMode_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure InDebugMode of Module Module1"
 End Function
+
 
 '---------------------------------------------------------------------------------------
 ' Procedure : clearAllMessageBoxRegistryEntries
@@ -2583,9 +2715,9 @@ Public Function determineIconWidth(ByRef thisForm As Form, ByVal thisDynamicSizi
     
     On Error GoTo determineIconWidth_Error
     
-    If thisDynamicSizingFlg = False Then
-        'Exit Function
-    End If
+'    If thisDynamicSizingFlg = False Then
+'        'Exit Function
+'    End If
     
     If thisForm.Width < 10500 Then
         topIconWidth = 600 '40 pixels
@@ -2614,7 +2746,34 @@ Public Function determineIconWidth(ByRef thisForm As Form, ByVal thisDynamicSizi
 
 determineIconWidth_Error:
 
-     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure determineIconWidth of Form panzerPrefs"
-Exit Function
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure determineIconWidth of Form panzerPrefs"
 
 End Function
+
+'---------------------------------------------------------------------------------------
+' Procedure : ArrayString
+' Author    : beededea
+' Date      : 09/10/2023
+' Purpose   : allows population of a string array from a comma separated string
+'             VB6 normally creates a variant when assigning a comma separated string to a var with an undeclared type
+'             this avoids that scenario.
+'---------------------------------------------------------------------------------------
+'
+Public Function ArrayString(ParamArray tokens()) As String()
+    On Error GoTo ArrayString_Error
+
+    ReDim Arr(UBound(tokens)) As String
+    Dim I As Long
+    For I = 0 To UBound(tokens)
+        Arr(I) = tokens(I)
+    Next
+    ArrayString = Arr
+
+    On Error GoTo 0
+    Exit Function
+
+ArrayString_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure ArrayString of Module Module1"
+End Function
+

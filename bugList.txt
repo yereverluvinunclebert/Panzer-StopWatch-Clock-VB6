@@ -20,31 +20,305 @@
 ' remove the smaller face images and replace with two merged stopwatch/clock faces - done
 ' mousewheel resize up/down direction - done
 
-' top justification of help button - wip
+' -oOo-
 
-' switch tick functions off, make it stick after a reboot/reload
+' top justification of help button - done
+' switch tick functions off, make it stick after a reboot/reload - done
+' %systemroot handled as per steamydock  - done
+' dblClick command - tested
+' shift +dblclick  - tested
+' new text base font and derived font - done
+' prefs position not saving/restoring - done
+' all changes backported to other VB6 widgets - done
+' hiding immediately from within the prefs - done
+' tooltips for the timezones and DST - done
+' credits updated - done
 
-' %systemroot handled as per steamydock
-' hide normal font box, show only the resized font
-' try the balloon tooltips on one control
-' opacity change after save, does not stick
-'
+' add hard restart after DPI awareness change - done
+' gauge mousewheel resize store position - done
+' tidy prefs form_load - done
+
+' day digits added and date logic given - done
+' month digits added and date logic given - done
+' opacity change after save, does not stick - restart - done
+
+' read the DST and timezones into the text fields in the prefs  - done
+
+' byval/byref on recent code additions - done
+
+' try the balloon tooltips on one control onmouseOver - done
+
+' when the standard tooltips are altered, a soft reload is required - done
+
+' HTML help screenshots of the prefs - done - need to be bigger at 800px - done
+' res file for Krool's slider copied from PzEarth - done
+
+' CHM create - done
+
+' add the mouseOver event for the balloon tooltips in the gaugeForm_BubblingEvent - done
+' add new prefs config variable for enabling the tooltips in the prefs - done
+' added new control and modified code to enable/disable tooltips in main/prefs - done
+' fixed createTooltip using incorrect config var - done
+' added balloon tooltips for each main program control - done
+
+' tick or smooth scroll for second hand - need to extract milliseconds  - done
+' save the state of the tick/smooth for reloading on startup - done
+' ensure the tickPin control is depressed when the smooth tick is loaded - done
+' move the tooltips from cfAlpha during setup to setMainTooltips using the form: fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget.ToolTip = "" - done
+' add smooth movement comboBox to the general tab on the prefs - done
+' add code to load the smooth movement comboBox in the prefs - done
+' create a licence class - done
+
+' licence form, a simple RC6 image form containing pre-defined RC widgets, one each for the accept and decline buttons - done
+' licence form, added pre-defined RC textbox widget to store the licence text - done
+' give the about form entry a 'ting' - done
+
+' smooth ticking toggle generates an error when ticking is stopped - done
+' enable prefs tooltips checkbox checked at startup - done
+
+' resizeControls and saveSizes made form agnostic - done
+' load the prefs form earlier, just make it hidden - done
+
+' fix bug in resizeControls - the control count must be the same in saveSizes and resizeControls - done
+' prefs object referred to implicitly in resizeControls, needed the form name added - done
+' prefs placement when unloaded moved to the close button - done
+' add top and tails to properties in frmMessage - done
+
+' msgboxA - replace the standard message boxes with my own - done
+' apply resizeControls to msgBoxA - done
+' fix msgBoxA icon sizing, cutting off the image bottom - done
+' restart now calls the correct binary - done
+
+' implement font sizing var for low DPI font vs high DPI font - done
+' DPI switching off - when switching to low DPI mode it needs to change the font to the unresized font - done
+' DPI switched off, needs to restart to fixed, non-resizable mode - done
+
+' low DPI mode, run, test and fix image issues - cannot run with full high DPI mode within the IDE, icons are always mal-sized - done
+' when DPI changed, always hard restarts - done
+' soft reload code distinguished from hard restarts by renaming the functions - done
+' font labels merged and built manually using vbCRLf, redundant labels removed - done
+
+' DPI switched off, the tabs need to size and fit the height as per old PzEarth widget - done
+
+' when switched from low to high DPI, the prefs does not re-open after the reloadWidget, add a parameter to the restart - done
+' msgboxA - in low DPI mode is too tall - done
+' msgbox icons - create new sizes of the information icon image to allow resizing as per the prefs - done
+
+' msgbox icons - create new sizes of the exclamation icon image to allow resizing as per the prefs - done
+
+' licence widgets on the licence form, too large for low DPI usage, added sizing for all elements - done
+
+' transparency not implemented yet on the surround and start/stop buttons - done
+' licence form, too large for low DPI usage, meaning the widget image within is not centered - done
+' about form, too large for low DPI usage, meaning the widget image within is not centered - done
+' msgbox icons - create new sizes of the windowsCritical icon image to allow resizing as per the prefs - done
+' msgboxA with 'go away' boxes as per steamydock - done
+
+' reset message pop-ups button added to fonts tab - done
+' resizing enabled for low DPI - done
+' msgbox icons - create new sizes of the windowsQuestion icon image to allow resizing as per the prefs - done
+
+' update HTMP help with recent changes - done
+' create compiled CHM - done
+' check system startup operating - done
+' change current clock x/y position to high DPI position - done
+' add clock low DPI x/y position to new low DPI position vars - done
+' change current prefs x/y position to high DPI position - done
+' add prefs low DPI x/y position to new low DPI position vars - done
+
+' update HTMP help to reduce CHM size, using JPGs - done
+' create compiled CHM - done
+' created 1920 icons for the frmMessage to display - done
+' add icon resizing to frmMessage msgBoxA - done
+' drag corner, implement - done
+' fixed Krool's slider instances min and max defaulting to 0 and 10 after buggy IDE menu/toolbar problem - done
+' disable the drag corner in low DPI mode - done
+
+' implement font characteristics variable for the main utility if it should ever need a font for itself - done
+' initialise private declared vars in prefs using form_initialise - done
+
+' monitorProperties, make it work and observe the result as per FCW - done
+' add monitor count - done
+' different scaling, currently 150%, others good
+' 125% desktop scaling problem, find and fix, panzerPrefs custom icon caused 500003 unexpected error when form asked to appear - done
+' getDLSrules -  read the daylight saving time rule list from file - done
+' getNumberOfMonth - get the number of the month given a month name - done
+
+' getNumberOfDay - get the number of the day given a day name and test - done
+' getDaysInMonth - get the number of days in a given month and test - done
+' getDateOfFirst - get Date (1..31) Of First dayName (Sun..Sat) after date (1..31) of monthName (Jan..Dec) of year (2004..) - done
+' getDateOfLast function - done
+
+' dayOfMonth function - done
+' updateDLS function - done
+' getRemoteOffset function - done
+' theDLSdelta function - done
+
+' added debug.print statements for input and output for debugging - done
+' added debug.print statements to .js version for input and output for equivalent debugging and comparison - done
+' Fill the cmbMainDaylightSaving list with the rules from DSLcodesWin.txt - done
+' extract the current rule from the selected rule in the cmbMainDaylightSaving prefs - done
+' tested rules for need of variants in 'for each' and split(). Made and tested variable type changes - done
+' time zone code - wip - look at YWE and replicate - done
+
+' daylight saving time code - implement and test - done
+' time values altered by DST and timezone changes as per YWE version - done
+
+' transparency for WHOLE form using API method of gaining transparency - done - this works but reveals the background form itself - removed
+' about page sound on exit - done
+' licence page sound on accept - done
+' review code using mzTools  - done
+' review code using rubberduck - done
+' restore the small icon for the help  - done
+' recreate help CHM - done
+
+' fix GMT for stdtime in DLS calcs - done
+' changing timezone or DST causes a reload or a change in time calcs - done
+' shift+r to hardRestart - done
+' update HTML new images and shift+r - done
+' recreate help CHM - done
+' convert several strings in the DLScalcs to long vars to ensure calcs correct - done
+' handling of Sun>1 rule in dayOfMonth func. - done
+' fix gmtOffset calculations to use mins - done
+
+' added function to obtain system/local time offset, vars declared and comments added - done
+' Added default timedate.cpl to settings validation - done
+' setup2go reinstalled after drive loss - done
+
+' project reference to RC6.DLL incorrect after synching to e6410 laptop - done
+' calling licenceForm prior to initialisation causes 'with' error, move licence check after form init - done
+' mainScreen modified to hide the widget in either portrait or landscape mode - done
+
+' setup2go - re-licence - done
+
+' prefs window check position on screen to ensure it is within the display bounds - done
+' prefs window set the Z order as per the gaugeForm - done
+' fGetTimeZoneOffset return the difference in mins between local time and system time in minutes - done
+
+' bugfixes to ensure GMT functioning, using tzDelta rather than tzDelta1 - done
+' bugfix to dateDiff using a LONG caused overflow errors, fixed with a DOUBLE - done
+
+' ensure the changes to DLS and timezone are reflected prior to a SAVE being applied - done
+' removed two lines in obtainDaylightSavings that unnecessarily set the values of the two DLS comboBoxes - done
+' populate the bias field - done
+' fix the MX rule, additional space char. preventing splitting of the rule array - done
+' revert to normal bias after selecting system time - done
+' tweak the bottom button positions in the prefs - done
+' menu - fix lock widget does not cause a button depression - done
+' modify HTML help to reflect latest changes re: DLS and timezones - done
+
+' check the monitor for high/low DPI - done
+' determine which mode to set the program according to monitor DPI probe - done
+
+' tmrClock_Timer calls updateDLS regularly every 15 mins as per .js version - done
+' check numeric date/day fields altered by DST bias - done
+
+' add property GETS to property LETS in frmMessages - done
+' synch the .js YWE version of this program - functionality only - done
+' missing icon images in pop-ups when in low DPI mode - done
+' very big messageboxes when high DPI on low DPI monitors - done
+' the prefs are very big when high DPI selected on low DPI monitors - done
+' in high DPI mode, the prefs should be no bigger than the maximum height of the screen - done
+' locking dock from the menu is linked to the prefs check box and vice versa - done
+' edit VBP option msgbox, extra params remove to stop mismatch error - done
+
+' create new CHM - done
+' synch. to E6410 and compile - done
+' test on E6410 win 7 low DPI - done
+' licence form appears on the left and off screen on restart with sLicence = 0 - done
+
+' about screen is massive in high DPI mode on low DPI screen, add widget.zoom - done
+' one-page help screen is massive in high DPI mode on low DPI - done
+' licence screen is sized correctly in high DPI mode on low DPI - done
+' separate the help, licence and about form initialisation routines - done
+' take into account max. screen size when creating the help, licence and about forms - done
+
+' Kofi msgbox not accepting yes or no - test & fix - done
+' user licence accepted in low DPI - missing icons - done
+' user licence accepted in low DPI - no need for yes and no - done
+' switching DPI pops up a msgbox that is yes/no, do both options work on high DPI screens? - done
+' test with slicence = 0, compiled DPI and otherwise on high DPI screen - done
+' switching between high/low DPI - remaining issues? - done
+' switching DPI pops up a msgbox that is yes/no, do both options work on low DPI screens? - done
+' check the other msgboxA to see which others have problems at low/high DPI - done
+' test with slicence = 0, compiled DPI and otherwise on low DPI screen - done
+' test on E6410 win 7 low DPI with slicence = 0
+' test on E6410 win 7 low DPI with no user settings - done
+' validateInputs     DST should be none - done
+' validateInputs     main gauge should be system time - done
+' validateInputs     DPI awareness - on when low DPI screen - done
+' licence text to be loaded from file - done
+
+' prefs slider synch. with manual resize using mousewheel - done
+
+' widget gauge location incorrect after DPI change and prefs visible - done
+' update help to include GUI interaction with the buttons - done
+' create an independent RC project to fade a widget in and out to demonstrate the RC fade-out bug in RC6 - done
+
+' aboutForm is not fading back-in but instantly hiding in RC6, opacity is acting strangely on second fade in. Confirmed - raise a bug with Olaf on VBforums - done
+' create a RC5 demo for the fade in/out - done
+' create a RC6 demo for the fade in/out - done
+
+' licence and help forms should have the same functionality re: the fade timers, copy from about form - done
+' fix the fadeIn/Out for the supplementary forms - done
+' upgrade to RC6 new version proposed by Olaf to obtain opacity control over the overlays currently limited to 25% - raise a request with Olaf on VBforums - done
+
+' automatic loading of the prefs icons using RC6 imageList - done
+' removed automatic loading of the prefs icons from the resize to the load function - done
+' removed unwanted icon sizes - done
+
+' use of cwLabel - automation error message caused by with Events, does not apply - done
+' upgrade to new cwAlphaImg.cls supplied by Olaf to obtain opacity control over the overlays currently limited to 25% - done
+' test on Dell win 11 high DPI with slicence = 0 - done
+' sync. E6410 win 7 - done
+' sync. Fast Dell laptop - done
+
+' -oOo-
+
+' dealing with increased density shadows, the simple PSD parser function seems to increase to opacity of shadows in the transparent regions.
+'    sent PSD to Olaf.  Awaiting response but not really a problem for these gauges, so low priority and can be ignored.
+
+' add second monitor - wip find cable!
+
+' test usage of RC6 for monitor awareness - wip
+With New_c.Displays(OneBasedIndex_Or_DeviceName) 'hands out an instance of cDisplay
+  'output as LeftOffs, TopOffs, Width, Height
+  Debug.Print .WorkLeft , .WorkTop, (.WorkRight - .WorkLeft), (.WorkBottom - .WorkTop)
+End With
+
+' https://www.vbforums.com/showthread.php?900892-VB6-Simple-way-to-make-your-VB6-application-quot-Per-Monitor-DPI-Aware-quot
+
+' adjustFormPositionToCorrectMonitor, make it work and observe the result as per FCW - wip
+
+' adjustFormPositionToCorrectMonitor - licence form
+' adjustFormPositionToCorrectMonitor - about form
+' adjustFormPositionToCorrectMonitor - help form
+
+' setup2go create setup.exe
+
+' -oOo-
+
+' Later tasks after testing
+
+' test the icon sizes on 32bit Win7, XP and ReactOS, find out if 48x48 causes a crash
+' 32x32 (24 bit)
+' 16x16 (24 bit)
+' 48x48 (32 bit)
+' 32x32 (32 bit)
+' 16x16 (32 bit)
+
+' patch a 256 bit icon into the VB6 binary
+' https://www.vbforums.com/showthread.php?858347-RESOLVED-How-to-create-and-connect-quality-icon-group-to-your-VB6-app
+
+' RC BUGS & LIMITATIONS
+' =====================
+
+' tooltips also resize when the whole thing is resized, code received from Olaf tested - resizing results in missing text and blank tooltips, using non-standard font centurion light
+' RC6 needs a static tooltip option.
+
+' when placing widgets on the main alpha form they take opacity changes and become fully transparent as expected, no problem.
+' However, when placing widgets on top of other widgets the opacity cumulates and they become significantly more opaque.
+' on circular elements, the surrounding transparent areas become opaque - this may be due to the increased shadow depth 
+' when simple PSD parser used.
 
 
-' upgrade to RC6 new version from Olaf to obtain opacity control over the overlays currently limited to 25%
-' monitorProperties, make it work
-
-' RC BUGS
-' =======
-
-' about widget -  scaleValue above 1.4 then scale jumps ridiculously
-
-' about widget image shadows not rendering correctly in the stopwatch, same code on RC5 widget works correctly
-
-' aboutForm is not fading back-in but instantly hiding in DPI aware mode, opacity is acting strangely on second fade in
-' aboutForm will not let me position it use .left nor .move. nether do anything
-
-' tooltips also resize when the whole thing is resized, which is not necessarily a good idea for a UI.
-
-' how do I set the visibility of the W_ created widgets so I can temporarily
-' make one invisible, for example a locking pin to be made invisible on a mouseDown then re-appear on a mouseUP.
