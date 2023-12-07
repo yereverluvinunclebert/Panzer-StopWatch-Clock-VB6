@@ -153,14 +153,28 @@ Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As S
                 If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click here to toggle the tick type from once per second to a more fluid, continuous movement.", _
                      TTIconInfo, widgetName & " Tick Button Help", , , , True
             Case "housing/switchfacesbutton"
-                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button switches the face from the standard clock to the stopwatch.", _
+                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button switches the face from the standard clock to the stopwatch and vice versa.", _
                      TTIconInfo, widgetName & " Switch Faces Button Help", , , , True
             Case "housing/stopbutton"
-                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button stops all animated clock functions for this widget, hand movements &c .", _
-                     TTIconInfo, widgetName & " Stop Button Help", , , , True
+                If PzGEnableBalloonTooltips = "1" Then
+                    If PzGClockFaceSwitchPref = "1" Then
+                        CreateToolTip gaugeForm.hwnd, "When in clock mode, this button stops all animated clock functions for this widget, hand movements &c .", _
+                            TTIconInfo, widgetName & " Stop Button Help", , , , True
+                    Else
+                        CreateToolTip gaugeForm.hwnd, "Press to continue the timing run. This button is active only when a timing run has been paused.", _
+                            TTIconInfo, widgetName & " Continue Timing Button Help", , , , True
+                    End If
+                End If
             Case "housing/startbutton"
-                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button restarts all stopped clock functions for this widget, hand movement &c .", _
-                     TTIconInfo, widgetName & " Start Button Help", , , , True
+                If PzGEnableBalloonTooltips = "1" Then
+                    If PzGClockFaceSwitchPref = "1" Then
+                        CreateToolTip gaugeForm.hwnd, "This button restarts all stopped clock functions for this widget, hand movement &c .", _
+                            TTIconInfo, widgetName & " Start Button Help", , , , True
+                    Else
+                        CreateToolTip gaugeForm.hwnd, "Press to zero the stopwatch dials (stopwatch mode).", _
+                            TTIconInfo, widgetName & " Zero Dials Button Help", , , , True
+                    End If
+                End If
             Case "housing/helpbutton"
                 If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button opens the one-page help file for this widget. There is a further detailed CHM help file available from the right-click menu that contains all the information that you need to run this widget.", _
                      TTIconInfo, widgetName & " Help Button Help", , , , True
