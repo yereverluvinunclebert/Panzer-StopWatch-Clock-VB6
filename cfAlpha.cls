@@ -156,25 +156,9 @@ Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As S
                 If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button switches the face from the standard clock to the stopwatch and vice versa.", _
                      TTIconInfo, widgetName & " Switch Faces Button Help", , , , True
             Case "housing/stopbutton"
-                If PzGEnableBalloonTooltips = "1" Then
-                    If PzGClockFaceSwitchPref = "1" Then
-                        CreateToolTip gaugeForm.hwnd, "When in clock mode, this button stops all animated clock functions for this widget, hand movements &c .", _
-                            TTIconInfo, widgetName & " Stop Button Help", , , , True
-                    Else
-                        CreateToolTip gaugeForm.hwnd, "Press to continue the timing run. This button is active only when a timing run has been paused.", _
-                            TTIconInfo, widgetName & " Continue Timing Button Help", , , , True
-                    End If
-                End If
+                Call stopbutton_mouseMove(Sender)
             Case "housing/startbutton"
-                If PzGEnableBalloonTooltips = "1" Then
-                    If PzGClockFaceSwitchPref = "1" Then
-                        CreateToolTip gaugeForm.hwnd, "This button restarts all stopped clock functions for this widget, hand movement &c .", _
-                            TTIconInfo, widgetName & " Start Button Help", , , , True
-                    Else
-                        CreateToolTip gaugeForm.hwnd, "Press to zero the stopwatch dials (stopwatch mode).", _
-                            TTIconInfo, widgetName & " Zero Dials Button Help", , , , True
-                    End If
-                End If
+                Call startbutton_mouseMove(Sender)
             Case "housing/helpbutton"
                 If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button opens the one-page help file for this widget. There is a further detailed CHM help file available from the right-click menu that contains all the information that you need to run this widget.", _
                      TTIconInfo, widgetName & " Help Button Help", , , , True
@@ -205,8 +189,7 @@ Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As S
     If EventName = "W_MouseUp" Then
         Select Case LCase$(Sender.Widget.Key)
             Case "housing/prefsbutton"
-                Sender.Widget.Alpha = Val(PzGOpacity) / 100
-                Sender.Widget.Refresh
+                Call prefsbutton_mouseUp(Sender)
             Case "housing/switchfacesbutton"
                 Call switchfacesbutton_mouseUp(Sender)
             Case "housing/stopbutton"
@@ -234,6 +217,68 @@ gaugeForm_BubblingEvent_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure gaugeForm_BubblingEvent of Class Module cfAlpha"
 End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : startbutton_mouseMove
+' Author    : beededea
+' Date      : 07/12/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub startbutton_mouseMove(ByRef Sender As Object)
+    On Error GoTo startbutton_mouseMove_Error
+
+    If PzGEnableBalloonTooltips = "1" Then
+        If PzGClockFaceSwitchPref = "1" Then
+            CreateToolTip gaugeForm.hwnd, "This button restarts all stopped clock functions for this widget, hand movement &c .", _
+                TTIconInfo, widgetName & " Start Button Help", , , , True
+        Else
+            CreateToolTip gaugeForm.hwnd, "Press to zero the stopwatch dials (stopwatch mode).", _
+                TTIconInfo, widgetName & " Zero Dials Button Help", , , , True
+        End If
+    End If
+
+    On Error GoTo 0
+    Exit Sub
+
+startbutton_mouseMove_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure startbutton_mouseMove of Class Module cfAlpha"
+End Sub
+
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : stopbutton_mouseMove
+' Author    : beededea
+' Date      : 07/12/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub stopbutton_mouseMove(ByRef Sender As Object)
+    On Error GoTo stopbutton_mouseMove_Error
+
+    If PzGEnableBalloonTooltips = "1" Then
+        If PzGClockFaceSwitchPref = "1" Then
+            CreateToolTip gaugeForm.hwnd, "When in clock mode, this button stops all animated clock functions for this widget, hand movements &c .", _
+                TTIconInfo, widgetName & " Stop Button Help", , , , True
+        Else
+            CreateToolTip gaugeForm.hwnd, "Press to continue the timing run. This button is active only when a timing run has been paused.", _
+                TTIconInfo, widgetName & " Continue Timing Button Help", , , , True
+        End If
+    End If
+
+    On Error GoTo 0
+    Exit Sub
+
+stopbutton_mouseMove_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure stopbutton_mouseMove of Class Module cfAlpha"
+End Sub
+
+                
+
+
 '---------------------------------------------------------------------------------------
 ' Procedure : helpbutton_click
 ' Author    : beededea
@@ -351,14 +396,14 @@ Private Sub switchfacesbutton_mouseDown(ByRef Sender As Object)
     
     If PzGClockFaceSwitchPref = "1" Then
         PzGClockFaceSwitchPref = "0"
-        fAlpha.gaugeForm.Widgets("clockface").Widget.Alpha = 0
-        fAlpha.gaugeForm.Widgets("stopwatchface").Widget.Alpha = Val(PzGOpacity) / 100
-        fAlpha.gaugeForm.Widgets("stopwatchface").Widget.Refresh
+        gaugeForm.Widgets("clockface").Widget.Alpha = 0
+        gaugeForm.Widgets("stopwatchface").Widget.Alpha = Val(PzGOpacity) / 100
+        gaugeForm.Widgets("stopwatchface").Widget.Refresh
     Else
         PzGClockFaceSwitchPref = "1"
-        fAlpha.gaugeForm.Widgets("stopwatchface").Widget.Alpha = 0
-        fAlpha.gaugeForm.Widgets("clockface").Widget.Alpha = Val(PzGOpacity) / 100
-        fAlpha.gaugeForm.Widgets("clockface").Widget.Refresh
+        gaugeForm.Widgets("stopwatchface").Widget.Alpha = 0
+        gaugeForm.Widgets("clockface").Widget.Alpha = Val(PzGOpacity) / 100
+        gaugeForm.Widgets("clockface").Widget.Refresh
     End If
     
     sPutINISetting "Software\PzStopWatch", "clockFaceSwitchPref", PzGClockFaceSwitchPref, PzGSettingsFile
@@ -371,6 +416,28 @@ switchfacesbutton_mouseDown_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure switchfacesbutton_mouseDown of Class Module cfAlpha"
 
 End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : prefsbutton_mouseUp
+' Author    : beededea
+' Date      : 07/12/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub prefsbutton_mouseUp(ByRef Sender As Object)
+    On Error GoTo prefsbutton_mouseUp_Error
+
+    Sender.Widget.Alpha = Val(PzGOpacity) / 100
+    Sender.Widget.Refresh
+
+    On Error GoTo 0
+    Exit Sub
+
+prefsbutton_mouseUp_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure prefsbutton_mouseUp of Class Module cfAlpha"
+End Sub
+
 '---------------------------------------------------------------------------------------
 ' Procedure : switchfacesbutton_mouseUp
 ' Author    : beededea

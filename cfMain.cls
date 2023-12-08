@@ -41,9 +41,6 @@ Attribute textBox.VB_VarHelpID = -1
 Private lblDeclineOrNot As cwLabel
 Attribute lblDeclineOrNot.VB_VarHelpID = -1
 
- 
-
-
 
 
 '---------------------------------------------------------------------------------------

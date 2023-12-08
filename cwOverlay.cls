@@ -389,12 +389,12 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
       If IsArray(Arr) Then
              CC.Save
              'derive a Pattern-Obj from each retrieved ImageList-Surface-reference
-             Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
+             
             
             ' for specific keys perform rotation actions, clock hands &c
              Select Case Key
                  Case "hourshadow", "hourhand" 'hours-shadow- and hour-hand
-                    
+                    Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     ' draw the date and day in the windows just once to retain opacity
                     If textDrawn = False Then ' has to be here to be underneath  all the hands and only run once
                         If PzGClockFaceSwitchPref = "1" Then
@@ -412,18 +412,57 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                     CC.RotateDrawingsDeg -7 + HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
                     
                  Case "minuteshadow", "minutehand" 'minutes-shadow- and minutes-hand
+                    Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(44, 105) 'shift to the "rotation-point" within the Pattern
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                     CC.RotateDrawingsDeg -61 + MDeg
                     
                  Case "secondshadow", "secondhand" 'seconds-shadow- and seconds-hand
+                    Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(60, 160) 'shift to the "rotation-point" within the Pattern
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                     
                     CC.RotateDrawingsDeg -50 + SDeg + MsDeg
     
-                 Case Else 'plain output for everything else ... this includes the reflection-layers,
-                     
+                 Case "swhourhand"
+                     If PzGClockFaceSwitchPref = "0" Then 'stopwatch mode
+                        Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
+                        Set Pat.Matrix = Pat.Matrix.TranslateCoords(15, 61) 'shift to the "rotation-point" within the Pattern
+                        CC.TranslateDrawings 352, 418  'shift to the rotation-point
+                        CC.RotateDrawingsDeg HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                     Else
+                        Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
+                        Set Pat.Matrix = Pat.Matrix.TranslateCoords(15, 61) 'shift to the "rotation-point" within the Pattern
+                        CC.TranslateDrawings 432, 240  'shift to the rotation-point
+                        CC.RotateDrawingsDeg HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                 
+                     End If
+                 Case "swminutehand"
+                     If PzGClockFaceSwitchPref = "0" Then 'stopwatch mode
+                         Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
+                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
+                         CC.TranslateDrawings 353, 203  'shift to the rotation-point
+                         CC.RotateDrawingsDeg MDeg
+                     Else
+                         Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
+                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
+                         CC.TranslateDrawings 286, 380  'shift to the rotation-point for the clock
+                         CC.RotateDrawingsDeg MDeg
+                     End If
+                 Case "swsecondhand"
+                     If PzGClockFaceSwitchPref = "0" Then 'stopwatch mode
+                         Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
+                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
+                         CC.TranslateDrawings 460, 312  'shift to the rotation-point
+                         CC.RotateDrawingsDeg SDeg
+                     Else
+'                         Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
+'                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 56) 'shift to the "rotation-point" within the Pattern
+'                         CC.TranslateDrawings 286, 380  'shift to the rotation-point for the clock
+'                         CC.RotateDrawingsDeg SDeg
+                     End If
+                 Case "bigreflectioncopy", "bigreflection", "windowreflection" 'plain output for everything else ... this includes the reflection-layers,
+                    Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'here we only shift the Pattern via the original PSD-Offsets (stored in Arr(0) and Arr(1))
              End Select
              CC.Paint Arr(2), Pat 'finally we render the Pattern with the current PSD-LayerAlpha, present in Arr(2)

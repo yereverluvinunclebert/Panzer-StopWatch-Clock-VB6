@@ -935,13 +935,10 @@ Private Sub loadExcludePathCollection()
     On Error GoTo loadExcludePathCollection_Error
 
     With fAlpha.collPSDNonUIElements ' the exclude list
-'        .Add Empty, "stopwatchface"
-'        .Add Empty, "clockface"
-        .Add Empty, "faceweathering"
 
         .Add Empty, "swsecondhand" 'arrow-hand-top
-        .Add Empty, "swminutehand" 'arrow-hand-right
         .Add Empty, "swhourhand"   'arrow-hand-bottom
+        .Add Empty, "swminutehand" 'arrow-hand-right
         
         .Add Empty, "hourshadow"   'clock-hand-hours-shadow
         .Add Empty, "hourhand"     'clock-hand-hours
