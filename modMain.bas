@@ -517,7 +517,7 @@ Public Sub adjustMainControls()
     End If
 
     ' determine the time bias
-    Call obtainDaylightSavings
+    If PzGMainDaylightSaving <> "0" Then Call obtainDaylightSavings ' determine the time bias
                
     ' set the z-ordering of the window
     Call setAlphaFormZordering

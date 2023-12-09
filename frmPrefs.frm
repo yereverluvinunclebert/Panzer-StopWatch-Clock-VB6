@@ -2151,7 +2151,8 @@ Private Sub cmbMainGaugeTimeZone_Click()
 
     If prefsStartupFlg = False Then ' don't run this on startup
         btnSave.Enabled = True ' enable the save button
-        Call obtainDaylightSavings 'determine the time bias
+        'If cmbMainDaylightSaving.ListIndex <> 0 Then
+        Call obtainDaylightSavings ' determine the time bias
     End If
 
     On Error GoTo 0
@@ -2179,7 +2180,7 @@ Private Sub cmbSecondaryDaylightSaving_Click()
 
     If prefsStartupFlg = False Then ' don't run this on startup
         btnSave.Enabled = True ' enable the save button
-        Call obtainDaylightSavings ' determine the time bias
+        If cmbSecondaryDaylightSaving.ListIndex <> 0 Then Call obtainDaylightSavings ' determine the time bias
     End If
 
     On Error GoTo 0
@@ -2202,7 +2203,7 @@ Private Sub cmbSecondaryGaugeTimeZone_Click()
 
     If prefsStartupFlg = False Then ' don't run this on startup
         btnSave.Enabled = True ' enable the save button
-        Call obtainDaylightSavings 'determine the time bias
+        If cmbSecondaryDaylightSaving.ListIndex <> 0 Then Call obtainDaylightSavings ' determine the time bias
     End If
 
     On Error GoTo 0
@@ -5648,7 +5649,7 @@ Private Sub cmbMainDaylightSaving_Click()
 
     If prefsStartupFlg = False Then ' don't run this on startup
         btnSave.Enabled = True ' enable the save button
-        Call obtainDaylightSavings ' determine the time bias
+        If cmbMainDaylightSaving.ListIndex <> 0 Then Call obtainDaylightSavings ' determine the time bias
     End If
    
    On Error GoTo 0

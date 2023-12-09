@@ -531,12 +531,14 @@ Private Sub tmrClock_Timer() 'update the private "Degree-Variables" for Hour-, M
     
     On Error GoTo tmrClock_Timer_Error
     
-    GetSystemTime currentLocaltime
+    GetSystemTime currentLocaltime ' API
     
     ' every 15 mins approx. update DaylightSavings and determine the time bias
-    If (Minute(T) Mod 15 = 0) And (Second(T) = 0) And (currentLocaltime.wMilliseconds < 100) Then
-        Call obtainDaylightSavings
-    End If
+    'If PzGMainDaylightSaving <> "0" Then
+        If (Minute(T) Mod 15 = 0) And (Second(T) = 0) And (currentLocaltime.wMilliseconds < 100) Then
+            Call obtainDaylightSavings
+        End If
+    'End If
         
     ' Debug.Print ("%updateTime-I tzDelta " & tzDelta)
 
