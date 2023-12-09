@@ -118,7 +118,7 @@ End Property
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub W_MouseDown(Button As Integer, Shift As Integer, ByVal x As Single, ByVal Y As Single)
+Private Sub W_MouseDown(Button As Integer, Shift As Integer, ByVal x As Single, ByVal y As Single)
    On Error GoTo W_MouseDown_Error
 
     tmrHelpFadeOut.Enabled = True ' this is not currently making the opacity reduce
@@ -220,7 +220,7 @@ End Property
 Private Sub tmrHelpFadeIn_Timer()
       
    On Error GoTo tmrHelpFadeIn_Timer_Error
-    fMain.helpForm.show
+    fMain.helpForm.Show
     MyOpacity = MyOpacity + 0.05
     If MyOpacity >= 1 Then
         MyOpacity = 1
@@ -303,13 +303,13 @@ End Sub
 '
 Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Single, ByVal mMyOpacity As Double)
     On Error GoTo Draw_Error
-
+    
     CC.ScaleDrawings mZoom, mZoom
 
     ' Widgets are refreshed "from the ground up" in RC5 and not so in RC6
     ' extra code NOT needed when using RC5 but now required in RC6 - starts
     CC.Operator = CAIRO_OPERATOR_CLEAR
-     CC.Paint 'clear the whole background of this Widgets underlying Surface via Clear-Operator
+    CC.Paint 'clear the whole background of this Widgets underlying Surface via Clear-Operator
     CC.Operator = CAIRO_OPERATOR_OVER 'switch back to the default-Operator
     ' extra code not needed when using RC5 but now required in RC6 - ends
     

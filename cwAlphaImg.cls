@@ -51,14 +51,34 @@ Private Sub W_MouseLeave(ByVal MouseEnterWidget As RC6.cWidgetBase)
   W.Parent.Refresh 'same here (trigger dynamic re-rendering, when the hover-state changes)
 End Sub
 
+'---------------------------------------------------------------------------------------
+' Procedure : W_Paint
+' Author    : beededea
+' Date      : 09/12/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
 Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As Single, ByVal dx_Aligned As Single, ByVal dy_Aligned As Single, UserObj As Object)
-  Dim Srf As cCairoSurface ', x As Single, y As Single
-  If Cairo.ImageList.Exists(W.ImageKey) Then Set Srf = Cairo.ImageList(W.ImageKey) Else Exit Sub
+    Dim Srf As cCairoSurface ', x As Single, y As Single
+    On Error GoTo W_Paint_Error
 
-  CC.RenderSurfaceContent Srf, 0, 0, W.Width, W.Height, , W.Alpha 'render the current W.ImageKey-Surface (as loaded priorily into the ImageList)
+    CC.Operator = CAIRO_OPERATOR_CLEAR
+    CC.Paint
+    CC.Operator = CAIRO_OPERATOR_OVER
+    
+    If Cairo.ImageList.Exists(W.ImageKey) Then Set Srf = Cairo.ImageList(W.ImageKey) Else Exit Sub
+    
+    CC.RenderSurfaceContent Srf, 0, 0, W.Width, W.Height, , W.Alpha 'render the current W.ImageKey-Surface (as loaded priorily into the ImageList)
+    
+    If W.MouseOver And W.HoverColor <> -1 Then 'render a colored, slightly blurred copy of the Srf with 25% Alpha (in case of being hovered)
+       CC.RenderSurfaceContent Srf.GaussianBlur(0.1, , True, W.HoverColor), 0, 0, W.Width, W.Height, , W.Tag
+    End If
 
-  If W.MouseOver And W.HoverColor <> -1 Then 'render a colored, slightly blurred copy of the Srf with 25% Alpha (in case of being hovered)
-     CC.RenderSurfaceContent Srf.GaussianBlur(0.1, , True, W.HoverColor), 0, 0, W.Width, W.Height, , W.Tag
-  End If
+    On Error GoTo 0
+    Exit Sub
+
+W_Paint_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure W_Paint of Class Module cwAlphaImg"
 End Sub
 

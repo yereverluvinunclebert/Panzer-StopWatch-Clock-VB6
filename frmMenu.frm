@@ -16,7 +16,7 @@ Begin VB.Form menuForm
    Begin VB.Menu mnuMainMenu 
       Caption         =   "mainmenu"
       Begin VB.Menu mnuAbout 
-         Caption         =   "About Panzer JustClock Cairo widget"
+         Caption         =   "About Panzer Stopwatch Cairo widget"
       End
       Begin VB.Menu mnuBlank5 
          Caption         =   "-"
@@ -35,7 +35,7 @@ Begin VB.Form menuForm
          Caption         =   ""
       End
       Begin VB.Menu mnuHelpSplash 
-         Caption         =   "Panzer JustClock Gauge Help"
+         Caption         =   "Panzer Stopwatch Gauge Help"
       End
       Begin VB.Menu mnuOnline 
          Caption         =   "Online Help and other options"

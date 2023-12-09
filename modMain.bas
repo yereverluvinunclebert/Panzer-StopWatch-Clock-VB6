@@ -686,8 +686,8 @@ Public Sub validateInputs()
         If PzGMainGaugeTimeZone = vbNullString Then PzGMainGaugeTimeZone = "0"
         If PzGMainDaylightSaving = vbNullString Then PzGMainDaylightSaving = "0"
 
-        If PzGSecondaryGaugeTimeZone = vbNullString Then PzGSecondaryGaugeTimeZone = "1"
-        If PzGSecondaryDaylightSaving = vbNullString Then PzGSecondaryDaylightSaving = "1"
+        If PzGSecondaryGaugeTimeZone = vbNullString Then PzGSecondaryGaugeTimeZone = "0"
+        If PzGSecondaryDaylightSaving = vbNullString Then PzGSecondaryDaylightSaving = "0"
 
         ' Configuration
         If PzGEnableTooltips = vbNullString Then PzGEnableTooltips = "0"

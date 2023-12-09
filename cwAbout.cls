@@ -154,7 +154,7 @@ End Property
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Private Sub W_MouseDown(Button As Integer, Shift As Integer, ByVal x As Single, ByVal Y As Single)
+Private Sub W_MouseDown(Button As Integer, Shift As Integer, ByVal x As Single, ByVal y As Single)
    Dim fileToPlay As String: fileToPlay = vbNullString
    On Error GoTo W_MouseDown_Error
     
@@ -264,7 +264,7 @@ End Property
 Private Sub tmrAboutFadeIn_Timer()
       
    On Error GoTo tmrAboutFadeIn_Timer_Error
-    fMain.aboutForm.show
+    fMain.aboutForm.Show
     MyOpacity = MyOpacity + 0.05
     If MyOpacity >= 1 Then
         MyOpacity = 1
@@ -342,7 +342,6 @@ Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Sing
     On Error GoTo Draw_Error
   
     CC.ScaleDrawings mZoom, mZoom
-
     
     ' Widgets are refreshed "from the ground up" in RC5 and not so in RC6
     ' extra code NOT needed when using RC5 but now required in RC6 - starts

@@ -367,6 +367,8 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
    
     On Error GoTo W_Paint_Error
     
+
+    
     'set some Font- and ForeColor-Properties and draw some Text on the Widget
     W.FontName = "arial"
     W.ForeColor = cream
@@ -389,7 +391,6 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
       If IsArray(Arr) Then
              CC.Save
              'derive a Pattern-Obj from each retrieved ImageList-Surface-reference
-             
             
             ' for specific keys perform rotation actions, clock hands &c
              Select Case Key
@@ -398,8 +399,8 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                     ' draw the date and day in the windows just once to retain opacity
                     If textDrawn = False Then ' has to be here to be underneath  all the hands and only run once
                         If PzGClockFaceSwitchPref = "1" Then
-                            CC.DrawText 260, 105, 200, 200, txtDayNumber, , , 2, True, , thisOpacity
-                            CC.DrawText 461, 309, 200, 200, txtMonthNumber, , , 2, True, , thisOpacity
+                            CC.DrawText 260, 103, 200, 200, txtDayNumber, , , 2, True, , thisOpacity
+                            CC.DrawText 458, 307, 200, 200, txtMonthNumber, , , 2, True, , thisOpacity
                         Else
                             CC.DrawText 187, 212, 200, 200, Str$(Sec), , , 2, True, , thisOpacity
                         End If

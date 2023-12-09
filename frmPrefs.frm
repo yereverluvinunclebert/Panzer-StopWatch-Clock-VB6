@@ -81,7 +81,7 @@ Begin VB.Form panzerPrefs
             Locked          =   -1  'True
             TabIndex        =   150
             Text            =   "0"
-            Top             =   3210
+            Top             =   3090
             Width           =   720
          End
          Begin VB.ComboBox cmbMainDaylightSaving 
@@ -89,17 +89,17 @@ Begin VB.Form panzerPrefs
             Left            =   2025
             Style           =   2  'Dropdown List
             TabIndex        =   145
-            Top             =   3210
+            Top             =   3090
             Width           =   3720
          End
          Begin VB.ComboBox cmbMainGaugeTimeZone 
             Height          =   315
             ItemData        =   "frmPrefs.frx":18572
-            Left            =   2010
+            Left            =   1995
             List            =   "frmPrefs.frx":18574
             Style           =   2  'Dropdown List
             TabIndex        =   142
-            Top             =   2070
+            Top             =   2040
             Width           =   3720
          End
          Begin VB.CheckBox chkGenStartup 
@@ -108,21 +108,21 @@ Begin VB.Form panzerPrefs
             Left            =   1995
             TabIndex        =   93
             ToolTipText     =   "Check this box to enable the automatic start of the program when Windows is started."
-            Top             =   5550
+            Top             =   5625
             Width           =   4020
          End
          Begin VB.Label lblGeneral 
-            Caption         =   "Second Gauge Zone :"
-            Height          =   495
+            Caption         =   "Minor Gauge Zone :"
+            Height          =   330
             Index           =   14
-            Left            =   240
+            Left            =   360
             TabIndex        =   169
             Top             =   4425
             Width           =   1995
          End
          Begin VB.Label lblGeneral 
-            Caption         =   "Second Gauge DST :"
-            Height          =   345
+            Caption         =   "Minor Gauge Daylight Savings Time:"
+            Height          =   540
             Index           =   13
             Left            =   285
             TabIndex        =   168
@@ -171,7 +171,7 @@ Begin VB.Form panzerPrefs
             Index           =   1
             Left            =   5910
             TabIndex        =   151
-            Top             =   2895
+            Top             =   2775
             Width           =   1740
          End
          Begin VB.Label lblGeneral 
@@ -180,7 +180,7 @@ Begin VB.Form panzerPrefs
             Index           =   8
             Left            =   600
             TabIndex        =   147
-            Top             =   3285
+            Top             =   3165
             Width           =   1365
          End
          Begin VB.Label lblGeneral 
@@ -189,7 +189,7 @@ Begin VB.Form panzerPrefs
             Index           =   7
             Left            =   2025
             TabIndex        =   146
-            Top             =   3690
+            Top             =   3570
             Width           =   3660
          End
          Begin VB.Label lblGeneral 
@@ -207,7 +207,7 @@ Begin VB.Form panzerPrefs
             Index           =   4
             Left            =   2025
             TabIndex        =   143
-            Top             =   2580
+            Top             =   2520
             Width           =   3810
          End
          Begin VB.Label lblGeneral 
@@ -226,7 +226,7 @@ Begin VB.Form panzerPrefs
             Left            =   960
             TabIndex        =   94
             Tag             =   "lblRefreshInterval"
-            Top             =   5670
+            Top             =   5745
             Width           =   1740
          End
          Begin VB.Label lblGeneral 
@@ -2117,10 +2117,26 @@ Private gblAllowSizeChangeFlg As Boolean
 
 
 
+'---------------------------------------------------------------------------------------
+' Procedure : cmbClockFaceSwitchPref_Click
+' Author    : beededea
+' Date      : 08/12/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
 Private Sub cmbClockFaceSwitchPref_Click()
+    On Error GoTo cmbClockFaceSwitchPref_Click_Error
+
     If prefsStartupFlg = False Then ' don't run this on startup
         btnSave.Enabled = True ' enable the save button
     End If
+
+    On Error GoTo 0
+    Exit Sub
+
+cmbClockFaceSwitchPref_Click_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure cmbClockFaceSwitchPref_Click of Form panzerPrefs"
 End Sub
 
 '---------------------------------------------------------------------------------------
@@ -2147,6 +2163,55 @@ cmbMainGaugeTimeZone_Click_Error:
 End Sub
 
 
+
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : cmbSecondaryDaylightSaving_Click
+' Author    : beededea
+' Date      : 08/12/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub cmbSecondaryDaylightSaving_Click()
+
+    On Error GoTo cmbSecondaryDaylightSaving_Click_Error
+
+    If prefsStartupFlg = False Then ' don't run this on startup
+        btnSave.Enabled = True ' enable the save button
+        Call obtainDaylightSavings ' determine the time bias
+    End If
+
+    On Error GoTo 0
+    Exit Sub
+
+cmbSecondaryDaylightSaving_Click_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure cmbSecondaryDaylightSaving_Click of Form panzerPrefs"
+End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : cmbSecondaryGaugeTimeZone_Click
+' Author    : beededea
+' Date      : 08/12/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Private Sub cmbSecondaryGaugeTimeZone_Click()
+    On Error GoTo cmbSecondaryGaugeTimeZone_Click_Error
+
+    If prefsStartupFlg = False Then ' don't run this on startup
+        btnSave.Enabled = True ' enable the save button
+        Call obtainDaylightSavings 'determine the time bias
+    End If
+
+    On Error GoTo 0
+    Exit Sub
+
+cmbSecondaryGaugeTimeZone_Click_Error:
+
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure cmbSecondaryGaugeTimeZone_Click of Form panzerPrefs"
+End Sub
 
 ' ----------------------------------------------------------------
 ' Procedure Name: Form_Initialize
@@ -3296,13 +3361,14 @@ Private Sub btnSave_Click()
     PzGStartup = LTrim$(Str$(chkGenStartup.Value))
     
     PzGClockFaceSwitchPref = cmbClockFaceSwitchPref.List(cmbClockFaceSwitchPref.ListIndex)
+    
     PzGMainGaugeTimeZone = cmbMainGaugeTimeZone.ListIndex
     PzGMainDaylightSaving = cmbMainDaylightSaving.ListIndex
     
     PzGSmoothSecondHand = cmbTickSwitchPref.ListIndex
     
-    'PzGSecondaryGaugeTimeZone = cmbSecondaryGaugeTimeZone.List(cmbSecondaryGaugeTimeZone.ListIndex)
-    'PzGSecondaryDaylightSaving = cmbSecondaryDaylightSaving.List(cmbSecondaryDaylightSaving.ListIndex)
+    PzGSecondaryGaugeTimeZone = cmbSecondaryGaugeTimeZone.ListIndex
+    PzGSecondaryDaylightSaving = cmbSecondaryDaylightSaving.ListIndex
     
     ' sounds
     PzGEnableSounds = LTrim$(Str$(chkEnableSounds.Value))
@@ -3617,6 +3683,9 @@ Private Sub adjustPrefsControls()
 
     cmbTickSwitchPref.ListIndex = Val(PzGSmoothSecondHand)
     
+    cmbSecondaryGaugeTimeZone.ListIndex = Val(PzGSecondaryGaugeTimeZone)
+    cmbSecondaryDaylightSaving.ListIndex = Val(PzGSecondaryDaylightSaving)
+    
     ' configuration tab
    
     ' check whether the size has been previously altered via ctrl+mousewheel on the widget
@@ -3789,11 +3858,12 @@ Private Sub populatePrefsComboBoxes()
     
     'populate one timezone combobox from file.
     Call readFileWriteComboBox(cmbMainDaylightSaving, App.path & "\Resources\txt\DLScodesWin.txt")
-  
-'    cmbMainDaylightSaving.AddItem "Daylight Savings Not used", 0
-'    cmbMainDaylightSaving.ItemData(0) = 0
-'    cmbMainDaylightSaving.AddItem "Daylight Savings Activated", 1
-'    cmbMainDaylightSaving.ItemData(0) = 1
+
+    'populate one timezone combobox from file.
+    Call readFileWriteComboBox(cmbSecondaryGaugeTimeZone, App.path & "\Resources\txt\timezones.txt")
+    
+    'populate one timezone combobox from file.
+    Call readFileWriteComboBox(cmbSecondaryDaylightSaving, App.path & "\Resources\txt\DLScodesWin.txt")
 
     cmbTickSwitchPref.AddItem "Tick", 0
     cmbTickSwitchPref.ItemData(0) = 0
@@ -4612,6 +4682,9 @@ Public Sub setPrefsTooltips()
         cmbMainGaugeTimeZone.ToolTipText = "Select the timezone of your choice."
         cmbMainDaylightSaving.ToolTipText = "Select and activate Daylight Savings Time for your area."
         
+        cmbSecondaryGaugeTimeZone.ToolTipText = "Select the timezone of your choice for the minor gauge."
+        cmbSecondaryDaylightSaving.ToolTipText = "Select and activate Daylight Savings Time for your area to display on the minor gauge."
+        
         cmbTickSwitchPref.ToolTipText = "The movement of the hand can be set to smooth or one-second ticks, the smooth movement uses slightly more CPU."
         
         'lstTimezoneRegions.ToolTipText = "These are the regions associated with the chosen timezone."
@@ -4683,6 +4756,9 @@ Public Sub setPrefsTooltips()
         lblCurrentFontsTab.ToolTipText = vbNullString
         cmbMainGaugeTimeZone.ToolTipText = vbNullString
         cmbMainDaylightSaving.ToolTipText = vbNullString
+                
+        cmbSecondaryGaugeTimeZone.ToolTipText = vbNullString
+        cmbSecondaryDaylightSaving.ToolTipText = vbNullString
         
         cmbTickSwitchPref.ToolTipText = vbNullString
         
