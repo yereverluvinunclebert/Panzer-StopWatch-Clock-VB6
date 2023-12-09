@@ -66,7 +66,7 @@ Private mTicking As Boolean ' property Ticking
 Private mSmoothSecondHand As Boolean ' property SmoothSecondHand
 Private mLocked As Boolean ' property Locked
 Private mHidden As Boolean ' property Hidden
-
+Private mFaceMode As String ' property FaceMode
 Private storeTxtDayNumber As String
 
 '---------------------------------------------------------------------------------------
@@ -275,7 +275,6 @@ LockedLet_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwGlobe"
 End Property
-
 '---------------------------------------------------------------------------------------
 ' Property  : Hidden
 ' Author    : beededea
@@ -323,6 +322,44 @@ HiddenLet_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwGlobe"
 End Property
+'---------------------------------------------------------------------------------------
+' Property  : FaceMode
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Get FaceMode() As String
+   On Error GoTo FaceModeGet_Error
+
+   FaceMode = mFaceMode
+
+   On Error GoTo 0
+   Exit Property
+
+FaceModeGet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property FaceMode of Class Module cwGlobe"
+End Property
+'---------------------------------------------------------------------------------------
+' Property  : FaceMode
+' Author    : beededea
+' Date      : 10/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Let FaceMode(ByVal newValue As String)
+   On Error GoTo FaceModeLet_Error
+
+    If mFaceMode <> newValue Then mFaceMode = newValue Else Exit Property
+
+   On Error GoTo 0
+   Exit Property
+
+FaceModeLet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property FaceMode of Class Module cwGlobe"
+End Property
 '
 '---------------------------------------------------------------------------------------------
 ' Procedure : W_HitTest
@@ -367,8 +404,6 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
    
     On Error GoTo W_Paint_Error
     
-
-    
     'set some Font- and ForeColor-Properties and draw some Text on the Widget
     W.FontName = "arial"
     W.ForeColor = cream
@@ -398,7 +433,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     ' draw the date and day in the windows just once to retain opacity
                     If textDrawn = False Then ' has to be here to be underneath  all the hands and only run once
-                        If PzGClockFaceSwitchPref = "1" Then
+                        If FaceMode = "1" Then
                             CC.DrawText 260, 103, 200, 200, txtDayNumber, , , 2, True, , thisOpacity
                             CC.DrawText 458, 307, 200, 200, txtMonthNumber, , , 2, True, , thisOpacity
                         Else
@@ -426,7 +461,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                     CC.RotateDrawingsDeg -50 + SDeg + MsDeg
     
                  Case "swhourhand"
-                     If PzGClockFaceSwitchPref = "0" Then 'stopwatch mode
+                     If FaceMode = "0" Then  'stopwatch mode
                         Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(15, 61) 'shift to the "rotation-point" within the Pattern
                         CC.TranslateDrawings 352, 418  'shift to the rotation-point
@@ -439,7 +474,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                  
                      End If
                  Case "swminutehand"
-                     If PzGClockFaceSwitchPref = "0" Then 'stopwatch mode
+                     If FaceMode = "0" Then  'stopwatch mode
                          Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                          Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
                          CC.TranslateDrawings 353, 203  'shift to the rotation-point
@@ -451,7 +486,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                          CC.RotateDrawingsDeg MDeg
                      End If
                  Case "swsecondhand"
-                     If PzGClockFaceSwitchPref = "0" Then 'stopwatch mode
+                     If FaceMode = "0" Then  'stopwatch mode
                          Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                          Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
                          CC.TranslateDrawings 460, 312  'shift to the rotation-point

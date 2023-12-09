@@ -3398,13 +3398,6 @@ Private Sub btnSave_Click()
     
     ' the sizing is not saved here again as it saved during the setting phase.
     
-'    If PzGDpiAwareness = "1" Then
-'        PzGPrefsFontSizeHighDPI = txtPrefsFontSize.Text
-'    Else
-'        PzGPrefsFontSizeLowDPI = txtPrefsFontSize.Text
-'    End If
-    'PzGPrefsFontItalics = txtFontSize.Text
-
     ' Windows
     PzGWindowLevel = LTrim$(Str$(cmbWindowLevel.ListIndex))
     PzGPreventDragging = LTrim$(Str$(chkPreventDragging.Value))
@@ -3850,8 +3843,8 @@ Private Sub populatePrefsComboBoxes()
     cmbHidingTime.ItemData(5) = 60
     
     ' populate the clock face to show
-    cmbClockFaceSwitchPref.AddItem "standard", 0
-    cmbClockFaceSwitchPref.AddItem "stopwatch", 1
+    cmbClockFaceSwitchPref.AddItem "stopwatch", 0
+    cmbClockFaceSwitchPref.AddItem "standard", 1
  
     'populate one timezone combobox from file.
     Call readFileWriteComboBox(cmbMainGaugeTimeZone, App.path & "\Resources\txt\timezones.txt")

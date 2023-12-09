@@ -414,9 +414,11 @@ Public Sub adjustMainControls()
 'PzGSecondaryDaylightSaving
     
     If PzGClockFaceSwitchPref = "0" Then
+        overlayWidget.FaceMode = "0"
         fAlpha.gaugeForm.Widgets("stopwatchface").Widget.Alpha = Val(PzGOpacity) / 100
         fAlpha.gaugeForm.Widgets("clockface").Widget.Alpha = 0
     Else
+        overlayWidget.FaceMode = "1"
         fAlpha.gaugeForm.Widgets("clockface").Widget.Alpha = Val(PzGOpacity) / 100
         fAlpha.gaugeForm.Widgets("stopwatchface").Widget.Alpha = 0
     End If

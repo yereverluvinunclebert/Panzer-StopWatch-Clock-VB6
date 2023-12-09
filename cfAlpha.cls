@@ -396,11 +396,13 @@ Private Sub switchfacesbutton_mouseDown(ByRef Sender As Object)
     
     If PzGClockFaceSwitchPref = "1" Then
         PzGClockFaceSwitchPref = "0"
+        overlayWidget.FaceMode = "0"
         gaugeForm.Widgets("clockface").Widget.Alpha = 0
         gaugeForm.Widgets("stopwatchface").Widget.Alpha = Val(PzGOpacity) / 100
         gaugeForm.Widgets("stopwatchface").Widget.Refresh
     Else
         PzGClockFaceSwitchPref = "1"
+        overlayWidget.FaceMode = "1"
         gaugeForm.Widgets("stopwatchface").Widget.Alpha = 0
         gaugeForm.Widgets("clockface").Widget.Alpha = Val(PzGOpacity) / 100
         gaugeForm.Widgets("clockface").Widget.Refresh
