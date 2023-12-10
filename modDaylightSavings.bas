@@ -126,7 +126,7 @@ Private Declare Sub GetSystemTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Sub obtainDaylightSavings()
+Public Function obtainDaylightSavings() As Long
     Dim DLSrules() As String
     
     On Error GoTo obtainDaylightSavings_Error
@@ -137,16 +137,16 @@ Public Sub obtainDaylightSavings()
     DLSrules = getDLSrules(App.path & "\Resources\txt\DLSRules.txt")
 
     'calculate the timezone bias
-    panzerPrefs.txtBias = updateDLS(DLSrules)
+    obtainDaylightSavings = updateDLS(DLSrules)
     
     On Error GoTo 0
-    Exit Sub
+    Exit Function
 
 obtainDaylightSavings_Error:
 
      MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure obtainDaylightSavings of Module modDaylightSavings"
     
-End Sub
+End Function
 '---------------------------------------------------------------------------------------
 ' Function  : updateDLS
 ' Author    : beededea
@@ -162,6 +162,7 @@ Private Function updateDLS(ByRef DLSrules() As String) As Long
     Dim dlsRule() As String
     Dim separator As String: separator = vbNullString
     Dim localGMTOffset As Long
+    Dim timeZoneDeltaMins As Integer
     
     separator = (" - ")
     
@@ -185,7 +186,7 @@ Private Function updateDLS(ByRef DLSrules() As String) As Long
     ' read the first component of the split rule
     thisRule = dlsRule(0)
     
-    tzDelta1 = theDLSdelta(DLSrules, thisRule, remoteGMTOffset1) ' return
+    timeZoneDeltaMins = theDLSdelta(DLSrules, thisRule, remoteGMTOffset1)
     
     'Debug.Print ("%DST-I thisRule " & thisRule)
     'Debug.Print ("%DST-I remoteGMTOffset1 " & remoteGMTOffset1)
@@ -198,7 +199,7 @@ Private Function updateDLS(ByRef DLSrules() As String) As Long
     'Debug.Print ("%updateTime-I localGMTOffset + remoteGMTOffset1 " & localGMTOffset + remoteGMTOffset1) ' // -600
     
     tzDelta = localGMTOffset + remoteGMTOffset1
-    tzDelta = tzDelta + tzDelta1
+    tzDelta = tzDelta + timeZoneDeltaMins
     
 '    Debug.Print ("%updateTime-I tzDelta " & tzDelta)
 '    Debug.Print ("%updateTime-I tzDelta1 " & tzDelta1)

@@ -517,8 +517,11 @@ Public Sub adjustMainControls()
     End If
 
     ' determine the time bias
-    If PzGMainDaylightSaving <> "0" Then Call obtainDaylightSavings ' determine the time bias
-               
+    If PzGMainDaylightSaving <> "0" Then
+        tzDelta = obtainDaylightSavings ' determine the time bias
+        panzerPrefs.txtBias = tzDelta
+    End If
+    
     ' set the z-ordering of the window
     Call setAlphaFormZordering
     
