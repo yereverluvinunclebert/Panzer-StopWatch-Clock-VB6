@@ -30,6 +30,15 @@ Begin VB.Form panzerPrefs
          TabIndex        =   51
          Top             =   300
          Width           =   6750
+         Begin VB.TextBox txtSecondaryBias 
+            Height          =   285
+            Left            =   5895
+            Locked          =   -1  'True
+            TabIndex        =   170
+            Text            =   "0"
+            Top             =   4950
+            Width           =   720
+         End
          Begin VB.ComboBox cmbSecondaryGaugeTimeZone 
             Height          =   315
             Left            =   2010
@@ -75,7 +84,7 @@ Begin VB.Form panzerPrefs
             Top             =   6165
             Width           =   3720
          End
-         Begin VB.TextBox txtBias 
+         Begin VB.TextBox txtMainBias 
             Height          =   285
             Left            =   5895
             Locked          =   -1  'True
@@ -110,6 +119,15 @@ Begin VB.Form panzerPrefs
             ToolTipText     =   "Check this box to enable the automatic start of the program when Windows is started."
             Top             =   5625
             Width           =   4020
+         End
+         Begin VB.Label lblGeneral 
+            Caption         =   "Bias (mins)"
+            Height          =   345
+            Index           =   15
+            Left            =   5910
+            TabIndex        =   171
+            Top             =   4635
+            Width           =   1740
          End
          Begin VB.Label lblGeneral 
             Caption         =   "Minor Gauge Zone :"
@@ -2147,17 +2165,14 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub cmbMainGaugeTimeZone_Click()
-   Dim P1 As Integer
-   Dim P2 As Integer
+    
+    
    On Error GoTo cmbMainGaugeTimeZone_Click_Error
 
     If prefsStartupFlg = False Then ' don't run this on startup
         btnSave.Enabled = True ' enable the save button
         If cmbMainDaylightSaving.ListIndex <> 0 Then
-            'tzDelta = obtainDaylightSavings
-            P1 = panzerPrefs.cmbMainGaugeTimeZone.List(panzerPrefs.cmbMainGaugeTimeZone.ListIndex)
-            P2 = panzerPrefs.cmbMainDaylightSaving.List(panzerPrefs.cmbMainDaylightSaving.ListIndex)
-            tzDelta = obtainDaylightSavings("main", P1, P2) ' determine the time bias
+            tzDelta = fObtainDaylightSavings("Main") ' determine the time bias
         End If
     End If
 
@@ -2181,17 +2196,14 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub cmbSecondaryDaylightSaving_Click()
-   Dim P1 As Integer
-   Dim P2 As Integer
+    
+    
     On Error GoTo cmbSecondaryDaylightSaving_Click_Error
 
     If prefsStartupFlg = False Then ' don't run this on startup
         btnSave.Enabled = True ' enable the save button
         If cmbSecondaryDaylightSaving.ListIndex <> 0 Then
-            'tzDelta = obtainDaylightSavings
-            P1 = panzerPrefs.cmbSecondaryGaugeTimeZone.List(panzerPrefs.cmbSecondaryGaugeTimeZone.ListIndex)
-            P2 = panzerPrefs.cmbSecondaryDaylightSaving.List(panzerPrefs.cmbSecondaryDaylightSaving.ListIndex)
-            tzDelta = obtainDaylightSavings("secondary", P1, P2) ' determine the time bias
+            tzDelta = fObtainDaylightSavings("Secondary") ' determine the time bias to display on the scondary gauge when in clock mode
         End If
     End If
 
@@ -2211,16 +2223,14 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub cmbSecondaryGaugeTimeZone_Click()
-   Dim P1 As Integer
-   Dim P2 As Integer
+    
+    
     On Error GoTo cmbSecondaryGaugeTimeZone_Click_Error
 
     If prefsStartupFlg = False Then ' don't run this on startup
         btnSave.Enabled = True ' enable the save button
         If cmbSecondaryDaylightSaving.ListIndex <> 0 Then
-            P1 = panzerPrefs.cmbSecondaryGaugeTimeZone.List(panzerPrefs.cmbSecondaryGaugeTimeZone.ListIndex)
-            P2 = panzerPrefs.cmbSecondaryDaylightSaving.List(panzerPrefs.cmbSecondaryDaylightSaving.ListIndex)
-            tzDelta = obtainDaylightSavings("secondary", P1, P2) ' determine the time bias
+            tzDelta1 = fObtainDaylightSavings("Secondary") ' determine the time bias
         End If
     End If
 
@@ -3681,6 +3691,8 @@ Private Sub adjustPrefsControls()
     
     On Error GoTo adjustPrefsControls_Error
             
+    'cmbMainGaugeTimeZone.ListIndex = 0
+    
     ' general tab
     chkGaugeFunctions.Value = Val(PzGGaugeFunctions)
     chkGenStartup.Value = Val(PzGStartup)
@@ -3690,11 +3702,11 @@ Private Sub adjustPrefsControls()
     'set the choice for four timezone comboboxes that were populated from file.
     cmbMainGaugeTimeZone.ListIndex = Val(PzGMainGaugeTimeZone)
     cmbMainDaylightSaving.ListIndex = Val(PzGMainDaylightSaving)
-        
-    txtBias.Text = tzDelta
-
+'
+    txtMainBias.Text = tzDelta
+'
     cmbTickSwitchPref.ListIndex = Val(PzGSmoothSecondHand)
-    
+'
     cmbSecondaryGaugeTimeZone.ListIndex = Val(PzGSecondaryGaugeTimeZone)
     cmbSecondaryDaylightSaving.ListIndex = Val(PzGSecondaryDaylightSaving)
     
@@ -4548,8 +4560,8 @@ End Sub
 
 
 
-Private Sub txtBias_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip txtBias.hwnd, "This field displays the current total bias that will be applied to the current time based upon the timezone and daylight savings selection made, (read only). ", _
+Private Sub txtMainBias_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+    If PzGEnableBalloonTooltips = "1" Then CreateToolTip txtMainBias.hwnd, "This field displays the current total bias that will be applied to the current time based upon the timezone and daylight savings selection made, (read only). ", _
                   TTIconInfo, "Help on the bias field.", , , , True
 End Sub
 
@@ -4700,7 +4712,7 @@ Public Sub setPrefsTooltips()
         cmbTickSwitchPref.ToolTipText = "The movement of the hand can be set to smooth or one-second ticks, the smooth movement uses slightly more CPU."
         
         'lstTimezoneRegions.ToolTipText = "These are the regions associated with the chosen timezone."
-        'txtBias.ToolTipText = "This is the bias offset in minutes that will affect the displayed time."
+        'txtMainBias.ToolTipText = "This is the bias offset in minutes that will affect the displayed time."
         chkDpiAwareness.ToolTipText = " Check the box to make the program DPI aware. RESTART required."
         chkEnablePrefsTooltips.ToolTipText = "Check the box to enable tooltips for all controls in the preferences utility"
         btnResetMessages.ToolTipText = "This button restores the pop-up messages to their original visible state."
@@ -4775,7 +4787,7 @@ Public Sub setPrefsTooltips()
         cmbTickSwitchPref.ToolTipText = vbNullString
         
         'lstTimezoneRegions.ToolTipText = vbNullString
-        'txtBias.ToolTipText = vbNullString
+        'txtMainBias.ToolTipText = vbNullString
         chkDpiAwareness.ToolTipText = vbNullString
         chkEnablePrefsTooltips.ToolTipText = vbNullString
         btnResetMessages.ToolTipText = vbNullString
@@ -4850,7 +4862,7 @@ Private Sub loadPrefsAboutText()
     lblMinorVersion.Caption = App.Minor
     lblRevisionNum.Caption = App.Revision
     
-    Call LoadFileToTB(txtAboutText, App.path & "\resources\txt\about.txt", False)
+    Call LoadFileToTB(txtAboutText, App.path & "\resources\txtSecondaryBias\about.txt", False)
 
    On Error GoTo 0
    Exit Sub
@@ -5662,16 +5674,13 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub cmbMainDaylightSaving_Click()
-   Dim P1 As Integer
-   Dim P2 As Integer
+    
    On Error GoTo cmbMainDaylightSaving_Click_Error
 
     If prefsStartupFlg = False Then ' don't run this on startup
         btnSave.Enabled = True ' enable the save button
         If cmbMainDaylightSaving.ListIndex <> 0 Then
-            P1 = panzerPrefs.cmbMainGaugeTimeZone.List(panzerPrefs.cmbMainGaugeTimeZone.ListIndex)
-            P2 = panzerPrefs.cmbMainDaylightSaving.List(panzerPrefs.cmbMainDaylightSaving.ListIndex)
-            tzDelta = obtainDaylightSavings("main", P1, P2) ' determine the time bias
+            tzDelta = fObtainDaylightSavings("Main") ' determine the time bias
         End If
     End If
    
@@ -5703,7 +5712,7 @@ End Sub
 '
 '      For cnt = LBound(tzinfo) To UBound(tzinfo)
 '
-'         If tzinfo(cnt).bias = txtBias.Text Then
+'         If tzinfo(cnt).bias = txtMainBias.Text Then
 '
 '            .AddItem tzinfo(cnt).TimeZoneName
 '            'Debug.Print tzinfo(cnt).TimeZoneName

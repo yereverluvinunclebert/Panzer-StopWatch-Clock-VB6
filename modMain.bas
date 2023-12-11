@@ -397,8 +397,8 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Public Sub adjustMainControls()
-   Dim P1 As Integer
-   Dim P2 As Integer
+    
+    
    On Error GoTo adjustMainControls_Error
 
     ' validate the inputs of any data from the input settings file
@@ -519,12 +519,16 @@ Public Sub adjustMainControls()
 
     ' determine the time bias
     If PzGMainDaylightSaving <> "0" Then
-        P1 = panzerPrefs.cmbMainGaugeTimeZone.List(panzerPrefs.cmbMainGaugeTimeZone.ListIndex)
-        P2 = panzerPrefs.cmbMainDaylightSaving.List(panzerPrefs.cmbMainDaylightSaving.ListIndex)
-        tzDelta = obtainDaylightSavings("main", P1, P2) ' determine the time bias
-        panzerPrefs.txtBias = tzDelta
+        tzDelta = fObtainDaylightSavings("Main") ' determine the time bias
+        panzerPrefs.txtMainBias = tzDelta
     End If
     
+    ' determine the time bias
+'    If PzGSecondaryDaylightSaving <> "0" Then
+'        tzDelta1 = fObtainDaylightSavings("Secondary") ' determine the time bias
+'        panzerPrefs.txtSecondaryBias = tzDelta1
+'    End If
+   
     ' set the z-ordering of the window
     Call setAlphaFormZordering
     

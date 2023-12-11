@@ -118,39 +118,14 @@ Private Declare Sub GetSystemTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 
 
 
-
-''---------------------------------------------------------------------------------------
-'' Procedure : obtainDaylightSavings
-'' Author    : beededea
-'' Date      : 07/10/2023
-'' Purpose   :
-''---------------------------------------------------------------------------------------
-''
-'Public Function obtainDaylightSavings(gaugeSelection As String, gaugeTimeZone As Integer, gaugeDST As Integer) As Long
-'
-'
-'    On Error GoTo obtainDaylightSavings_Error
-'
-'
-'    'calculate the timezone bias
-'    obtainDaylightSavings = updateDLS(DLSrules)
-'
-'    On Error GoTo 0
-'    Exit Function
-'
-'obtainDaylightSavings_Error:
-'
-'     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure obtainDaylightSavings of Module modDaylightSavings"
-'
-'End Function
 '---------------------------------------------------------------------------------------
-' Function  : obtainDaylightSavings
+' Function  : fObtainDaylightSavings
 ' Author    : beededea
 ' Date      : 10/10/2023
 ' Purpose   : calculate the timezone bias
 '---------------------------------------------------------------------------------------
 '
-Public Function obtainDaylightSavings(gaugeSelection As String, gaugeTimeZone As Integer, gaugeDST As Integer) As Long
+Public Function fObtainDaylightSavings(gaugeSelection As String) As Long
     Dim DLSrules() As String
     Dim remoteGMTOffset1 As Long: remoteGMTOffset1 = 0
     Dim thisRule As String: thisRule = vbNullString
@@ -159,27 +134,38 @@ Public Function obtainDaylightSavings(gaugeSelection As String, gaugeTimeZone As
     Dim separator As String: separator = vbNullString
     Dim localGMTOffset As Long
     Dim timeZoneDeltaMins As Integer
+    Dim finalTimeZoneDelta As Long
     
     separator = (" - ")
     
-    On Error GoTo obtainDaylightSavings_Error
+    On Error GoTo fObtainDaylightSavings_Error
     
-    ''Debug.Print ("%DST func obtainDaylightSavings")
+    ''Debug.Print ("%DST func fObtainDaylightSavings")
         
     ' From DLSRules.txt - assign all rules in this file to an array
     DLSrules = getDLSrules(App.path & "\Resources\txt\DLSRules.txt")
   
     ' From timezones.txt take the offset from the selected timezone in the prefs
-    chosenTimeZone = panzerPrefs.cmbMainGaugeTimeZone.List(panzerPrefs.cmbMainGaugeTimeZone.ListIndex)
+    If gaugeSelection = "Main" Then
+        chosenTimeZone = panzerPrefs.cmbMainGaugeTimeZone.List(panzerPrefs.cmbMainGaugeTimeZone.ListIndex)
+    Else
+        chosenTimeZone = panzerPrefs.cmbSecondaryGaugeTimeZone.List(panzerPrefs.cmbSecondaryGaugeTimeZone.ListIndex)
+    End If
+    
     If chosenTimeZone = "System Time" Then
-        tzDelta = 0
+        finalTimeZoneDelta = 0
         Exit Function
     End If
     
     remoteGMTOffset1 = getRemoteOffset(chosenTimeZone) ' returns a long containing number of minutes
 
     ' From DSLcodesWin.txt, extract the current rule contents from the selected rule in the prefs
-    thisRule = panzerPrefs.cmbMainDaylightSaving.List(panzerPrefs.cmbMainDaylightSaving.ListIndex)
+    If gaugeSelection = "Main" Then
+        thisRule = panzerPrefs.cmbMainDaylightSaving.List(panzerPrefs.cmbMainDaylightSaving.ListIndex)
+    Else
+        thisRule = panzerPrefs.cmbSecondaryDaylightSaving.List(panzerPrefs.cmbSecondaryDaylightSaving.ListIndex)
+    End If
+    
     dlsRule = Split(thisRule, separator)
     
     ' read the first component of the split rule
@@ -197,20 +183,20 @@ Public Function obtainDaylightSavings(gaugeSelection As String, gaugeTimeZone As
     'Debug.Print ("%updateTime-I remoteGMTOffset1 " & remoteGMTOffset1) ' //0
     'Debug.Print ("%updateTime-I localGMTOffset + remoteGMTOffset1 " & localGMTOffset + remoteGMTOffset1) ' // -600
     
-    tzDelta = localGMTOffset + remoteGMTOffset1
-    tzDelta = tzDelta + timeZoneDeltaMins
+    finalTimeZoneDelta = localGMTOffset + remoteGMTOffset1
+    finalTimeZoneDelta = finalTimeZoneDelta + timeZoneDeltaMins
     
-'    Debug.Print ("%updateTime-I tzDelta " & tzDelta)
+'    Debug.Print ("%updateTime-I finalTimeZoneDelta " & finalTimeZoneDelta)
 '    Debug.Print ("%updateTime-I tzDelta1 " & tzDelta1)
     
-    obtainDaylightSavings = tzDelta
+    fObtainDaylightSavings = finalTimeZoneDelta ' return
     
     On Error GoTo 0
     Exit Function
 
-obtainDaylightSavings_Error:
+fObtainDaylightSavings_Error:
 
-     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Function   obtainDaylightSavings of Module modDaylightSavings"
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Function   fObtainDaylightSavings of Module modDaylightSavings"
 End Function
 
 '---------------------------------------------------------------------------------------
