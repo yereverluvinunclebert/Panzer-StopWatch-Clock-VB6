@@ -397,7 +397,8 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Public Sub adjustMainControls()
-   
+   Dim P1 As Integer
+   Dim P2 As Integer
    On Error GoTo adjustMainControls_Error
 
     ' validate the inputs of any data from the input settings file
@@ -518,7 +519,9 @@ Public Sub adjustMainControls()
 
     ' determine the time bias
     If PzGMainDaylightSaving <> "0" Then
-        tzDelta = obtainDaylightSavings ' determine the time bias
+        P1 = panzerPrefs.cmbMainGaugeTimeZone.List(panzerPrefs.cmbMainGaugeTimeZone.ListIndex)
+        P2 = panzerPrefs.cmbMainDaylightSaving.List(panzerPrefs.cmbMainDaylightSaving.ListIndex)
+        tzDelta = obtainDaylightSavings("main", P1, P2) ' determine the time bias
         panzerPrefs.txtBias = tzDelta
     End If
     

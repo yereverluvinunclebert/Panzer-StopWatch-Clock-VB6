@@ -526,6 +526,8 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub tmrClock_Timer() 'update the private "Degree-Variables" for Hour-, Minute- and Second-Hands + Refresh
+    Dim P1 As Integer
+    Dim P2 As Integer
     Dim currentLocaltime As SYSTEMTIME
     Static T As Date: T = Time
     
@@ -536,7 +538,11 @@ Private Sub tmrClock_Timer() 'update the private "Degree-Variables" for Hour-, M
     ' every 15 mins approx. update DaylightSavings and determine the time bias
     If PzGMainDaylightSaving <> "0" Then
         If (Minute(T) Mod 15 = 0) And (Second(T) = 0) And (currentLocaltime.wMilliseconds < 100) Then
-            tzDelta = obtainDaylightSavings
+            If PzGMainDaylightSaving <> 0 Then
+                 P1 = panzerPrefs.cmbMainGaugeTimeZone.List(panzerPrefs.cmbMainGaugeTimeZone.ListIndex)
+                 P2 = panzerPrefs.cmbMainDaylightSaving.List(panzerPrefs.cmbMainDaylightSaving.ListIndex)
+                 tzDelta = obtainDaylightSavings("main", P1, P2) ' determine the time bias
+             End If
         End If
     End If
         

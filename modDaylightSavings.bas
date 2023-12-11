@@ -119,43 +119,39 @@ Private Declare Sub GetSystemTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 
 
 
-'---------------------------------------------------------------------------------------
-' Procedure : obtainDaylightSavings
-' Author    : beededea
-' Date      : 07/10/2023
-' Purpose   :
-'---------------------------------------------------------------------------------------
+''---------------------------------------------------------------------------------------
+'' Procedure : obtainDaylightSavings
+'' Author    : beededea
+'' Date      : 07/10/2023
+'' Purpose   :
+''---------------------------------------------------------------------------------------
+''
+'Public Function obtainDaylightSavings(gaugeSelection As String, gaugeTimeZone As Integer, gaugeDST As Integer) As Long
 '
-Public Function obtainDaylightSavings() As Long
-    Dim DLSrules() As String
-    
-    On Error GoTo obtainDaylightSavings_Error
-            
-    'Debug.Print ("%DST func obtainDaylightSavings")
-    
-    ' From DLSRules.txt - assign all rules in this file to an array
-    DLSrules = getDLSrules(App.path & "\Resources\txt\DLSRules.txt")
-
-    'calculate the timezone bias
-    obtainDaylightSavings = updateDLS(DLSrules)
-    
-    On Error GoTo 0
-    Exit Function
-
-obtainDaylightSavings_Error:
-
-     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure obtainDaylightSavings of Module modDaylightSavings"
-    
-End Function
+'
+'    On Error GoTo obtainDaylightSavings_Error
+'
+'
+'    'calculate the timezone bias
+'    obtainDaylightSavings = updateDLS(DLSrules)
+'
+'    On Error GoTo 0
+'    Exit Function
+'
+'obtainDaylightSavings_Error:
+'
+'     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure obtainDaylightSavings of Module modDaylightSavings"
+'
+'End Function
 '---------------------------------------------------------------------------------------
-' Function  : updateDLS
+' Function  : obtainDaylightSavings
 ' Author    : beededea
 ' Date      : 10/10/2023
 ' Purpose   : calculate the timezone bias
 '---------------------------------------------------------------------------------------
 '
-Private Function updateDLS(ByRef DLSrules() As String) As Long
-
+Public Function obtainDaylightSavings(gaugeSelection As String, gaugeTimeZone As Integer, gaugeDST As Integer) As Long
+    Dim DLSrules() As String
     Dim remoteGMTOffset1 As Long: remoteGMTOffset1 = 0
     Dim thisRule As String: thisRule = vbNullString
     Dim chosenTimeZone As String: chosenTimeZone = vbNullString
@@ -166,10 +162,13 @@ Private Function updateDLS(ByRef DLSrules() As String) As Long
     
     separator = (" - ")
     
-    On Error GoTo updateDLS_Error
+    On Error GoTo obtainDaylightSavings_Error
     
-    ''Debug.Print ("%DST func updateDLS")
+    ''Debug.Print ("%DST func obtainDaylightSavings")
         
+    ' From DLSRules.txt - assign all rules in this file to an array
+    DLSrules = getDLSrules(App.path & "\Resources\txt\DLSRules.txt")
+  
     ' From timezones.txt take the offset from the selected timezone in the prefs
     chosenTimeZone = panzerPrefs.cmbMainGaugeTimeZone.List(panzerPrefs.cmbMainGaugeTimeZone.ListIndex)
     If chosenTimeZone = "System Time" Then
@@ -204,14 +203,14 @@ Private Function updateDLS(ByRef DLSrules() As String) As Long
 '    Debug.Print ("%updateTime-I tzDelta " & tzDelta)
 '    Debug.Print ("%updateTime-I tzDelta1 " & tzDelta1)
     
-    updateDLS = tzDelta
+    obtainDaylightSavings = tzDelta
     
     On Error GoTo 0
     Exit Function
 
-updateDLS_Error:
+obtainDaylightSavings_Error:
 
-     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Function   updateDLS of Module modDaylightSavings"
+     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Function   obtainDaylightSavings of Module modDaylightSavings"
 End Function
 
 '---------------------------------------------------------------------------------------
