@@ -351,6 +351,10 @@ Public PzGFirstTimeRun  As String
 ' General storage variables declared
 Public PzGSettingsDir As String
 Public PzGSettingsFile As String
+
+Public PzGTrinketsDir      As String
+Public PzGTrinketsFile      As String
+
 Public PzGClockHighDpiXPos As String
 Public PzGClockHighDpiYPos As String
 Public PzGClockLowDpiXPos As String

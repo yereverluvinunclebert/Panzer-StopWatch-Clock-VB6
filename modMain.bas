@@ -101,6 +101,9 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     ' check the Windows version
     classicThemeCapable = fTestClassicThemeCapable
   
+    ' get this tool's entry in the trinkets settings file and assign the app.path
+    Call getTrinketsFile
+    
     ' get the location of this tool's settings file (appdata)
     Call getToolSettingsFile
     
@@ -280,6 +283,9 @@ Private Sub initialiseGlobalVars()
     ' general storage variables declared
     PzGSettingsDir = vbNullString
     PzGSettingsFile = vbNullString
+    
+    PzGTrinketsDir = vbNullString
+    PzGTrinketsFile = vbNullString
     PzGClockHighDpiXPos = vbNullString
     PzGClockHighDpiYPos = vbNullString
     
@@ -758,6 +764,45 @@ Public Sub validateInputs()
 validateInputs_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure validateInputs of form modMain"
+End Sub
+'---------------------------------------------------------------------------------------
+' Procedure : getTrinketsFile
+' Author    : beededea
+' Date      : 17/10/2019
+' Purpose   : get this tool's entry in the trinkets settings file and assign the app.path
+'---------------------------------------------------------------------------------------
+'
+Private Sub getTrinketsFile()
+    On Error GoTo getTrinketsFile_Error
+    
+    Dim iFileNo As Integer: iFileNo = 0
+    
+    PzGTrinketsDir = fSpecialFolder(feUserAppData) & "\trinkets" ' just for this user alone
+    PzGTrinketsFile = PzGTrinketsDir & "\" & widgetName & ".ini"
+        
+    'if the folder does not exist then create the folder
+    If Not fDirExists(PzGTrinketsDir) Then
+        MkDir PzGTrinketsDir
+    End If
+
+    'if the settings.ini does not exist then create the file by copying
+    If Not fFExists(PzGTrinketsFile) Then
+
+        iFileNo = FreeFile
+        'open the file for writing
+        Open PzGTrinketsFile For Output As #iFileNo
+        Write #iFileNo, App.path & "\" & App.EXEName & ".exe"
+        Write #iFileNo,
+        Close #iFileNo
+    End If
+    
+   On Error GoTo 0
+   Exit Sub
+
+getTrinketsFile_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure getTrinketsFile of Form modMain"
+
 End Sub
 
 '---------------------------------------------------------------------------------------
