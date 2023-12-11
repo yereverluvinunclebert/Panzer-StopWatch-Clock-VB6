@@ -11,11 +11,19 @@
 ' if DST option is not selected then DST is not calculated - done
 ' updateDLS merged with updateDaylightSavings - done
 ' secondary gauge tzDelta calculation - done
+' Added function to check and write the Trinkets File - done
+' restart.exe takes a parameter which is the binary to restart, fix it - done
+
+-oOo-
+
+' prefs restart
 
 ' clock mode - secondary gauge must use tzdelta 1
 ' stopwatch mode press button 1 starts a timing run
 ' stopwatch mode press button 2 pauses a timing run
 ' stopwatch mode press button 2 restarts a timing run
+
+
 
 ' https://www.vbforums.com/showthread.php?900892-VB6-Simple-way-to-make-your-VB6-application-quot-Per-Monitor-DPI-Aware-quot
 

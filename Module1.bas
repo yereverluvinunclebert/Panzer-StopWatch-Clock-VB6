@@ -2601,9 +2601,8 @@ Public Sub hardRestart()
     thisCommand = App.path & "\restart.exe"
     
     If fFExists(thisCommand) Then
-        
         ' run the selected program
-        Call ShellExecute(panzerPrefs.hwnd, "open", thisCommand, "Panzer StopWatch.exe prefs", "", 1)
+        Call ShellExecute(panzerPrefs.hwnd, "open", thisCommand, "Panzer Stopwatch Widget.exe", "prefs", 1)
     Else
         'answer = MsgBox(thisCommand & " is missing", vbOKOnly + vbExclamation)
         answerMsg = thisCommand & " is missing"
