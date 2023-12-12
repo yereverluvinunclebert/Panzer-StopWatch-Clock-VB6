@@ -2,7 +2,7 @@
 
  A FOSS Stopwatch VB6 Widget for Reactos, XP, Win7, 8 and 10+.
 
-My current VB6/RC6 PSD program being worked upon now, in progress, don't download! I am working on integrating my own native VB6 forms and code with the the RC6 Cairo code.
+My current VB6/RC6 PSD program being worked upon now, in progress, you can download but the stopwatch code has not yet been implemented. New version always coming. I am working on integrating my own native VB6 forms and code with the the RC6 Cairo code.
 This based upon the Yahoo widget of the same design.
  
 This Panzer widget is an attractive dieselpunk Yahoo widget for your desktop. 
