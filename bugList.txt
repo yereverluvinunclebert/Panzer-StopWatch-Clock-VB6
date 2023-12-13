@@ -16,12 +16,16 @@
 
 -oOo-
 
-' prefs restart
+' prefs restart bug
 
-' clock mode - secondary gauge must use tzdelta 1
+' clock mode - secondary gauge must use tzdelta1
 ' stopwatch mode press button 1 starts a timing run
 ' stopwatch mode press button 2 pauses a timing run
 ' stopwatch mode press button 2 restarts a timing run
+
+' web widgets
+
+' NW.js
 
 
 

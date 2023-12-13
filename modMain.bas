@@ -525,15 +525,15 @@ Public Sub adjustMainControls()
 
     ' determine the time bias
     If PzGMainDaylightSaving <> "0" Then
-        tzDelta = fObtainDaylightSavings("Main") ' determine the time bias
+        tzDelta = fObtainDaylightSavings("Main")
         panzerPrefs.txtMainBias = tzDelta
     End If
     
-    ' determine the time bias
-'    If PzGSecondaryDaylightSaving <> "0" Then
-'        tzDelta1 = fObtainDaylightSavings("Secondary") ' determine the time bias
-'        panzerPrefs.txtSecondaryBias = tzDelta1
-'    End If
+    ' determine the time bias, secondary gauge
+    If PzGSecondaryDaylightSaving <> "0" Then
+        tzDelta1 = fObtainDaylightSavings("Secondary")
+        panzerPrefs.txtSecondaryBias = tzDelta1
+    End If
    
     ' set the z-ordering of the window
     Call setAlphaFormZordering

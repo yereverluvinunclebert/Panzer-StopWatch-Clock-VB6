@@ -33,6 +33,8 @@ Private WithEvents tmrClock As cTimer
 Attribute tmrClock.VB_VarHelpID = -1
 Private HDeg As Double
 Private MDeg As Double
+Private HDeg1 As Double
+Private MDeg1 As Double
 Private SDeg As Double
 Private Sec As Integer
 Private MsDeg As Double
@@ -465,12 +467,12 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                         Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(15, 61) 'shift to the "rotation-point" within the Pattern
                         CC.TranslateDrawings 352, 418  'shift to the rotation-point
-                        CC.RotateDrawingsDeg HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                        CC.RotateDrawingsDeg HDeg1 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
                      Else
                         Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(15, 61) 'shift to the "rotation-point" within the Pattern
                         CC.TranslateDrawings 432, 240  'shift to the rotation-point
-                        CC.RotateDrawingsDeg HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                        CC.RotateDrawingsDeg HDeg1 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
                  
                      End If
                  Case "swminutehand"
@@ -478,12 +480,12 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                          Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                          Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
                          CC.TranslateDrawings 353, 203  'shift to the rotation-point
-                         CC.RotateDrawingsDeg MDeg
+                         CC.RotateDrawingsDeg MDeg1
                      Else
                          Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                          Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
                          CC.TranslateDrawings 286, 380  'shift to the rotation-point for the clock
-                         CC.RotateDrawingsDeg MDeg
+                         CC.RotateDrawingsDeg MDeg1
                      End If
                  Case "swsecondhand"
                      If FaceMode = "0" Then  'stopwatch mode
@@ -527,7 +529,6 @@ End Sub
 '
 Private Sub tmrClock_Timer() 'update the private "Degree-Variables" for Hour-, Minute- and Second-Hands + Refresh
  
-     
     Dim currentLocaltime As SYSTEMTIME
     Static T As Date: T = Time
     
@@ -538,10 +539,10 @@ Private Sub tmrClock_Timer() 'update the private "Degree-Variables" for Hour-, M
     ' every 15 mins approx. update DaylightSavings and determine the time bias
     If PzGMainDaylightSaving <> "0" Then
         If (Minute(T) Mod 15 = 0) And (Second(T) = 0) And (currentLocaltime.wMilliseconds < 100) Then
-            If PzGMainDaylightSaving <> 0 Then
+            If PzGMainDaylightSaving <> "0" Then
                  tzDelta = fObtainDaylightSavings("Main") ' determine the time bias
             End If
-            If PzGSecondaryDaylightSaving <> 0 Then
+            If PzGSecondaryDaylightSaving <> "0" Then
                  tzDelta1 = fObtainDaylightSavings("Secondary") ' determine the time bias
             End If
         End If
@@ -549,9 +550,14 @@ Private Sub tmrClock_Timer() 'update the private "Degree-Variables" for Hour-, M
         
     ' Debug.Print ("%updateTime-I tzDelta " & tzDelta)
 
+    ' time calc for main gauge
     HDeg = 30 * (Hour(T) Mod 12 + (Minute(T) + tzDelta) / 60)
     MDeg = 6 * ((Minute(T) + tzDelta) + (Second(T) / 60))
-
+    
+    ' time calc for secondary gauge
+    HDeg1 = 30 * (Hour(T) Mod 12 + (Minute(T) + tzDelta1) / 60)
+    MDeg1 = 6 * ((Minute(T) + tzDelta1) + (Second(T) / 60))
+    
     Sec = Second(T)
 
     If mSmoothSecondHand = True Then
