@@ -2171,9 +2171,7 @@ Private Sub cmbMainGaugeTimeZone_Click()
 
     If prefsStartupFlg = False Then ' don't run this on startup
         btnSave.Enabled = True ' enable the save button
-        If cmbMainDaylightSaving.ListIndex <> 0 Then
-            tzDelta = fObtainDaylightSavings("Main") ' determine the time bias
-        End If
+        tzDelta = fObtainDaylightSavings("Main") ' determine the time bias
     End If
 
     On Error GoTo 0
@@ -2203,7 +2201,7 @@ Private Sub cmbSecondaryDaylightSaving_Click()
     If prefsStartupFlg = False Then ' don't run this on startup
         btnSave.Enabled = True ' enable the save button
         If cmbSecondaryDaylightSaving.ListIndex <> 0 Then
-            tzDelta = fObtainDaylightSavings("Secondary") ' determine the time bias to display on the scondary gauge when in clock mode
+            tzDelta1 = fObtainDaylightSavings("Secondary") ' determine the time bias to display on the scondary gauge when in clock mode
         End If
     End If
 
@@ -2229,9 +2227,7 @@ Private Sub cmbSecondaryGaugeTimeZone_Click()
 
     If prefsStartupFlg = False Then ' don't run this on startup
         btnSave.Enabled = True ' enable the save button
-        If cmbSecondaryDaylightSaving.ListIndex <> 0 Then
-            tzDelta1 = fObtainDaylightSavings("Secondary") ' determine the time bias
-        End If
+        tzDelta1 = fObtainDaylightSavings("Secondary") ' determine the time bias
     End If
 
     On Error GoTo 0

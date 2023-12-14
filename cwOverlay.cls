@@ -489,10 +489,22 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                      End If
                  Case "swsecondhand"
                      If FaceMode = "0" Then  'stopwatch mode
-                         Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
-                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
-                         CC.TranslateDrawings 460, 312  'shift to the rotation-point
-                         CC.RotateDrawingsDeg SDeg
+                     
+                        ' only rotate if the top button has been pressed
+                        ' if stopwatchRunningState = 1 then
+                            Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
+                            Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
+                            CC.TranslateDrawings 460, 312  'shift to the rotation-point
+                            CC.RotateDrawingsDeg SDeg
+                        ' endif
+                        ' if stopwatchRunningState = 2 then
+                            ' zero the dials
+                        ' endif
+                     
+                        ' if stopwatchRunningState = 3 then
+                            ' do nothing
+                        ' endif
+                     
                      Else
 '                         Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
 '                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 56) 'shift to the "rotation-point" within the Pattern

@@ -230,10 +230,10 @@ Private Sub startbutton_mouseMove(ByRef Sender As Object)
 
     If PzGEnableBalloonTooltips = "1" Then
         If PzGClockFaceSwitchPref = "1" Then
-            CreateToolTip gaugeForm.hwnd, "This button restarts all stopped clock functions for this widget, hand movement &c .", _
+            CreateToolTip gaugeForm.hwnd, "Clock mode, this button restarts all stopped clock functions for this widget, hand movement &c .", _
                 TTIconInfo, widgetName & " Start Button Help", , , , True
         Else
-            CreateToolTip gaugeForm.hwnd, "Press to zero the stopwatch dials (stopwatch mode).", _
+            CreateToolTip gaugeForm.hwnd, "Stopwatch mode, press to zero the stopwatch dials.", _
                 TTIconInfo, widgetName & " Zero Dials Button Help", , , , True
         End If
     End If
@@ -260,10 +260,10 @@ Private Sub stopbutton_mouseMove(ByRef Sender As Object)
 
     If PzGEnableBalloonTooltips = "1" Then
         If PzGClockFaceSwitchPref = "1" Then
-            CreateToolTip gaugeForm.hwnd, "When in clock mode, this button stops all animated clock functions for this widget, hand movements &c .", _
+            CreateToolTip gaugeForm.hwnd, "Clock mode, this button stops all animated clock functions for this widget, hand movements &c .", _
                 TTIconInfo, widgetName & " Stop Button Help", , , , True
         Else
-            CreateToolTip gaugeForm.hwnd, "Press to continue the timing run. This button is active only when a timing run has been paused.", _
+            CreateToolTip gaugeForm.hwnd, "Stopwatch mode, press to continue the timing run. This button is active only when a timing run has been paused.", _
                 TTIconInfo, widgetName & " Continue Timing Button Help", , , , True
         End If
     End If
@@ -312,8 +312,14 @@ Private Sub startbutton_click()
     On Error GoTo startbutton_click_Error
    
     Dim fileToPlay As String: fileToPlay = vbNullString
-
-    Call TurnFunctionsOn
+    
+    If PzGClockFaceSwitchPref = "1" Then
+        ' if in clock mode just enable the ticking
+        Call TurnFunctionsOn
+    Else
+        ' if in stopwatch mode zero the dials
+        
+    End If
 
     fileToPlay = "ting.wav"
     If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
