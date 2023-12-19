@@ -317,8 +317,12 @@ Private Sub startbutton_click()
         ' if in clock mode just enable the ticking
         Call TurnFunctionsOn
     Else
-        ' if in stopwatch mode zero the dials
+        stopwatchRunningState = 1
+        stopWatchStartTime = Now() ' theDate.getTime();
+        fAlpha.gaugeForm.Widgets("housing/startbutton").Widget.ToolTip = "Stopwatch Mode: Press to pause the stopwatch dials. The timing run continues in the background."
+        overlayWidget.StopWatchTicking = True
         
+
     End If
 
     fileToPlay = "ting.wav"
