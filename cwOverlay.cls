@@ -485,33 +485,35 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     If storeTxtDayNumber <> txtDayNumber Then textDrawn = False ' trigger a redraw of the day and month within the boxes
     
     txtMonthNumber = Month(DateAdd("m", tzDelta, Now))
-    
-    ' the DrawText code has to be here, before the graphical elements, in order to appear underneath the hands
-    If FaceMode = "0" Then  'stopwatch mode
-       If stopWatchRunningState = 1 Or stopWatchRunningState = 2 Then
-           CC.DrawText 187, 212, 200, 200, Str$(SWSec), , , 2, True, , thisOpacity
-       Else
-           CC.DrawText 187, 212, 200, 200, Str$(Sec), , , 2, True, , thisOpacity
-       End If
-    Else ' clock mode
-        If textDrawn = False Then ' draw the date and day in the windows just once to retain opacity
-            CC.DrawText 260, 103, 200, 200, txtDayNumber, , , 2, True, , thisOpacity
-            CC.DrawText 458, 307, 200, 200, txtMonthNumber, , , 2, True, , thisOpacity
-            textDrawn = True
-        End If
-    End If
 
     For I = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
       Arr = cCollOverlayImages.ItemByIndex(I)
       Key = cCollOverlayImages.KeyByIndex(I)
       
+      ' derive a Pattern-Obj from each retrieved ImageList-Surface-reference
       If IsArray(Arr) Then
              CC.Save
-             'derive a Pattern-Obj from each retrieved ImageList-Surface-reference
-            
-            ' for specific keys perform rotation actions, clock hands &c
+             
+             ' for specific keys perform rotation actions, clock hands &c
              Select Case Key
                  Case "hourshadow", "hourhand" 'hours-shadow- and hour-hand
+                 
+                    ' the DrawText code has to be here, before the graphical elements, in order to appear underneath the hands
+                    ' if you move this section out of the loop it causes graphical problems
+                    If FaceMode = "0" Then  'stopwatch mode
+                       If stopWatchRunningState = 1 Or stopWatchRunningState = 2 Then
+                           CC.DrawText 187, 212, 200, 200, Str$(SWSec), , , 2, True, , thisOpacity
+                       Else
+                           CC.DrawText 187, 212, 200, 200, Str$(Sec), , , 2, True, , thisOpacity
+                       End If
+                    Else ' clock mode
+                        If textDrawn = False Then ' draw the date and day in the windows just once to retain opacity
+                            CC.DrawText 260, 103, 200, 200, txtDayNumber, , , 2, True, , thisOpacity
+                            CC.DrawText 458, 307, 200, 200, txtMonthNumber, , , 2, True, , thisOpacity
+                            textDrawn = True
+                        End If
+                    End If
+    
                     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(19, 160) 'shift to the "rotation-point" within the Pattern
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
@@ -528,9 +530,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(60, 160) 'shift to the "rotation-point" within the Pattern
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                     CC.RotateDrawingsDeg -50 + SDeg + MsDeg
-    
                  Case "swhourhand"
-                 
                      If FaceMode = "0" Then  'stopwatch mode
                         Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(15, 61) 'shift to the "rotation-point" within the Pattern
@@ -570,21 +570,11 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                             CC.TranslateDrawings 460, 312  'shift to the rotation-point
                             CC.RotateDrawingsDeg SWSDeg
                         End If
-                        
-                        ' if stopwatchRunningState = 3 then
-                            ' unpause
-                        ' endif
-                        ' if stopwatchRunningState = 4 then
-                            ' zero the dials
-                        ' endif
-                     
                      End If
-                 Case "bigreflectioncopy", "bigreflection", "windowreflection" 'plain output for everything else ... this includes the reflection-layers,
+                 Case "bigreflectioncopy", "bigreflection", "windowreflection", "helpbutton" 'plain output for everything else ... this includes the reflection-layers,
                     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'here we only shift the Pattern via the original PSD-Offsets (stored in Arr(0) and Arr(1))
-                    'CC.TranslateDrawings 0, 0  'shift to the rotation-point
                  Case Else
-
              End Select
              CC.Paint Arr(2), Pat 'finally we render the Pattern with the current PSD-LayerAlpha, present in Arr(2)
              

@@ -1010,6 +1010,7 @@ Private Sub loadExcludePathCollection()
         .Add Empty, "bigreflectioncopy"     'all reflections
         .Add Empty, "bigreflection"     'all reflections
         .Add Empty, "windowreflection"
+        '.Add Empty, "tickbutton"
 
 
     End With
