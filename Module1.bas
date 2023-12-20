@@ -437,7 +437,8 @@ Public tzDelta1 As Long
 Public msgBoxADynamicSizingFlg As Boolean
 
 Public stopWatchStartTime As Date
-Public stopwatchRunningState As Integer
+Public stopWatchRunningState As Integer
+Public stopWatchZeroed As Boolean
 
 
 

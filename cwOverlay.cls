@@ -538,31 +538,33 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                      End If
                  Case "swsecondhand"
                      If FaceMode = "0" Then  'stopwatch mode
-                        If stopwatchRunningState = 1 Then
+                        If stopWatchRunningState = 1 Or stopWatchRunningState = 2 Then
                             CC.DrawText 187, 212, 200, 200, Str$(SWSec), , , 2, True, , thisOpacity
                         Else
                             CC.DrawText 187, 212, 200, 200, Str$(Sec), , , 2, True, , thisOpacity
                         End If
-                        ' only rotate if the top button has been pressed
-                         'If stopwatchRunningState = 1 Then
+                         ' just show the hand if ready to go
+                         If stopWatchRunningState = 0 Then
+                            Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
+                            Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
+                            CC.TranslateDrawings 460, 312  'shift to the rotation-point
+                            CC.RotateDrawingsDeg 0
+                         End If
+                         ' only rotate if the top button has been pressed
+                         If stopWatchRunningState = 1 Or stopWatchRunningState = 2 Then
                             Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                             Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
                             CC.TranslateDrawings 460, 312  'shift to the rotation-point
                             CC.RotateDrawingsDeg SWSDeg
-                         'End If
+                         End If
                         ' if stopwatchRunningState = 2 then
-                            ' zero the dials
+                            ' pause
                         ' endif
                      
                         ' if stopwatchRunningState = 3 then
-                            ' do nothing
+                            ' zero the dials
                         ' endif
                      
-                     Else
-'                         Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
-'                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 56) 'shift to the "rotation-point" within the Pattern
-'                         CC.TranslateDrawings 286, 380  'shift to the rotation-point for the clock
-'                         CC.RotateDrawingsDeg SDeg
                      End If
                  Case "bigreflectioncopy", "bigreflection", "windowreflection" 'plain output for everything else ... this includes the reflection-layers,
                     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
@@ -675,11 +677,20 @@ Private Sub tmrStopWatch_Timer()
     elapsedTimeSecs = DateDiff("s", stopWatchStartTime, theTime)
 
     ' time degree calculation for main gauge
-    SWHDeg = (elapsedTimeSecs * 0.001667) Mod 360
-    SWMDeg = (elapsedTimeSecs * 0.1) Mod 360
-    SWSDeg = (elapsedTimeSecs * 6) Mod 360
-
-    SWSec = elapsedTimeSecs Mod 60
+    If stopWatchRunningState = 2 Then
+        SWHDeg = SWHDeg
+        SWMDeg = SWMDeg
+        SWSDeg = SWSDeg
+    
+        SWSec = SWSec
+    Else
+    
+        SWHDeg = (elapsedTimeSecs * 0.001667) Mod 360
+        SWMDeg = (elapsedTimeSecs * 0.1) Mod 360
+        SWSDeg = (elapsedTimeSecs * 6) Mod 360
+    
+        SWSec = elapsedTimeSecs Mod 60
+    End If
 
     'W.Parent.Refresh ' no need as this is done by the main timer
 

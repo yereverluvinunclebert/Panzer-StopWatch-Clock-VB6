@@ -16,26 +16,23 @@
 
 ' clock mode - secondary gauge must use tzdelta1  - done
 
+' new code and a new timer to rotate swhourhand, swminutehand and swsecondhand according to a newly calculated set of degrees of rotation from
+'    the point the timer starts - done
+
 -oOo-
 
 ' prefs restart bug
 
-' in clock mode the timer calculates degrees for the hours and mins plus seconds
-'   note: CW_Paint is called regularly not from a timer visible to us (can be redrawn using a refresh) but from a timer within the RC6 DLL.
-'   CW_PAINT uses the calculated degrees from the rotation point for hours and mins plus seconds.
-' in stopwatch mode, swhourhand, swminutehand and swsecondhand will rotate according to a set and stored start point, the start of the timer run
-'    in CW_PAINT the code to rotate swhourhand, swminutehand and swsecondhand in a standard manner, will not be run
-'       a new mode will remove the rotation of the minute/hour/second altogether from the CW_PAINT class.
-'    new code and a new timer to rotate swhourhand, swminutehand and swsecondhand according to a newly calculated set of degrees of rotation from
-'    the point the timer starts.
-'    If button 1 is pressed for a second time, this just stops the hands rotating, the secondary timer itself continues.
-'    When the timer is reset using the lower b, the main timer will have a flag to stop rotating the hands and a secondary timer will rotate them backward and reset the start point
-'
+' changing large tooltips added to button 1 - wip
+
+' If button 1 is pressed for a second time, this just stops the hands rotating, the secondary timer itself continues - wip
+
+' When the timer is reset using the lower b, the main timer will have a flag to stop rotating the hands and a secondary timer will rotate them backward and reset the start point
 
 ' stopwatch mode press once on button 1 set and store a start point and start a timing run
 ' stopwatch mode press twice on button 1 pauses the hands on any current timing run but the run continues...
-' stopwatch mode press thrice on button 1 resets the hands and stops the timing run
-' stopwatch mode press button 3 unpauses a timing run
+' stopwatch mode press thrice on button 3 resets the hands and stops the timing run
+' stopwatch mode press button 1 unpauses a timing run
 
 ' https://www.vbforums.com/showthread.php?900892-VB6-Simple-way-to-make-your-VB6-application-quot-Per-Monitor-DPI-Aware-quot
 

@@ -233,8 +233,19 @@ Private Sub startbutton_mouseMove(ByRef Sender As Object)
             CreateToolTip gaugeForm.hwnd, "Clock mode, this button restarts all stopped clock functions for this widget, hand movement &c .", _
                 TTIconInfo, widgetName & " Start Button Help", , , , True
         Else
-            CreateToolTip gaugeForm.hwnd, "Stopwatch mode, press to zero the stopwatch dials.", _
-                TTIconInfo, widgetName & " Zero Dials Button Help", , , , True
+        
+            If stopWatchRunningState = 0 Then
+                If stopWatchZeroed = False Then
+                    CreateToolTip gaugeForm.hwnd, "Stopwatch mode, press to zero the stopwatch dials.", _
+                        TTIconInfo, widgetName & " Zero Dials Button Help", , , , True
+                Else
+                    CreateToolTip gaugeForm.hwnd, "Stopwatch mode, press to start a timing run.", _
+                        TTIconInfo, widgetName & " Start Timing Button Help", , , , True
+                End If
+            ElseIf stopWatchRunningState = 1 Then
+                CreateToolTip gaugeForm.hwnd, "Stopwatch Mode: Press to pause the stopwatch dials. The timing run continues in the background.", _
+                    TTIconInfo, widgetName & " Pause Dials Button Help", , , , True
+            End If
         End If
     End If
 
@@ -312,17 +323,25 @@ Private Sub startbutton_click()
     On Error GoTo startbutton_click_Error
    
     Dim fileToPlay As String: fileToPlay = vbNullString
-    
+        
     If PzGClockFaceSwitchPref = "1" Then
         ' if in clock mode just enable the ticking
         Call TurnFunctionsOn
     Else
-        stopwatchRunningState = 1
-        stopWatchStartTime = Now() ' theDate.getTime();
-        fAlpha.gaugeForm.Widgets("housing/startbutton").Widget.ToolTip = "Stopwatch Mode: Press to pause the stopwatch dials. The timing run continues in the background."
-        overlayWidget.StopWatchTicking = True
-        
-
+        Select Case stopWatchRunningState
+            Case 0
+                stopWatchRunningState = 1
+                stopWatchStartTime = Now() ' theDate.getTime();
+                overlayWidget.StopWatchTicking = True
+            Case 1
+                stopWatchRunningState = 2
+            Case 2
+                stopWatchRunningState = 3
+            Case 3
+                stopWatchRunningState = 4
+            Case 4
+                stopWatchRunningState = 5
+        End Select
     End If
 
     fileToPlay = "ting.wav"
