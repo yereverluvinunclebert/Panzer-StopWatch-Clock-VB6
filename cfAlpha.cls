@@ -334,13 +334,9 @@ Private Sub startbutton_click()
                 stopWatchStartTime = Now() ' theDate.getTime();
                 overlayWidget.StopWatchTicking = True
             Case 1
-                stopWatchRunningState = 2
+                stopWatchRunningState = 2 ' pause the hands, stopwatch still running
             Case 2
-                stopWatchRunningState = 3
-            Case 3
-                stopWatchRunningState = 4
-            Case 4
-                stopWatchRunningState = 5
+                stopWatchRunningState = 1 ' back to running state
         End Select
     End If
 
@@ -372,8 +368,16 @@ Private Sub stopbutton_mouseUp(ByRef Sender As Object)
 
     Sender.Widget.Alpha = Val(PzGOpacity) / 100
     Sender.Widget.Refresh
-           
-    Call SwitchOff
+    
+    If PzGClockFaceSwitchPref = "1" Then
+        ' if in clock mode just switch off
+        Call SwitchOff
+    Else
+        stopWatchStartTime = Now()
+        stopWatchRunningState = 0 ' back to zeroed state
+        overlayWidget.StopWatchTicking = False
+
+    End If
     
     fileToPlay = "stop.wav"
     If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then

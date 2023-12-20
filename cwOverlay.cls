@@ -99,6 +99,11 @@ Private Sub Class_Initialize()
         W.ImplementsHitTest = True 'when at False, no HitTest-Event would be triggered
                     
     intervalValue = 500
+'
+' SWHDeg = 0
+' SWMDeg = 0
+' SWSDeg = 0
+' SWSec = 0
 
     Set tmrClock = Nothing
     Set tmrClock = New_c.Timer(intervalValue, mTicking)
@@ -237,6 +242,10 @@ Public Property Let StopWatchTicking(ByVal newValue As Boolean)
         tmrStopWatch.Enabled = True
     Else
         tmrStopWatch.Enabled = False
+        SWHDeg = 0
+        SWMDeg = 0
+        SWSDeg = 0
+        SWSec = 0
     End If
 
    On Error GoTo 0
@@ -476,6 +485,21 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     If storeTxtDayNumber <> txtDayNumber Then textDrawn = False ' trigger a redraw of the day and month within the boxes
     
     txtMonthNumber = Month(DateAdd("m", tzDelta, Now))
+    
+    ' the DrawText code has to be here, before the graphical elements, in order to appear underneath the hands
+    If FaceMode = "0" Then  'stopwatch mode
+       If stopWatchRunningState = 1 Or stopWatchRunningState = 2 Then
+           CC.DrawText 187, 212, 200, 200, Str$(SWSec), , , 2, True, , thisOpacity
+       Else
+           CC.DrawText 187, 212, 200, 200, Str$(Sec), , , 2, True, , thisOpacity
+       End If
+    Else ' clock mode
+        If textDrawn = False Then ' draw the date and day in the windows just once to retain opacity
+            CC.DrawText 260, 103, 200, 200, txtDayNumber, , , 2, True, , thisOpacity
+            CC.DrawText 458, 307, 200, 200, txtMonthNumber, , , 2, True, , thisOpacity
+            textDrawn = True
+        End If
+    End If
 
     For I = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
       Arr = cCollOverlayImages.ItemByIndex(I)
@@ -489,20 +513,10 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
              Select Case Key
                  Case "hourshadow", "hourhand" 'hours-shadow- and hour-hand
                     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
-                    ' draw the date and day in the windows just once to retain opacity
-                    'If textDrawn = False Then ' has to be here to be underneath  all the hands and only run once
-                          If FaceMode = "1" Then ' clock mode
-                              CC.DrawText 260, 103, 200, 200, txtDayNumber, , , 2, True, , thisOpacity
-                              CC.DrawText 458, 307, 200, 200, txtMonthNumber, , , 2, True, , thisOpacity
-                          End If
-                          'textDrawn = True
-                    'End If
-                    
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(19, 160) 'shift to the "rotation-point" within the Pattern
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                     CC.RotateDrawingsDeg -7 + HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
-                    
-
+                 
                  Case "minuteshadow", "minutehand" 'minutes-shadow- and minutes-hand
                     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(44, 105) 'shift to the "rotation-point" within the Pattern
@@ -513,7 +527,6 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(60, 160) 'shift to the "rotation-point" within the Pattern
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
-                    
                     CC.RotateDrawingsDeg -50 + SDeg + MsDeg
     
                  Case "swhourhand"
@@ -528,7 +541,6 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                         Set Pat.Matrix = Pat.Matrix.TranslateCoords(15, 61) 'shift to the "rotation-point" within the Pattern
                         CC.TranslateDrawings 432, 240  'shift to the rotation-point
                         CC.RotateDrawingsDeg HDeg1 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
-                 
                      End If
                  Case "swminutehand"
                      If FaceMode = "0" Then  'stopwatch mode
@@ -544,25 +556,21 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                      End If
                  Case "swsecondhand"
                      If FaceMode = "0" Then  'stopwatch mode
-                        If stopWatchRunningState = 1 Or stopWatchRunningState = 2 Then
-                            CC.DrawText 187, 212, 200, 200, Str$(SWSec), , , 2, True, , thisOpacity
-                        Else
-                            CC.DrawText 187, 212, 200, 200, Str$(Sec), , , 2, True, , thisOpacity
-                        End If
                          ' just show the respective hand static and unmoving
-                         If stopWatchRunningState = 0 Then
+                        If stopWatchRunningState = 0 Then
                             Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                             Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
                             CC.TranslateDrawings 460, 312  'shift to the rotation-point
                             CC.RotateDrawingsDeg 0
-                         End If
+                        End If
                          ' only rotate the stopwatch hands if the top button has been pressed at least once
-                         If stopWatchRunningState = 1 Or stopWatchRunningState = 2 Then
+                        If stopWatchRunningState = 1 Or stopWatchRunningState = 2 Then
                             Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                             Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
                             CC.TranslateDrawings 460, 312  'shift to the rotation-point
                             CC.RotateDrawingsDeg SWSDeg
-                         End If
+                        End If
+                        
                         ' if stopwatchRunningState = 3 then
                             ' unpause
                         ' endif
@@ -574,6 +582,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                  Case "bigreflectioncopy", "bigreflection", "windowreflection" 'plain output for everything else ... this includes the reflection-layers,
                     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(-Arr(0), -Arr(1)) 'here we only shift the Pattern via the original PSD-Offsets (stored in Arr(0) and Arr(1))
+                    'CC.TranslateDrawings 0, 0  'shift to the rotation-point
                  Case Else
 
              End Select
@@ -582,6 +591,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
              CC.Restore
       End If
      Next
+
 
    On Error GoTo 0
    Exit Sub
@@ -598,10 +608,10 @@ End Sub
 ' Procedure : tmrClock_Timer
 ' Author    : olaf schmidt
 ' Date      : 30/07/2023
-' Purpose   :
+' Purpose   : update the degree-Variables for the stopwatch Hour, Minute and Second Hands
 '---------------------------------------------------------------------------------------
 '
-Private Sub tmrClock_Timer() 'update the private "Degree-Variables" for Hour-, Minute- and Second-Hands + Refresh
+Private Sub tmrClock_Timer()
  
     Dim currentLocaltime As SYSTEMTIME
     Static T As Date: T = Time
@@ -687,14 +697,14 @@ Private Sub tmrStopWatch_Timer()
         SWMDeg = SWMDeg
         SWSDeg = SWSDeg
         SWSec = SWSec
-    Else ' stopwatch running,
+    Else ' stopwatch running
         SWHDeg = (elapsedTimeSecs * 0.001667) Mod 360
         SWMDeg = (elapsedTimeSecs * 0.1) Mod 360
         SWSDeg = (elapsedTimeSecs * 6) Mod 360
         SWSec = elapsedTimeSecs Mod 60
     End If
 
-    'W.Parent.Refresh ' no need to refresh as this is done by the main timer
+    W.Parent.Refresh ' no need to refresh as this is done by the main timer
 
    On Error GoTo 0
    Exit Sub
