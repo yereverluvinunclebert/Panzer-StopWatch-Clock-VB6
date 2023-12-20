@@ -33,6 +33,9 @@ Private WithEvents tmrClock As cTimer
 Attribute tmrClock.VB_VarHelpID = -1
 Private WithEvents tmrStopWatch As cTimer
 Attribute tmrStopWatch.VB_VarHelpID = -1
+Private WithEvents tmrSWRotation As cTimer
+Attribute tmrSWRotation.VB_VarHelpID = -1
+
 Private HDeg As Double
 Private MDeg As Double
 Private HDeg1 As Double
@@ -102,6 +105,9 @@ Private Sub Class_Initialize()
 
     Set tmrStopWatch = Nothing
     Set tmrStopWatch = New_c.Timer(intervalValue, False)
+
+    Set tmrSWRotation = Nothing
+    Set tmrSWRotation = New_c.Timer(100, False)
 
    On Error GoTo 0
    Exit Sub
@@ -697,4 +703,32 @@ tmrStopWatch_Timer_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrStopWatch_Timer of Class Module cwOverlay"
 End Sub
+
+    
+'---------------------------------------------------------------------------------------
+' Procedure : tmrSWRotation_Timer
+' Author    :
+' Date      : 30/07/2023
+' Purpose   : update the degree-Variables for the stopwatch Hour, Minute and Second Hands
+'---------------------------------------------------------------------------------------
+'
+Private Sub tmrSWRotation_Timer()
+    
+    On Error GoTo tmrSWRotation_Timer_Error
+        
+'    SWHDeg = (elapsedTimeSecs * 0.001667) Mod 360
+'    SWMDeg = (elapsedTimeSecs * 0.1) Mod 360
+'    SWSDeg = (elapsedTimeSecs * 6) Mod 360
+'    SWSec = elapsedTimeSecs Mod 60
+
+    W.Parent.Refresh
+
+   On Error GoTo 0
+   Exit Sub
+
+tmrSWRotation_Timer_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrSWRotation_Timer of Class Module cwOverlay"
+End Sub
+
 
