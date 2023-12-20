@@ -543,25 +543,24 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                         Else
                             CC.DrawText 187, 212, 200, 200, Str$(Sec), , , 2, True, , thisOpacity
                         End If
-                         ' just show the hand if ready to go
+                         ' just show the respective hand static and unmoving
                          If stopWatchRunningState = 0 Then
                             Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                             Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
                             CC.TranslateDrawings 460, 312  'shift to the rotation-point
                             CC.RotateDrawingsDeg 0
                          End If
-                         ' only rotate if the top button has been pressed
+                         ' only rotate the stopwatch hands if the top button has been pressed at least once
                          If stopWatchRunningState = 1 Or stopWatchRunningState = 2 Then
                             Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                             Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
                             CC.TranslateDrawings 460, 312  'shift to the rotation-point
                             CC.RotateDrawingsDeg SWSDeg
                          End If
-                        ' if stopwatchRunningState = 2 then
-                            ' pause
-                        ' endif
-                     
                         ' if stopwatchRunningState = 3 then
+                            ' unpause
+                        ' endif
+                        ' if stopwatchRunningState = 4 then
                             ' zero the dials
                         ' endif
                      
@@ -664,12 +663,12 @@ End Sub
 ' Procedure : tmrStopWatch_Timer
 ' Author    :
 ' Date      : 30/07/2023
-' Purpose   : update the stopwatch degree-Variables for Hour, Minute and Second Hands
+' Purpose   : update the degree-Variables for the stopwatch Hour, Minute and Second Hands
 '---------------------------------------------------------------------------------------
 '
 Private Sub tmrStopWatch_Timer()
-    Dim theTime As Date
-    Dim elapsedTimeSecs As Long
+    Dim theTime As Date:  theTime = #1/1/2000 12:00:00 PM#
+    Dim elapsedTimeSecs As Long ' long means a max of 2,147,483,647 seconds, 24,855 days or 68 years
     
     On Error GoTo tmrStopWatch_Timer_Error
         
@@ -677,22 +676,19 @@ Private Sub tmrStopWatch_Timer()
     elapsedTimeSecs = DateDiff("s", stopWatchStartTime, theTime)
 
     ' time degree calculation for main gauge
-    If stopWatchRunningState = 2 Then
+    If stopWatchRunningState = 2 Then ' pause
         SWHDeg = SWHDeg
         SWMDeg = SWMDeg
         SWSDeg = SWSDeg
-    
         SWSec = SWSec
-    Else
-    
+    Else ' stopwatch running,
         SWHDeg = (elapsedTimeSecs * 0.001667) Mod 360
         SWMDeg = (elapsedTimeSecs * 0.1) Mod 360
         SWSDeg = (elapsedTimeSecs * 6) Mod 360
-    
         SWSec = elapsedTimeSecs Mod 60
     End If
 
-    'W.Parent.Refresh ' no need as this is done by the main timer
+    'W.Parent.Refresh ' no need to refresh as this is done by the main timer
 
    On Error GoTo 0
    Exit Sub

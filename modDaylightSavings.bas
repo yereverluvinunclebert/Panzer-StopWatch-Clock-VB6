@@ -210,7 +210,7 @@ Public Function fGetTimeZoneOffset() As Long
     Dim myTime As SYSTEMTIME
     Dim stringBuffer As String: stringBuffer = vbNullString
     Dim retVal As Long: retVal = 0
-    Dim localTime As Date
+    Dim localTime As Date: localTime = #1/1/2000 12:00:00 PM#
     Dim standardTime As Date
     Dim paddingLocation As Integer: paddingLocation = 0
     Dim thisTimeDeviation As Long: thisTimeDeviation = 0
@@ -567,7 +567,7 @@ Public Function getDateOfFirst(ByVal dayName As String, ByVal thisDayNumber As I
     Dim tDay As Integer: tDay = 0
     Dim tMonth As Integer: tMonth = 0
     Dim last As Integer: last = 0
-    Dim d As Date
+    Dim d As Date:  d = #1/1/2000 12:00:00 PM#
     Dim lastDay As Long: lastDay = 0
 
     On Error GoTo getDateOfFirst_Error
@@ -619,7 +619,7 @@ Public Function getDateOfLast(ByVal dayName As String, ByVal monthName As String
     Dim tDay As Integer: tDay = 0
     Dim tMonth As Integer: tMonth = 0
     Dim last As Integer: last = 0
-    Dim d As Date
+    Dim d As Date: d = #1/1/2000 12:00:00 PM#
     Dim lastDay As Long: lastDay = 0
     
     On Error GoTo getDateOfLast_Error
@@ -739,21 +739,21 @@ Public Function theDLSdelta(ByRef DLSrules() As String, ByVal rule As String, By
     Dim endDay As String:  endDay = vbNullString
     Dim endTimeDeviationInMins As Integer: endTimeDeviationInMins = 0
     Dim useUTC As Boolean: useUTC = False
-    Dim theDate As Date
+    Dim theDate As Date:  theDate = #1/1/2000 12:00:00 PM#
     Dim startYear As Integer: startYear = 0
     Dim endYear As Integer: endYear = 0
     Dim currentMonth As String: currentMonth = vbNullString
     Dim newMonthNumber As Integer: newMonthNumber = 0
     Dim startDate As Integer: startDate = 0
     Dim endDate As Integer: endDate = 0
-    Dim stdTime As Date
+    Dim stdTime As Date: stdTime = #1/1/2000 12:00:00 PM#
     Dim theGMTOffset As Long: theGMTOffset = 0
     Dim startHour As Integer: startHour = 0
     Dim startMin As Integer: startMin = 0
-    Dim theStart As Date
+    Dim theStart As Date: theStart = #1/1/2000 12:00:00 PM#
     Dim endHour As Integer: endHour = 0
     Dim endMin As Integer: endMin = 0
-    Dim theEnd As Date
+    Dim theEnd As Date: theEnd = #1/1/2000 12:00:00 PM#
     Dim dlsRule() As String
     
     Dim useloop As Integer: useloop = 0
@@ -992,7 +992,7 @@ End Function
 Private Function GetCurrentGMTDate() As Date
 
    Dim tzi As TIME_ZONE_INFORMATION
-   Dim gmt As Date
+   Dim gmt As Date: gmt = #1/1/2000 12:00:00 PM#
    Dim dwBias As Long
    Dim tmp As String
 
