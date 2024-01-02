@@ -76,12 +76,14 @@ Private Declare Sub GetSystemTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 
 Private mTicking As Boolean ' property Ticking
 Private mStopWatchTicking As Boolean ' property StopWatchTicking
-
+Private mZeroInterval As Boolean
 Private mSmoothSecondHand As Boolean ' property SmoothSecondHand
 Private mLocked As Boolean ' property Locked
 Private mHidden As Boolean ' property Hidden
 Private mFaceMode As String ' property FaceMode
 Private storeTxtDayNumber As String
+
+Private rotationTimerValue As Long
 
 '---------------------------------------------------------------------------------------
 ' Procedure : Class_Initialize
@@ -112,7 +114,7 @@ Private Sub Class_Initialize()
     Set tmrStopWatch = New_c.Timer(intervalValue, False)
 
     Set tmrSWRotation = Nothing
-    Set tmrSWRotation = New_c.Timer(100, False)
+    Set tmrSWRotation = New_c.Timer(20, False)
 
    On Error GoTo 0
    Exit Sub
@@ -217,7 +219,7 @@ End Property
 Public Property Get StopWatchTicking() As Boolean
    On Error GoTo StopWatchTickingGet_Error
 
-  StopWatchTicking = mStopWatchTicking
+   StopWatchTicking = mStopWatchTicking
 
    On Error GoTo 0
    Exit Property
@@ -254,6 +256,54 @@ Public Property Let StopWatchTicking(ByVal newValue As Boolean)
 StopWatchTickingLet_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property StopWatchTicking of Class Module cwOverlay"
+End Property
+
+'---------------------------------------------------------------------------------------
+' Property : ZeroInterval
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Get ZeroInterval() As Long
+   On Error GoTo ZeroIntervalGet_Error
+
+   ZeroInterval = mZeroInterval
+
+   On Error GoTo 0
+   Exit Property
+
+ZeroIntervalGet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property ZeroInterval of Class Module cwOverlay"
+End Property
+'---------------------------------------------------------------------------------------
+' Property  : ZeroInterval
+' Author    :
+' Date      : 09/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Let ZeroInterval(ByVal newValue As Long)
+    On Error GoTo ZeroIntervalLet_Error
+
+    If mZeroInterval <> newValue Then mZeroInterval = newValue Else Exit Property
+    
+    If mZeroInterval = 0 Then
+        tmrStopWatch.Enabled = True
+        tmrSWRotation.Enabled = False
+    Else
+        tmrStopWatch.Enabled = False
+        tmrSWRotation.Interval = mZeroInterval
+        tmrSWRotation.Enabled = True
+    End If
+
+   On Error GoTo 0
+   Exit Property
+
+ZeroIntervalLet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property ZeroInterval of Class Module cwOverlay"
 End Property
 
 '---------------------------------------------------------------------------------------
@@ -464,7 +514,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     Dim Pat As cCairoPattern
     Dim txtDayNumber As String: txtDayNumber = vbNullString
     Dim txtMonthNumber As String: txtMonthNumber = vbNullString
-    Dim textDrawn As Boolean:   textDrawn = False
+    Dim textDrawn As Boolean: textDrawn = False
     Dim thisOpacity As Double: thisOpacity = 0
     
     Const cream As String = "&HFFF5F5F5"
@@ -501,7 +551,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                     ' the DrawText code has to be here, before the graphical elements, in order to appear underneath the hands
                     ' if you move this section out of the loop it causes graphical problems
                     If FaceMode = "0" Then  'stopwatch mode
-                       If stopWatchRunningState = 1 Or stopWatchRunningState = 2 Then
+                       If gblStopWatchState = 1 Or gblStopWatchState = 2 Then
                            CC.DrawText 187, 212, 200, 200, Str$(SWSec), , , 2, True, , thisOpacity
                        Else
                            CC.DrawText 187, 212, 200, 200, Str$(Sec), , , 2, True, , thisOpacity
@@ -514,22 +564,43 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                         End If
                     End If
     
+
+                    
                     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(19, 160) 'shift to the "rotation-point" within the Pattern
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
-                    CC.RotateDrawingsDeg -7 + HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                    
+                    If gblStopWatchState = 1 Or gblStopWatchState = 2 Then
+                        CC.RotateDrawingsDeg 250 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                    Else
+                        CC.RotateDrawingsDeg -7 + HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                    End If
                  
                  Case "minuteshadow", "minutehand" 'minutes-shadow- and minutes-hand
                     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(44, 105) 'shift to the "rotation-point" within the Pattern
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
-                    CC.RotateDrawingsDeg -61 + MDeg
+                    
+                    If gblStopWatchState = 1 Or gblStopWatchState = 2 Then
+                        CC.RotateDrawingsDeg 185 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                    Else
+                        CC.RotateDrawingsDeg -61 + MDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                    End If
+                    
                     
                  Case "secondshadow", "secondhand" 'seconds-shadow- and seconds-hand
                     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(60, 160) 'shift to the "rotation-point" within the Pattern
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
-                    CC.RotateDrawingsDeg -50 + SDeg + MsDeg
+
+                    
+                    If gblStopWatchState = 1 Or gblStopWatchState = 2 Then
+                        CC.RotateDrawingsDeg 185 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                    Else
+                        CC.RotateDrawingsDeg -50 + SDeg + MsDeg
+                    End If
+                    
+
                  Case "swhourhand"
                      If FaceMode = "0" Then  'stopwatch mode
                         Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
@@ -557,14 +628,14 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                  Case "swsecondhand"
                      If FaceMode = "0" Then  'stopwatch mode
                          ' just show the respective hand static and unmoving
-                        If stopWatchRunningState = 0 Then
+                        If gblStopWatchState = 0 Then
                             Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                             Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
                             CC.TranslateDrawings 460, 312  'shift to the rotation-point
                             CC.RotateDrawingsDeg 0
                         End If
                          ' only rotate the stopwatch hands if the top button has been pressed at least once
-                        If stopWatchRunningState = 1 Or stopWatchRunningState = 2 Then
+                        If gblStopWatchState = 1 Or gblStopWatchState = 2 Then
                             Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                             Set Pat.Matrix = Pat.Matrix.TranslateCoords(12, 57) 'shift to the "rotation-point" within the Pattern
                             CC.TranslateDrawings 460, 312  'shift to the rotation-point
@@ -581,7 +652,6 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
              CC.Restore
       End If
      Next
-
 
    On Error GoTo 0
    Exit Sub
@@ -679,10 +749,10 @@ Private Sub tmrStopWatch_Timer()
     On Error GoTo tmrStopWatch_Timer_Error
         
     theTime = Now()
-    elapsedTimeSecs = DateDiff("s", stopWatchStartTime, theTime)
+    elapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, theTime)
 
     ' time degree calculation for main gauge
-    If stopWatchRunningState = 2 Then ' pause
+    If gblStopWatchState = 2 Then ' pause
         SWHDeg = SWHDeg
         SWMDeg = SWMDeg
         SWSDeg = SWSDeg
@@ -710,17 +780,27 @@ End Sub
 ' Author    :
 ' Date      : 30/07/2023
 ' Purpose   : update the degree-Variables for the stopwatch Hour, Minute and Second Hands
+'             allowing the gauge hands to rotate to new position
 '---------------------------------------------------------------------------------------
 '
 Private Sub tmrSWRotation_Timer()
     
     On Error GoTo tmrSWRotation_Timer_Error
         
-'    SWHDeg = (elapsedTimeSecs * 0.001667) Mod 360
-'    SWMDeg = (elapsedTimeSecs * 0.1) Mod 360
-'    SWSDeg = (elapsedTimeSecs * 6) Mod 360
-'    SWSec = elapsedTimeSecs Mod 60
-
+    If rotationTimerCount < rotationDegreesPerInterval Then
+        rotationTimerCount = rotationTimerCount + 1
+        'SWHDeg = (elapsedTimeSecs * 0.001667) Mod 360
+        'SWMDeg = (elapsedTimeSecs * 0.1) Mod 360
+        'SWSDeg = (elapsedTimeSecs * 6) Mod 360
+        SWSDeg = storedSWSDeg + (rotationTimerCount * rotationDegreesPerInterval)
+    Else
+        rotationTimerCount = 0
+        gblStopWatchState = 1
+        tmrSWRotation.Enabled = False
+        tmrStopWatch.Enabled = True
+        overlayWidget.StopWatchTicking = True
+    End If
+                
     W.Parent.Refresh
 
    On Error GoTo 0

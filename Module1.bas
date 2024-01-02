@@ -150,8 +150,11 @@ Public Declare Function ShellExecute Lib "Shell32.dll" Alias "ShellExecuteA" (By
 ' Constants and APIs for playing sounds
 Public Const SND_ASYNC As Long = &H1             '  play asynchronously
 Public Const SND_FILENAME  As Long = &H20000     '  name is a file name
+'Public Const SND_MEMORY = &H4
+'Public Const SND_NODEFAULT = &H2
 
-Public Declare Function PlaySound Lib "winmm.dll" Alias "PlaySoundA" (ByVal lpszName As String, ByVal hModule As Long, ByVal dwFlags As Long) As Long
+Public Declare Function PlaySound Lib "WINMM.DLL" Alias "PlaySoundA" (ByVal lpszName As String, ByVal hModule As Long, ByVal dwFlags As Long) As Long
+Public Declare Function sndPlaySound Lib "WINMM.DLL" Alias "sndPlaySoundA" (lpszSoundName As Any, ByVal uFlags As Long) As Long
 '------------------------------------------------------ ENDS
 
 
@@ -436,11 +439,17 @@ Public tzDelta1 As Long
 
 Public msgBoxADynamicSizingFlg As Boolean
 
-Public stopWatchStartTime As Date
-Public stopWatchRunningState As Integer
-Public stopWatchZeroed As Boolean
+Public gblStopWatchStartTime As Date ' these to be changed to properties
+Public gblStopWatchPauseTime As Date ' these to be changed to properties
+Public gblStopWatchState As Integer
+Public gblStopWatchZeroed As Boolean
 
 
+
+Public rotationDegreesPerInterval  As Long ' rotationDegreesPerInterval = 0
+Public rotationTimerCount As Integer ' rotationTimerCount = 0
+'Public storedSWSec As Integer ' storedSWHDeg = 0
+Public storedSWSDeg As Integer ' storedSWSDeg = 0
 
 
 '---------------------------------------------------------------------------------------
