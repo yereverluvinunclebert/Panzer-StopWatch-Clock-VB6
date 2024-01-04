@@ -29,10 +29,12 @@ Public collPSDNonUIElements As cCollection, FX As Long, FY As Long, FZ As Single
 Private PSDWidth As Long
 Private PSDHeight As Long
 Private mGlowing As Boolean
-Private storedElapsedTimeSecs As Long ' long means a max of 2,147,483,647 seconds, 24,855 days or 68 years
-Private newElapsedTimeSecs As Long
 
-Private Declare Sub Sleep Lib "kernel32.dll" (ByVal dwMilliseconds As Long)
+' do these need to be changed to properties?
+Private pauseElapsedTimeSecs As Long ' long means a max of 2,147,483,647 seconds, 24,855 days or 68 years
+Private restartElapsedTimeSecs As Long
+
+'Private Declare Sub Sleep Lib "kernel32.dll" (ByVal dwMilliseconds As Long)
 
 '---------------------------------------------------------------------------------------
 ' Procedure : Class_Initialize
@@ -331,7 +333,7 @@ Private Sub startbutton_click()
     
     Dim storedSWHDeg As Double: storedSWHDeg = 0
     Dim storedSWMDeg As Double: storedSWHDeg = 0
-    'Dim storedSWSDeg As Double: storedSWHDeg = 0
+    'Dim pauseSWSDeg As Double: storedSWHDeg = 0
     'Dim storedSWSec As Integer: storedSWHDeg = 0
     
     Dim newSWHDeg As Double: newSWHDeg = 0
@@ -339,8 +341,8 @@ Private Sub startbutton_click()
     Dim newSWSDeg As Double: newSWHDeg = 0
     Dim newSWSec As Integer: newSWHDeg = 0
     
-    Dim theTime As Date:  theTime = #1/1/2000 12:00:00 PM#
-    'Dim newElapsedTimeSecs As Long: newElapsedTimeSecs = 0 ' long means a max of 2,147,483,647 seconds, 24,855 days or 68 years
+    Dim restartTime As Date:  restartTime = #1/1/2000 12:00:00 PM#
+    'Dim restartElapsedTimeSecs As Long: restartElapsedTimeSecs = 0 ' long means a max of 2,147,483,647 seconds, 24,855 days or 68 years
     
     Dim rotationTime As Integer: rotationTime = 0
     Dim rotationIntervalMax As Integer: rotationIntervalMax = 0
@@ -348,7 +350,8 @@ Private Sub startbutton_click()
     Dim rotationVarianceDegrees As Long: rotationVarianceDegrees = 0
     'Dim rotationDegreesPerInterval  As Long: rotationDegreesPerInterval = 0
     
-    Dim playReset As Boolean: playReset = False
+    Dim playCounterTing As Boolean: playCounterTing = False
+    Dim playCounter As Boolean: playCounter = False
     Dim playTing As Boolean: playTing = False
 
     On Error GoTo startbutton_click_Error
@@ -361,71 +364,91 @@ Private Sub startbutton_click()
         Call TurnFunctionsOn
     Else
         Select Case gblStopWatchState
-            Case 0
-                playTing = True
-                playReset = True
+            Case 0 ' start the stopwatch the first time
+                playTing = False
+                playCounterTing = True
+                playCounter = False
+                
                 gblStopWatchState = 1 ' stopwatch running
                 gblStopWatchStartTime = Now()
                 overlayWidget.StopWatchTicking = True
                 
-                'place the hour and minute hands out of harm's way
-                
-                
-            Case 1
+            Case 1 ' pause the stopwatch
                 playTing = True
-                playReset = False
+                playCounterTing = False
+                playCounter = False
+                
                 gblStopWatchState = 2 ' pause the hands in CW_PAINT, stopwatch still running
+                
                 ' store the current degree and second position values
                 gblStopWatchPauseTime = Now()
-                storedElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, gblStopWatchPauseTime)
+                pauseElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, gblStopWatchPauseTime)
+                pauseSWSDeg = (pauseElapsedTimeSecs * 6) Mod 360
                 
-            Case 2
+'                storedSWHDeg = (pauseElapsedTimeSecs * 0.001667) Mod 360
+'                storedSWMDeg = (pauseElapsedTimeSecs * 0.1) Mod 360
+                'storedSWSec = pauseElapsedTimeSecs Mod 60
+                                
+            Case 2 ' restart the stopwatch
                 playTing = False
-                playReset = True
+                playCounterTing = False
+                playCounter = True
                 
                 ' back to stopwatch running
                 ' but first task will be to zero and rotate the hands
-                
-'                storedSWHDeg = (storedElapsedTimeSecs * 0.001667) Mod 360
-'                storedSWMDeg = (storedElapsedTimeSecs * 0.1) Mod 360
-                storedSWSDeg = (storedElapsedTimeSecs * 6) Mod 360
-                'storedSWSec = storedElapsedTimeSecs Mod 60
-                
-                theTime = Now()
-                newElapsedTimeSecs = DateDiff("s", gblStopWatchPauseTime, theTime) + 1 ' adding 1 second for the zeroing time
-                
+
+                restartTime = Now()
+                restartElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, restartTime) '+ 1 ' adding 1 second for the zeroing time
+                restartSWSDeg = (restartElapsedTimeSecs * 6) Mod 360
+                                
                 ' calculate the new position where the hands would be if they were rotating
-'                newSWHDeg = (newElapsedTimeSecs * 0.001667) Mod 360
-'                newSWMDeg = (newElapsedTimeSecs * 0.1) Mod 360
-'                newSWSDeg = (newElapsedTimeSecs * 6) Mod 360
-                newSWSec = newElapsedTimeSecs Mod 60
+'                newSWHDeg = (restartElapsedTimeSecs * 0.001667) Mod 360
+'                newSWMDeg = (restartElapsedTimeSecs * 0.1) Mod 360
+'                newSWSDeg = (restartElapsedTimeSecs * 6) Mod 360
+
+                ' pauseSWSDeg = (pauseElapsedTimeSecs * 6) Mod 360
                 
                 ' rotate from the old stored position to the new one
                 ' the amount of degrees variance needs to be covered by the zeroing time sound duration of 1.1 seconds
 
-                rotationVarianceSecs = newElapsedTimeSecs + storedElapsedTimeSecs
-                rotationVarianceDegrees = (rotationVarianceSecs * 6) Mod 360
-                
+                rotationVarianceSecs = restartElapsedTimeSecs - pauseElapsedTimeSecs
+                rotationVarianceDegrees = (rotationVarianceSecs) Mod 360
+
                 rotationDegreesPerInterval = rotationTime / rotationVarianceDegrees ' ms per degree
                 If rotationDegreesPerInterval >= rotationIntervalMax Then rotationDegreesPerInterval = rotationIntervalMax
                 
                 overlayWidget.StopWatchTicking = False
                 
+                If PzGEnableSounds = "1" Then
+                    fileToPlay = "counter.wav"
+            
+                    If fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+                        PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+                    End If
+                End If
+            
                 ' start the third timer to rotate passing through the interval
-                overlayWidget.ZeroInterval = rotationDegreesPerInterval
-
+                overlayWidget.rotationInterval = rotationDegreesPerInterval
+                overlayWidget.startDegrees = pauseSWSDeg
+                overlayWidget.endDegrees = restartSWSDeg
+                overlayWidget.startRotation = True
+                
         End Select
     End If
     
     If PzGEnableSounds = "1" Then
-        If playReset = True Then
-            fileToPlay = "counter.wav"
-    
+        If playCounterTing = True Then
+            fileToPlay = "counterTing.wav"
             If fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
                 PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
             End If
-            
-            Sleep 1000
+        End If
+        
+        If playCounter = True Then
+            fileToPlay = "counter.wav"
+            If fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+                PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+            End If
         End If
 
         If playTing = True Then
@@ -459,6 +482,18 @@ Private Sub stopbutton_mouseUp(ByRef Sender As Object)
 
     Sender.Widget.Alpha = Val(PzGOpacity) / 100
     Sender.Widget.Refresh
+        
+    If PzGEnableSounds = "1" Then
+        If gblStopWatchState = 0 Then
+            fileToPlay = "stop.wav"
+        Else
+            fileToPlay = "counterStop.wav"
+        End If
+        
+        If fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+            PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+        End If
+    End If
     
     If PzGClockFaceSwitchPref = "1" Then
         ' if in clock mode just switch off
@@ -467,22 +502,6 @@ Private Sub stopbutton_mouseUp(ByRef Sender As Object)
         gblStopWatchStartTime = Now()
         gblStopWatchState = 0 ' back to zeroed state
         overlayWidget.StopWatchTicking = False
-    End If
-    
-        
-    If PzGEnableSounds = "1" Then
-        fileToPlay = "counter.wav"
-
-        If fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
-            PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
-        End If
-        
-        Sleep 1000
-
-        fileToPlay = "stop.wav"
-        If fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
-            PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
-        End If
     End If
 
    On Error GoTo 0

@@ -76,14 +76,18 @@ Private Declare Sub GetSystemTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 
 Private mTicking As Boolean ' property Ticking
 Private mStopWatchTicking As Boolean ' property StopWatchTicking
-Private mZeroInterval As Boolean
 Private mSmoothSecondHand As Boolean ' property SmoothSecondHand
 Private mLocked As Boolean ' property Locked
 Private mHidden As Boolean ' property Hidden
 Private mFaceMode As String ' property FaceMode
 Private storeTxtDayNumber As String
 
-Private rotationTimerValue As Long
+Private mStartRotation As Boolean
+Private mStartDegrees As Long
+Private mEndDegrees As Long
+Private mRotationInterval As Long
+
+
 
 '---------------------------------------------------------------------------------------
 ' Procedure : Class_Initialize
@@ -259,51 +263,166 @@ StopWatchTickingLet_Error:
 End Property
 
 '---------------------------------------------------------------------------------------
-' Property : ZeroInterval
+' Property : startRotation
 ' Author    : beededea
 ' Date      : 17/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Get ZeroInterval() As Long
-   On Error GoTo ZeroIntervalGet_Error
+Public Property Get startRotation() As Boolean
+   On Error GoTo startRotationGet_Error
 
-   ZeroInterval = mZeroInterval
+   startRotation = mStartRotation
 
    On Error GoTo 0
    Exit Property
 
-ZeroIntervalGet_Error:
+startRotationGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property ZeroInterval of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property startRotation of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
-' Property  : ZeroInterval
+' Property  : startRotation
 ' Author    :
 ' Date      : 09/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Let ZeroInterval(ByVal newValue As Long)
-    On Error GoTo ZeroIntervalLet_Error
+Public Property Let startRotation(ByVal newValue As Boolean)
+    On Error GoTo startRotationLet_Error
 
-    If mZeroInterval <> newValue Then mZeroInterval = newValue Else Exit Property
+    If mStartRotation <> newValue Then mStartRotation = newValue Else Exit Property
     
-    If mZeroInterval = 0 Then
+    If mStartRotation = 0 Then
         tmrStopWatch.Enabled = True
         tmrSWRotation.Enabled = False
     Else
         tmrStopWatch.Enabled = False
-        tmrSWRotation.Interval = mZeroInterval
+        tmrSWRotation.Interval = 50 ' mstartRotation
         tmrSWRotation.Enabled = True
     End If
 
    On Error GoTo 0
    Exit Property
 
-ZeroIntervalLet_Error:
+startRotationLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property ZeroInterval of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property startRotation of Class Module cwOverlay"
+End Property
+'---------------------------------------------------------------------------------------
+' Property : startDegrees
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Get startDegrees() As Long
+   On Error GoTo startDegreesGet_Error
+
+   startDegrees = mStartDegrees
+
+   On Error GoTo 0
+   Exit Property
+
+startDegreesGet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property startDegrees of Class Module cwOverlay"
+End Property
+'---------------------------------------------------------------------------------------
+' Property  : startDegrees
+' Author    :
+' Date      : 09/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Let startDegrees(ByVal newValue As Long)
+    On Error GoTo startDegreesLet_Error
+
+    If mStartDegrees <> newValue Then mStartDegrees = newValue Else Exit Property
+
+   On Error GoTo 0
+   Exit Property
+
+startDegreesLet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property startDegrees of Class Module cwOverlay"
+End Property
+'---------------------------------------------------------------------------------------
+' Property : rotationInterval
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Get rotationInterval() As Long
+   On Error GoTo rotationIntervalGet_Error
+
+   rotationInterval = mRotationInterval
+
+   On Error GoTo 0
+   Exit Property
+
+rotationIntervalGet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property rotationInterval of Class Module cwOverlay"
+End Property
+'---------------------------------------------------------------------------------------
+' Property  : rotationInterval
+' Author    :
+' Date      : 09/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Let rotationInterval(ByVal newValue As Long)
+    On Error GoTo rotationIntervalLet_Error
+
+    If mRotationInterval <> newValue Then mRotationInterval = newValue Else Exit Property
+
+   On Error GoTo 0
+   Exit Property
+
+rotationIntervalLet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property rotationInterval of Class Module cwOverlay"
+End Property
+
+'---------------------------------------------------------------------------------------
+' Property : endDegrees
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Get endDegrees() As Long
+   On Error GoTo endDegreesGet_Error
+
+   endDegrees = mEndDegrees
+
+   On Error GoTo 0
+   Exit Property
+
+endDegreesGet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property endDegrees of Class Module cwOverlay"
+End Property
+'---------------------------------------------------------------------------------------
+' Property  : endDegrees
+' Author    :
+' Date      : 09/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Let endDegrees(ByVal newValue As Long)
+    On Error GoTo endDegreesLet_Error
+
+    If mEndDegrees <> newValue Then mEndDegrees = newValue Else Exit Property
+
+   On Error GoTo 0
+   Exit Property
+
+endDegreesLet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property endDegrees of Class Module cwOverlay"
 End Property
 
 '---------------------------------------------------------------------------------------
@@ -563,15 +682,13 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                             textDrawn = True
                         End If
                     End If
-    
-
                     
                     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(19, 160) 'shift to the "rotation-point" within the Pattern
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                     
                     If gblStopWatchState = 1 Or gblStopWatchState = 2 Then
-                        CC.RotateDrawingsDeg 250 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                        CC.RotateDrawingsDeg 250 'place the hour hand out of the way of the stopwatch mini-faces
                     Else
                         CC.RotateDrawingsDeg -7 + HDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
                     End If
@@ -582,24 +699,21 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
                     
                     If gblStopWatchState = 1 Or gblStopWatchState = 2 Then
-                        CC.RotateDrawingsDeg 185 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                        CC.RotateDrawingsDeg 185        'place the minute hand out of the way of the stopwatch mini-faces
                     Else
                         CC.RotateDrawingsDeg -61 + MDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
                     End If
-                    
                     
                  Case "secondshadow", "secondhand" 'seconds-shadow- and seconds-hand
                     Set Pat = Cairo.ImageList(Key).CreateSurfacePattern
                     Set Pat.Matrix = Pat.Matrix.TranslateCoords(60, 160) 'shift to the "rotation-point" within the Pattern
                     CC.TranslateDrawings W.Width * cxPerc, W.Height * cyPerc 'shift to the center-point of the Overlay-Widget-area
 
-                    
                     If gblStopWatchState = 1 Or gblStopWatchState = 2 Then
-                        CC.RotateDrawingsDeg 185 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
+                        CC.RotateDrawingsDeg 185 'place the minute hand out of the way of the stopwatch mini-faces
                     Else
-                        CC.RotateDrawingsDeg -50 + SDeg + MsDeg
+                        CC.RotateDrawingsDeg -50 + SDeg + MsDeg 'now we can rotate (the leading negative degrees are the rotation-offsets for 12 o'clock)
                     End If
-                    
 
                  Case "swhourhand"
                      If FaceMode = "0" Then  'stopwatch mode
@@ -787,18 +901,16 @@ Private Sub tmrSWRotation_Timer()
     
     On Error GoTo tmrSWRotation_Timer_Error
         
-    If rotationTimerCount < rotationDegreesPerInterval Then
-        rotationTimerCount = rotationTimerCount + 1
-        'SWHDeg = (elapsedTimeSecs * 0.001667) Mod 360
-        'SWMDeg = (elapsedTimeSecs * 0.1) Mod 360
-        'SWSDeg = (elapsedTimeSecs * 6) Mod 360
-        SWSDeg = storedSWSDeg + (rotationTimerCount * rotationDegreesPerInterval)
+    If rotationTimerCount <= mEndDegrees Then
+        rotationTimerCount = rotationTimerCount + mRotationInterval
+        If mStartDegrees + rotationTimerCount <= mEndDegrees Then SWSDeg = mStartDegrees + rotationTimerCount
     Else
+        tmrStopWatch.Enabled = True
+        
         rotationTimerCount = 0
         gblStopWatchState = 1
+        startRotation = False
         tmrSWRotation.Enabled = False
-        tmrStopWatch.Enabled = True
-        overlayWidget.StopWatchTicking = True
     End If
                 
     W.Parent.Refresh
