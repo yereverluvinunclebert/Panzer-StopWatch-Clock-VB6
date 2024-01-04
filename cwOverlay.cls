@@ -213,7 +213,25 @@ TickingLet_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Ticking of Class Module cwOverlay"
 End Property
+'---------------------------------------------------------------------------------------
+' Property  : getSWSDeg
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   :
+'---------------------------------------------------------------------------------------
+'
+Public Property Get getSWSDeg() As Integer
+   On Error GoTo getSWSDegGet_Error
 
+   getSWSDeg = SWSDeg
+
+   On Error GoTo 0
+   Exit Property
+
+getSWSDegGet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property getSWSDeg of Class Module cwOverlay"
+End Property
 '---------------------------------------------------------------------------------------
 ' Property : StopWatchTicking
 ' Author    : beededea
@@ -338,7 +356,11 @@ End Property
 '
 Public Property Let startDegrees(ByVal newValue As Long)
     On Error GoTo startDegreesLet_Error
-
+'
+'    If mStartDegrees = 0 Then
+'        mStartDegrees = SWSDeg
+'        Exit Property
+'    End If
     If mStartDegrees <> newValue Then mStartDegrees = newValue Else Exit Property
 
    On Error GoTo 0
@@ -914,7 +936,12 @@ Private Sub tmrSWRotation_Timer()
         tmrStopWatch.Enabled = True
         
         rotationTimerCount = 0
-        gblStopWatchState = 1
+        If gblStopWatchState = 2 Then
+            gblStopWatchState = 1
+        Else
+            gblStopWatchState = 0
+        End If
+        
         startRotation = False
         tmrSWRotation.Enabled = False
     End If

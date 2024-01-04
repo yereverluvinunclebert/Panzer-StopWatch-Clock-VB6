@@ -337,8 +337,7 @@ Private Sub startbutton_click()
     Dim pausedSWHDeg As Double: pausedSWHDeg = 0
     Dim pausedSWMDeg As Double: pausedSWMDeg = 0
     'Dim pausedSWSDeg As Double: pausedSWHDeg = 0
-    'Dim storedSWSec As Integer: pausedSWHDeg = 0
-    
+
     Dim restartSWHDeg As Double: restartSWHDeg = 0
     Dim restartSWMDeg As Double: restartSWHDeg = 0
     Dim newSWSDeg As Double: restartSWHDeg = 0
@@ -389,8 +388,8 @@ Private Sub startbutton_click()
                 gblStopWatchPauseTime = Now()
                 pauseElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, gblStopWatchPauseTime)
                 
-                pausedSWHDeg = (pauseElapsedTimeSecs * 0.001667) Mod 360
-                pausedSWMDeg = (pauseElapsedTimeSecs * 0.1) Mod 360
+'                pausedSWHDeg = (pauseElapsedTimeSecs * 0.001667) Mod 360
+'                pausedSWMDeg = (pauseElapsedTimeSecs * 0.1) Mod 360
                 pausedSWSDeg = (pauseElapsedTimeSecs * 6) Mod 360
 
             Case 2 ' restart the stopwatch
@@ -405,8 +404,8 @@ Private Sub startbutton_click()
                 restartTime = Now()
                 restartElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, restartTime)
                 
-                restartSWHDeg = (restartElapsedTimeSecs * 0.001667) Mod 360
-                restartSWMDeg = (restartElapsedTimeSecs * 0.1) Mod 360
+'                restartSWHDeg = (restartElapsedTimeSecs * 0.001667) Mod 360
+'                restartSWMDeg = (restartElapsedTimeSecs * 0.1) Mod 360
                 restartSWSDeg = (restartElapsedTimeSecs * 6) Mod 360
                 
                 ' rotate from the old stored position to the new one
@@ -484,7 +483,9 @@ End Sub
 '
 Private Sub stopbutton_mouseUp(ByRef Sender As Object)
     Dim fileToPlay As String: fileToPlay = vbNullString
-   
+    Dim stopSWSDeg As Integer: stopSWSDeg = 0
+    Dim NoOfDegrees As Integer: NoOfDegrees = 0
+    
     On Error GoTo stopbutton_mouseUp_Error
 
     Sender.Widget.Alpha = Val(PzGOpacity) / 100
@@ -506,9 +507,41 @@ Private Sub stopbutton_mouseUp(ByRef Sender As Object)
         ' if in clock mode just switch off
         Call SwitchOff
     Else
-        gblStopWatchStartTime = Now()
-        gblStopWatchState = 0 ' back to zeroed state
-        overlayWidget.StopWatchTicking = False
+    
+        If gblStopWatchState = 1 Or gblStopWatchState = 2 Then
+            ' calculate where the hands are now
+            stopSWSDeg = overlayWidget.getSWSDeg
+            
+            ' rotate from the old stored position to the new one
+            ' the amount of degrees variance needs to be covered by the zeroing time sound duration of 1.1 seconds
+    
+    '        rotationVarianceSecs = stopElapsedTimeSecs - pauseElapsedTimeSecs
+    '        rotationVarianceDegrees = (rotationVarianceSecs) Mod 360
+    
+    '        rotationDegreesPerInterval = rotationTime / rotationVarianceDegrees ' ms per degree
+    '        If rotationDegreesPerInterval >= rotationIntervalMax Then rotationDegreesPerInterval = rotationIntervalMax
+            
+            overlayWidget.StopWatchTicking = False
+            
+            If PzGEnableSounds = "1" Then
+                fileToPlay = "counter.wav"
+                If fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+                    PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
+                End If
+            End If
+        
+            NoOfDegrees = 360 - stopSWSDeg
+                            
+            ' start the third timer to rotate passing through the interval
+            overlayWidget.rotationInterval = 20
+            overlayWidget.startDegrees = stopSWSDeg
+            overlayWidget.NoOfDegrees = NoOfDegrees
+            overlayWidget.startRotation = True
+    
+            'gblStopWatchState = 0 ' back to zeroed state
+            gblStopWatchStartTime = Now()
+        End If
+        
     End If
 
    On Error GoTo 0
