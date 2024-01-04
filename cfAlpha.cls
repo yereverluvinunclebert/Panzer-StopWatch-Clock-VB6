@@ -34,7 +34,7 @@ Private mGlowing As Boolean
 Private pauseElapsedTimeSecs As Long ' long means a max of 2,147,483,647 seconds, 24,855 days or 68 years
 Private restartElapsedTimeSecs As Long
 
-Private pauseSWSDeg As Long ' pauseSWSDeg = 0
+Private pausedSWSDeg As Long ' pausedSWSDeg = 0
 
 
 'Private Declare Sub Sleep Lib "kernel32.dll" (ByVal dwMilliseconds As Long)
@@ -334,15 +334,15 @@ End Sub
 Private Sub startbutton_click()
     Dim fileToPlay As String: fileToPlay = vbNullString
     
-    Dim storedSWHDeg As Double: storedSWHDeg = 0
-    Dim storedSWMDeg As Double: storedSWHDeg = 0
-    'Dim pauseSWSDeg As Double: storedSWHDeg = 0
-    'Dim storedSWSec As Integer: storedSWHDeg = 0
+    Dim pausedSWHDeg As Double: pausedSWHDeg = 0
+    Dim pausedSWMDeg As Double: pausedSWMDeg = 0
+    'Dim pausedSWSDeg As Double: pausedSWHDeg = 0
+    'Dim storedSWSec As Integer: pausedSWHDeg = 0
     
-    Dim newSWHDeg As Double: newSWHDeg = 0
-    Dim newSWMDeg As Double: newSWHDeg = 0
-    Dim newSWSDeg As Double: newSWHDeg = 0
-    Dim newSWSec As Integer: newSWHDeg = 0
+    Dim restartSWHDeg As Double: restartSWHDeg = 0
+    Dim restartSWMDeg As Double: restartSWHDeg = 0
+    Dim newSWSDeg As Double: restartSWHDeg = 0
+    Dim newSWSec As Integer: restartSWHDeg = 0
     
     Dim restartTime As Date:  restartTime = #1/1/2000 12:00:00 PM#
     Dim restartSWSDeg As Long: restartSWSDeg = 0
@@ -388,12 +388,11 @@ Private Sub startbutton_click()
                 ' store the current degree and second position values
                 gblStopWatchPauseTime = Now()
                 pauseElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, gblStopWatchPauseTime)
-                pauseSWSDeg = (pauseElapsedTimeSecs * 6) Mod 360
                 
-'                storedSWHDeg = (pauseElapsedTimeSecs * 0.001667) Mod 360
-'                storedSWMDeg = (pauseElapsedTimeSecs * 0.1) Mod 360
-                'storedSWSec = pauseElapsedTimeSecs Mod 60
-                                
+                pausedSWHDeg = (pauseElapsedTimeSecs * 0.001667) Mod 360
+                pausedSWMDeg = (pauseElapsedTimeSecs * 0.1) Mod 360
+                pausedSWSDeg = (pauseElapsedTimeSecs * 6) Mod 360
+
             Case 2 ' restart the stopwatch
                 playTing = False
                 playCounterTing = False
@@ -402,16 +401,13 @@ Private Sub startbutton_click()
                 ' back to stopwatch running
                 ' but first task will be to zero and rotate the hands
 
+                ' calculate the new position where the hands would be if they were rotating
                 restartTime = Now()
                 restartElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, restartTime)
+                
+                restartSWHDeg = (restartElapsedTimeSecs * 0.001667) Mod 360
+                restartSWMDeg = (restartElapsedTimeSecs * 0.1) Mod 360
                 restartSWSDeg = (restartElapsedTimeSecs * 6) Mod 360
-                                
-                ' calculate the new position where the hands would be if they were rotating
-'                newSWHDeg = (restartElapsedTimeSecs * 0.001667) Mod 360
-'                newSWMDeg = (restartElapsedTimeSecs * 0.1) Mod 360
-'                newSWSDeg = (restartElapsedTimeSecs * 6) Mod 360
-
-                ' pauseSWSDeg = (pauseElapsedTimeSecs * 6) Mod 360
                 
                 ' rotate from the old stored position to the new one
                 ' the amount of degrees variance needs to be covered by the zeroing time sound duration of 1.1 seconds
@@ -431,15 +427,16 @@ Private Sub startbutton_click()
                     End If
                 End If
             
-                If pauseSWSDeg < restartSWSDeg Then
-                    NoOfDegrees = restartSWSDeg - pauseSWSDeg
+                If pausedSWSDeg < restartSWSDeg Then
+                    NoOfDegrees = restartSWSDeg - pausedSWSDeg
                 Else
-                    NoOfDegrees = 360 - pauseSWSDeg + restartSWSDeg
+                    NoOfDegrees = 360 - pausedSWSDeg + restartSWSDeg
                 End If
                 
                 ' start the third timer to rotate passing through the interval
+                ' trigger which hands we are rotating
                 overlayWidget.rotationInterval = rotationDegreesPerInterval
-                overlayWidget.startDegrees = pauseSWSDeg
+                overlayWidget.startDegrees = pausedSWSDeg
                 overlayWidget.NoOfDegrees = NoOfDegrees
                 overlayWidget.startRotation = True
                 

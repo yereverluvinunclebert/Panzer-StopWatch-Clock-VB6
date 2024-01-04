@@ -19,20 +19,26 @@
 ' new code and a new timer to rotate swhourhand, swminutehand and swsecondhand according to a newly calculated set of degrees of rotation from
 '    the point the timer starts - done
 
+' If button 1 is pressed for a second time, this just stops the hands rotating, the secondary timer itself continues - done
+' stopwatch mode press once on button 1 set and store a start point and start a timing run - done
+' stopwatch mode press twice on button 1 pauses the hands on any current timing run but the run continues - done
+' stopwatch mode press once on button 3 resets the hands and stops the timing run - done
+' stopwatch mode press once on switch faces button resets the hands and stops the timing run - done
+' the stopwatch second hand rotates smoothly from paused location to actual elapsed time - done
+
 -oOo-
+
+' the stopwatch minute hand rotates smoothly from paused location to actual elapsed time
+
+' the stopwatch main hour hand and shadow rotates smoothly from normal time to parked location
+' the stopwatch main minute hand and shadow rotates smoothly from normal time to parked location
+' the stopwatch main second hand and shadow rotates smoothly from normal time to parked location
+
+' When the timer is reset using the lower b, the main timer will have a flag to stop rotating the hands and a secondary timer will rotate them backward and reset the start point
 
 ' prefs restart bug
 
 ' changing large tooltips added to button 1 - wip
-
-' If button 1 is pressed for a second time, this just stops the hands rotating, the secondary timer itself continues - wip
-
-' When the timer is reset using the lower b, the main timer will have a flag to stop rotating the hands and a secondary timer will rotate them backward and reset the start point
-
-' stopwatch mode press once on button 1 set and store a start point and start a timing run
-' stopwatch mode press twice on button 1 pauses the hands on any current timing run but the run continues...
-' stopwatch mode press thrice on button 3 resets the hands and stops the timing run
-' stopwatch mode press button 1 unpauses a timing run
 
 ' https://www.vbforums.com/showthread.php?900892-VB6-Simple-way-to-make-your-VB6-application-quot-Per-Monitor-DPI-Aware-quot
 
@@ -43,6 +49,8 @@
 ' adjustFormPositionToCorrectMonitor - help form
 
 ' setup2go create setup.exe
+
+' adapt a completely new help HTML from the Pz Just Clock with new information pertaining to the stopwatch functionality.
 
 ' -oOo-
 

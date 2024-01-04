@@ -668,7 +668,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
              Select Case Key
                  Case "hourshadow", "hourhand" 'hours-shadow- and hour-hand
                  
-                    ' the DrawText code has to be here, before the graphical elements, in order to appear underneath the hands
+                    ' the DrawText code MUST be here, before the graphical elements, in order to appear underneath the hands
                     ' if you move this section out of the loop it causes graphical problems
                     If FaceMode = "0" Then  'stopwatch mode
                        If gblStopWatchState = 1 Or gblStopWatchState = 2 Then
@@ -871,7 +871,7 @@ Private Sub tmrStopWatch_Timer()
         SWHDeg = SWHDeg
         SWMDeg = SWMDeg
         SWSDeg = SWSDeg
-        SWSec = SWSec
+        SWSec = elapsedTimeSecs Mod 60 ' the digital display keeps running
     Else ' stopwatch running
         SWHDeg = (elapsedTimeSecs * 0.001667) Mod 360
         SWMDeg = (elapsedTimeSecs * 0.1) Mod 360
