@@ -445,10 +445,8 @@ Public gblStopWatchState As Integer
 Public gblStopWatchZeroed As Boolean
 
 ' These need to be changed to properties? or gbl variables
-Public rotationDegreesPerInterval  As Long ' rotationDegreesPerInterval = 0
-Public rotationTimerCount As Integer ' rotationTimerCount = 0
-Public pauseSWSDeg As Long ' pauseSWSDeg = 0
-Public restartSWSDeg As Long ' restartSWSDeg = 0
+'Public rotationDegreesPerInterval  As Long ' rotationDegreesPerInterval = 0
+
 
 '---------------------------------------------------------------------------------------
 ' Procedure : fFExists

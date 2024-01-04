@@ -34,6 +34,9 @@ Private mGlowing As Boolean
 Private pauseElapsedTimeSecs As Long ' long means a max of 2,147,483,647 seconds, 24,855 days or 68 years
 Private restartElapsedTimeSecs As Long
 
+Private pauseSWSDeg As Long ' pauseSWSDeg = 0
+
+
 'Private Declare Sub Sleep Lib "kernel32.dll" (ByVal dwMilliseconds As Long)
 
 '---------------------------------------------------------------------------------------
@@ -342,17 +345,19 @@ Private Sub startbutton_click()
     Dim newSWSec As Integer: newSWHDeg = 0
     
     Dim restartTime As Date:  restartTime = #1/1/2000 12:00:00 PM#
+    Dim restartSWSDeg As Long: restartSWSDeg = 0
     'Dim restartElapsedTimeSecs As Long: restartElapsedTimeSecs = 0 ' long means a max of 2,147,483,647 seconds, 24,855 days or 68 years
     
     Dim rotationTime As Integer: rotationTime = 0
     Dim rotationIntervalMax As Integer: rotationIntervalMax = 0
     Dim rotationVarianceSecs As Long: rotationVarianceSecs = 0
     Dim rotationVarianceDegrees As Long: rotationVarianceDegrees = 0
-    'Dim rotationDegreesPerInterval  As Long: rotationDegreesPerInterval = 0
+    Dim rotationDegreesPerInterval  As Long: rotationDegreesPerInterval = 0
     
     Dim playCounterTing As Boolean: playCounterTing = False
     Dim playCounter As Boolean: playCounter = False
     Dim playTing As Boolean: playTing = False
+    Dim NoOfDegrees As Long: NoOfDegrees = 0
 
     On Error GoTo startbutton_click_Error
     
@@ -398,7 +403,7 @@ Private Sub startbutton_click()
                 ' but first task will be to zero and rotate the hands
 
                 restartTime = Now()
-                restartElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, restartTime) + 1 ' adding 1 second for the zeroing time
+                restartElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, restartTime)
                 restartSWSDeg = (restartElapsedTimeSecs * 6) Mod 360
                                 
                 ' calculate the new position where the hands would be if they were rotating
@@ -426,18 +431,16 @@ Private Sub startbutton_click()
                     End If
                 End If
             
-                Dim noDegrees As Long
-                
                 If pauseSWSDeg < restartSWSDeg Then
-                    noDegrees = restartSWSDeg - pauseSWSDeg
+                    NoOfDegrees = restartSWSDeg - pauseSWSDeg
                 Else
-                    noDegrees = 360 - pauseSWSDeg + restartSWSDeg
+                    NoOfDegrees = 360 - pauseSWSDeg + restartSWSDeg
                 End If
                 
                 ' start the third timer to rotate passing through the interval
                 overlayWidget.rotationInterval = rotationDegreesPerInterval
                 overlayWidget.startDegrees = pauseSWSDeg
-                overlayWidget.noDegrees = noDegrees
+                overlayWidget.NoOfDegrees = NoOfDegrees
                 overlayWidget.startRotation = True
                 
         End Select

@@ -84,9 +84,10 @@ Private storeTxtDayNumber As String
 
 Private mStartRotation As Boolean
 Private mStartDegrees As Long
-Private mNoDegrees As Long
+Private mNoOfDegrees As Long
 Private mRotationInterval As Long
 
+Private rotationTimerCount As Integer ' rotationTimerCount = 0
 
 
 '---------------------------------------------------------------------------------------
@@ -387,42 +388,42 @@ rotationIntervalLet_Error:
 End Property
 
 '---------------------------------------------------------------------------------------
-' Property : NoDegrees
+' Property : NoOfDegrees
 ' Author    : beededea
 ' Date      : 17/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Get NoDegrees() As Long
-   On Error GoTo NoDegreesGet_Error
+Public Property Get NoOfDegrees() As Long
+   On Error GoTo NoOfDegreesGet_Error
 
-   NoDegrees = mNoDegrees
+   NoOfDegrees = mNoOfDegrees
 
    On Error GoTo 0
    Exit Property
 
-NoDegreesGet_Error:
+NoOfDegreesGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property NoDegrees of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property NoOfDegrees of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
-' Property  : NoDegrees
+' Property  : NoOfDegrees
 ' Author    :
 ' Date      : 09/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Let NoDegrees(ByVal newValue As Long)
-    On Error GoTo NoDegreesLet_Error
+Public Property Let NoOfDegrees(ByVal newValue As Long)
+    On Error GoTo NoOfDegreesLet_Error
 
-    If mNoDegrees <> newValue Then mNoDegrees = newValue Else Exit Property
+    If mNoOfDegrees <> newValue Then mNoOfDegrees = newValue Else Exit Property
 
    On Error GoTo 0
    Exit Property
 
-NoDegreesLet_Error:
+NoOfDegreesLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property NoDegrees of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property NoOfDegrees of Class Module cwOverlay"
 End Property
 
 '---------------------------------------------------------------------------------------
@@ -898,13 +899,17 @@ End Sub
 '---------------------------------------------------------------------------------------
 '
 Private Sub tmrSWRotation_Timer()
+    Dim degrees As Integer: degrees = 0
     
     On Error GoTo tmrSWRotation_Timer_Error
            
-    If rotationTimerCount <= mNoDegrees Then
+    If rotationTimerCount < mNoOfDegrees Then
         rotationTimerCount = rotationTimerCount + mRotationInterval
-        'If mStartDegrees + rotationTimerCount <= mNoDegrees Then
-        SWSDeg = mStartDegrees + rotationTimerCount
+        If rotationTimerCount > mNoOfDegrees Then rotationTimerCount = mNoOfDegrees
+        degrees = mStartDegrees + rotationTimerCount
+       
+        'Case "swsecondhand"
+        SWSDeg = degrees
     Else
         tmrStopWatch.Enabled = True
         
