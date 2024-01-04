@@ -84,7 +84,7 @@ Private storeTxtDayNumber As String
 
 Private mStartRotation As Boolean
 Private mStartDegrees As Long
-Private mEndDegrees As Long
+Private mNoDegrees As Long
 Private mRotationInterval As Long
 
 
@@ -387,42 +387,42 @@ rotationIntervalLet_Error:
 End Property
 
 '---------------------------------------------------------------------------------------
-' Property : endDegrees
+' Property : NoDegrees
 ' Author    : beededea
 ' Date      : 17/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Get endDegrees() As Long
-   On Error GoTo endDegreesGet_Error
+Public Property Get NoDegrees() As Long
+   On Error GoTo NoDegreesGet_Error
 
-   endDegrees = mEndDegrees
+   NoDegrees = mNoDegrees
 
    On Error GoTo 0
    Exit Property
 
-endDegreesGet_Error:
+NoDegreesGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property endDegrees of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property NoDegrees of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
-' Property  : endDegrees
+' Property  : NoDegrees
 ' Author    :
 ' Date      : 09/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Let endDegrees(ByVal newValue As Long)
-    On Error GoTo endDegreesLet_Error
+Public Property Let NoDegrees(ByVal newValue As Long)
+    On Error GoTo NoDegreesLet_Error
 
-    If mEndDegrees <> newValue Then mEndDegrees = newValue Else Exit Property
+    If mNoDegrees <> newValue Then mNoDegrees = newValue Else Exit Property
 
    On Error GoTo 0
    Exit Property
 
-endDegreesLet_Error:
+NoDegreesLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property endDegrees of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property NoDegrees of Class Module cwOverlay"
 End Property
 
 '---------------------------------------------------------------------------------------
@@ -900,10 +900,11 @@ End Sub
 Private Sub tmrSWRotation_Timer()
     
     On Error GoTo tmrSWRotation_Timer_Error
-        
-    If rotationTimerCount <= mEndDegrees Then
+           
+    If rotationTimerCount <= mNoDegrees Then
         rotationTimerCount = rotationTimerCount + mRotationInterval
-        If mStartDegrees + rotationTimerCount <= mEndDegrees Then SWSDeg = mStartDegrees + rotationTimerCount
+        'If mStartDegrees + rotationTimerCount <= mNoDegrees Then
+        SWSDeg = mStartDegrees + rotationTimerCount
     Else
         tmrStopWatch.Enabled = True
         

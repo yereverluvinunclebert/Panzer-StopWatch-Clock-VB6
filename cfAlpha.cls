@@ -398,7 +398,7 @@ Private Sub startbutton_click()
                 ' but first task will be to zero and rotate the hands
 
                 restartTime = Now()
-                restartElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, restartTime) '+ 1 ' adding 1 second for the zeroing time
+                restartElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, restartTime) + 1 ' adding 1 second for the zeroing time
                 restartSWSDeg = (restartElapsedTimeSecs * 6) Mod 360
                                 
                 ' calculate the new position where the hands would be if they were rotating
@@ -421,16 +421,23 @@ Private Sub startbutton_click()
                 
                 If PzGEnableSounds = "1" Then
                     fileToPlay = "counter.wav"
-            
                     If fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
                         PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
                     End If
                 End If
             
+                Dim noDegrees As Long
+                
+                If pauseSWSDeg < restartSWSDeg Then
+                    noDegrees = restartSWSDeg - pauseSWSDeg
+                Else
+                    noDegrees = 360 - pauseSWSDeg + restartSWSDeg
+                End If
+                
                 ' start the third timer to rotate passing through the interval
                 overlayWidget.rotationInterval = rotationDegreesPerInterval
                 overlayWidget.startDegrees = pauseSWSDeg
-                overlayWidget.endDegrees = restartSWSDeg
+                overlayWidget.noDegrees = noDegrees
                 overlayWidget.startRotation = True
                 
         End Select
