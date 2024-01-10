@@ -25,16 +25,21 @@
 ' stopwatch mode press once on button 3 resets the hands and stops the timing run - done
 ' stopwatch mode press once on switch faces button resets the hands and stops the timing run - done
 ' the stopwatch second hand rotates smoothly from paused location to actual elapsed time - done
+' When the timer is reset using the lower b, the timer will stop rotating the hands and a secondary timer will rotate them backward and reset the start point - done
 
 -oOo-
 
-' the stopwatch minute hand rotates smoothly from paused location to actual elapsed time
+' adapt a completely new help HTML from the Pz Just Clock with new information pertaining to the stopwatch functionality.
+' CHM build
+' github synch CHM manually
 
 ' the stopwatch main hour hand and shadow rotates smoothly from normal time to parked location
 ' the stopwatch main minute hand and shadow rotates smoothly from normal time to parked location
 ' the stopwatch main second hand and shadow rotates smoothly from normal time to parked location
 
-' When the timer is reset using the lower b, the main timer will have a flag to stop rotating the hands and a secondary timer will rotate them backward and reset the start point
+' change recent globals to properties
+
+' loop counters changed to STATIC vars
 
 ' prefs restart bug
 
@@ -50,7 +55,7 @@
 
 ' setup2go create setup.exe
 
-' adapt a completely new help HTML from the Pz Just Clock with new information pertaining to the stopwatch functionality.
+
 
 ' -oOo-
 

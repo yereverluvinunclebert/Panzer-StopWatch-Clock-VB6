@@ -35,6 +35,8 @@ Private WithEvents tmrStopWatch As cTimer
 Attribute tmrStopWatch.VB_VarHelpID = -1
 Private WithEvents tmrSWRotation As cTimer
 Attribute tmrSWRotation.VB_VarHelpID = -1
+Private WithEvents tmrHandsRotation As cTimer
+Attribute tmrHandsRotation.VB_VarHelpID = -1
 
 Private HDeg As Double
 Private MDeg As Double
@@ -82,10 +84,10 @@ Private mHidden As Boolean ' property Hidden
 Private mFaceMode As String ' property FaceMode
 Private storeTxtDayNumber As String
 
-Private mStartRotation As Boolean
-Private mStartDegrees As Long
-Private mNoOfDegrees As Long
-Private mRotationInterval As Long
+Private mstartSWRotation As Boolean
+Private mstartSWDegrees As Long
+Private mSWRotationDegrees As Long
+Private mrotationSWInterval As Long
 
 Private rotationTimerCount As Integer ' rotationTimerCount = 0
 
@@ -120,6 +122,9 @@ Private Sub Class_Initialize()
 
     Set tmrSWRotation = Nothing
     Set tmrSWRotation = New_c.Timer(20, False)
+
+    Set tmrHandsRotation = Nothing
+    Set tmrHandsRotation = New_c.Timer(20, False)
 
    On Error GoTo 0
    Exit Sub
@@ -282,170 +287,170 @@ StopWatchTickingLet_Error:
 End Property
 
 '---------------------------------------------------------------------------------------
-' Property : startRotation
+' Property : startSWRotation
 ' Author    : beededea
 ' Date      : 17/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Get startRotation() As Boolean
-   On Error GoTo startRotationGet_Error
+Public Property Get startSWRotation() As Boolean
+   On Error GoTo startSWRotationGet_Error
 
-   startRotation = mStartRotation
+   startSWRotation = mstartSWRotation
 
    On Error GoTo 0
    Exit Property
 
-startRotationGet_Error:
+startSWRotationGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property startRotation of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property startSWRotation of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
-' Property  : startRotation
+' Property  : startSWRotation
 ' Author    :
 ' Date      : 09/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Let startRotation(ByVal newValue As Boolean)
-    On Error GoTo startRotationLet_Error
+Public Property Let startSWRotation(ByVal newValue As Boolean)
+    On Error GoTo startSWRotationLet_Error
 
-    If mStartRotation <> newValue Then mStartRotation = newValue Else Exit Property
+    If mstartSWRotation <> newValue Then mstartSWRotation = newValue Else Exit Property
     
-    If mStartRotation = 0 Then
+    If mstartSWRotation = 0 Then
         tmrStopWatch.Enabled = True
         tmrSWRotation.Enabled = False
     Else
         tmrStopWatch.Enabled = False
-        tmrSWRotation.Interval = 50 ' mstartRotation
+        tmrSWRotation.Interval = 50 ' mstartSWRotation
         tmrSWRotation.Enabled = True
     End If
 
    On Error GoTo 0
    Exit Property
 
-startRotationLet_Error:
+startSWRotationLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property startRotation of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property startSWRotation of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
-' Property : startDegrees
+' Property : startSWDegrees
 ' Author    : beededea
 ' Date      : 17/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Get startDegrees() As Long
-   On Error GoTo startDegreesGet_Error
+Public Property Get startSWDegrees() As Long
+   On Error GoTo startSWDegreesGet_Error
 
-   startDegrees = mStartDegrees
+   startSWDegrees = mstartSWDegrees
 
    On Error GoTo 0
    Exit Property
 
-startDegreesGet_Error:
+startSWDegreesGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property startDegrees of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property startSWDegrees of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
-' Property  : startDegrees
+' Property  : startSWDegrees
 ' Author    :
 ' Date      : 09/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Let startDegrees(ByVal newValue As Long)
-    On Error GoTo startDegreesLet_Error
+Public Property Let startSWDegrees(ByVal newValue As Long)
+    On Error GoTo startSWDegreesLet_Error
 '
-'    If mStartDegrees = 0 Then
-'        mStartDegrees = SWSDeg
+'    If mstartSWDegrees = 0 Then
+'        mstartSWDegrees = SWSDeg
 '        Exit Property
 '    End If
-    If mStartDegrees <> newValue Then mStartDegrees = newValue Else Exit Property
+    If mstartSWDegrees <> newValue Then mstartSWDegrees = newValue Else Exit Property
 
    On Error GoTo 0
    Exit Property
 
-startDegreesLet_Error:
+startSWDegreesLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property startDegrees of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property startSWDegrees of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
-' Property : rotationInterval
+' Property : rotationSWInterval
 ' Author    : beededea
 ' Date      : 17/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Get rotationInterval() As Long
-   On Error GoTo rotationIntervalGet_Error
+Public Property Get rotationSWInterval() As Long
+   On Error GoTo rotationSWIntervalGet_Error
 
-   rotationInterval = mRotationInterval
+   rotationSWInterval = mrotationSWInterval
 
    On Error GoTo 0
    Exit Property
 
-rotationIntervalGet_Error:
+rotationSWIntervalGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property rotationInterval of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property rotationSWInterval of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
-' Property  : rotationInterval
+' Property  : rotationSWInterval
 ' Author    :
 ' Date      : 09/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Let rotationInterval(ByVal newValue As Long)
-    On Error GoTo rotationIntervalLet_Error
+Public Property Let rotationSWInterval(ByVal newValue As Long)
+    On Error GoTo rotationSWIntervalLet_Error
 
-    If mRotationInterval <> newValue Then mRotationInterval = newValue Else Exit Property
+    If mrotationSWInterval <> newValue Then mrotationSWInterval = newValue Else Exit Property
 
    On Error GoTo 0
    Exit Property
 
-rotationIntervalLet_Error:
+rotationSWIntervalLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property rotationInterval of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property rotationSWInterval of Class Module cwOverlay"
 End Property
 
 '---------------------------------------------------------------------------------------
-' Property : NoOfDegrees
+' Property : SWRotationDegrees
 ' Author    : beededea
 ' Date      : 17/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Get NoOfDegrees() As Long
-   On Error GoTo NoOfDegreesGet_Error
+Public Property Get SWRotationDegrees() As Long
+   On Error GoTo SWRotationDegreesGet_Error
 
-   NoOfDegrees = mNoOfDegrees
+   SWRotationDegrees = mSWRotationDegrees
 
    On Error GoTo 0
    Exit Property
 
-NoOfDegreesGet_Error:
+SWRotationDegreesGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property NoOfDegrees of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property SWRotationDegrees of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
-' Property  : NoOfDegrees
+' Property  : SWRotationDegrees
 ' Author    :
 ' Date      : 09/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------
 '
-Public Property Let NoOfDegrees(ByVal newValue As Long)
-    On Error GoTo NoOfDegreesLet_Error
+Public Property Let SWRotationDegrees(ByVal newValue As Long)
+    On Error GoTo SWRotationDegreesLet_Error
 
-    If mNoOfDegrees <> newValue Then mNoOfDegrees = newValue Else Exit Property
+    If mSWRotationDegrees <> newValue Then mSWRotationDegrees = newValue Else Exit Property
 
    On Error GoTo 0
    Exit Property
 
-NoOfDegreesLet_Error:
+SWRotationDegreesLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property NoOfDegrees of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property SWRotationDegrees of Class Module cwOverlay"
 End Property
 
 '---------------------------------------------------------------------------------------
@@ -513,7 +518,7 @@ Public Property Get Locked() As Boolean
 
 LockedGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwGlobe"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
 ' Property  : Locked
@@ -532,7 +537,7 @@ Public Property Let Locked(ByVal newValue As Boolean)
 
 LockedLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwGlobe"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
 ' Property  : Hidden
@@ -551,7 +556,7 @@ Public Property Get Hidden() As Boolean
 
 HiddenGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwGlobe"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
 ' Property  : Hidden
@@ -579,7 +584,7 @@ Public Property Let Hidden(ByVal newValue As Boolean)
 
 HiddenLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwGlobe"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
 ' Property  : FaceMode
@@ -598,7 +603,7 @@ Public Property Get FaceMode() As String
 
 FaceModeGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property FaceMode of Class Module cwGlobe"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property FaceMode of Class Module cwOverlay"
 End Property
 '---------------------------------------------------------------------------------------
 ' Property  : FaceMode
@@ -617,7 +622,7 @@ Public Property Let FaceMode(ByVal newValue As String)
 
 FaceModeLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property FaceMode of Class Module cwGlobe"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property FaceMode of Class Module cwOverlay"
 End Property
 '
 '---------------------------------------------------------------------------------------------
@@ -916,8 +921,8 @@ End Sub
 ' Procedure : tmrSWRotation_Timer
 ' Author    :
 ' Date      : 30/07/2023
-' Purpose   : update the degree-Variables for the stopwatch Hour, Minute and Second Hands
-'             allowing the gauge hands to rotate to new position
+' Purpose   : update the degree-Variables for the stopwatch Second Hand only
+'             allowing the gauge Second hand to rotate to new position
 '---------------------------------------------------------------------------------------
 '
 Private Sub tmrSWRotation_Timer()
@@ -925,10 +930,10 @@ Private Sub tmrSWRotation_Timer()
     
     On Error GoTo tmrSWRotation_Timer_Error
            
-    If rotationTimerCount < mNoOfDegrees Then
-        rotationTimerCount = rotationTimerCount + mRotationInterval
-        If rotationTimerCount > mNoOfDegrees Then rotationTimerCount = mNoOfDegrees
-        degrees = mStartDegrees + rotationTimerCount
+    If rotationTimerCount < mSWRotationDegrees Then
+        rotationTimerCount = rotationTimerCount + mrotationSWInterval
+        If rotationTimerCount > mSWRotationDegrees Then rotationTimerCount = mSWRotationDegrees
+        degrees = mstartSWDegrees + rotationTimerCount
        
         'Case "swsecondhand"
         SWSDeg = degrees
@@ -936,13 +941,13 @@ Private Sub tmrSWRotation_Timer()
         tmrStopWatch.Enabled = True
         
         rotationTimerCount = 0
-        If gblStopWatchState = 2 Then
+        If gblStopWatchState = 0 Or gblStopWatchState = 2 Then
             gblStopWatchState = 1
         Else
             gblStopWatchState = 0
         End If
         
-        startRotation = False
+        startSWRotation = False
         tmrSWRotation.Enabled = False
     End If
                 
@@ -954,6 +959,55 @@ Private Sub tmrSWRotation_Timer()
 tmrSWRotation_Timer_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrSWRotation_Timer of Class Module cwOverlay"
+End Sub
+
+'from set location to current time
+    
+'---------------------------------------------------------------------------------------
+' Procedure : tmrHandsRotation_Timer
+' Author    :
+' Date      : 30/07/2023
+' Purpose   : update the degree-Variables for the stopwatch Second Hand only
+'             allowing the gauge Second hand to rotate to new position
+'---------------------------------------------------------------------------------------
+'
+Private Sub tmrHandsRotation_Timer()
+    Dim degrees As Integer: degrees = 0
+    
+    On Error GoTo tmrHandsRotation_Timer_Error
+           
+    If rotationTimerCount < mSWRotationDegrees Then
+        rotationTimerCount = rotationTimerCount + mrotationSWInterval
+        If rotationTimerCount > mSWRotationDegrees Then rotationTimerCount = mSWRotationDegrees
+        degrees = mstartSWDegrees + rotationTimerCount
+       
+        'Case "swsecondhand"
+        SWSDeg = degrees
+        HDeg = degrees
+        MDeg = degrees
+        SDeg = degrees
+    Else
+        tmrStopWatch.Enabled = True
+        
+        rotationTimerCount = 0
+        If gblStopWatchState = 0 Or gblStopWatchState = 2 Then
+            gblStopWatchState = 1
+        Else
+            gblStopWatchState = 0
+        End If
+        
+        startSWRotation = False
+        tmrHandsRotation.Enabled = False
+    End If
+                
+    W.Parent.Refresh
+
+   On Error GoTo 0
+   Exit Sub
+
+tmrHandsRotation_Timer_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrHandsRotation_Timer of Class Module cwOverlay"
 End Sub
 
 

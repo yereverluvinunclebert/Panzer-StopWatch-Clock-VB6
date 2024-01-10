@@ -334,9 +334,8 @@ End Sub
 Private Sub startbutton_click()
     Dim fileToPlay As String: fileToPlay = vbNullString
     
-    Dim pausedSWHDeg As Double: pausedSWHDeg = 0
-    Dim pausedSWMDeg As Double: pausedSWMDeg = 0
-    'Dim pausedSWSDeg As Double: pausedSWHDeg = 0
+'    Dim pausedSWHDeg As Double: pausedSWHDeg = 0
+'    Dim pausedSWMDeg As Double: pausedSWMDeg = 0
 
     Dim restartSWHDeg As Double: restartSWHDeg = 0
     Dim restartSWMDeg As Double: restartSWHDeg = 0
@@ -345,10 +344,10 @@ Private Sub startbutton_click()
     
     Dim restartTime As Date:  restartTime = #1/1/2000 12:00:00 PM#
     Dim restartSWSDeg As Long: restartSWSDeg = 0
-    'Dim restartElapsedTimeSecs As Long: restartElapsedTimeSecs = 0 ' long means a max of 2,147,483,647 seconds, 24,855 days or 68 years
-    
+    Dim stopWatchPauseTime As Date: stopWatchPauseTime = #1/1/2000 12:00:00 PM#
+
     Dim rotationTime As Integer: rotationTime = 0
-    Dim rotationIntervalMax As Integer: rotationIntervalMax = 0
+    Dim rotationSWIntervalMax As Integer: rotationSWIntervalMax = 0
     Dim rotationVarianceSecs As Long: rotationVarianceSecs = 0
     Dim rotationVarianceDegrees As Long: rotationVarianceDegrees = 0
     Dim rotationDegreesPerInterval  As Long: rotationDegreesPerInterval = 0
@@ -356,12 +355,12 @@ Private Sub startbutton_click()
     Dim playCounterTing As Boolean: playCounterTing = False
     Dim playCounter As Boolean: playCounter = False
     Dim playTing As Boolean: playTing = False
-    Dim NoOfDegrees As Long: NoOfDegrees = 0
+    Dim SWRotationDegrees As Long: SWRotationDegrees = 0
 
     On Error GoTo startbutton_click_Error
     
     rotationTime = 1100 ' ms
-    rotationIntervalMax = 20 ' ms
+    rotationSWIntervalMax = 20 ' ms
     
     If PzGClockFaceSwitchPref = "1" Then
         ' if in clock mode just enable the ticking
@@ -385,11 +384,8 @@ Private Sub startbutton_click()
                 gblStopWatchState = 2 ' pause the hands in CW_PAINT, stopwatch still running
                 
                 ' store the current degree and second position values
-                gblStopWatchPauseTime = Now()
-                pauseElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, gblStopWatchPauseTime)
-                
-'                pausedSWHDeg = (pauseElapsedTimeSecs * 0.001667) Mod 360
-'                pausedSWMDeg = (pauseElapsedTimeSecs * 0.1) Mod 360
+                stopWatchPauseTime = Now()
+                pauseElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, stopWatchPauseTime)
                 pausedSWSDeg = (pauseElapsedTimeSecs * 6) Mod 360
 
             Case 2 ' restart the stopwatch
@@ -403,9 +399,6 @@ Private Sub startbutton_click()
                 ' calculate the new position where the hands would be if they were rotating
                 restartTime = Now()
                 restartElapsedTimeSecs = DateDiff("s", gblStopWatchStartTime, restartTime)
-                
-'                restartSWHDeg = (restartElapsedTimeSecs * 0.001667) Mod 360
-'                restartSWMDeg = (restartElapsedTimeSecs * 0.1) Mod 360
                 restartSWSDeg = (restartElapsedTimeSecs * 6) Mod 360
                 
                 ' rotate from the old stored position to the new one
@@ -415,7 +408,7 @@ Private Sub startbutton_click()
                 rotationVarianceDegrees = (rotationVarianceSecs) Mod 360
 
                 rotationDegreesPerInterval = rotationTime / rotationVarianceDegrees ' ms per degree
-                If rotationDegreesPerInterval >= rotationIntervalMax Then rotationDegreesPerInterval = rotationIntervalMax
+                If rotationDegreesPerInterval >= rotationSWIntervalMax Then rotationDegreesPerInterval = rotationSWIntervalMax
                 
                 overlayWidget.StopWatchTicking = False
                 
@@ -427,17 +420,16 @@ Private Sub startbutton_click()
                 End If
             
                 If pausedSWSDeg < restartSWSDeg Then
-                    NoOfDegrees = restartSWSDeg - pausedSWSDeg
+                    SWRotationDegrees = restartSWSDeg - pausedSWSDeg
                 Else
-                    NoOfDegrees = 360 - pausedSWSDeg + restartSWSDeg
+                    SWRotationDegrees = 360 - pausedSWSDeg + restartSWSDeg
                 End If
                 
                 ' start the third timer to rotate passing through the interval
-                ' trigger which hands we are rotating
-                overlayWidget.rotationInterval = rotationDegreesPerInterval
-                overlayWidget.startDegrees = pausedSWSDeg
-                overlayWidget.NoOfDegrees = NoOfDegrees
-                overlayWidget.startRotation = True
+                overlayWidget.rotationSWInterval = rotationDegreesPerInterval
+                overlayWidget.startSWDegrees = pausedSWSDeg
+                overlayWidget.SWRotationDegrees = SWRotationDegrees
+                overlayWidget.startSWRotation = True
                 
         End Select
     End If
@@ -484,7 +476,7 @@ End Sub
 Private Sub stopbutton_mouseUp(ByRef Sender As Object)
     Dim fileToPlay As String: fileToPlay = vbNullString
     Dim stopSWSDeg As Integer: stopSWSDeg = 0
-    Dim NoOfDegrees As Integer: NoOfDegrees = 0
+    Dim SWRotationDegrees As Integer: SWRotationDegrees = 0
     
     On Error GoTo stopbutton_mouseUp_Error
 
@@ -507,20 +499,12 @@ Private Sub stopbutton_mouseUp(ByRef Sender As Object)
         ' if in clock mode just switch off
         Call SwitchOff
     Else
-    
+        
+        ' rotate the stopwatch from the old stored position to the new one
         If gblStopWatchState = 1 Or gblStopWatchState = 2 Then
             ' calculate where the hands are now
             stopSWSDeg = overlayWidget.getSWSDeg
-            
-            ' rotate from the old stored position to the new one
-            ' the amount of degrees variance needs to be covered by the zeroing time sound duration of 1.1 seconds
-    
-    '        rotationVarianceSecs = stopElapsedTimeSecs - pauseElapsedTimeSecs
-    '        rotationVarianceDegrees = (rotationVarianceSecs) Mod 360
-    
-    '        rotationDegreesPerInterval = rotationTime / rotationVarianceDegrees ' ms per degree
-    '        If rotationDegreesPerInterval >= rotationIntervalMax Then rotationDegreesPerInterval = rotationIntervalMax
-            
+     
             overlayWidget.StopWatchTicking = False
             
             If PzGEnableSounds = "1" Then
@@ -530,17 +514,27 @@ Private Sub stopbutton_mouseUp(ByRef Sender As Object)
                 End If
             End If
         
-            NoOfDegrees = 360 - stopSWSDeg
+            SWRotationDegrees = 360 - stopSWSDeg
                             
-            ' start the third timer to rotate passing through the interval
-            overlayWidget.rotationInterval = 20
-            overlayWidget.startDegrees = stopSWSDeg
-            overlayWidget.NoOfDegrees = NoOfDegrees
-            overlayWidget.startRotation = True
+            ' start the third timer to rotate stopwatch secondhand
+            overlayWidget.rotationSWInterval = 20
+            overlayWidget.startSWDegrees = stopSWSDeg
+            overlayWidget.SWRotationDegrees = SWRotationDegrees
+            overlayWidget.startSWRotation = True
     
-            'gblStopWatchState = 0 ' back to zeroed state
             gblStopWatchStartTime = Now()
+            
+            ' rotate the main hands from the stored position to the current time
+        
+            ' we know the current position, we have the start degrees
+            ' calculate the finishing degrees using the current time
+            ' calculate the no of degrees to rotate
+            ' pass these to the overlay class
+            ' trigger the rotation
+            
         End If
+        
+
         
     End If
 
@@ -835,7 +829,7 @@ End Sub
 ' Procedure : gaugeForm_MouseUp
 ' Author    : beededea
 ' Date      : 05/05/2023
-' Purpose   : save the form x,y position when ever the globe/form is dragged
+' Purpose   : save the form x,y position when ever the form is dragged
 '---------------------------------------------------------------------------------------
 '
 Private Sub gaugeForm_MouseUp(ByRef Button As Integer, ByRef Shift As Integer, ByRef x As Single, ByRef y As Single)

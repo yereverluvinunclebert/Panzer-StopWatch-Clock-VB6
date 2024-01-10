@@ -440,7 +440,6 @@ Public tzDelta1 As Long
 Public msgBoxADynamicSizingFlg As Boolean
 
 Public gblStopWatchStartTime As Date ' these to be changed to properties
-Public gblStopWatchPauseTime As Date ' these to be changed to properties
 Public gblStopWatchState As Integer
 Public gblStopWatchZeroed As Boolean
 
