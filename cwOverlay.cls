@@ -663,8 +663,9 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     Dim txtMonthNumber As String: txtMonthNumber = vbNullString
     Dim textDrawn As Boolean: textDrawn = False
     Dim thisOpacity As Double: thisOpacity = 0
+    Dim cream As String: cream = vbNullString
     
-    Const cream As String = "&HFFF5F5F5"
+    cream = RGB(235, 217, 179) ' cannot create a constant from an RGB value
    
     On Error GoTo W_Paint_Error
     
