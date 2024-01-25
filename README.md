@@ -108,16 +108,17 @@ unwitting source of inspiration.
 
 Dependencies:
 
+The widget is built using unmanaged code, ie, it needs no framework to allow it to operate. Microsoft already builds the tiny VB6 runtime as an intrinsic part of all versions of Windows. All you will need to run the program is Windows or Linux with Wine. If you want to develop the program further you will need the following:
+
 o A windows-alike o/s such as Windows XP, 7-11 or Apple Mac OSX 11. 
 
 o Microsoft VB6 IDE installed with its runtime components. The program runs 
 without any additional Microsoft OCX components, just the basic controls that 
 ship with VB6.  
-
 	
 * Uses the latest version of the RC6 Cairo framework from Olaf Schmidt.
 
-During development the RC6 components need to be registered. These scripts are 
+During development the RC6 components need to be registered. These scripts are supplied are 
 used to register. Run each by double-clicking on them.
 
 	RegisterRC6inPlace.vbs
@@ -125,7 +126,6 @@ used to register. Run each by double-clicking on them.
 
 During runtime on the users system, the RC6 components are dynamically 
 referenced using modRC6regfree.bas which is compiled into the binary.	
-
 
 Requires a PzStopWatch folder in C:\Users\<user>\AppData\Roaming\ 
 eg: C:\Users\<user>\AppData\Roaming\PzStopWatch
@@ -159,8 +159,6 @@ REGTLIB %SystemRoot%\System32\OLEGUIDS.TLB
 
 In the VB6 IDE - project - references - browse - select the OLEGuids.tlb
 
-
-
 * SETUP.EXE - The program is currently distributed using setup2go, a very useful 
 and comprehensive installer program that builds a .exe installer. Youll have to 
 find a copy of setup2go on the web as it is now abandonware. Contact me
@@ -175,12 +173,13 @@ HELP folder.
 
  Project References:
 
+ Ensure your project has the following Menu - Project - References selected and ticked.
+
 	VisualBasic for Applications  
 	VisualBasic Runtime Objects and Procedures  
 	VisualBasic Objects and Procedures  
 	OLE Automation  
 	vbRichClient6  
-
 
 LICENCE AGREEMENTS:
 
