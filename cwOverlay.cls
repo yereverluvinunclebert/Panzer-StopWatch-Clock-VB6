@@ -811,7 +811,7 @@ End Sub
 ' Procedure : tmrClock_Timer
 ' Author    : olaf schmidt
 ' Date      : 30/07/2023
-' Purpose   : update the degree-Variables for the stopwatch Hour, Minute and Second Hands
+' Purpose   : update the degree-Variables for the clock Hour, Minute and Second Hands
 '---------------------------------------------------------------------------------------
 '
 Private Sub tmrClock_Timer()

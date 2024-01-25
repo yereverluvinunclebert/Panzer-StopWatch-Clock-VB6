@@ -6,12 +6,12 @@
 <BODY>
  <OBJECT type="text/site properties">
   <PARAM name="Window Styles" value="0x800027">
-  <PARAM name="Font" value="Centurion Light SF,10,1">
+  <PARAM name="ImageType" value="Folder">
  </OBJECT>
 <UL>
  <LI><OBJECT type="text/sitemap">
-  <PARAM name="Name" value="SteamyDock Help Page">
-  <PARAM name="Local" value="steamydock.html">
+  <PARAM name="Name" value="Panzer Panzer Stop Watch Cairo Widget Help">
+  <PARAM name="Local" value="pzStopwatch.html">
  </OBJECT>
 </BODY>
 </HTML>
