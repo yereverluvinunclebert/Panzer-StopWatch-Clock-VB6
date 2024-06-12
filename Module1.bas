@@ -2164,7 +2164,7 @@ Public Sub unloadAllForms(ByVal endItAll As Boolean)
     ' unload the native VB6 and RC6 forms
     
     Unload panzerPrefs
-    'Unload frmLicence
+    Unload frmMessage
     Unload frmTimer
     Unload menuForm
 
@@ -2176,14 +2176,14 @@ Public Sub unloadAllForms(ByVal endItAll As Boolean)
     ' remove all variable references to each form in turn
     
     Set panzerPrefs = Nothing
+    Set frmMessage = Nothing
+    Set frmTimer = Nothing
+    Set menuForm = Nothing
+    
     Set fMain.aboutForm = Nothing
     Set fMain.helpForm = Nothing
     Set fAlpha.gaugeForm = Nothing
     Set fMain.licenceForm = Nothing
-    
-    'Set frmLicence = Nothing
-    Set frmTimer = Nothing
-    Set menuForm = Nothing
     
     If endItAll = True Then End
 
@@ -2274,15 +2274,7 @@ End Sub
 '
 Public Sub makeProgramPreferencesAvailable()
     On Error GoTo makeProgramPreferencesAvailable_Error
-'    Dim debugFlg As Integer: debugFlg = 1
-    
-'    If debugFlg = 1 Then
-'
-'        MsgBox "panzerPrefs.Visible " & panzerPrefs.Visible
-'        MsgBox "panzerPrefs.WindowState " & panzerPrefs.WindowState
-'
-'    End If
-    
+
     If panzerPrefs.IsVisible = False Then
         panzerPrefs.Visible = True
         panzerPrefs.Show  ' show it again
@@ -2296,8 +2288,9 @@ Public Sub makeProgramPreferencesAvailable()
         
         Call readPrefsPosition
         Call panzerPrefs.positionPrefsMonitor
+    Else
+        panzerPrefs.SetFocus
     End If
-    
 
    On Error GoTo 0
    Exit Sub
