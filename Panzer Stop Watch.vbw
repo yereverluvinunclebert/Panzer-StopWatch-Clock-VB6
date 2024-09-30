@@ -14,3 +14,4 @@ cwHelp = 559, 302, 1530, 1312,
 cwLicence = 338, 338, 1178, 1026, 
 frmMessage = 312, 312, 1152, 1000, , 156, 156, 996, 844, C
 modResize = 338, 338, 1178, 1026, 
+modDaylightSavings = 0, 0, 0, 0, C
