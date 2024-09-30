@@ -694,3 +694,35 @@ setMessageIconImagesLight_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure setMessageIconImagesLight of Form frmMessage"
 
 End Sub
+
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : IsVisible
+' Author    : beededea
+' Date      : 08/05/2023
+' Purpose   : calling a manual property to a form allows external checks to the form to
+'             determine whether it is loaded, without also activating the form automatically.
+'---------------------------------------------------------------------------------------
+'
+Public Property Get IsVisible() As Boolean
+    On Error GoTo IsVisible_Error
+
+    If Me.WindowState = vbNormal Then
+        IsVisible = Me.Visible
+    Else
+        IsVisible = False
+    End If
+
+    On Error GoTo 0
+    Exit Property
+
+IsVisible_Error:
+
+    With Err
+         If .Number <> 0 Then
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure IsVisible of Form panzerPrefs"
+            Resume Next
+          End If
+    End With
+End Property
