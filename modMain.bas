@@ -1106,3 +1106,16 @@ End Function
 
 
 
+
+
+'Property Get GetCurrentNow() As Date
+''    If m_dCurrentStartDate = 0 Then
+''        GetCurrentNow = VBA.Now
+''    Else
+'        GetCurrentNow = DateAdd("s", TimerEx - m_dblCurrentStartTimer, m_dCurrentStartDate)
+''    End If
+'End Property
+'
+'Property Get Now(ByVal dwDummy As Long) As Long
+'    Err.Raise vbObjectError, , "Use GetCurrentNow instead"
+'End Property

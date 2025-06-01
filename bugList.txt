@@ -29,6 +29,12 @@
 
 -oOo-
 
+NOTE: When editing using the VB6 IDE started from the widget right click menu itself, it may not compile and run correctly. 
+- it may well run in the IDE but not as an .EXE run via the IDE 'run' button.
+FIX: Initiate the IDE from the VBP file in the folder itself, opened using explorer
+     Compile and then run from explorer. 
+     Do not know why it only affects this widget alone.
+
 ' adapt a completely new help HTML from the Pz Just Clock with new information pertaining to the stopwatch functionality.
 ' CHM build
 ' github synch CHM manually

@@ -56,8 +56,8 @@ Public Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, ByVal hdc As
 Public Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
 'Private Declare Function CreateDC Lib "gdi32" Alias "CreateDCA" (ByVal lpDriverName As String, ByVal lpDeviceName As String, ByVal lpOutput As String, ByVal lpInitData As Long) As Long
 Private Declare Function UnionRect Lib "user32" (lprcDst As RECT, lprcSrc1 As RECT, lprcSrc2 As RECT) As Long
-Private Declare Function OffsetRect Lib "user32" (lpRect As RECT, ByVal x As Long, ByVal Y As Long) As Long
-Private Declare Function MoveWindow Lib "user32" (ByVal hwnd As Long, ByVal x As Long, ByVal Y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal bRepaint As Long) As Long
+Private Declare Function OffsetRect Lib "user32" (lpRect As RECT, ByVal x As Long, ByVal y As Long) As Long
+Private Declare Function MoveWindow Lib "user32" (ByVal hwnd As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal bRepaint As Long) As Long
 Private Declare Function GetWindowRect Lib "user32.dll" (ByVal hwnd As Long, lpRect As RECT) As Long
 Private Declare Function MonitorFromRect Lib "user32" (rc As RECT, ByVal dwFlags As dwFlags) As Long
 Private Declare Function GetMonitorInfo Lib "user32" Alias "GetMonitorInfoA" (ByVal hMonitor As Long, MonInfo As tagMONITORINFO) As Long
@@ -280,14 +280,14 @@ MonitorEnumProc_Error:
 End Function
 
 '---------------------------------------------------------------------------------------
-' Procedure : adjustFormPositionToCorrectMonitor
+' Procedure : SetFormOnMonitor
 ' Author    : Hypetia from TekTips https://www.tek-tips.com/userinfo.cfm?member=Hypetia
 ' Date      : 01/03/2023
 ' Purpose   : Called on startup - restores the form's saved position and puts it on screen
 '             if the form finds itself offscreen due to monitor position/resolution changes.
 '---------------------------------------------------------------------------------------
 '
-Public Sub adjustFormPositionToCorrectMonitor(ByRef hwnd As Long, ByVal Left As Long, ByVal Top As Long)
+Public Sub SetFormOnMonitor(ByRef hwnd As Long, ByVal Left As Long, ByVal Top As Long)
 
     Dim rc As RECT
 '    Dim Left As Long: Left = 0
@@ -295,7 +295,7 @@ Public Sub adjustFormPositionToCorrectMonitor(ByRef hwnd As Long, ByVal Left As 
     Dim hMonitor As Long: hMonitor = 0
     Dim mi As tagMONITORINFO
     
-    On Error GoTo adjustFormPositionToCorrectMonitor_Error
+    On Error GoTo SetFormOnMonitor_Error
 
     GetWindowRect hwnd, rc 'obtain the current form's window rectangle co-ords and assign it a handle
         
@@ -321,11 +321,11 @@ Public Sub adjustFormPositionToCorrectMonitor(ByRef hwnd As Long, ByVal Left As 
     On Error GoTo 0
     Exit Sub
 
-adjustFormPositionToCorrectMonitor_Error:
+SetFormOnMonitor_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure adjustFormPositionToCorrectMonitor of Module Module1"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure SetFormOnMonitor of Module Module1"
             Resume Next
           End If
     End With

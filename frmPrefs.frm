@@ -2407,7 +2407,7 @@ Public Sub positionPrefsMonitor()
     End If
     
     monitorCount = fGetMonitorCount
-    If monitorCount > 1 Then Call adjustFormPositionToCorrectMonitor(Me.hwnd, formLeftTwips, formTopTwips)
+    If monitorCount > 1 Then Call SetFormOnMonitor(Me.hwnd, formLeftTwips / fTwipsPerPixelX, formTopTwips / fTwipsPerPixelY)
     
     ' calculate the on-screen widget position
     If Me.Left < 0 Then
