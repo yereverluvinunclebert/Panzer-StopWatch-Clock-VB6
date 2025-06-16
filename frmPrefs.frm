@@ -2698,8 +2698,6 @@ Private Sub btnOpenFile_Click()
     Dim answerMsg As String: answerMsg = vbNullString
 
     On Error GoTo btnOpenFile_Click_Error
-
-
     
     Call addTargetFile(txtOpenFile.Text, retFileName)
     
