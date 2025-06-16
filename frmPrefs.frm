@@ -2123,7 +2123,7 @@ Private Declare Function IsThemeActive Lib "uxtheme" () As Boolean
 
 '------------------------------------------------------ STARTS
 ' Private Types for determining prefs sizing
-Private PzGPrefsLoadedFlg As Boolean
+Private gblPrefsLoadedFlg As Boolean
 Private prefsDynamicSizingFlg As Boolean
 Private lastFormHeight As Long
 Private Const cPrefsFormHeight As Long = 11055
@@ -2250,7 +2250,7 @@ End Sub
 Private Sub Form_Initialize()
     On Error GoTo Form_Initialize_Error
     
-    PzGPrefsLoadedFlg = False
+    gblPrefsLoadedFlg = False
     prefsDynamicSizingFlg = False
     lastFormHeight = 0
 
@@ -2277,8 +2277,8 @@ Private Sub Form_Load()
         
     prefsStartupFlg = True ' this is used to prevent some control initialisations from running code at startup
     prefsDynamicSizingFlg = False
-    PzGPrefsLoadedFlg = True ' this is a variable tested by an added form property to indicate whether the form is loaded or not
-    PzGWindowLevelWasChanged = False
+    gblPrefsLoadedFlg = True ' this is a variable tested by an added form property to indicate whether the form is loaded or not
+    gblWindowLevelWasChanged = False
     prefsFormHeight = prefsCurrentHeight
     
     With lblDragCorner
@@ -2294,7 +2294,7 @@ Private Sub Form_Load()
      
     btnSave.Enabled = False ' disable the save button
 
-    If PzGDpiAwareness = "1" Then
+    If gblDpiAwareness = "1" Then
         prefsDynamicSizingFlg = True
         chkEnableResizing.Value = 1
         lblDragCorner.Visible = True
@@ -2334,7 +2334,7 @@ Private Sub Form_Load()
     Call loadHigherResPrefsImages
     
     ' now cause a form_resize event and set the height of the whole form
-    If PzGDpiAwareness = "1" Then
+    If gblDpiAwareness = "1" Then
         If prefsFormHeight < screenHeightTwips Then
             Me.Height = prefsFormHeight
         Else
@@ -2379,12 +2379,12 @@ Public Sub positionPrefsMonitor()
     
     On Error GoTo positionPrefsMonitor_Error
     
-    If PzGDpiAwareness = "1" Then
-        formLeftTwips = Val(PzGFormHighDpiXPosTwips)
-        formTopTwips = Val(PzGFormHighDpiYPosTwips)
+    If gblDpiAwareness = "1" Then
+        formLeftTwips = Val(gblFormHighDpiXPosTwips)
+        formTopTwips = Val(gblFormHighDpiYPosTwips)
     Else
-        formLeftTwips = Val(PzGFormLowDpiXPosTwips)
-        formTopTwips = Val(PzGFormLowDpiYPosTwips)
+        formLeftTwips = Val(gblFormLowDpiXPosTwips)
+        formTopTwips = Val(gblFormLowDpiYPosTwips)
     End If
     
     If formLeftTwips = 0 Then
@@ -2441,7 +2441,7 @@ End Sub
 Private Sub btnResetMessages_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     On Error GoTo btnResetMessages_MouseMove_Error
 
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip btnResetMessages.hwnd, "The various pop-up messages that this program generates can be manually hidden. This button restores them to their original visible state.", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip btnResetMessages.hwnd, "The various pop-up messages that this program generates can be manually hidden. This button restores them to their original visible state.", _
                   TTIconInfo, "Help on the message reset button", , , , True
 
     On Error GoTo 0
@@ -2473,12 +2473,12 @@ Private Sub chkDpiAwareness_Click()
         answer = msgBoxA(answerMsg, vbYesNo, "DpiAwareness Confirmation", True, "chkDpiAwarenessRestart")
         
         If chkDpiAwareness.Value = 0 Then
-            PzGDpiAwareness = "0"
+            gblDpiAwareness = "0"
         Else
-            PzGDpiAwareness = "1"
+            gblDpiAwareness = "1"
         End If
 
-        sPutINISetting "Software\PzStopWatch", "dpiAwareness", PzGDpiAwareness, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "dpiAwareness", gblDpiAwareness, gblSettingsFile
         
         If answer = vbNo Then
             answer = vbYes
@@ -2488,7 +2488,7 @@ Private Sub chkDpiAwareness_Click()
             Exit Sub
         Else
 
-            sPutINISetting "Software\PzStopWatch", "dpiAwareness", PzGDpiAwareness, PzGSettingsFile
+            sPutINISetting "Software\PzStopWatch", "dpiAwareness", gblDpiAwareness, gblSettingsFile
             'Call reloadWidget ' this is insufficient, image controls still fail to resize and autoscale correctly
             Call hardRestart
         End If
@@ -2520,12 +2520,12 @@ Private Sub chkEnablePrefsTooltips_Click()
     
     If prefsStartupFlg = False Then
         If chkEnablePrefsTooltips.Value = 1 Then
-            PzGEnablePrefsTooltips = "1"
+            gblEnablePrefsTooltips = "1"
         Else
-            PzGEnablePrefsTooltips = "0"
+            gblEnablePrefsTooltips = "0"
         End If
         
-        sPutINISetting "Software\PzStopWatch", "enablePrefsTooltips", PzGEnablePrefsTooltips, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "enablePrefsTooltips", gblEnablePrefsTooltips, gblSettingsFile
 
     End If
     
@@ -2551,7 +2551,7 @@ End Sub
 Private Sub chkEnableTooltips_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     On Error GoTo chkEnableTooltips_MouseMove_Error
 
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip chkEnableTooltips.hwnd, "There is a problem with the current tooltips on the clock itself as they resize along with the program graphical elements, meaning that they cannot be seen, there is also a problem with tooltip handling different fonts, hoping to get Olaf to fix these soon. My suggestion is to turn them off for the moment.", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip chkEnableTooltips.hwnd, "There is a problem with the current tooltips on the clock itself as they resize along with the program graphical elements, meaning that they cannot be seen, there is also a problem with tooltip handling different fonts, hoping to get Olaf to fix these soon. My suggestion is to turn them off for the moment.", _
                   TTIconInfo, "Help on the Program tooltip problem", , , , True
 
     On Error GoTo 0
@@ -2575,9 +2575,9 @@ Private Sub chkShowTaskbar_Click()
 
     btnSave.Enabled = True ' enable the save button
     If chkShowTaskbar.Value = 1 Then
-        PzGShowTaskbar = "1"
+        gblShowTaskbar = "1"
     Else
-        PzGShowTaskbar = "0"
+        gblShowTaskbar = "0"
     End If
 
    On Error GoTo 0
@@ -2850,9 +2850,9 @@ Private Sub chkEnableBalloonTooltips_Click()
 
     btnSave.Enabled = True ' enable the save button
     If chkEnableBalloonTooltips.Value = 1 Then
-        PzGEnableBalloonTooltips = "1"
+        gblEnableBalloonTooltips = "1"
     Else
-        PzGEnableBalloonTooltips = "0"
+        gblEnableBalloonTooltips = "0"
     End If
 
    On Error GoTo 0
@@ -2875,9 +2875,9 @@ Private Sub chkIgnoreMouse_Click()
    On Error GoTo chkIgnoreMouse_Click_Error
 
     If chkIgnoreMouse.Value = 0 Then
-        PzGIgnoreMouse = "0"
+        gblIgnoreMouse = "0"
     Else
-        PzGIgnoreMouse = "1"
+        gblIgnoreMouse = "1"
     End If
 
     btnSave.Enabled = True ' enable the save button
@@ -2904,7 +2904,7 @@ Private Sub chkPreventDragging_Click()
     ' immediately make the widget locked in place
     If chkPreventDragging.Value = 0 Then
         overlayWidget.Locked = False
-        PzGPreventDragging = "0"
+        gblPreventDragging = "0"
         menuForm.mnuLockWidget.Checked = False
         If aspectRatio = "landscape" Then
             txtLandscapeHoffset.Text = vbNullString
@@ -2915,7 +2915,7 @@ Private Sub chkPreventDragging_Click()
         End If
     Else
         overlayWidget.Locked = True
-        PzGPreventDragging = "1"
+        gblPreventDragging = "1"
         menuForm.mnuLockWidget.Checked = True
         If aspectRatio = "landscape" Then
             txtLandscapeHoffset.Text = fAlpha.gaugeForm.Left
@@ -2957,17 +2957,17 @@ Private Sub chkWidgetHidden_Click()
         fAlpha.gaugeForm.Visible = True
 
         frmTimer.revealWidgetTimer.Enabled = False
-        PzGWidgetHidden = "0"
+        gblWidgetHidden = "0"
     Else
         'overlayWidget.Hidden = True
         fAlpha.gaugeForm.Visible = False
 
 
         frmTimer.revealWidgetTimer.Enabled = True
-        PzGWidgetHidden = "1"
+        gblWidgetHidden = "1"
     End If
     
-    sPutINISetting "Software\PzStopWatch", "widgetHidden", PzGWidgetHidden, PzGSettingsFile
+    sPutINISetting "Software\PzStopWatch", "widgetHidden", gblWidgetHidden, gblSettingsFile
     
     btnSave.Enabled = True ' enable the save button
 
@@ -3030,7 +3030,7 @@ Private Sub cmbDebug_Click()
         btnDefaultEditor.Enabled = False
         lblDebug(9).Enabled = False
     Else
-        txtDefaultEditor.Text = PzGDefaultEditor
+        txtDefaultEditor.Text = gblDefaultEditor
         txtDefaultEditor.Enabled = True
         lblDebug(7).Enabled = True
         btnDefaultEditor.Enabled = True
@@ -3145,7 +3145,7 @@ End Sub
 Public Property Get IsVisible() As Boolean
     On Error GoTo IsVisible_Error
 
-    If PzGPrefsLoadedFlg Then
+    If gblPrefsLoadedFlg Then
         If Me.WindowState = vbNormal Then
             IsVisible = Me.Visible
         Else
@@ -3180,14 +3180,14 @@ Private Sub showLastTab()
 
    On Error GoTo showLastTab_Error
 
-    If PzGLastSelectedTab = "general" Then Call picButtonMouseUpEvent("general", imgGeneral, imgGeneralClicked, fraGeneral, fraGeneralButton)  ' was imgGeneralMouseUpEvent
-    If PzGLastSelectedTab = "config" Then Call picButtonMouseUpEvent("config", imgConfig, imgConfigClicked, fraConfig, fraConfigButton)     ' was imgConfigMouseUpEvent
-    If PzGLastSelectedTab = "position" Then Call picButtonMouseUpEvent("position", imgPosition, imgPositionClicked, fraPosition, fraPositionButton)
-    If PzGLastSelectedTab = "development" Then Call picButtonMouseUpEvent("development", imgDevelopment, imgDevelopmentClicked, fraDevelopment, fraDevelopmentButton)
-    If PzGLastSelectedTab = "fonts" Then Call picButtonMouseUpEvent("fonts", imgFonts, imgFontsClicked, fraFonts, fraFontsButton)
-    If PzGLastSelectedTab = "sounds" Then Call picButtonMouseUpEvent("sounds", imgSounds, imgSoundsClicked, fraSounds, fraSoundsButton)
-    If PzGLastSelectedTab = "window" Then Call picButtonMouseUpEvent("window", imgWindow, imgWindowClicked, fraWindow, fraWindowButton)
-    If PzGLastSelectedTab = "about" Then Call picButtonMouseUpEvent("about", imgAbout, imgAboutClicked, fraAbout, fraAboutButton)
+    If gblLastSelectedTab = "general" Then Call picButtonMouseUpEvent("general", imgGeneral, imgGeneralClicked, fraGeneral, fraGeneralButton)  ' was imgGeneralMouseUpEvent
+    If gblLastSelectedTab = "config" Then Call picButtonMouseUpEvent("config", imgConfig, imgConfigClicked, fraConfig, fraConfigButton)     ' was imgConfigMouseUpEvent
+    If gblLastSelectedTab = "position" Then Call picButtonMouseUpEvent("position", imgPosition, imgPositionClicked, fraPosition, fraPositionButton)
+    If gblLastSelectedTab = "development" Then Call picButtonMouseUpEvent("development", imgDevelopment, imgDevelopmentClicked, fraDevelopment, fraDevelopmentButton)
+    If gblLastSelectedTab = "fonts" Then Call picButtonMouseUpEvent("fonts", imgFonts, imgFontsClicked, fraFonts, fraFontsButton)
+    If gblLastSelectedTab = "sounds" Then Call picButtonMouseUpEvent("sounds", imgSounds, imgSoundsClicked, fraSounds, fraSoundsButton)
+    If gblLastSelectedTab = "window" Then Call picButtonMouseUpEvent("window", imgWindow, imgWindowClicked, fraWindow, fraWindowButton)
+    If gblLastSelectedTab = "about" Then Call picButtonMouseUpEvent("about", imgAbout, imgAboutClicked, fraAbout, fraAboutButton)
 
    On Error GoTo 0
    Exit Sub
@@ -3374,135 +3374,135 @@ Private Sub btnSave_Click()
     On Error GoTo btnSave_Click_Error
 
     ' configuration
-    PzGEnableTooltips = LTrim$(Str$(chkEnableTooltips.Value))
-    PzGEnablePrefsTooltips = LTrim$(Str$(chkEnablePrefsTooltips.Value))
-    PzGEnableBalloonTooltips = LTrim$(Str$(chkEnableBalloonTooltips.Value))
-    PzGShowTaskbar = LTrim$(Str$(chkShowTaskbar.Value))
-    PzGDpiAwareness = LTrim$(Str$(chkDpiAwareness.Value))
-    PzGGaugeSize = LTrim$(Str$(sliGaugeSize.Value))
-    PzGScrollWheelDirection = LTrim$(Str$(cmbScrollWheelDirection.ListIndex))
+    gblEnableTooltips = LTrim$(Str$(chkEnableTooltips.Value))
+    gblEnablePrefsTooltips = LTrim$(Str$(chkEnablePrefsTooltips.Value))
+    gblEnableBalloonTooltips = LTrim$(Str$(chkEnableBalloonTooltips.Value))
+    gblShowTaskbar = LTrim$(Str$(chkShowTaskbar.Value))
+    gblDpiAwareness = LTrim$(Str$(chkDpiAwareness.Value))
+    gblGaugeSize = LTrim$(Str$(sliGaugeSize.Value))
+    gblScrollWheelDirection = LTrim$(Str$(cmbScrollWheelDirection.ListIndex))
     
     ' general
-    PzGGaugeFunctions = LTrim$(Str$(chkGaugeFunctions.Value))
-    PzGStartup = LTrim$(Str$(chkGenStartup.Value))
+    gblGaugeFunctions = LTrim$(Str$(chkGaugeFunctions.Value))
+    gblStartup = LTrim$(Str$(chkGenStartup.Value))
     
-    PzGClockFaceSwitchPref = cmbClockFaceSwitchPref.List(cmbClockFaceSwitchPref.ListIndex)
+    gblClockFaceSwitchPref = cmbClockFaceSwitchPref.List(cmbClockFaceSwitchPref.ListIndex)
     
-    PzGMainGaugeTimeZone = cmbMainGaugeTimeZone.ListIndex
-    PzGMainDaylightSaving = cmbMainDaylightSaving.ListIndex
+    gblMainGaugeTimeZone = cmbMainGaugeTimeZone.ListIndex
+    gblMainDaylightSaving = cmbMainDaylightSaving.ListIndex
     
-    PzGSmoothSecondHand = cmbTickSwitchPref.ListIndex
+    gblSmoothSecondHand = cmbTickSwitchPref.ListIndex
     
-    PzGSecondaryGaugeTimeZone = cmbSecondaryGaugeTimeZone.ListIndex
-    PzGSecondaryDaylightSaving = cmbSecondaryDaylightSaving.ListIndex
+    gblSecondaryGaugeTimeZone = cmbSecondaryGaugeTimeZone.ListIndex
+    gblSecondaryDaylightSaving = cmbSecondaryDaylightSaving.ListIndex
     
     ' sounds
-    PzGEnableSounds = LTrim$(Str$(chkEnableSounds.Value))
+    gblEnableSounds = LTrim$(Str$(chkEnableSounds.Value))
     
     'development
-    PzGDebug = LTrim$(Str$(cmbDebug.ListIndex))
-    PzGDblClickCommand = txtDblClickCommand.Text
-    PzGOpenFile = txtOpenFile.Text
-    PzGDefaultEditor = txtDefaultEditor.Text
+    gblDebug = LTrim$(Str$(cmbDebug.ListIndex))
+    gblDblClickCommand = txtDblClickCommand.Text
+    gblOpenFile = txtOpenFile.Text
+    gblDefaultEditor = txtDefaultEditor.Text
     
     ' position
-    PzGAspectHidden = LTrim$(Str$(cmbAspectHidden.ListIndex))
-    PzGWidgetPosition = LTrim$(Str$(cmbWidgetPosition.ListIndex))
-    PzGWidgetLandscape = LTrim$(Str$(cmbWidgetLandscape.ListIndex))
-    PzGWidgetPortrait = LTrim$(Str$(cmbWidgetPortrait.ListIndex))
-    PzGLandscapeFormHoffset = txtLandscapeHoffset.Text
-    PzGLandscapeFormVoffset = txtLandscapeVoffset.Text
-    PzGPortraitHoffset = txtPortraitHoffset.Text
-    PzGPortraitYoffset = txtPortraitYoffset.Text
+    gblAspectHidden = LTrim$(Str$(cmbAspectHidden.ListIndex))
+    gblWidgetPosition = LTrim$(Str$(cmbWidgetPosition.ListIndex))
+    gblWidgetLandscape = LTrim$(Str$(cmbWidgetLandscape.ListIndex))
+    gblWidgetPortrait = LTrim$(Str$(cmbWidgetPortrait.ListIndex))
+    gblLandscapeFormHoffset = txtLandscapeHoffset.Text
+    gblLandscapeFormVoffset = txtLandscapeVoffset.Text
+    gblPortraitHoffset = txtPortraitHoffset.Text
+    gblPortraitYoffset = txtPortraitYoffset.Text
     
-'    PzGvLocationPercPrefValue
-'    PzGhLocationPercPrefValue
+'    gblvLocationPercPrefValue
+'    gblhLocationPercPrefValue
 
     ' fonts
-    PzGPrefsFont = txtPrefsFont.Text
-    PzGClockFont = PzGPrefsFont
+    gblPrefsFont = txtPrefsFont.Text
+    gblClockFont = gblPrefsFont
     
     ' the sizing is not saved here again as it saved during the setting phase.
     
     ' Windows
-    PzGWindowLevel = LTrim$(Str$(cmbWindowLevel.ListIndex))
-    PzGPreventDragging = LTrim$(Str$(chkPreventDragging.Value))
-    PzGOpacity = LTrim$(Str$(sliOpacity.Value))
-    PzGWidgetHidden = LTrim$(Str$(chkWidgetHidden.Value))
-    PzGHidingTime = LTrim$(Str$(cmbHidingTime.ListIndex))
-    PzGIgnoreMouse = LTrim$(Str$(chkIgnoreMouse.Value))
+    gblWindowLevel = LTrim$(Str$(cmbWindowLevel.ListIndex))
+    gblPreventDragging = LTrim$(Str$(chkPreventDragging.Value))
+    gblOpacity = LTrim$(Str$(sliOpacity.Value))
+    gblWidgetHidden = LTrim$(Str$(chkWidgetHidden.Value))
+    gblHidingTime = LTrim$(Str$(cmbHidingTime.ListIndex))
+    gblIgnoreMouse = LTrim$(Str$(chkIgnoreMouse.Value))
             
     
     'development
-    PzGDebug = LTrim$(Str$(cmbDebug.ListIndex))
-    PzGDblClickCommand = txtDblClickCommand.Text
-    PzGOpenFile = txtOpenFile.Text
-    PzGDefaultEditor = txtDefaultEditor.Text
+    gblDebug = LTrim$(Str$(cmbDebug.ListIndex))
+    gblDblClickCommand = txtDblClickCommand.Text
+    gblOpenFile = txtOpenFile.Text
+    gblDefaultEditor = txtDefaultEditor.Text
             
-    If PzGStartup = "1" Then
+    If gblStartup = "1" Then
         Call savestring(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "PzStopWatchWidget", """" & App.path & "\" & "Panzer Stopwatch Widget.exe""")
     Else
         Call savestring(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "PzStopWatchWidget", vbNullString)
     End If
 
     ' save the values from the general tab
-    If fFExists(PzGSettingsFile) Then
-        sPutINISetting "Software\PzStopWatch", "enableTooltips", PzGEnableTooltips, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "enablePrefsTooltips", PzGEnablePrefsTooltips, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "enableBalloonTooltips", PzGEnableBalloonTooltips, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "showTaskbar", PzGShowTaskbar, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "dpiAwareness", PzGDpiAwareness, PzGSettingsFile
+    If fFExists(gblSettingsFile) Then
+        sPutINISetting "Software\PzStopWatch", "enableTooltips", gblEnableTooltips, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "enablePrefsTooltips", gblEnablePrefsTooltips, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "enableBalloonTooltips", gblEnableBalloonTooltips, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "showTaskbar", gblShowTaskbar, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "dpiAwareness", gblDpiAwareness, gblSettingsFile
         
         
-        sPutINISetting "Software\PzStopWatch", "gaugeSize", PzGGaugeSize, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "scrollWheelDirection", PzGScrollWheelDirection, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "gaugeSize", gblGaugeSize, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "scrollWheelDirection", gblScrollWheelDirection, gblSettingsFile
                 
-        sPutINISetting "Software\PzStopWatch", "gaugeFunctions", PzGGaugeFunctions, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "smoothSecondHand", PzGSmoothSecondHand, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "gaugeFunctions", gblGaugeFunctions, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "smoothSecondHand", gblSmoothSecondHand, gblSettingsFile
         
-        sPutINISetting "Software\PzStopWatch", "clockFaceSwitchPref", PzGClockFaceSwitchPref, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "mainGaugeTimeZone", PzGMainGaugeTimeZone, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "mainDaylightSaving", PzGMainDaylightSaving, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "secondaryGaugeTimeZone", PzGSecondaryGaugeTimeZone, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "secondaryDaylightSaving", PzGSecondaryDaylightSaving, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "clockFaceSwitchPref", gblClockFaceSwitchPref, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "mainGaugeTimeZone", gblMainGaugeTimeZone, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "mainDaylightSaving", gblMainDaylightSaving, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "secondaryGaugeTimeZone", gblSecondaryGaugeTimeZone, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "secondaryDaylightSaving", gblSecondaryDaylightSaving, gblSettingsFile
         
-        sPutINISetting "Software\PzStopWatch", "aspectHidden", PzGAspectHidden, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "widgetPosition", PzGWidgetPosition, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "widgetLandscape", PzGWidgetLandscape, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "widgetPortrait", PzGWidgetPortrait, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "aspectHidden", gblAspectHidden, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "widgetPosition", gblWidgetPosition, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "widgetLandscape", gblWidgetLandscape, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "widgetPortrait", gblWidgetPortrait, gblSettingsFile
 
-        sPutINISetting "Software\PzStopWatch", "prefsFont", PzGPrefsFont, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "clockFont", PzGClockFont, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "prefsFont", gblPrefsFont, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "clockFont", gblClockFont, gblSettingsFile
         
-        sPutINISetting "Software\PzStopWatch", "prefsFontSizeHighDPI", PzGPrefsFontSizeHighDPI, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "prefsFontSizeLowDPI", PzGPrefsFontSizeLowDPI, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "prefsFontItalics", PzGPrefsFontItalics, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "prefsFontColour", PzGPrefsFontColour, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "prefsFontSizeHighDPI", gblPrefsFontSizeHighDPI, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "prefsFontSizeLowDPI", gblPrefsFontSizeLowDPI, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "prefsFontItalics", gblPrefsFontItalics, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "prefsFontColour", gblPrefsFontColour, gblSettingsFile
 
         'save the values from the Windows Config Items
-        sPutINISetting "Software\PzStopWatch", "windowLevel", PzGWindowLevel, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "preventDragging", PzGPreventDragging, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "windowLevel", gblWindowLevel, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "preventDragging", gblPreventDragging, gblSettingsFile
         
-        sPutINISetting "Software\PzStopWatch", "opacity", PzGOpacity, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "widgetHidden", PzGWidgetHidden, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "hidingTime", PzGHidingTime, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "ignoreMouse", PzGIgnoreMouse, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "opacity", gblOpacity, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "widgetHidden", gblWidgetHidden, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "hidingTime", gblHidingTime, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "ignoreMouse", gblIgnoreMouse, gblSettingsFile
         
-        sPutINISetting "Software\PzStopWatch", "startup", PzGStartup, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "startup", gblStartup, gblSettingsFile
 
-        sPutINISetting "Software\PzStopWatch", "enableSounds", PzGEnableSounds, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "lastSelectedTab", PzGLastSelectedTab, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "enableSounds", gblEnableSounds, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "lastSelectedTab", gblLastSelectedTab, gblSettingsFile
         
-        sPutINISetting "Software\PzStopWatch", "debug", PzGDebug, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "dblClickCommand", PzGDblClickCommand, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "openFile", PzGOpenFile, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "defaultEditor", PzGDefaultEditor, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "debug", gblDebug, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "dblClickCommand", gblDblClickCommand, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "openFile", gblOpenFile, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "defaultEditor", gblDefaultEditor, gblSettingsFile
         
-        sPutINISetting "Software\PzStopWatch", "clockHighDpiXPos", PzGClockHighDpiXPos, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "clockHighDpiYPos", PzGClockHighDpiYPos, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "clockHighDpiXPos", gblClockHighDpiXPos, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "clockHighDpiYPos", gblClockHighDpiYPos, gblSettingsFile
         
-        sPutINISetting "Software\PzStopWatch", "clockLowDpiXPos", PzGClockLowDpiXPos, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "clockLowDpiYPos", PzGClockLowDpiYPos, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "clockLowDpiXPos", gblClockLowDpiXPos, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "clockLowDpiYPos", gblClockLowDpiYPos, gblSettingsFile
         
 
         'save the values from the Text Items
@@ -3520,9 +3520,9 @@ Private Sub btnSave_Click()
     Me.SetFocus
     btnSave.Enabled = False ' disable the save button showing it has successfully saved
     
-    ' reload here if the PzGWindowLevel Was Changed
-    If PzGWindowLevelWasChanged = True Then
-        PzGWindowLevelWasChanged = False
+    ' reload here if the gblWindowLevel Was Changed
+    If gblWindowLevelWasChanged = True Then
+        gblWindowLevelWasChanged = False
         Call reloadWidget
     End If
     
@@ -3552,12 +3552,12 @@ Private Sub chkEnableTooltips_Click()
     
     If prefsStartupFlg = False Then
         If chkEnableTooltips.Value = 1 Then
-            PzGEnableTooltips = "1"
+            gblEnableTooltips = "1"
         Else
-            PzGEnableTooltips = "0"
+            gblEnableTooltips = "0"
         End If
         
-        sPutINISetting "Software\PzStopWatch", "enableTooltips", PzGEnableTooltips, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "enableTooltips", gblEnableTooltips, gblSettingsFile
 
         answer = vbYes
         answerMsg = "You must soft reload this widget, in order to change the tooltip setting, do you want me to reload this widget? I can do it now for you."
@@ -3589,7 +3589,7 @@ End Sub
 
 Private Sub cmbWindowLevel_Click()
     btnSave.Enabled = True ' enable the save button
-    If prefsStartupFlg = False Then PzGWindowLevelWasChanged = True
+    If prefsStartupFlg = False Then gblWindowLevelWasChanged = True
 End Sub
 '---------------------------------------------------------------------------------------
 ' Procedure : btnPrefsFont_Click
@@ -3614,41 +3614,41 @@ Private Sub btnPrefsFont_Click()
     btnSave.Enabled = True ' enable the save button
     
     ' set the preliminary vars to feed and populate the changefont routine
-    fntFont = PzGPrefsFont
-    ' PzGClockFont
+    fntFont = gblPrefsFont
+    ' gblClockFont
     
-    If PzGDpiAwareness = "1" Then
-        fntSize = Val(PzGPrefsFontSizeHighDPI)
+    If gblDpiAwareness = "1" Then
+        fntSize = Val(gblPrefsFontSizeHighDPI)
     Else
-        fntSize = Val(PzGPrefsFontSizeLowDPI)
+        fntSize = Val(gblPrefsFontSizeLowDPI)
     End If
     
     If fntSize = 0 Then fntSize = 8
-    fntItalics = CBool(PzGPrefsFontItalics)
-    fntColour = CLng(PzGPrefsFontColour)
+    fntItalics = CBool(gblPrefsFontItalics)
+    fntColour = CLng(gblPrefsFontColour)
         
     Call changeFont(panzerPrefs, True, fntFont, fntSize, fntWeight, fntStyle, fntColour, fntItalics, fntUnderline, fntFontResult)
     
-    PzGPrefsFont = CStr(fntFont)
-    PzGClockFont = PzGPrefsFont
+    gblPrefsFont = CStr(fntFont)
+    gblClockFont = gblPrefsFont
     
-    If PzGDpiAwareness = "1" Then
-        PzGPrefsFontSizeHighDPI = CStr(fntSize)
+    If gblDpiAwareness = "1" Then
+        gblPrefsFontSizeHighDPI = CStr(fntSize)
         Call Form_Resize
     Else
-        PzGPrefsFontSizeLowDPI = CStr(fntSize)
+        gblPrefsFontSizeLowDPI = CStr(fntSize)
     End If
     
-    PzGPrefsFontItalics = CStr(fntItalics)
-    PzGPrefsFontColour = CStr(fntColour)
+    gblPrefsFontItalics = CStr(fntItalics)
+    gblPrefsFontColour = CStr(fntColour)
 
-    If fFExists(PzGSettingsFile) Then ' does the tool's own settings.ini exist?
-        sPutINISetting "Software\PzStopWatch", "prefsFont", PzGPrefsFont, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "clockFont", PzGClockFont, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "prefsFontSizeHighDPI", PzGPrefsFontSizeHighDPI, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "prefsFontSizeLowDPI", PzGPrefsFontSizeLowDPI, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "prefsFontItalics", PzGPrefsFontItalics, PzGSettingsFile
-        sPutINISetting "Software\PzStopWatch", "PrefsFontColour", PzGPrefsFontColour, PzGSettingsFile
+    If fFExists(gblSettingsFile) Then ' does the tool's own settings.ini exist?
+        sPutINISetting "Software\PzStopWatch", "prefsFont", gblPrefsFont, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "clockFont", gblClockFont, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "prefsFontSizeHighDPI", gblPrefsFontSizeHighDPI, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "prefsFontSizeLowDPI", gblPrefsFontSizeLowDPI, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "prefsFontItalics", gblPrefsFontItalics, gblSettingsFile
+        sPutINISetting "Software\PzStopWatch", "PrefsFontColour", gblPrefsFontColour, gblSettingsFile
     End If
     
     If fntFont = vbNullString Then fntFont = "arial"
@@ -3691,105 +3691,105 @@ Private Sub adjustPrefsControls()
     'cmbMainGaugeTimeZone.ListIndex = 0
     
     ' general tab
-    chkGaugeFunctions.Value = Val(PzGGaugeFunctions)
-    chkGenStartup.Value = Val(PzGStartup)
+    chkGaugeFunctions.Value = Val(gblGaugeFunctions)
+    chkGenStartup.Value = Val(gblStartup)
     
-    cmbClockFaceSwitchPref.ListIndex = Val(PzGClockFaceSwitchPref)
+    cmbClockFaceSwitchPref.ListIndex = Val(gblClockFaceSwitchPref)
     
     'set the choice for four timezone comboboxes that were populated from file.
-    cmbMainGaugeTimeZone.ListIndex = Val(PzGMainGaugeTimeZone)
-    cmbMainDaylightSaving.ListIndex = Val(PzGMainDaylightSaving)
+    cmbMainGaugeTimeZone.ListIndex = Val(gblMainGaugeTimeZone)
+    cmbMainDaylightSaving.ListIndex = Val(gblMainDaylightSaving)
 '
     txtMainBias.Text = tzDelta
 '
-    cmbTickSwitchPref.ListIndex = Val(PzGSmoothSecondHand)
+    cmbTickSwitchPref.ListIndex = Val(gblSmoothSecondHand)
 '
-    cmbSecondaryGaugeTimeZone.ListIndex = Val(PzGSecondaryGaugeTimeZone)
-    cmbSecondaryDaylightSaving.ListIndex = Val(PzGSecondaryDaylightSaving)
+    cmbSecondaryGaugeTimeZone.ListIndex = Val(gblSecondaryGaugeTimeZone)
+    cmbSecondaryDaylightSaving.ListIndex = Val(gblSecondaryDaylightSaving)
     
     ' configuration tab
    
     ' check whether the size has been previously altered via ctrl+mousewheel on the widget
     sliGaugeSizeOldValue = sliGaugeSize.Value
-    sliGaugeSize.Value = Val(PzGGaugeSize)
+    sliGaugeSize.Value = Val(gblGaugeSize)
     If sliGaugeSize.Value <> sliGaugeSizeOldValue Then
         btnSave.Visible = True
     End If
     
-    cmbScrollWheelDirection.ListIndex = Val(PzGScrollWheelDirection)
-    chkEnableTooltips.Value = Val(PzGEnableTooltips)
-    chkEnableBalloonTooltips.Value = Val(PzGEnableBalloonTooltips)
-    chkShowTaskbar.Value = Val(PzGShowTaskbar)
-    chkDpiAwareness.Value = Val(PzGDpiAwareness)
+    cmbScrollWheelDirection.ListIndex = Val(gblScrollWheelDirection)
+    chkEnableTooltips.Value = Val(gblEnableTooltips)
+    chkEnableBalloonTooltips.Value = Val(gblEnableBalloonTooltips)
+    chkShowTaskbar.Value = Val(gblShowTaskbar)
+    chkDpiAwareness.Value = Val(gblDpiAwareness)
     
-    chkEnablePrefsTooltips.Value = Val(PzGEnablePrefsTooltips)
+    chkEnablePrefsTooltips.Value = Val(gblEnablePrefsTooltips)
     
     ' sounds tab
-    chkEnableSounds.Value = Val(PzGEnableSounds)
+    chkEnableSounds.Value = Val(gblEnableSounds)
     
     ' development
-    cmbDebug.ListIndex = Val(PzGDebug)
-    txtDblClickCommand.Text = PzGDblClickCommand
-    txtOpenFile.Text = PzGOpenFile
-    txtDefaultEditor.Text = PzGDefaultEditor
+    cmbDebug.ListIndex = Val(gblDebug)
+    txtDblClickCommand.Text = gblDblClickCommand
+    txtOpenFile.Text = gblOpenFile
+    txtDefaultEditor.Text = gblDefaultEditor
     lblGitHub.Caption = "You can find the code for the Panzer StopWatch Clock on github, visit by double-clicking this link https://github.com/yereverluvinunclebert/ Panzer-StopWatch-Clock-VB6"
      
      ' fonts tab
-    If PzGPrefsFont <> vbNullString Then
-        txtPrefsFont.Text = PzGPrefsFont
-        If PzGDpiAwareness = "1" Then
-            Call changeFormFont(panzerPrefs, PzGPrefsFont, Val(PzGPrefsFontSizeHighDPI), fntWeight, fntStyle, PzGPrefsFontItalics, PzGPrefsFontColour)
-            txtPrefsFontSize.Text = PzGPrefsFontSizeHighDPI
+    If gblPrefsFont <> vbNullString Then
+        txtPrefsFont.Text = gblPrefsFont
+        If gblDpiAwareness = "1" Then
+            Call changeFormFont(panzerPrefs, gblPrefsFont, Val(gblPrefsFontSizeHighDPI), fntWeight, fntStyle, gblPrefsFontItalics, gblPrefsFontColour)
+            txtPrefsFontSize.Text = gblPrefsFontSizeHighDPI
         Else
-            Call changeFormFont(panzerPrefs, PzGPrefsFont, Val(PzGPrefsFontSizeLowDPI), fntWeight, fntStyle, PzGPrefsFontItalics, PzGPrefsFontColour)
-            txtPrefsFontSize.Text = PzGPrefsFontSizeLowDPI
+            Call changeFormFont(panzerPrefs, gblPrefsFont, Val(gblPrefsFontSizeLowDPI), fntWeight, fntStyle, gblPrefsFontItalics, gblPrefsFontColour)
+            txtPrefsFontSize.Text = gblPrefsFontSizeLowDPI
         End If
     End If
     
     
     ' position tab
-    cmbAspectHidden.ListIndex = Val(PzGAspectHidden)
-    cmbWidgetPosition.ListIndex = Val(PzGWidgetPosition)
+    cmbAspectHidden.ListIndex = Val(gblAspectHidden)
+    cmbWidgetPosition.ListIndex = Val(gblWidgetPosition)
         
-    If PzGPreventDragging = "1" Then
+    If gblPreventDragging = "1" Then
         If aspectRatio = "landscape" Then
 '            txtLandscapeHoffset.Text = fAlpha.gaugeForm.Left
 '            txtLandscapeVoffset.Text = fAlpha.gaugeForm.Top
-            If PzGDpiAwareness = "1" Then
-                txtLandscapeHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGClockHighDpiXPos & "px"
-                txtLandscapeVoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGClockHighDpiYPos & "px"
+            If gblDpiAwareness = "1" Then
+                txtLandscapeHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & gblClockHighDpiXPos & "px"
+                txtLandscapeVoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & gblClockHighDpiYPos & "px"
             Else
-                txtLandscapeHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGClockLowDpiXPos & "px"
-                txtLandscapeVoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGClockLowDpiYPos & "px"
+                txtLandscapeHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & gblClockLowDpiXPos & "px"
+                txtLandscapeVoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & gblClockLowDpiYPos & "px"
             End If
         Else
 '            txtPortraitHoffset.Text = fAlpha.gaugeForm.Left
 '            txtPortraitYoffset.Text = fAlpha.gaugeForm.Top
-            If PzGDpiAwareness = "1" Then
-                txtPortraitHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGClockHighDpiXPos & "px"
-                txtPortraitYoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGClockHighDpiYPos & "px"
+            If gblDpiAwareness = "1" Then
+                txtPortraitHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & gblClockHighDpiXPos & "px"
+                txtPortraitYoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & gblClockHighDpiYPos & "px"
             Else
-                txtPortraitHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & PzGClockLowDpiXPos & "px"
-                txtPortraitYoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & PzGClockLowDpiYPos & "px"
+                txtPortraitHoffset.ToolTipText = "Last Sampled Form X Horizontal Position : " & gblClockLowDpiXPos & "px"
+                txtPortraitYoffset.ToolTipText = "Last Sampled Form Y Vertical Position : " & gblClockLowDpiYPos & "px"
             End If
         End If
     End If
     
     'cmbWidgetLandscape
-    cmbWidgetLandscape.ListIndex = Val(PzGWidgetLandscape)
-    cmbWidgetPortrait.ListIndex = Val(PzGWidgetPortrait)
-    txtLandscapeHoffset.Text = PzGLandscapeFormHoffset
-    txtLandscapeVoffset.Text = PzGLandscapeFormVoffset
-    txtPortraitHoffset.Text = PzGPortraitHoffset
-    txtPortraitYoffset.Text = PzGPortraitYoffset
+    cmbWidgetLandscape.ListIndex = Val(gblWidgetLandscape)
+    cmbWidgetPortrait.ListIndex = Val(gblWidgetPortrait)
+    txtLandscapeHoffset.Text = gblLandscapeFormHoffset
+    txtLandscapeVoffset.Text = gblLandscapeFormVoffset
+    txtPortraitHoffset.Text = gblPortraitHoffset
+    txtPortraitYoffset.Text = gblPortraitYoffset
 
     ' Windows tab
-    cmbWindowLevel.ListIndex = Val(PzGWindowLevel)
-    chkIgnoreMouse.Value = Val(PzGIgnoreMouse)
-    chkPreventDragging.Value = Val(PzGPreventDragging)
-    sliOpacity.Value = Val(PzGOpacity)
-    chkWidgetHidden.Value = Val(PzGWidgetHidden)
-    cmbHidingTime.ListIndex = Val(PzGHidingTime)
+    cmbWindowLevel.ListIndex = Val(gblWindowLevel)
+    chkIgnoreMouse.Value = Val(gblIgnoreMouse)
+    chkPreventDragging.Value = Val(gblPreventDragging)
+    sliOpacity.Value = Val(gblOpacity)
+    chkWidgetHidden.Value = Val(gblWidgetHidden)
+    cmbHidingTime.ListIndex = Val(gblHidingTime)
         
    On Error GoTo 0
    Exit Sub
@@ -4006,10 +4006,10 @@ Private Sub Form_Resize()
     
     If prefsDynamicSizingFlg = True Then
         
-        If PzGDpiAwareness = "1" Then
-            currentFont = PzGPrefsFontSizeHighDPI
+        If gblDpiAwareness = "1" Then
+            currentFont = gblPrefsFontSizeHighDPI
         Else
-            currentFont = PzGPrefsFontSizeLowDPI
+            currentFont = gblPrefsFontSizeLowDPI
         End If
         Call resizeControls(Me, prefsControlPositions(), prefsCurrentWidth, prefsCurrentHeight, currentFont)
         Call tweakPrefsControlPositions(Me, prefsCurrentWidth, prefsCurrentHeight)
@@ -4110,7 +4110,7 @@ End Sub
 Private Sub Form_Unload(Cancel As Integer)
    On Error GoTo Form_Unload_Error
 
-    PzGPrefsLoadedFlg = False
+    gblPrefsLoadedFlg = False
     
     Call writePrefsPosition
     
@@ -4134,7 +4134,7 @@ Private Sub fraAbout_MouseDown(Button As Integer, Shift As Integer, x As Single,
 End Sub
 Private Sub fraAbout_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     fraScrollbarCover.Visible = True
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraAbout.hwnd, "The About tab tells you all about this program and its creation using VB6.", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip fraAbout.hwnd, "The About tab tells you all about this program and its creation using VB6.", _
                   TTIconInfo, "Help on the About Tab", , , , True
 End Sub
 Private Sub fraConfigInner_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -4143,7 +4143,7 @@ Private Sub fraConfigInner_MouseDown(Button As Integer, Shift As Integer, x As S
     End If
 End Sub
 Private Sub fraConfigInner_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraConfigInner.hwnd, "The configuration panel is the location for optional configuration items. These items change how Pz Earth operates, configure them to suit your needs and your mode of operation.", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip fraConfigInner.hwnd, "The configuration panel is the location for optional configuration items. These items change how Pz Earth operates, configure them to suit your needs and your mode of operation.", _
                   TTIconInfo, "Help on Configuration", , , , True
 
 End Sub
@@ -4153,7 +4153,7 @@ Private Sub fraConfig_MouseDown(Button As Integer, Shift As Integer, x As Single
     End If
 End Sub
 Private Sub fraConfig_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraConfig.hwnd, "The configuration panel is the location for optional configuration items. These items change how Pz Earth operates, configure them to suit your needs and your mode of operation.", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip fraConfig.hwnd, "The configuration panel is the location for optional configuration items. These items change how Pz Earth operates, configure them to suit your needs and your mode of operation.", _
                   TTIconInfo, "Help on Configuration", , , , True
 
 End Sub
@@ -4168,7 +4168,7 @@ Private Sub fraDevelopment_MouseDown(Button As Integer, Shift As Integer, x As S
     End If
 End Sub
 Private Sub fraDevelopment_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraDevelopment.hwnd, "This tab contains elements that will assist in debugging and developing this program further. ", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip fraDevelopment.hwnd, "This tab contains elements that will assist in debugging and developing this program further. ", _
                   TTIconInfo, "Help on the Development Tab", , , , True
 End Sub
 
@@ -4179,12 +4179,12 @@ Private Sub fraDevelopmentInner_MouseDown(Button As Integer, Shift As Integer, x
     End If
 End Sub
 Private Sub fraDevelopmentInner_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraDevelopmentInner.hwnd, "This tab contains elements that will assist in debugging and developing this program further. ", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip fraDevelopmentInner.hwnd, "This tab contains elements that will assist in debugging and developing this program further. ", _
                   TTIconInfo, "Help on the Development Tab", , , , True
 
 End Sub
 Private Sub fraFonts_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraFonts.hwnd, "This tab allows you to set a specific font for the preferences only as there are no textual elements in the main program. We suggest Centurion Light SF at 8pt, which you will find bundled in the PzG program folder. Choose a small 8pt font for each.", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip fraFonts.hwnd, "This tab allows you to set a specific font for the preferences only as there are no textual elements in the main program. We suggest Centurion Light SF at 8pt, which you will find bundled in the gbl program folder. Choose a small 8pt font for each.", _
                   TTIconInfo, "Help on Setting the Fonts", , , , True
 
 End Sub
@@ -4194,7 +4194,7 @@ Private Sub fraFontsInner_MouseDown(Button As Integer, Shift As Integer, x As Si
     End If
 End Sub
 Private Sub fraFontsInner_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraFontsInner.hwnd, "This tab allows you to set a specific font for the preferences only as there are no textual elements in the main program. We suggest Centurion Light SF at 8pt, which you will find bundled in the PzG program folder. Choose a small 8pt font for each.", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip fraFontsInner.hwnd, "This tab allows you to set a specific font for the preferences only as there are no textual elements in the main program. We suggest Centurion Light SF at 8pt, which you will find bundled in the gbl program folder. Choose a small 8pt font for each.", _
                   TTIconInfo, "Help on Setting the Fonts", , , , True
 End Sub
 'Private Sub fraConfigurationButtonInner_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -4208,7 +4208,7 @@ Private Sub fraGeneral_MouseDown(Button As Integer, Shift As Integer, x As Singl
     End If
 End Sub
 Private Sub fraGeneral_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraGeneral.hwnd, "The General Panel contains the most important user-configurable items required for the program to operate correctly.", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip fraGeneral.hwnd, "The General Panel contains the most important user-configurable items required for the program to operate correctly.", _
                   TTIconInfo, "Help on Essential Configuration", , , , True
 End Sub
 
@@ -4218,12 +4218,12 @@ Private Sub fraGeneralInner_MouseDown(Button As Integer, Shift As Integer, x As 
     End If
 End Sub
 Private Sub fraGeneralInner_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraGeneralInner.hwnd, "The General Panel contains the most important user-configurable items required for the program to operate correctly.", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip fraGeneralInner.hwnd, "The General Panel contains the most important user-configurable items required for the program to operate correctly.", _
                   TTIconInfo, "Help on Essential Configuration", , , , True
 End Sub
 
 Private Sub fraPosition_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-     If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraPosition.hwnd, "This tab allows you to determine the X and Y positioning of your widget in landscape and portrait screen modes. Best left well alone unless you use Windows on a tablet.", _
+     If gblEnableBalloonTooltips = "1" Then CreateToolTip fraPosition.hwnd, "This tab allows you to determine the X and Y positioning of your widget in landscape and portrait screen modes. Best left well alone unless you use Windows on a tablet.", _
                   TTIconInfo, "Help on Tablet Positioning", , , , True
 End Sub
 Private Sub fraPositionInner_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -4232,7 +4232,7 @@ Private Sub fraPositionInner_MouseDown(Button As Integer, Shift As Integer, x As
     End If
 End Sub
 Private Sub fraPositionInner_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraPositionInner.hwnd, "This tab allows you to determine the X and Y positioning of your widget in landscape and portrait screen modes. Best left well alone unless you use Windows on a tablet.", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip fraPositionInner.hwnd, "This tab allows you to determine the X and Y positioning of your widget in landscape and portrait screen modes. Best left well alone unless you use Windows on a tablet.", _
                   TTIconInfo, "Help on Tablet Positioning", , , , True
 End Sub
 
@@ -4246,7 +4246,7 @@ Private Sub fraSounds_MouseDown(Button As Integer, Shift As Integer, x As Single
     End If
 End Sub
 Private Sub fraSounds_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
- If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraSounds.hwnd, "The sound panel allows you to configure the sounds that occur within PzG. Some of the animations have associated sounds, you can control these here..", _
+ If gblEnableBalloonTooltips = "1" Then CreateToolTip fraSounds.hwnd, "The sound panel allows you to configure the sounds that occur within gbl. Some of the animations have associated sounds, you can control these here..", _
                   TTIconInfo, "Help on Configuring Sounds", , , , True
 End Sub
 Private Sub fraSoundsInner_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -4255,7 +4255,7 @@ Private Sub fraSoundsInner_MouseDown(Button As Integer, Shift As Integer, x As S
     End If
 End Sub
 Private Sub fraSoundsInner_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-     If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraSoundsInner.hwnd, "The sound panel allows you to configure the sounds that occur within PzG. Some of the animations have associated sounds, you can control these here..", _
+     If gblEnableBalloonTooltips = "1" Then CreateToolTip fraSoundsInner.hwnd, "The sound panel allows you to configure the sounds that occur within gbl. Some of the animations have associated sounds, you can control these here..", _
                   TTIconInfo, "Help on Configuring Sounds", , , , True
 End Sub
 
@@ -4265,7 +4265,7 @@ Private Sub fraWindow_MouseDown(Button As Integer, Shift As Integer, x As Single
     End If
 End Sub
 Private Sub fraWindow_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-     If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraWindow.hwnd, "The Opacity and Window Level of the program are rather strange characteristics to change in a Windows program, however this widget is a copy of a Yahoo Widget of the same name. All widgets have similar window tab options including the capability to change the opacity and window level. Whether these options are useful to you or anyone is a moot point but as this tool aims to replicate the YWE version functionality it has been reproduced here. It is here as more of an experiment as to how to implement a feature, one carried over from the Yahoo Widget (javascript) version of this program.", _
+     If gblEnableBalloonTooltips = "1" Then CreateToolTip fraWindow.hwnd, "The Opacity and Window Level of the program are rather strange characteristics to change in a Windows program, however this widget is a copy of a Yahoo Widget of the same name. All widgets have similar window tab options including the capability to change the opacity and window level. Whether these options are useful to you or anyone is a moot point but as this tool aims to replicate the YWE version functionality it has been reproduced here. It is here as more of an experiment as to how to implement a feature, one carried over from the Yahoo Widget (javascript) version of this program.", _
                   TTIconInfo, "Help on YWE Quirk Mode Options", , , , True
 End Sub
 Private Sub fraWindowInner_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -4274,7 +4274,7 @@ Private Sub fraWindowInner_MouseDown(Button As Integer, Shift As Integer, x As S
     End If
 End Sub
 Private Sub fraWindowInner_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-     If PzGEnableBalloonTooltips = "1" Then CreateToolTip fraWindowInner.hwnd, "The Opacity and Window Level of the program are rather strange characteristics to change in a Windows program, however this widget is a copy of a Yahoo Widget of the same name. All widgets have similar window tab options including the capability to change the opacity and window level. Whether these options are useful to you or anyone is a moot point but as this tool aims to replicate the YWE version functionality it has been reproduced here. It is here as more of an experiment as to how to implement a feature, one carried over from the Yahoo Widget (javascript) version of this program.", _
+     If gblEnableBalloonTooltips = "1" Then CreateToolTip fraWindowInner.hwnd, "The Opacity and Window Level of the program are rather strange characteristics to change in a Windows program, however this widget is a copy of a Yahoo Widget of the same name. All widgets have similar window tab options including the capability to change the opacity and window level. Whether these options are useful to you or anyone is a moot point but as this tool aims to replicate the YWE version functionality it has been reproduced here. It is here as more of an experiment as to how to implement a feature, one carried over from the Yahoo Widget (javascript) version of this program.", _
                   TTIconInfo, "Help on YWE Quirk Mode Options", , , , True
 End Sub
 
@@ -4481,9 +4481,9 @@ Private Sub sliOpacity_Click()
     btnSave.Enabled = True ' enable the save button
 
     If prefsStartupFlg = False Then
-        PzGOpacity = LTrim$(Str$(sliOpacity.Value))
+        gblOpacity = LTrim$(Str$(sliOpacity.Value))
     
-        sPutINISetting "Software\PzStopWatch", "opacity", PzGOpacity, PzGSettingsFile
+        sPutINISetting "Software\PzStopWatch", "opacity", gblOpacity, gblSettingsFile
         
         'Call setOpacity(sliOpacity.Value) ' this works but reveals the background form itself
         
@@ -4553,7 +4553,7 @@ End Sub
 
 
 Private Sub txtMainBias_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip txtMainBias.hwnd, "This field displays the current total bias that will be applied to the current time based upon the timezone and daylight savings selection made, (read only). ", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip txtMainBias.hwnd, "This field displays the current total bias that will be applied to the current time based upon the timezone and daylight savings selection made, (read only). ", _
                   TTIconInfo, "Help on the bias field.", , , , True
 End Sub
 
@@ -4891,8 +4891,8 @@ Private Sub picButtonMouseUpEvent(ByVal thisTabName As String, ByRef thisPicName
     
     Call clearBorderStyle
 
-    PzGLastSelectedTab = thisTabName
-    sPutINISetting "Software\PzStopWatch", "lastSelectedTab", PzGLastSelectedTab, PzGSettingsFile
+    gblLastSelectedTab = thisTabName
+    sPutINISetting "Software\PzStopWatch", "lastSelectedTab", gblLastSelectedTab, gblSettingsFile
 
     thisFraName.Visible = True
     thisFraButtonName.BorderStyle = 1
@@ -4900,7 +4900,7 @@ Private Sub picButtonMouseUpEvent(ByVal thisTabName As String, ByRef thisPicName
     ' Get the form's current scale factors.
     y_scale = Me.ScaleHeight / prefsCurrentHeight
     
-    If PzGDpiAwareness = "1" Then
+    If gblDpiAwareness = "1" Then
         btnHelp.Top = fraGeneral.Top + fraGeneral.Height + (200 * y_scale)
     Else
         btnHelp.Top = thisFraName.Top + thisFraName.Height + (200 * y_scale)
@@ -4930,7 +4930,7 @@ Private Sub picButtonMouseUpEvent(ByVal thisTabName As String, ByRef thisPicName
         Me.Height = lastFormHeight
     End If
     
-    If PzGDpiAwareness = "0" Then
+    If gblDpiAwareness = "0" Then
         If thisTabName = "about" Then
             lblAsterix.Visible = False
             chkEnableResizing.Visible = True
@@ -5177,7 +5177,7 @@ Private Sub mnuDark_Click()
     mnuLight.Caption = "Light Theme Enable"
     themeTimer.Enabled = False
     
-    PzGSkinTheme = "dark"
+    gblSkinTheme = "dark"
 
     Call setThemeShade(212, 208, 199)
 
@@ -5206,7 +5206,7 @@ Private Sub mnuLight_Click()
     mnuLight.Caption = "Light Theme Enabled"
     themeTimer.Enabled = False
     
-    PzGSkinTheme = "light"
+    gblSkinTheme = "light"
 
     Call setThemeShade(240, 240, 240)
 
@@ -5269,7 +5269,7 @@ Private Sub setThemeShade(ByVal redC As Integer, ByVal greenC As Integer, ByVal 
     sliOpacity.BackColor = RGB(redC, greenC, blueC)
     txtAboutText.BackColor = RGB(redC, greenC, blueC)
     
-    sPutINISetting "Software\PzStopWatch", "skinTheme", PzGSkinTheme, PzGSettingsFile
+    sPutINISetting "Software\PzStopWatch", "skinTheme", gblSkinTheme, gblSettingsFile
 
     On Error GoTo 0
     Exit Sub
@@ -5307,7 +5307,7 @@ Private Sub setThemeColour()
         'set themed buttons to none
         Call setThemeShade(212, 208, 199)
         SysClr = GetSysColor(COLOR_BTNFACE)
-        PzGSkinTheme = "dark"
+        gblSkinTheme = "dark"
         
         mnuDark.Caption = "Dark Theme Enabled"
         mnuLight.Caption = "Light Theme Enable"
@@ -5337,8 +5337,8 @@ End Sub
 Private Sub adjustPrefsTheme()
    On Error GoTo adjustPrefsTheme_Error
 
-    If PzGSkinTheme <> vbNullString Then
-        If PzGSkinTheme = "dark" Then
+    If gblSkinTheme <> vbNullString Then
+        If gblSkinTheme = "dark" Then
             Call setThemeShade(212, 208, 199)
         Else
             Call setThemeShade(240, 240, 240)
@@ -5348,7 +5348,7 @@ Private Sub adjustPrefsTheme()
             mnuAuto.Caption = "Auto Theme Enabled - Click to Disable"
             themeTimer.Enabled = True
         Else
-            PzGSkinTheme = "light"
+            gblSkinTheme = "light"
             Call setModernThemeColours
         End If
     End If
@@ -5381,10 +5381,10 @@ Private Sub setModernThemeColours()
     SysClr = GetSysColor(COLOR_BTNFACE)
     If SysClr = 13160660 Then
         Call setThemeShade(212, 208, 199)
-        PzGSkinTheme = "dark"
+        gblSkinTheme = "dark"
     Else ' 15790320
         Call setThemeShade(240, 240, 240)
-        PzGSkinTheme = "light"
+        gblSkinTheme = "light"
     End If
 
    On Error GoTo 0
@@ -5487,7 +5487,7 @@ chkEnableResizing_Click_Error:
 End Sub
 
 Private Sub chkEnableResizing_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip chkEnableResizing.hwnd, "This allows you to resize the whole prefs window by dragging the bottom right corner of the window. It provides an alternative method of supporting high DPI screens.", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip chkEnableResizing.hwnd, "This allows you to resize the whole prefs window by dragging the bottom right corner of the window. It provides an alternative method of supporting high DPI screens.", _
                   TTIconInfo, "Help on Resizing", , , , True
 End Sub
  
@@ -5521,7 +5521,7 @@ Private Sub setframeHeights()
         fraDevelopment.Width = fraAbout.Width
         fraWindow.Width = fraAbout.Width
     
-        'If PzGDpiAwareness = "1" Then
+        'If gblDpiAwareness = "1" Then
             ' save the initial positions of ALL the controls on the prefs form
             Call SaveSizes(panzerPrefs, prefsControlPositions(), prefsCurrentWidth, prefsCurrentHeight)
         'End If
@@ -5652,7 +5652,7 @@ setPrefsIconImagesLight_Error:
 End Sub
 
 Private Sub txtPrefsFontCurrentSize_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    If PzGEnableBalloonTooltips = "1" Then CreateToolTip txtPrefsFontCurrentSize.hwnd, "This is a read-only text box. It displays the current font as set when dynamic form resizing is enabled. Drag the right hand corner of the window downward and the form will auto-resize. This text box will display the resized font currently in operation for informational purposes only.", _
+    If gblEnableBalloonTooltips = "1" Then CreateToolTip txtPrefsFontCurrentSize.hwnd, "This is a read-only text box. It displays the current font as set when dynamic form resizing is enabled. Drag the right hand corner of the window downward and the form will auto-resize. This text box will display the resized font currently in operation for informational purposes only.", _
                   TTIconInfo, "Help on Setting the Font size Dynamically", , , , True
 End Sub
 
@@ -6088,11 +6088,11 @@ Public Sub setPrefsFormZordering()
 
    On Error GoTo setPrefsFormZordering_Error
 
-'    If Val(PzGWindowLevel) = 0 Then
+'    If Val(gblWindowLevel) = 0 Then
 '        Call SetWindowPos(Me.hwnd, HWND_BOTTOM, 0&, 0&, 0&, 0&, OnTopFlags)
-'    ElseIf Val(PzGWindowLevel) = 1 Then
+'    ElseIf Val(gblWindowLevel) = 1 Then
 '        Call SetWindowPos(Me.hwnd, HWND_TOP, 0&, 0&, 0&, 0&, OnTopFlags)
-'    ElseIf Val(PzGWindowLevel) = 2 Then
+'    ElseIf Val(gblWindowLevel) = 2 Then
 '        Call SetWindowPos(Me.hwnd, HWND_TOPMOST, 0&, 0&, 0&, 0&, OnTopFlags)
 '    End If
 

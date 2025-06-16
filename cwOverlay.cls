@@ -676,7 +676,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     W.FontBold = True
     W.SelectFontSettingsInto CC
     W.Refresh
-    thisOpacity = (Val(PzGOpacity) / 100) * 0.75
+    thisOpacity = (Val(gblOpacity) / 100) * 0.75
     
     storeTxtDayNumber = txtDayNumber
     txtDayNumber = Day(DateAdd("m", tzDelta, Now))
@@ -824,12 +824,12 @@ Private Sub tmrClock_Timer()
     GetSystemTime currentLocaltime ' API
     
     ' every 15 mins approx. update DaylightSavings and determine the time bias
-    If PzGMainDaylightSaving <> "0" Then
+    If gblMainDaylightSaving <> "0" Then
         If (Minute(T) Mod 15 = 0) And (Second(T) = 0) And (currentLocaltime.wMilliseconds < 100) Then
-            If PzGMainDaylightSaving <> "0" Then
+            If gblMainDaylightSaving <> "0" Then
                  tzDelta = fObtainDaylightSavings("Main") ' determine the time bias
             End If
-            If PzGSecondaryDaylightSaving <> "0" Then
+            If gblSecondaryDaylightSaving <> "0" Then
                  tzDelta1 = fObtainDaylightSavings("Secondary") ' determine the time bias
             End If
         End If

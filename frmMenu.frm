@@ -208,7 +208,7 @@ Private Sub mnuEditWidget_Click()
     
    On Error GoTo mnuEditWidget_Click_Error
 
-    editorPath = PzGDefaultEditor
+    editorPath = gblDefaultEditor
     If fFExists(editorPath) Then ' if it is a folder already
         '''If debugflg = 1  Then msgBox "ShellExecute " & sCommand
         
@@ -298,9 +298,9 @@ Private Sub mnuHideWidget_Click()
     'overlayWidget.Hidden = True
     fAlpha.gaugeForm.Visible = False
     frmTimer.revealWidgetTimer.Enabled = True
-    PzGWidgetHidden = "1"
+    gblWidgetHidden = "1"
     ' we have to save the value here
-    sPutINISetting "Software\PzStopWatch", "widgetHidden", PzGWidgetHidden, PzGSettingsFile
+    sPutINISetting "Software\PzStopWatch", "widgetHidden", gblWidgetHidden, gblSettingsFile
 
    On Error GoTo 0
    Exit Sub

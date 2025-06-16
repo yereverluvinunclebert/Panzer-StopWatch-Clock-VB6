@@ -97,14 +97,14 @@ Public Sub InitFromPSD(ByRef PSD_FileNameOrByteArray As Variant)
                     If collPSDNonUIElements.Exists(.LayerPath(I)) Then ' we do not create Widgets for those in this exclude list.
                         
                         'we add layer info. (used in cwOverlay) to the "excluded paths" previously defined in Sub Main,
-                        collPSDNonUIElements(.LayerPath(I)) = Array(.LayerX(I), .LayerY(I), Val(PzGOpacity) / 100)  'here we update the so far empty slots with the PSD-offsets
+                        collPSDNonUIElements(.LayerPath(I)) = Array(.LayerX(I), .LayerY(I), Val(gblOpacity) / 100)  'here we update the so far empty slots with the PSD-offsets
                 
                     Else 'everything not in the exclude-list will get its own Widget-instance
                         Set W = gaugeForm.Widgets.Add(New cwAlphaImg, LCase$(.LayerPath(I)), .LayerX(I), .LayerY(I), .LayerWidth(I), .LayerHeight(I)).Widget
                         'Set W = gaugeForm.Widgets.Add(New_W("cwAlphaImg"), LCase$(.LayerPath(I)), .LayerX(I), .LayerY(I), .LayerWidth(I), .LayerHeight(I)).Widget
                             W.ImageKey = W.Key 'W.Key equals ImageList-Key, set above - and LayerPath(i) at this point ... set it also as the ImageKey of our new created Widget
-                        If PzGOpacity < 1 Then
-                            W.Alpha = Val(PzGOpacity) / 100
+                        If gblOpacity < 1 Then
+                            W.Alpha = Val(gblOpacity) / 100
                         Else
                             W.Alpha = 1
                         End If
@@ -116,7 +116,7 @@ Public Sub InitFromPSD(ByRef PSD_FileNameOrByteArray As Variant)
                         
                         ' all non-clickable Layer-Widgets will be -1 or "non-hoverable" and "fully click-through"
                         W.HoverColor = -1 ' task: might change this later when new ver or RC6 arrives
-                        If PzGEnableTooltips = "1" Then W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
+                        If gblEnableTooltips = "1" Then W.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
                         W.MousePointer = IDC_SIZEALL
 
                     End If
@@ -148,31 +148,31 @@ End Sub
 Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As String, ByRef P1 As Variant, ByRef P2 As Variant, ByRef P3 As Variant, ByRef P4 As Variant, ByRef P5 As Variant, ByRef P6 As Variant, ByRef P7 As Variant)
    On Error GoTo gaugeForm_BubblingEvent_Error
 
-    If PzGIgnoreMouse = "1" Then Exit Sub
+    If gblIgnoreMouse = "1" Then Exit Sub
     
     If EventName = "W_MouseMove" Then
         Select Case LCase$(Sender.Widget.Key)
             Case "housing/lockbutton"
-                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click me to lock the widget in place. This lock can be released by clicking again on the lock button, or in the preferences. A locking sound will denote the button's operation.", _
+                If gblEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click me to lock the widget in place. This lock can be released by clicking again on the lock button, or in the preferences. A locking sound will denote the button's operation.", _
                      TTIconInfo, widgetName & " Lock Button Help", , , , True
             Case "housing/prefsbutton"
-                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click me to open the preferences utility. The configuration of the widget is performed using the preference utility.", _
+                If gblEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click me to open the preferences utility. The configuration of the widget is performed using the preference utility.", _
                      TTIconInfo, widgetName & " Prefs Button Help", , , , True
             Case "housing/tickbutton"
-                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click here to toggle the tick type from once per second to a more fluid, continuous movement.", _
+                If gblEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click here to toggle the tick type from once per second to a more fluid, continuous movement.", _
                      TTIconInfo, widgetName & " Tick Button Help", , , , True
             Case "housing/switchfacesbutton"
-                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button switches the face from the standard clock to the stopwatch and vice versa.", _
+                If gblEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button switches the face from the standard clock to the stopwatch and vice versa.", _
                      TTIconInfo, widgetName & " Switch Faces Button Help", , , , True
             Case "housing/stopbutton"
                 Call stopbutton_mouseMove(Sender)
             Case "housing/startbutton"
                 Call startbutton_mouseMove(Sender)
             Case "housing/helpbutton"
-                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button opens the one-page help file for this widget. There is a further detailed CHM help file available from the right-click menu that contains all the information that you need to run this widget.", _
+                If gblEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "This button opens the one-page help file for this widget. There is a further detailed CHM help file available from the right-click menu that contains all the information that you need to run this widget.", _
                      TTIconInfo, widgetName & " Help Button Help", , , , True
             Case Else
-                If PzGEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Right Click to open the menu and the preferences. CTRL+ Mouse scrollwheel UP/DOWN to resize. " _
+                If gblEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Right Click to open the menu and the preferences. CTRL+ Mouse scrollwheel UP/DOWN to resize. " _
                     & vbCrLf & "You can turn off the balloon tooltips in the preferences.", _
                     TTIconInfo, widgetName & " Configuration Help", , , , True
         End Select
@@ -237,8 +237,8 @@ End Sub
 Private Sub startbutton_mouseMove(ByRef Sender As Object)
     On Error GoTo startbutton_mouseMove_Error
 
-    If PzGEnableBalloonTooltips = "1" Then
-        If PzGClockFaceSwitchPref = "1" Then
+    If gblEnableBalloonTooltips = "1" Then
+        If gblClockFaceSwitchPref = "1" Then
             CreateToolTip gaugeForm.hwnd, "Clock mode, this button restarts all stopped clock functions for this widget, hand movement &c .", _
                 TTIconInfo, widgetName & " Start Button Help", , , , True
         Else
@@ -281,8 +281,8 @@ End Sub
 Private Sub stopbutton_mouseMove(ByRef Sender As Object)
     On Error GoTo stopbutton_mouseMove_Error
 
-    If PzGEnableBalloonTooltips = "1" Then
-        If PzGClockFaceSwitchPref = "1" Then
+    If gblEnableBalloonTooltips = "1" Then
+        If gblClockFaceSwitchPref = "1" Then
             CreateToolTip gaugeForm.hwnd, "Clock mode, this button stops all animated clock functions for this widget, hand movements &c .", _
                 TTIconInfo, widgetName & " Stop Button Help", , , , True
         Else
@@ -362,7 +362,7 @@ Private Sub startbutton_click()
     rotationTime = 1100 ' ms
     rotationSWIntervalMax = 20 ' ms
     
-    If PzGClockFaceSwitchPref = "1" Then
+    If gblClockFaceSwitchPref = "1" Then
         ' if in clock mode just enable the ticking
         Call TurnFunctionsOn
     Else
@@ -412,7 +412,7 @@ Private Sub startbutton_click()
                 
                 overlayWidget.StopWatchTicking = False
                 
-                If PzGEnableSounds = "1" Then
+                If gblEnableSounds = "1" Then
                     fileToPlay = "counter.wav"
                     If fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
                         PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
@@ -434,7 +434,7 @@ Private Sub startbutton_click()
         End Select
     End If
     
-    If PzGEnableSounds = "1" Then
+    If gblEnableSounds = "1" Then
         If playCounterTing = True Then
             fileToPlay = "counterTing.wav"
             If fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
@@ -480,10 +480,10 @@ Private Sub stopbutton_mouseUp(ByRef Sender As Object)
     
     On Error GoTo stopbutton_mouseUp_Error
 
-    Sender.Widget.Alpha = Val(PzGOpacity) / 100
+    Sender.Widget.Alpha = Val(gblOpacity) / 100
     Sender.Widget.Refresh
         
-    If PzGEnableSounds = "1" Then
+    If gblEnableSounds = "1" Then
         If gblStopWatchState = 0 Then
             fileToPlay = "stop.wav"
         Else
@@ -495,7 +495,7 @@ Private Sub stopbutton_mouseUp(ByRef Sender As Object)
         End If
     End If
     
-    If PzGClockFaceSwitchPref = "1" Then
+    If gblClockFaceSwitchPref = "1" Then
         ' if in clock mode just switch off
         Call SwitchOff
     Else
@@ -507,7 +507,7 @@ Private Sub stopbutton_mouseUp(ByRef Sender As Object)
      
             overlayWidget.StopWatchTicking = False
             
-            If PzGEnableSounds = "1" Then
+            If gblEnableSounds = "1" Then
                 fileToPlay = "counter.wav"
                 If fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
                     PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
@@ -581,22 +581,22 @@ Private Sub switchfacesbutton_mouseDown(ByRef Sender As Object)
     Sender.Widget.Alpha = 0
     Sender.Widget.Refresh
     
-    If PzGClockFaceSwitchPref = "1" Then
-        PzGClockFaceSwitchPref = "0"
+    If gblClockFaceSwitchPref = "1" Then
+        gblClockFaceSwitchPref = "0"
         overlayWidget.FaceMode = "0"
         gaugeForm.Widgets("clockface").Widget.Alpha = 0
-        gaugeForm.Widgets("stopwatchface").Widget.Alpha = Val(PzGOpacity) / 100
+        gaugeForm.Widgets("stopwatchface").Widget.Alpha = Val(gblOpacity) / 100
         gaugeForm.Widgets("stopwatchface").Widget.Refresh
     Else
-        PzGClockFaceSwitchPref = "1"
+        gblClockFaceSwitchPref = "1"
         overlayWidget.FaceMode = "1"
         gaugeForm.Widgets("stopwatchface").Widget.Alpha = 0
-        gaugeForm.Widgets("clockface").Widget.Alpha = Val(PzGOpacity) / 100
+        gaugeForm.Widgets("clockface").Widget.Alpha = Val(gblOpacity) / 100
         gaugeForm.Widgets("clockface").Widget.Refresh
         gblStopWatchState = 0
     End If
     
-    sPutINISetting "Software\PzStopWatch", "clockFaceSwitchPref", PzGClockFaceSwitchPref, PzGSettingsFile
+    sPutINISetting "Software\PzStopWatch", "clockFaceSwitchPref", gblClockFaceSwitchPref, gblSettingsFile
     
    On Error GoTo 0
    Exit Sub
@@ -617,7 +617,7 @@ End Sub
 Private Sub prefsbutton_mouseUp(ByRef Sender As Object)
     On Error GoTo prefsbutton_mouseUp_Error
 
-    Sender.Widget.Alpha = Val(PzGOpacity) / 100
+    Sender.Widget.Alpha = Val(gblOpacity) / 100
     Sender.Widget.Refresh
 
     On Error GoTo 0
@@ -639,11 +639,11 @@ Private Sub switchfacesbutton_mouseUp(ByRef Sender As Object)
     Dim fileToPlay As String: fileToPlay = vbNullString
     On Error GoTo switchfacesbutton_mouseUp_Error
 
-    Sender.Widget.Alpha = Val(PzGOpacity) / 100
+    Sender.Widget.Alpha = Val(gblOpacity) / 100
     Sender.Widget.Refresh
         
     fileToPlay = "till.wav"
-    If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+    If gblEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
    On Error GoTo 0
@@ -667,7 +667,7 @@ Private Sub lockbutton_mouseDown(ByRef Sender As Object)
     If overlayWidget.Locked = False Then
         Sender.Widget.Alpha = 0
     Else
-        Sender.Widget.Alpha = Val(PzGOpacity) / 100
+        Sender.Widget.Alpha = Val(gblOpacity) / 100
     End If
     Sender.Widget.Refresh ' this removes the delay in the lockButton depressing
     Call lockWidget
@@ -696,7 +696,7 @@ Private Sub prefsbutton_mouseDown(ByRef Sender As Object)
     'Sender.Widget.Visible = False
     Sender.Widget.Refresh ' this removes the delay in the Button depressing
     fileToPlay = "winding.wav"
-    If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+    If gblEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
    'MsgBox "prefsbutton_mouseDown"
@@ -724,22 +724,22 @@ Private Sub tickbutton_mouseDown(ByRef Sender As Object)
         
     If overlayWidget.SmoothSecondHand = True Then
         overlayWidget.SmoothSecondHand = False
-        Sender.Widget.Alpha = Val(PzGOpacity) / 100
-        PzGSmoothSecondHand = "0"
+        Sender.Widget.Alpha = Val(gblOpacity) / 100
+        gblSmoothSecondHand = "0"
     Else
         overlayWidget.SmoothSecondHand = True
         Sender.Widget.Alpha = 0 ' sender is the referring control
-        PzGSmoothSecondHand = "1"
+        gblSmoothSecondHand = "1"
         
     End If
     Sender.Widget.Refresh ' this removes the delay in the Button depressing
     
     fileToPlay = "lock.wav"
-    If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+    If gblEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
     
-    sPutINISetting "Software\PzStopWatch", "smoothSecondHand", PzGSmoothSecondHand, PzGSettingsFile
+    sPutINISetting "Software\PzStopWatch", "smoothSecondHand", gblSmoothSecondHand, gblSettingsFile
     
    On Error GoTo 0
    Exit Sub
@@ -767,11 +767,11 @@ Private Sub gaugeForm_DblClick()
     
     On Error GoTo gaugeForm_DblClick_Error
 
-    '    If PzGIgnoreMouse = "1" Then Exit Sub
+    '    If gblIgnoreMouse = "1" Then Exit Sub
 
-    If LTrim$(PzGDblClickCommand) = vbNullString Then Exit Sub
+    If LTrim$(gblDblClickCommand) = vbNullString Then Exit Sub
     
-    thisCommand = PzGDblClickCommand
+    thisCommand = gblDblClickCommand
         
     If InStr(thisCommand, "%userprofile%") Then
         userprof = Environ$("USERPROFILE")
@@ -786,7 +786,7 @@ Private Sub gaugeForm_DblClick()
     
     If SHIFT_1 = True Then
         SHIFT_1 = False
-        Call ShellExecute(fAlpha.gaugeForm.hwnd, "Open", PzGOpenFile, vbNullString, App.path, 1)
+        Call ShellExecute(fAlpha.gaugeForm.hwnd, "Open", gblOpenFile, vbNullString, App.path, 1)
     Else
         Call ShellExecute(fAlpha.gaugeForm.hwnd, "runas", thisCommand, vbNullString, App.path, 1)
     End If
@@ -863,7 +863,7 @@ Private Sub gaugeForm_MouseMove(ByRef Button As Integer, ByRef Shift As Integer,
    On Error GoTo gaugeForm_MouseMove_Error
     
     If overlayWidget.Locked = True Then Exit Sub
-    If PzGIgnoreMouse = "1" Then Exit Sub
+    If gblIgnoreMouse = "1" Then Exit Sub
 
     If Button = vbLeftButton And Not gaugeForm.ActiveWidget Is Nothing Then 'Form-Dragging (under certain conditions)
 
@@ -893,7 +893,7 @@ Private Sub gaugeForm_MouseWheel(ByVal MouseKeys As Long, ByVal Rotation As Long
    
    On Error GoTo gaugeForm_MouseWheel_Error
 
-    If PzGScrollWheelDirection = "1" Then
+    If gblScrollWheelDirection = "1" Then
         If Rotation > 0 Then
             RotationDirection = 0 - Abs(Rotation)
         Else
@@ -949,8 +949,8 @@ Public Sub AdjustZoom(ByVal NewZoom As Single)
   gaugeForm.Move gaugeForm.Left, gaugeForm.Top, PSDWidth * gaugeForm.WidgetRoot.Zoom, PSDHeight * gaugeForm.WidgetRoot.Zoom
 
   ' when resized from the gauge scroll up/down it needs to write it back so the size is correct when prefs opened.
-  PzGGaugeSize = LTrim$(Str$(NewZoom * 100))
-  If panzerPrefs.IsVisible = True Then panzerPrefs.sliGaugeSize = Val(PzGGaugeSize)
+  gblGaugeSize = LTrim$(Str$(NewZoom * 100))
+  If panzerPrefs.IsVisible = True Then panzerPrefs.sliGaugeSize = Val(gblGaugeSize)
 
     
    On Error GoTo 0
@@ -973,7 +973,7 @@ Private Sub gaugeForm_MouseDown(ByRef Button As Integer, ByRef Shift As Integer,
     If Button = vbRightButton Then
         Call menuForm.PopupMenu(menuForm.mnuMainMenu)
     Else
-        If PzGIgnoreMouse = "1" Then Exit Sub
+        If gblIgnoreMouse = "1" Then Exit Sub
         ' do whatever you want with a mouseDown here, not doing anything at the moment but we will...
     End If
 

@@ -108,7 +108,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     Call getToolSettingsFile
     
     ' read the dock settings from the new configuration file
-    Call readSettingsFile("Software\PzStopWatch", PzGSettingsFile)
+    Call readSettingsFile("Software\PzStopWatch", gblSettingsFile)
     
     ' validate the inputs of any data from the input settings file
     Call validateInputs
@@ -193,12 +193,12 @@ Private Sub checkFirstTime()
 
    On Error GoTo checkFirstTime_Error
 
-    If PzGFirstTimeRun = "true" Then
+    If gblFirstTimeRun = "true" Then
         'MsgBox "checkFirstTime"
 
         Call makeProgramPreferencesAvailable
-        PzGFirstTimeRun = "false"
-        sPutINISetting "Software\PzStopWatch", "firstTimeRun", PzGFirstTimeRun, PzGSettingsFile
+        gblFirstTimeRun = "false"
+        sPutINISetting "Software\PzStopWatch", "firstTimeRun", gblFirstTimeRun, gblSettingsFile
     End If
 
    On Error GoTo 0
@@ -222,78 +222,78 @@ Private Sub initialiseGlobalVars()
     On Error GoTo initialiseGlobalVars_Error
 
     ' general
-    PzGStartup = vbNullString
-    PzGGaugeFunctions = vbNullString
-    PzGSmoothSecondHand = vbNullString
+    gblStartup = vbNullString
+    gblGaugeFunctions = vbNullString
+    gblSmoothSecondHand = vbNullString
 
-    PzGClockFaceSwitchPref = vbNullString
-    PzGMainGaugeTimeZone = vbNullString
-    PzGMainDaylightSaving = vbNullString
-    PzGSecondaryGaugeTimeZone = vbNullString
-    PzGSecondaryDaylightSaving = vbNullString
+    gblClockFaceSwitchPref = vbNullString
+    gblMainGaugeTimeZone = vbNullString
+    gblMainDaylightSaving = vbNullString
+    gblSecondaryGaugeTimeZone = vbNullString
+    gblSecondaryDaylightSaving = vbNullString
 
     ' config
-    PzGEnableTooltips = vbNullString
-    PzGEnablePrefsTooltips = vbNullString
-    PzGEnableBalloonTooltips = vbNullString
-    PzGShowTaskbar = vbNullString
-    PzGDpiAwareness = vbNullString
+    gblEnableTooltips = vbNullString
+    gblEnablePrefsTooltips = vbNullString
+    gblEnableBalloonTooltips = vbNullString
+    gblShowTaskbar = vbNullString
+    gblDpiAwareness = vbNullString
     
-    PzGGaugeSize = vbNullString
-    PzGScrollWheelDirection = vbNullString
+    gblGaugeSize = vbNullString
+    gblScrollWheelDirection = vbNullString
     
     ' position
-    PzGAspectHidden = vbNullString
-    PzGWidgetPosition = vbNullString
-    PzGWidgetLandscape = vbNullString
-    PzGWidgetPortrait = vbNullString
-    PzGLandscapeFormHoffset = vbNullString
-    PzGLandscapeFormVoffset = vbNullString
-    PzGPortraitHoffset = vbNullString
-    PzGPortraitYoffset = vbNullString
-    PzGvLocationPercPrefValue = vbNullString
-    PzGhLocationPercPrefValue = vbNullString
+    gblAspectHidden = vbNullString
+    gblWidgetPosition = vbNullString
+    gblWidgetLandscape = vbNullString
+    gblWidgetPortrait = vbNullString
+    gblLandscapeFormHoffset = vbNullString
+    gblLandscapeFormVoffset = vbNullString
+    gblPortraitHoffset = vbNullString
+    gblPortraitYoffset = vbNullString
+    gblvLocationPercPrefValue = vbNullString
+    gblhLocationPercPrefValue = vbNullString
     
     ' sounds
-    PzGEnableSounds = vbNullString
+    gblEnableSounds = vbNullString
     
     ' development
-    PzGDebug = vbNullString
-    PzGDblClickCommand = vbNullString
-    PzGOpenFile = vbNullString
-    PzGDefaultEditor = vbNullString
+    gblDebug = vbNullString
+    gblDblClickCommand = vbNullString
+    gblOpenFile = vbNullString
+    gblDefaultEditor = vbNullString
          
     ' font
-    PzGClockFont = vbNullString
-    PzGPrefsFont = vbNullString
-    PzGPrefsFontSizeHighDPI = vbNullString
-    PzGPrefsFontSizeLowDPI = vbNullString
-    PzGPrefsFontItalics = vbNullString
-    PzGPrefsFontColour = vbNullString
+    gblClockFont = vbNullString
+    gblPrefsFont = vbNullString
+    gblPrefsFontSizeHighDPI = vbNullString
+    gblPrefsFontSizeLowDPI = vbNullString
+    gblPrefsFontItalics = vbNullString
+    gblPrefsFontColour = vbNullString
     
     ' window
-    PzGWindowLevel = vbNullString
-    PzGPreventDragging = vbNullString
-    PzGOpacity = vbNullString
-    PzGWidgetHidden = vbNullString
-    PzGHidingTime = vbNullString
-    PzGIgnoreMouse = vbNullString
-    PzGFirstTimeRun = vbNullString
+    gblWindowLevel = vbNullString
+    gblPreventDragging = vbNullString
+    gblOpacity = vbNullString
+    gblWidgetHidden = vbNullString
+    gblHidingTime = vbNullString
+    gblIgnoreMouse = vbNullString
+    gblFirstTimeRun = vbNullString
     
     ' general storage variables declared
-    PzGSettingsDir = vbNullString
-    PzGSettingsFile = vbNullString
+    gblSettingsDir = vbNullString
+    gblSettingsFile = vbNullString
     
-    PzGTrinketsDir = vbNullString
-    PzGTrinketsFile = vbNullString
-    PzGClockHighDpiXPos = vbNullString
-    PzGClockHighDpiYPos = vbNullString
+    gblTrinketsDir = vbNullString
+    gblTrinketsFile = vbNullString
+    gblClockHighDpiXPos = vbNullString
+    gblClockHighDpiYPos = vbNullString
     
-    PzGClockLowDpiXPos = vbNullString
-    PzGClockLowDpiYPos = vbNullString
+    gblClockLowDpiXPos = vbNullString
+    gblClockLowDpiYPos = vbNullString
     
-    PzGLastSelectedTab = vbNullString
-    PzGSkinTheme = vbNullString
+    gblLastSelectedTab = vbNullString
+    gblSkinTheme = vbNullString
     
     ' general variables declared
     'toolSettingsFile = vbNullString
@@ -320,7 +320,7 @@ Private Sub initialiseGlobalVars()
     minutesToHide = 0
     aspectRatio = vbNullString
     revealWidgetTimerCount = 0
-    oldPzGSettingsModificationTime = #1/1/2000 12:00:00 PM#
+    oldgblSettingsModificationTime = #1/1/2000 12:00:00 PM#
 
    On Error GoTo 0
    Exit Sub
@@ -410,28 +410,28 @@ Public Sub adjustMainControls()
     ' validate the inputs of any data from the input settings file
     Call validateInputs
     
-    fAlpha.AdjustZoom Val(PzGGaugeSize) / 100
+    fAlpha.AdjustZoom Val(gblGaugeSize) / 100
     
-'    overlayWidget.ZoomDirection = PzGScrollWheelDirection
+'    overlayWidget.ZoomDirection = gblScrollWheelDirection
 
-'PzGClockFaceSwitchPref
-'PzGMainGaugeTimeZone
-'PzGMainDaylightSaving
-'PzGSecondaryGaugeTimeZone
-'PzGSecondaryDaylightSaving
+'gblClockFaceSwitchPref
+'gblMainGaugeTimeZone
+'gblMainDaylightSaving
+'gblSecondaryGaugeTimeZone
+'gblSecondaryDaylightSaving
     gblStopWatchZeroed = True
     gblStopWatchState = 0
-    If PzGClockFaceSwitchPref = "0" Then
+    If gblClockFaceSwitchPref = "0" Then
         overlayWidget.FaceMode = "0"
-        fAlpha.gaugeForm.Widgets("stopwatchface").Widget.Alpha = Val(PzGOpacity) / 100
+        fAlpha.gaugeForm.Widgets("stopwatchface").Widget.Alpha = Val(gblOpacity) / 100
         fAlpha.gaugeForm.Widgets("clockface").Widget.Alpha = 0
     Else
         overlayWidget.FaceMode = "1"
-        fAlpha.gaugeForm.Widgets("clockface").Widget.Alpha = Val(PzGOpacity) / 100
+        fAlpha.gaugeForm.Widgets("clockface").Widget.Alpha = Val(gblOpacity) / 100
         fAlpha.gaugeForm.Widgets("stopwatchface").Widget.Alpha = 0
     End If
     
-    If PzGGaugeFunctions = "1" Then
+    If gblGaugeFunctions = "1" Then
         overlayWidget.Ticking = True
         menuForm.mnuSwitchOff.Checked = False
         menuForm.mnuTurnFunctionsOn.Checked = True
@@ -441,15 +441,15 @@ Public Sub adjustMainControls()
         menuForm.mnuTurnFunctionsOn.Checked = False
     End If
     
-    If PzGDefaultEditor <> vbNullString And PzGDebug = "1" Then
-        menuForm.mnuEditWidget.Caption = "Edit Widget using " & PzGDefaultEditor
+    If gblDefaultEditor <> vbNullString And gblDebug = "1" Then
+        menuForm.mnuEditWidget.Caption = "Edit Widget using " & gblDefaultEditor
         menuForm.mnuEditWidget.Visible = True
     Else
         menuForm.mnuEditWidget.Visible = False
     End If
     
     
-    If PzGShowTaskbar = "0" Then
+    If gblShowTaskbar = "0" Then
         fAlpha.gaugeForm.ShowInTaskbar = False
     Else
         fAlpha.gaugeForm.ShowInTaskbar = True
@@ -460,27 +460,27 @@ Public Sub adjustMainControls()
     With fAlpha.gaugeForm.Widgets("housing/helpbutton").Widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
-        .Alpha = Val(PzGOpacity) / 100
+        .Alpha = Val(gblOpacity) / 100
     End With
      
     With fAlpha.gaugeForm.Widgets("housing/startbutton").Widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
-        .Alpha = Val(PzGOpacity) / 100
+        .Alpha = Val(gblOpacity) / 100
         .Tag = 0.25
     End With
       
     With fAlpha.gaugeForm.Widgets("housing/stopbutton").Widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
-        .Alpha = Val(PzGOpacity) / 100
+        .Alpha = Val(gblOpacity) / 100
         .Tag = 0.25
     End With
       
     With fAlpha.gaugeForm.Widgets("housing/switchfacesbutton").Widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
-        .Alpha = Val(PzGOpacity) / 100
+        .Alpha = Val(gblOpacity) / 100
     End With
           
     With fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget
@@ -491,7 +491,7 @@ Public Sub adjustMainControls()
     With fAlpha.gaugeForm.Widgets("housing/prefsbutton").Widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
-        .Alpha = Val(PzGOpacity) / 100
+        .Alpha = Val(gblOpacity) / 100
     End With
           
     With fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget
@@ -502,22 +502,22 @@ Public Sub adjustMainControls()
     With fAlpha.gaugeForm.Widgets("housing/surround").Widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_SIZEALL
-        .Alpha = Val(PzGOpacity) / 100
+        .Alpha = Val(gblOpacity) / 100
 
     End With
     
-    If PzGSmoothSecondHand = "0" Then
+    If gblSmoothSecondHand = "0" Then
         overlayWidget.SmoothSecondHand = False
-        fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget.Alpha = Val(PzGOpacity) / 100
+        fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget.Alpha = Val(gblOpacity) / 100
     Else
         overlayWidget.SmoothSecondHand = True
         fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget.Alpha = 0
     End If
         
-    If PzGPreventDragging = "0" Then
+    If gblPreventDragging = "0" Then
         menuForm.mnuLockWidget.Checked = False
         overlayWidget.Locked = False
-        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.Alpha = Val(PzGOpacity) / 100
+        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.Alpha = Val(gblOpacity) / 100
     Else
         menuForm.mnuLockWidget.Checked = True
         overlayWidget.Locked = True ' this is just here for continuity's sake, it is also set at the time the control is selected
@@ -525,13 +525,13 @@ Public Sub adjustMainControls()
     End If
 
     ' determine the time bias
-    If PzGMainDaylightSaving <> "0" Then
+    If gblMainDaylightSaving <> "0" Then
         tzDelta = fObtainDaylightSavings("Main")
         panzerPrefs.txtMainBias = tzDelta
     End If
     
     ' determine the time bias, secondary gauge
-    If PzGSecondaryDaylightSaving <> "0" Then
+    If gblSecondaryDaylightSaving <> "0" Then
         tzDelta1 = fObtainDaylightSavings("Secondary")
         panzerPrefs.txtSecondaryBias = tzDelta1
     End If
@@ -567,11 +567,11 @@ Public Sub setAlphaFormZordering()
 
    On Error GoTo setAlphaFormZordering_Error
 
-    If Val(PzGWindowLevel) = 0 Then
+    If Val(gblWindowLevel) = 0 Then
         Call SetWindowPos(fAlpha.gaugeForm.hwnd, HWND_BOTTOM, 0&, 0&, 0&, 0&, OnTopFlags)
-    ElseIf Val(PzGWindowLevel) = 1 Then
+    ElseIf Val(gblWindowLevel) = 1 Then
         Call SetWindowPos(fAlpha.gaugeForm.hwnd, HWND_TOP, 0&, 0&, 0&, 0&, OnTopFlags)
-    ElseIf Val(PzGWindowLevel) = 2 Then
+    ElseIf Val(gblWindowLevel) = 2 Then
         Call SetWindowPos(fAlpha.gaugeForm.hwnd, HWND_TOPMOST, 0&, 0&, 0&, 0&, OnTopFlags)
     End If
 
@@ -590,86 +590,86 @@ End Sub
 ' Purpose   : read the application's setting file and assign values to public vars
 '---------------------------------------------------------------------------------------
 '
-Public Sub readSettingsFile(ByVal location As String, ByVal PzGSettingsFile As String)
+Public Sub readSettingsFile(ByVal location As String, ByVal gblSettingsFile As String)
     On Error GoTo readSettingsFile_Error
 
-    If fFExists(PzGSettingsFile) Then
+    If fFExists(gblSettingsFile) Then
         
         ' general
-        PzGStartup = fGetINISetting(location, "startup", PzGSettingsFile)
-        PzGGaugeFunctions = fGetINISetting(location, "gaugeFunctions", PzGSettingsFile)
-        PzGSmoothSecondHand = fGetINISetting(location, "smoothSecondHand", PzGSettingsFile)
+        gblStartup = fGetINISetting(location, "startup", gblSettingsFile)
+        gblGaugeFunctions = fGetINISetting(location, "gaugeFunctions", gblSettingsFile)
+        gblSmoothSecondHand = fGetINISetting(location, "smoothSecondHand", gblSettingsFile)
         
 
-        PzGClockFaceSwitchPref = fGetINISetting(location, "clockFaceSwitchPref", PzGSettingsFile)
-        PzGMainGaugeTimeZone = fGetINISetting(location, "mainGaugeTimeZone", PzGSettingsFile)
-        PzGMainDaylightSaving = fGetINISetting(location, "mainDaylightSaving", PzGSettingsFile)
-        PzGSecondaryGaugeTimeZone = fGetINISetting(location, "secondaryGaugeTimeZone", PzGSettingsFile)
-        PzGSecondaryDaylightSaving = fGetINISetting(location, "secondaryDaylightSaving", PzGSettingsFile)
+        gblClockFaceSwitchPref = fGetINISetting(location, "clockFaceSwitchPref", gblSettingsFile)
+        gblMainGaugeTimeZone = fGetINISetting(location, "mainGaugeTimeZone", gblSettingsFile)
+        gblMainDaylightSaving = fGetINISetting(location, "mainDaylightSaving", gblSettingsFile)
+        gblSecondaryGaugeTimeZone = fGetINISetting(location, "secondaryGaugeTimeZone", gblSettingsFile)
+        gblSecondaryDaylightSaving = fGetINISetting(location, "secondaryDaylightSaving", gblSettingsFile)
 
         ' configuration
-        PzGEnableTooltips = fGetINISetting(location, "enableTooltips", PzGSettingsFile)
-        PzGEnablePrefsTooltips = fGetINISetting(location, "enablePrefsTooltips", PzGSettingsFile)
-        PzGEnableBalloonTooltips = fGetINISetting(location, "enableBalloonTooltips", PzGSettingsFile)
-        PzGShowTaskbar = fGetINISetting(location, "showTaskbar", PzGSettingsFile)
-        PzGDpiAwareness = fGetINISetting(location, "dpiAwareness", PzGSettingsFile)
+        gblEnableTooltips = fGetINISetting(location, "enableTooltips", gblSettingsFile)
+        gblEnablePrefsTooltips = fGetINISetting(location, "enablePrefsTooltips", gblSettingsFile)
+        gblEnableBalloonTooltips = fGetINISetting(location, "enableBalloonTooltips", gblSettingsFile)
+        gblShowTaskbar = fGetINISetting(location, "showTaskbar", gblSettingsFile)
+        gblDpiAwareness = fGetINISetting(location, "dpiAwareness", gblSettingsFile)
         
         
-        PzGGaugeSize = fGetINISetting(location, "gaugeSize", PzGSettingsFile)
-        PzGScrollWheelDirection = fGetINISetting(location, "scrollWheelDirection", PzGSettingsFile)
+        gblGaugeSize = fGetINISetting(location, "gaugeSize", gblSettingsFile)
+        gblScrollWheelDirection = fGetINISetting(location, "scrollWheelDirection", gblSettingsFile)
         
         ' position
-        PzGAspectHidden = fGetINISetting(location, "aspectHidden", PzGSettingsFile)
-        PzGWidgetPosition = fGetINISetting(location, "widgetPosition", PzGSettingsFile)
-        PzGWidgetLandscape = fGetINISetting(location, "widgetLandscape", PzGSettingsFile)
-        PzGWidgetPortrait = fGetINISetting(location, "widgetPortrait", PzGSettingsFile)
-        PzGLandscapeFormHoffset = fGetINISetting(location, "landscapeHoffset", PzGSettingsFile)
-        PzGLandscapeFormVoffset = fGetINISetting(location, "landscapeYoffset", PzGSettingsFile)
-        PzGPortraitHoffset = fGetINISetting(location, "portraitHoffset", PzGSettingsFile)
-        PzGPortraitYoffset = fGetINISetting(location, "portraitYoffset", PzGSettingsFile)
-        PzGvLocationPercPrefValue = fGetINISetting(location, "vLocationPercPrefValue", PzGSettingsFile)
-        PzGhLocationPercPrefValue = fGetINISetting(location, "hLocationPercPrefValue", PzGSettingsFile)
+        gblAspectHidden = fGetINISetting(location, "aspectHidden", gblSettingsFile)
+        gblWidgetPosition = fGetINISetting(location, "widgetPosition", gblSettingsFile)
+        gblWidgetLandscape = fGetINISetting(location, "widgetLandscape", gblSettingsFile)
+        gblWidgetPortrait = fGetINISetting(location, "widgetPortrait", gblSettingsFile)
+        gblLandscapeFormHoffset = fGetINISetting(location, "landscapeHoffset", gblSettingsFile)
+        gblLandscapeFormVoffset = fGetINISetting(location, "landscapeYoffset", gblSettingsFile)
+        gblPortraitHoffset = fGetINISetting(location, "portraitHoffset", gblSettingsFile)
+        gblPortraitYoffset = fGetINISetting(location, "portraitYoffset", gblSettingsFile)
+        gblvLocationPercPrefValue = fGetINISetting(location, "vLocationPercPrefValue", gblSettingsFile)
+        gblhLocationPercPrefValue = fGetINISetting(location, "hLocationPercPrefValue", gblSettingsFile)
 
         ' font
-        PzGClockFont = fGetINISetting(location, "clockFont", PzGSettingsFile)
-        PzGPrefsFont = fGetINISetting(location, "prefsFont", PzGSettingsFile)
-        PzGPrefsFontSizeHighDPI = fGetINISetting(location, "prefsFontSizeHighDPI", PzGSettingsFile)
-        PzGPrefsFontSizeLowDPI = fGetINISetting(location, "prefsFontSizeLowDPI", PzGSettingsFile)
-        PzGPrefsFontItalics = fGetINISetting(location, "prefsFontItalics", PzGSettingsFile)
-        PzGPrefsFontColour = fGetINISetting(location, "prefsFontColour", PzGSettingsFile)
+        gblClockFont = fGetINISetting(location, "clockFont", gblSettingsFile)
+        gblPrefsFont = fGetINISetting(location, "prefsFont", gblSettingsFile)
+        gblPrefsFontSizeHighDPI = fGetINISetting(location, "prefsFontSizeHighDPI", gblSettingsFile)
+        gblPrefsFontSizeLowDPI = fGetINISetting(location, "prefsFontSizeLowDPI", gblSettingsFile)
+        gblPrefsFontItalics = fGetINISetting(location, "prefsFontItalics", gblSettingsFile)
+        gblPrefsFontColour = fGetINISetting(location, "prefsFontColour", gblSettingsFile)
         
         ' sound
-        PzGEnableSounds = fGetINISetting(location, "enableSounds", PzGSettingsFile)
+        gblEnableSounds = fGetINISetting(location, "enableSounds", gblSettingsFile)
         
         ' development
-        PzGDebug = fGetINISetting(location, "debug", PzGSettingsFile)
-        PzGDblClickCommand = fGetINISetting(location, "dblClickCommand", PzGSettingsFile)
-        PzGOpenFile = fGetINISetting(location, "openFile", PzGSettingsFile)
-        PzGDefaultEditor = fGetINISetting(location, "defaultEditor", PzGSettingsFile)
+        gblDebug = fGetINISetting(location, "debug", gblSettingsFile)
+        gblDblClickCommand = fGetINISetting(location, "dblClickCommand", gblSettingsFile)
+        gblOpenFile = fGetINISetting(location, "openFile", gblSettingsFile)
+        gblDefaultEditor = fGetINISetting(location, "defaultEditor", gblSettingsFile)
         
         ' other
-        PzGClockHighDpiXPos = fGetINISetting("Software\PzStopWatch", "clockHighDpiXPos", PzGSettingsFile)
-        PzGClockHighDpiYPos = fGetINISetting("Software\PzStopWatch", "clockHighDpiYPos", PzGSettingsFile)
+        gblClockHighDpiXPos = fGetINISetting("Software\PzStopWatch", "clockHighDpiXPos", gblSettingsFile)
+        gblClockHighDpiYPos = fGetINISetting("Software\PzStopWatch", "clockHighDpiYPos", gblSettingsFile)
         
-        PzGClockLowDpiXPos = fGetINISetting("Software\PzStopWatch", "clockLowDpiXPos", PzGSettingsFile)
-        PzGClockLowDpiYPos = fGetINISetting("Software\PzStopWatch", "clockLowDpiYPos", PzGSettingsFile)
+        gblClockLowDpiXPos = fGetINISetting("Software\PzStopWatch", "clockLowDpiXPos", gblSettingsFile)
+        gblClockLowDpiYPos = fGetINISetting("Software\PzStopWatch", "clockLowDpiYPos", gblSettingsFile)
         
-        PzGLastSelectedTab = fGetINISetting(location, "lastSelectedTab", PzGSettingsFile)
-        PzGSkinTheme = fGetINISetting(location, "skinTheme", PzGSettingsFile)
+        gblLastSelectedTab = fGetINISetting(location, "lastSelectedTab", gblSettingsFile)
+        gblSkinTheme = fGetINISetting(location, "skinTheme", gblSettingsFile)
         
         ' window
-        PzGWindowLevel = fGetINISetting(location, "windowLevel", PzGSettingsFile)
-        PzGPreventDragging = fGetINISetting(location, "preventDragging", PzGSettingsFile)
-        PzGOpacity = fGetINISetting(location, "opacity", PzGSettingsFile)
+        gblWindowLevel = fGetINISetting(location, "windowLevel", gblSettingsFile)
+        gblPreventDragging = fGetINISetting(location, "preventDragging", gblSettingsFile)
+        gblOpacity = fGetINISetting(location, "opacity", gblSettingsFile)
         
         ' we do not want the widget to hide at startup
-        'PzGWidgetHidden = fGetINISetting(location, "widgetHidden", PzGSettingsFile)
-        PzGWidgetHidden = "0"
+        'gblWidgetHidden = fGetINISetting(location, "widgetHidden", gblSettingsFile)
+        gblWidgetHidden = "0"
         
-        PzGHidingTime = fGetINISetting(location, "hidingTime", PzGSettingsFile)
-        PzGIgnoreMouse = fGetINISetting(location, "ignoreMouse", PzGSettingsFile)
+        gblHidingTime = fGetINISetting(location, "hidingTime", gblSettingsFile)
+        gblIgnoreMouse = fGetINISetting(location, "ignoreMouse", gblSettingsFile)
          
-        PzGFirstTimeRun = fGetINISetting(location, "firstTimeRun", PzGSettingsFile)
+        gblFirstTimeRun = fGetINISetting(location, "firstTimeRun", gblSettingsFile)
         
     End If
 
@@ -696,68 +696,68 @@ Public Sub validateInputs()
    On Error GoTo validateInputs_Error
             
         ' general
-        If PzGGaugeFunctions = vbNullString Then PzGGaugeFunctions = "1" ' always turn
-'        If PzGAnimationInterval = vbNullString Then PzGAnimationInterval = "130"
-        If PzGStartup = vbNullString Then PzGStartup = "1"
-        If PzGSmoothSecondHand = vbNullString Then PzGSmoothSecondHand = "0"
+        If gblGaugeFunctions = vbNullString Then gblGaugeFunctions = "1" ' always turn
+'        If gblAnimationInterval = vbNullString Then gblAnimationInterval = "130"
+        If gblStartup = vbNullString Then gblStartup = "1"
+        If gblSmoothSecondHand = vbNullString Then gblSmoothSecondHand = "0"
         
-        If PzGClockFaceSwitchPref = vbNullString Then PzGClockFaceSwitchPref = "0"
-        If PzGMainGaugeTimeZone = vbNullString Then PzGMainGaugeTimeZone = "0"
-        If PzGMainDaylightSaving = vbNullString Then PzGMainDaylightSaving = "0"
+        If gblClockFaceSwitchPref = vbNullString Then gblClockFaceSwitchPref = "0"
+        If gblMainGaugeTimeZone = vbNullString Then gblMainGaugeTimeZone = "0"
+        If gblMainDaylightSaving = vbNullString Then gblMainDaylightSaving = "0"
 
-        If PzGSecondaryGaugeTimeZone = vbNullString Then PzGSecondaryGaugeTimeZone = "0"
-        If PzGSecondaryDaylightSaving = vbNullString Then PzGSecondaryDaylightSaving = "0"
+        If gblSecondaryGaugeTimeZone = vbNullString Then gblSecondaryGaugeTimeZone = "0"
+        If gblSecondaryDaylightSaving = vbNullString Then gblSecondaryDaylightSaving = "0"
 
         ' Configuration
-        If PzGEnableTooltips = vbNullString Then PzGEnableTooltips = "0"
-        If PzGEnablePrefsTooltips = vbNullString Then PzGEnablePrefsTooltips = "1"
-        If PzGEnableBalloonTooltips = vbNullString Then PzGEnableBalloonTooltips = "1"
-        If PzGShowTaskbar = vbNullString Then PzGShowTaskbar = "0"
-        If PzGDpiAwareness = vbNullString Then PzGDpiAwareness = "0"
-        If PzGGaugeSize = vbNullString Then PzGGaugeSize = "25"
-        If PzGScrollWheelDirection = vbNullString Then PzGScrollWheelDirection = "1"
+        If gblEnableTooltips = vbNullString Then gblEnableTooltips = "0"
+        If gblEnablePrefsTooltips = vbNullString Then gblEnablePrefsTooltips = "1"
+        If gblEnableBalloonTooltips = vbNullString Then gblEnableBalloonTooltips = "1"
+        If gblShowTaskbar = vbNullString Then gblShowTaskbar = "0"
+        If gblDpiAwareness = vbNullString Then gblDpiAwareness = "0"
+        If gblGaugeSize = vbNullString Then gblGaugeSize = "25"
+        If gblScrollWheelDirection = vbNullString Then gblScrollWheelDirection = "1"
                
         ' fonts
-        If PzGPrefsFont = vbNullString Then PzGPrefsFont = "times new roman"
-        If PzGClockFont = vbNullString Then PzGClockFont = PzGPrefsFont
-        If PzGPrefsFontSizeHighDPI = vbNullString Then PzGPrefsFontSizeHighDPI = "8"
-        If PzGPrefsFontSizeLowDPI = vbNullString Then PzGPrefsFontSizeLowDPI = "8"
-        If PzGPrefsFontItalics = vbNullString Then PzGPrefsFontItalics = "false"
-        If PzGPrefsFontColour = vbNullString Then PzGPrefsFontColour = "0"
+        If gblPrefsFont = vbNullString Then gblPrefsFont = "times new roman"
+        If gblClockFont = vbNullString Then gblClockFont = gblPrefsFont
+        If gblPrefsFontSizeHighDPI = vbNullString Then gblPrefsFontSizeHighDPI = "8"
+        If gblPrefsFontSizeLowDPI = vbNullString Then gblPrefsFontSizeLowDPI = "8"
+        If gblPrefsFontItalics = vbNullString Then gblPrefsFontItalics = "false"
+        If gblPrefsFontColour = vbNullString Then gblPrefsFontColour = "0"
 
         ' sounds
-        If PzGEnableSounds = vbNullString Then PzGEnableSounds = "1"
+        If gblEnableSounds = vbNullString Then gblEnableSounds = "1"
 
         ' position
-        If PzGAspectHidden = vbNullString Then PzGAspectHidden = "0"
-        If PzGWidgetPosition = vbNullString Then PzGWidgetPosition = "0"
-        If PzGWidgetLandscape = vbNullString Then PzGWidgetLandscape = "0"
-        If PzGWidgetPortrait = vbNullString Then PzGWidgetPortrait = "0"
-        If PzGLandscapeFormHoffset = vbNullString Then PzGLandscapeFormHoffset = vbNullString
-        If PzGLandscapeFormVoffset = vbNullString Then PzGLandscapeFormVoffset = vbNullString
-        If PzGPortraitHoffset = vbNullString Then PzGPortraitHoffset = vbNullString
-        If PzGPortraitYoffset = vbNullString Then PzGPortraitYoffset = vbNullString
-        If PzGvLocationPercPrefValue = vbNullString Then PzGvLocationPercPrefValue = vbNullString
-        If PzGhLocationPercPrefValue = vbNullString Then PzGhLocationPercPrefValue = vbNullString
+        If gblAspectHidden = vbNullString Then gblAspectHidden = "0"
+        If gblWidgetPosition = vbNullString Then gblWidgetPosition = "0"
+        If gblWidgetLandscape = vbNullString Then gblWidgetLandscape = "0"
+        If gblWidgetPortrait = vbNullString Then gblWidgetPortrait = "0"
+        If gblLandscapeFormHoffset = vbNullString Then gblLandscapeFormHoffset = vbNullString
+        If gblLandscapeFormVoffset = vbNullString Then gblLandscapeFormVoffset = vbNullString
+        If gblPortraitHoffset = vbNullString Then gblPortraitHoffset = vbNullString
+        If gblPortraitYoffset = vbNullString Then gblPortraitYoffset = vbNullString
+        If gblvLocationPercPrefValue = vbNullString Then gblvLocationPercPrefValue = vbNullString
+        If gblhLocationPercPrefValue = vbNullString Then gblhLocationPercPrefValue = vbNullString
                 
         ' development
-        If PzGDebug = vbNullString Then PzGDebug = "0"
-        If PzGDblClickCommand = vbNullString Then PzGDblClickCommand = "%systemroot%\system32\timedate.cpl"
-        If PzGOpenFile = vbNullString Then PzGOpenFile = vbNullString
-        If PzGDefaultEditor = vbNullString Then PzGDefaultEditor = vbNullString
+        If gblDebug = vbNullString Then gblDebug = "0"
+        If gblDblClickCommand = vbNullString Then gblDblClickCommand = "%systemroot%\system32\timedate.cpl"
+        If gblOpenFile = vbNullString Then gblOpenFile = vbNullString
+        If gblDefaultEditor = vbNullString Then gblDefaultEditor = vbNullString
         
         ' window
-        If PzGWindowLevel = vbNullString Then PzGWindowLevel = "1" 'WindowLevel", PzGSettingsFile)
-        If PzGOpacity = vbNullString Then PzGOpacity = "100"
-        If PzGWidgetHidden = vbNullString Then PzGWidgetHidden = "0"
-        If PzGHidingTime = vbNullString Then PzGHidingTime = "0"
-        If PzGIgnoreMouse = vbNullString Then PzGIgnoreMouse = "0"
-        If PzGPreventDragging = vbNullString Then PzGPreventDragging = "0"
+        If gblWindowLevel = vbNullString Then gblWindowLevel = "1" 'WindowLevel", gblSettingsFile)
+        If gblOpacity = vbNullString Then gblOpacity = "100"
+        If gblWidgetHidden = vbNullString Then gblWidgetHidden = "0"
+        If gblHidingTime = vbNullString Then gblHidingTime = "0"
+        If gblIgnoreMouse = vbNullString Then gblIgnoreMouse = "0"
+        If gblPreventDragging = vbNullString Then gblPreventDragging = "0"
         
         ' other
-        If PzGFirstTimeRun = vbNullString Then PzGFirstTimeRun = "true"
-        If PzGLastSelectedTab = vbNullString Then PzGLastSelectedTab = "general"
-        If PzGSkinTheme = vbNullString Then PzGSkinTheme = "dark"
+        If gblFirstTimeRun = vbNullString Then gblFirstTimeRun = "true"
+        If gblLastSelectedTab = vbNullString Then gblLastSelectedTab = "general"
+        If gblSkinTheme = vbNullString Then gblSkinTheme = "dark"
         
    On Error GoTo 0
    Exit Sub
@@ -778,20 +778,20 @@ Private Sub getTrinketsFile()
     
     Dim iFileNo As Integer: iFileNo = 0
     
-    PzGTrinketsDir = fSpecialFolder(feUserAppData) & "\trinkets" ' just for this user alone
-    PzGTrinketsFile = PzGTrinketsDir & "\" & widgetName & ".ini"
+    gblTrinketsDir = fSpecialFolder(feUserAppData) & "\trinkets" ' just for this user alone
+    gblTrinketsFile = gblTrinketsDir & "\" & widgetName & ".ini"
         
     'if the folder does not exist then create the folder
-    If Not fDirExists(PzGTrinketsDir) Then
-        MkDir PzGTrinketsDir
+    If Not fDirExists(gblTrinketsDir) Then
+        MkDir gblTrinketsDir
     End If
 
     'if the settings.ini does not exist then create the file by copying
-    If Not fFExists(PzGTrinketsFile) Then
+    If Not fFExists(gblTrinketsFile) Then
 
         iFileNo = FreeFile
         'open the file for writing
-        Open PzGTrinketsFile For Output As #iFileNo
+        Open gblTrinketsFile For Output As #iFileNo
         Write #iFileNo, App.path & "\" & App.EXEName & ".exe"
         Write #iFileNo,
         Close #iFileNo
@@ -819,20 +819,20 @@ Private Sub getToolSettingsFile()
     
     Dim iFileNo As Integer: iFileNo = 0
     
-    PzGSettingsDir = fSpecialFolder(feUserAppData) & "\PzStopWatch" ' just for this user alone
-    PzGSettingsFile = PzGSettingsDir & "\settings.ini"
+    gblSettingsDir = fSpecialFolder(feUserAppData) & "\PzStopWatch" ' just for this user alone
+    gblSettingsFile = gblSettingsDir & "\settings.ini"
         
     'if the folder does not exist then create the folder
-    If Not fDirExists(PzGSettingsDir) Then
-        MkDir PzGSettingsDir
+    If Not fDirExists(gblSettingsDir) Then
+        MkDir gblSettingsDir
     End If
 
     'if the settings.ini does not exist then create the file by copying
-    If Not fFExists(PzGSettingsFile) Then
+    If Not fFExists(gblSettingsFile) Then
 
         iFileNo = FreeFile
         'open the file for writing
-        Open PzGSettingsFile For Output As #iFileNo
+        Open gblSettingsFile For Output As #iFileNo
         Close #iFileNo
     End If
     
@@ -859,7 +859,7 @@ Private Sub configureTimers()
 
     On Error GoTo configureTimers_Error
     
-    oldPzGSettingsModificationTime = FileDateTime(PzGSettingsFile)
+    oldgblSettingsModificationTime = FileDateTime(gblSettingsFile)
 
     frmTimer.rotationTimer.Enabled = True
     frmTimer.settingsTimer.Enabled = True
@@ -890,12 +890,12 @@ Private Sub setHidingTime()
     
     On Error GoTo setHidingTime_Error
 
-    If PzGHidingTime = "0" Then minutesToHide = 1
-    If PzGHidingTime = "1" Then minutesToHide = 5
-    If PzGHidingTime = "2" Then minutesToHide = 10
-    If PzGHidingTime = "3" Then minutesToHide = 20
-    If PzGHidingTime = "4" Then minutesToHide = 30
-    If PzGHidingTime = "5" Then minutesToHide = 60
+    If gblHidingTime = "0" Then minutesToHide = 1
+    If gblHidingTime = "1" Then minutesToHide = 5
+    If gblHidingTime = "2" Then minutesToHide = 10
+    If gblHidingTime = "3" Then minutesToHide = 20
+    If gblHidingTime = "4" Then minutesToHide = 30
+    If gblHidingTime = "5" Then minutesToHide = 60
 
     On Error GoTo 0
     Exit Sub
@@ -960,8 +960,8 @@ Private Sub handleUnhideMode(ByVal thisUnhideMode As String)
     On Error GoTo handleUnhideMode_Error
 
     If thisUnhideMode = "unhide" Then     'parse the command line
-        PzGUnhide = "true"
-        sPutINISetting "Software\PzStopWatch", "unhide", PzGUnhide, PzGSettingsFile
+        gblUnhide = "true"
+        sPutINISetting "Software\PzStopWatch", "unhide", gblUnhide, gblSettingsFile
         Call thisForm_Unload
         End
     End If

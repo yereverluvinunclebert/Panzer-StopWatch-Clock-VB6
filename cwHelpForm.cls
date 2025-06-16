@@ -258,7 +258,7 @@ Private Sub tmrHelpFadeOut_Timer()
         fMain.helpForm.Hide
     
         fileToPlay = "till.wav"
-        If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+        If gblEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
             PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
         End If
         

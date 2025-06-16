@@ -62,7 +62,7 @@ Public Sub initAndShowAboutForm(ByVal x As Long, ByVal y As Long, Optional ByVal
     
     On Error GoTo initAndShowAboutForm_Error
     
-    If PzGDpiAwareness = "0" Then
+    If gblDpiAwareness = "0" Then
         aboutFormWidth = 900
         aboutFormHeight = 850
         If aboutFormWidth > screenWidthPixels Then aboutFormWidth = screenWidthPixels
@@ -95,7 +95,7 @@ Public Sub initAndShowAboutForm(ByVal x As Long, ByVal y As Long, Optional ByVal
     ' create a new about widget with a name, position and size, first step of that is to run Class_Initialize
     Set aboutWidget = aboutForm.Widgets.Add(New cwAbout, "about", 1, 1, aboutWidgetWidth, aboutWidgetHeight)
     
-    If PzGDpiAwareness = "0" Then
+    If gblDpiAwareness = "0" Then
         aboutWidget.Zoom = aboutWidgetZoomValue
     Else
         aboutWidget.Zoom = aboutWidgetZoomValue
@@ -130,7 +130,7 @@ Public Sub initAndShowHelpForm(ByVal x As Long, ByVal y As Long, Optional ByVal 
     
     On Error GoTo initAndShowHelpForm_Error
     
-    If PzGDpiAwareness = "0" Then
+    If gblDpiAwareness = "0" Then
         helpFormWidth = 1000
         helpFormHeight = 800
         If helpFormWidth > screenWidthPixels Then helpFormWidth = screenWidthPixels
@@ -166,7 +166,7 @@ Public Sub initAndShowHelpForm(ByVal x As Long, ByVal y As Long, Optional ByVal 
     ' create a new help widget image with a name, position and size
     Set helpWidget = helpForm.Widgets.Add(New cwHelp, "help", 0, 0, helpWidgetWidth, helpWidgetHeight)
        
-     If PzGDpiAwareness = "0" Then
+     If gblDpiAwareness = "0" Then
         helpWidget.Zoom = helpWidgetZoomValue
     Else
         helpWidget.Zoom = helpWidgetZoomValue
@@ -200,7 +200,7 @@ Public Sub initAndShowLicenceForm(ByVal x As Long, ByVal y As Long, Optional ByV
     
     On Error GoTo initAndShowLicenceForm_Error
     
-    If PzGDpiAwareness = "0" Then
+    If gblDpiAwareness = "0" Then
         licenceFormWidth = 650
         licenceFormHeight = 550
         If licenceFormWidth > screenWidthPixels Then licenceFormWidth = screenWidthPixels
@@ -236,14 +236,14 @@ Public Sub initAndShowLicenceForm(ByVal x As Long, ByVal y As Long, Optional ByV
     ' create a new licence class widget with a name, position and size
     Set licenceWidget = licenceForm.Widgets.Add(New cwLicence, "licence", 0, 0, licenceWidgetWidth, licenceWidgetHeight)
     
-    If PzGDpiAwareness = "0" Then
+    If gblDpiAwareness = "0" Then
         licenceWidget.Zoom = licenceWidgetZoomValue
     Else
         licenceWidget.Zoom = licenceWidgetZoomValue
     End If
 
     ' add two RC predefined button controls to the licence form
-    If PzGDpiAwareness = "1" Then
+    If gblDpiAwareness = "1" Then
         Set btnDecline = licenceForm.Widgets.Add(New_W("cwButton"), "btnDecline", 352, 397, 70, 29)
         Set btnAccept = licenceForm.Widgets.Add(New_W("cwButton"), "btnAccept", 428, 397, 70, 29)
         Set textBox = licenceForm.Widgets.Add(New_W("cwTextBox"), "textBox", 50, 60, 440, 280)
@@ -320,14 +320,14 @@ Private Sub btnAccept_Click()
     On Error GoTo btnAccept_Click_Error
     
     fileToPlay = "ting.wav"
-    If PzGEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
+    If gblEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
 
     answer = msgBoxA("User accepted licence, thankyou.", vbOKOnly + vbExclamation, "Licence Acceptance", True, "btnAcceptClick")
     
     slicence = "1"
-    sPutINISetting "Software\PzStopWatch", "licence", slicence, PzGSettingsFile
+    sPutINISetting "Software\PzStopWatch", "licence", slicence, gblSettingsFile
     
     licenceWidget.ShowMe = False
     licenceWidget.MyOpacity = 0
@@ -360,7 +360,7 @@ Private Sub btnDecline_Click()
     'answer = MsgBox("Licence declined, please destroy your copy of this widget and its documentation.", vbYes)
     answer = msgBoxA("Licence declined, please destroy your copy of this widget and its documentation. This widget will now unload.", vbOKOnly + vbExclamation, "Licence Declined", False)
     slicence = "0"
-    sPutINISetting "Software\PzStopWatch", "licence", slicence, PzGSettingsFile
+    sPutINISetting "Software\PzStopWatch", "licence", slicence, gblSettingsFile
 
     Call thisForm_Unload
 
@@ -388,7 +388,7 @@ Private Sub licenceForm_MouseMove(ByRef Button As Integer, ByRef Shift As Intege
    On Error GoTo licenceForm_MouseMove_Error
     
     If overlayWidget.Locked = True Then Exit Sub
-    If PzGIgnoreMouse = "1" Then Exit Sub
+    If gblIgnoreMouse = "1" Then Exit Sub
 
     If Button = vbLeftButton And Not licenceForm.ActiveWidget Is Nothing Then 'Form-Dragging (under certain conditions)
 
