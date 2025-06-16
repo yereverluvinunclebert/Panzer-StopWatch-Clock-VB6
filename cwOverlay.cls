@@ -29,13 +29,13 @@ Public cyPerc As Single
 
 Private WithEvents W As cWidgetBase
 Attribute W.VB_VarHelpID = -1
-Private WithEvents tmrClock As cTimer
+Public WithEvents tmrClock As cTimer
 Attribute tmrClock.VB_VarHelpID = -1
-Private WithEvents tmrStopWatch As cTimer
+Public WithEvents tmrStopWatch As cTimer
 Attribute tmrStopWatch.VB_VarHelpID = -1
-Private WithEvents tmrSWRotation As cTimer
+Public WithEvents tmrSWRotation As cTimer
 Attribute tmrSWRotation.VB_VarHelpID = -1
-Private WithEvents tmrHandsRotation As cTimer
+Public WithEvents tmrHandsRotation As cTimer
 Attribute tmrHandsRotation.VB_VarHelpID = -1
 
 Private HDeg As Double

@@ -30,6 +30,14 @@ Begin VB.Form frmTimer
       Left            =   90
       Top             =   135
    End
+   Begin VB.Label Label4 
+      Caption         =   "no need for a sleep timer"
+      Height          =   195
+      Left            =   345
+      TabIndex        =   4
+      Top             =   1860
+      Width           =   3645
+   End
    Begin VB.Label Label3 
       Caption         =   "Note: this invisible form is also the container for the large 128x128px project icon"
       Height          =   435
