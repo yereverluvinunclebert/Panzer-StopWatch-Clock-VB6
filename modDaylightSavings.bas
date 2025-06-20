@@ -147,9 +147,9 @@ Public Function fObtainDaylightSavings(gaugeSelection As String) As Long
   
     ' From timezones.txt take the offset from the selected timezone in the prefs
     If gaugeSelection = "Main" Then
-        chosenTimeZone = panzerPrefs.cmbMainGaugeTimeZone.List(panzerPrefs.cmbMainGaugeTimeZone.ListIndex)
+        chosenTimeZone = widgetPrefs.cmbMainGaugeTimeZone.List(widgetPrefs.cmbMainGaugeTimeZone.ListIndex)
     Else
-        chosenTimeZone = panzerPrefs.cmbSecondaryGaugeTimeZone.List(panzerPrefs.cmbSecondaryGaugeTimeZone.ListIndex)
+        chosenTimeZone = widgetPrefs.cmbSecondaryGaugeTimeZone.List(widgetPrefs.cmbSecondaryGaugeTimeZone.ListIndex)
     End If
     
     If chosenTimeZone = "System Time" Then
@@ -161,9 +161,9 @@ Public Function fObtainDaylightSavings(gaugeSelection As String) As Long
 
     ' From DSLcodesWin.txt, extract the current rule contents from the selected rule in the prefs
     If gaugeSelection = "Main" Then
-        thisRule = panzerPrefs.cmbMainDaylightSaving.List(panzerPrefs.cmbMainDaylightSaving.ListIndex)
+        thisRule = widgetPrefs.cmbMainDaylightSaving.List(widgetPrefs.cmbMainDaylightSaving.ListIndex)
     Else
-        thisRule = panzerPrefs.cmbSecondaryDaylightSaving.List(panzerPrefs.cmbSecondaryDaylightSaving.ListIndex)
+        thisRule = widgetPrefs.cmbSecondaryDaylightSaving.List(widgetPrefs.cmbSecondaryDaylightSaving.ListIndex)
     End If
     
     dlsRule = Split(thisRule, separator)

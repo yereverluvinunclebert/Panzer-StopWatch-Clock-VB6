@@ -429,8 +429,6 @@ Public gblWindowLevelWasChanged As Boolean
 '------------------------------------------------------ ENDS
                             
 
-
-
 ' Flag for debug mode '.06 DAEB 19/04/2021 common.bas moved to the common area so that it can be used by each of the utilities
 Private mbDebugMode As Boolean ' .30 DAEB 03/03/2021 frmMain.frm replaced the inIDE function that used a variant to one without
 
@@ -442,6 +440,11 @@ Public msgBoxADynamicSizingFlg As Boolean
 Public gblStopWatchStartTime As Date ' these to be changed to properties
 Public gblStopWatchState As Integer
 Public gblStopWatchZeroed As Boolean
+
+' vars to obtain the virtual (multi-monitor) width twips
+Public gblVirtualScreenHeightTwips As Long
+Public gblVirtualScreenWidthTwips As Long
+
 
 ' These need to be changed to properties? or gbl variables
 'Public rotationDegreesPerInterval  As Long ' rotationDegreesPerInterval = 0
@@ -1572,7 +1575,7 @@ Public Sub aboutClickEvent()
     
     'aboutWidget.opacity = 0
     aboutWidget.ShowMe = True
-    aboutWidget.Widget.Refresh
+    aboutWidget.widget.Refresh
     
     'fMain.aboutForm.Load
     'fMain.aboutForm.show
@@ -1611,7 +1614,7 @@ Public Sub helpSplash()
      
     'helpWidget.MyOpacity = 0
     helpWidget.ShowMe = True
-    helpWidget.Widget.Refresh
+    helpWidget.widget.Refresh
     
     fMain.helpForm.Load
     fMain.helpForm.Show
@@ -1653,7 +1656,7 @@ Public Sub licenceSplash()
     'licenceWidget.opacity = 0
     'opacityflag = 0
     licenceWidget.ShowMe = True
-    licenceWidget.Widget.Refresh
+    licenceWidget.widget.Refresh
     
     fMain.licenceForm.Load
     fMain.licenceForm.Show
@@ -1767,36 +1770,36 @@ Public Sub setMainTooltips()
 
     If gblEnableTooltips = "1" Then
 
-        overlayWidget.Widget.ToolTip = "Use CTRL+mouse scrollwheel up/down to resize."
-        helpWidget.Widget.ToolTip = "Click on me to make me go away."
-        aboutWidget.Widget.ToolTip = "Click on me to make me go away."
+        overlayWidget.widget.ToolTip = "Use CTRL+mouse scrollwheel up/down to resize."
+        helpWidget.widget.ToolTip = "Click on me to make me go away."
+        aboutWidget.widget.ToolTip = "Click on me to make me go away."
         
-        fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget.ToolTip = "Choose smooth movement or regular ticks"
-        fAlpha.gaugeForm.Widgets("housing/helpbutton").Widget.ToolTip = "Press for a little help"
-        fAlpha.gaugeForm.Widgets("housing/startbutton").Widget.ToolTip = "Press to restart (when stopped)"
-        fAlpha.gaugeForm.Widgets("housing/stopbutton").Widget.ToolTip = "Press to stop clock operation."
-        fAlpha.gaugeForm.Widgets("housing/switchfacesbutton").Widget.ToolTip = "Press to do nothing at all."
-        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.ToolTip = "Press to lock the widget in place"
-        fAlpha.gaugeForm.Widgets("housing/prefsbutton").Widget.ToolTip = "Press to open the widget preferences"
-        fAlpha.gaugeForm.Widgets("housing/surround").Widget.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
+        fAlpha.gaugeForm.Widgets("housing/tickbutton").widget.ToolTip = "Choose smooth movement or regular ticks"
+        fAlpha.gaugeForm.Widgets("housing/helpbutton").widget.ToolTip = "Press for a little help"
+        fAlpha.gaugeForm.Widgets("housing/startbutton").widget.ToolTip = "Press to restart (when stopped)"
+        fAlpha.gaugeForm.Widgets("housing/stopbutton").widget.ToolTip = "Press to stop clock operation."
+        fAlpha.gaugeForm.Widgets("housing/switchfacesbutton").widget.ToolTip = "Press to do nothing at all."
+        fAlpha.gaugeForm.Widgets("housing/lockbutton").widget.ToolTip = "Press to lock the widget in place"
+        fAlpha.gaugeForm.Widgets("housing/prefsbutton").widget.ToolTip = "Press to open the widget preferences"
+        fAlpha.gaugeForm.Widgets("housing/surround").widget.ToolTip = "Ctrl + mouse scrollwheel up/down to resize, you can also drag me to a new position."
         
     Else
-        overlayWidget.Widget.ToolTip = vbNullString
-        helpWidget.Widget.ToolTip = vbNullString
-        aboutWidget.Widget.ToolTip = vbNullString
+        overlayWidget.widget.ToolTip = vbNullString
+        helpWidget.widget.ToolTip = vbNullString
+        aboutWidget.widget.ToolTip = vbNullString
         
-        fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("housing/helpbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("housing/startbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("housing/stopbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("housing/switchfacesbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("housing/prefsbutton").Widget.ToolTip = vbNullString
-        fAlpha.gaugeForm.Widgets("housing/surround").Widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/tickbutton").widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/helpbutton").widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/startbutton").widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/stopbutton").widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/switchfacesbutton").widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/lockbutton").widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/prefsbutton").widget.ToolTip = vbNullString
+        fAlpha.gaugeForm.Widgets("housing/surround").widget.ToolTip = vbNullString
         
     End If
     
-    Call ChangeToolTipWidgetDefaultSettings(Cairo.ToolTipWidget.Widget)
+    Call ChangeToolTipWidgetDefaultSettings(Cairo.ToolTipWidget.widget)
 
    On Error GoTo 0
    Exit Sub
@@ -2025,14 +2028,17 @@ Public Sub determineScreenDimensions()
     'If debugflg = 1 Then msgbox "% sub determineScreenDimensions"
 
     ' only calling TwipsPerPixelX/Y functions once on startup
-    screenTwipsPerPixelX = fTwipsPerPixelX
-    screenTwipsPerPixelY = fTwipsPerPixelY
+    gblScreenTwipsPerPixelX = fTwipsPerPixelX
+    gblScreenTwipsPerPixelY = fTwipsPerPixelY
     
     screenHeightPixels = GetDeviceCaps(menuForm.hdc, VERTRES) ' we use the name of any form that we don't mind being loaded at this point
     screenWidthPixels = GetDeviceCaps(menuForm.hdc, HORZRES)
 
-    screenHeightTwips = screenHeightPixels * screenTwipsPerPixelY
-    screenWidthTwips = screenWidthPixels * screenTwipsPerPixelX
+    screenHeightTwips = screenHeightPixels * gblScreenTwipsPerPixelY
+    screenWidthTwips = screenWidthPixels * gblScreenTwipsPerPixelX
+    
+    gblVirtualScreenHeightTwips = fVirtualScreenHeight(False)
+    gblVirtualScreenWidthTwips = fVirtualScreenWidth(False)
     
     oldScreenHeightPixels = screenHeightPixels ' will be used to check for orientation changes
     oldScreenWidthPixels = screenWidthPixels
@@ -2166,8 +2172,8 @@ Public Sub unloadAllForms(ByVal endItAll As Boolean)
     
     ' stop all VB6 timers in the prefs form
     
-    panzerPrefs.themeTimer.Enabled = False
-    panzerPrefs.positionTimer.Enabled = False
+    widgetPrefs.themeTimer.Enabled = False
+    widgetPrefs.positionTimer.Enabled = False
     
     ' stop all RC6 timers
     
@@ -2184,7 +2190,7 @@ Public Sub unloadAllForms(ByVal endItAll As Boolean)
     
     ' unload the native VB6 forms
     
-    Unload panzerPrefs
+    Unload widgetPrefs
     Unload frmMessage
     Unload frmTimer
     Unload menuForm
@@ -2198,7 +2204,7 @@ Public Sub unloadAllForms(ByVal endItAll As Boolean)
     
     ' remove all variable references to each form in turn
     
-    Set panzerPrefs = Nothing
+    Set widgetPrefs = Nothing
     Set frmMessage = Nothing
     Set frmTimer = Nothing
     Set menuForm = Nothing
@@ -2300,21 +2306,21 @@ End Sub
 Public Sub makeProgramPreferencesAvailable()
     On Error GoTo makeProgramPreferencesAvailable_Error
 
-    If panzerPrefs.IsVisible = False Then
-        panzerPrefs.Visible = True
-        panzerPrefs.Show  ' show it again
-        panzerPrefs.SetFocus
+    If widgetPrefs.IsVisible = False Then
+        widgetPrefs.Visible = True
+        widgetPrefs.Show  ' show it again
+        widgetPrefs.SetFocus
 
-        If panzerPrefs.WindowState = vbMinimized Then
-            panzerPrefs.WindowState = vbNormal
+        If widgetPrefs.WindowState = vbMinimized Then
+            widgetPrefs.WindowState = vbNormal
         End If
 
         ' set the current position of the utility according to previously stored positions
         
         Call readPrefsPosition
-        Call panzerPrefs.positionPrefsMonitor
+        Call widgetPrefs.positionPrefsMonitor
     Else
-        panzerPrefs.SetFocus
+        widgetPrefs.SetFocus
     End If
 
    On Error GoTo 0
@@ -2343,15 +2349,15 @@ Public Sub readPrefsPosition()
         
 '        ' if a current location not stored then position to the middle of the screen
 '        If gblFormHighDpiXPosTwips <> "" Then
-'            panzerPrefs.Left = Val(gblFormHighDpiXPosTwips)
+'            widgetPrefs.Left = Val(gblFormHighDpiXPosTwips)
 '        Else
-'            panzerPrefs.Left = screenWidthTwips / 2 - panzerPrefs.Width / 2
+'            widgetPrefs.Left = screenWidthTwips / 2 - widgetPrefs.Width / 2
 '        End If
 '
 '        If gblFormHighDpiYPosTwips <> "" Then
-'            panzerPrefs.Top = Val(gblFormHighDpiYPosTwips)
+'            widgetPrefs.Top = Val(gblFormHighDpiYPosTwips)
 '        Else
-'            panzerPrefs.Top = Screen.Height / 2 - panzerPrefs.Height / 2
+'            widgetPrefs.Top = Screen.Height / 2 - widgetPrefs.Height / 2
 '        End If
     Else
         gblFormLowDpiXPosTwips = fGetINISetting("Software\PzStopWatch", "formLowDpiXPosTwips", gblSettingsFile)
@@ -2359,15 +2365,15 @@ Public Sub readPrefsPosition()
         
 '        ' if a current location not stored then position to the middle of the screen
 '        If gblFormLowDpiXPosTwips <> "" Then
-'            panzerPrefs.Left = Val(gblFormLowDpiXPosTwips)
+'            widgetPrefs.Left = Val(gblFormLowDpiXPosTwips)
 '        Else
-'            panzerPrefs.Left = screenWidthTwips / 2 - panzerPrefs.Width / 2
+'            widgetPrefs.Left = screenWidthTwips / 2 - widgetPrefs.Width / 2
 '        End If
 '
 '        If gblFormLowDpiYPosTwips <> "" Then
-'            panzerPrefs.Top = Val(gblFormLowDpiYPosTwips)
+'            widgetPrefs.Top = Val(gblFormLowDpiYPosTwips)
 '        Else
-'            panzerPrefs.Top = Screen.Height / 2 - panzerPrefs.Height / 2
+'            widgetPrefs.Top = Screen.Height / 2 - widgetPrefs.Height / 2
 '        End If
     End If
    
@@ -2389,17 +2395,17 @@ Public Sub writePrefsPosition()
         
    On Error GoTo writePrefsPosition_Error
 
-    If panzerPrefs.WindowState = vbNormal Then ' when vbMinimised the value = -48000  !
+    If widgetPrefs.WindowState = vbNormal Then ' when vbMinimised the value = -48000  !
         If gblDpiAwareness = "1" Then
-            gblFormHighDpiXPosTwips = CStr(panzerPrefs.Left)
-            gblFormHighDpiYPosTwips = CStr(panzerPrefs.Top)
+            gblFormHighDpiXPosTwips = CStr(widgetPrefs.Left)
+            gblFormHighDpiYPosTwips = CStr(widgetPrefs.Top)
             
             ' now write those params to the toolSettings.ini
             sPutINISetting "Software\PzStopWatch", "formHighDpiXPosTwips", gblFormHighDpiXPosTwips, gblSettingsFile
             sPutINISetting "Software\PzStopWatch", "formHighDpiYPosTwips", gblFormHighDpiYPosTwips, gblSettingsFile
         Else
-            gblFormLowDpiXPosTwips = CStr(panzerPrefs.Left)
-            gblFormLowDpiYPosTwips = CStr(panzerPrefs.Top)
+            gblFormLowDpiXPosTwips = CStr(widgetPrefs.Left)
+            gblFormLowDpiYPosTwips = CStr(widgetPrefs.Top)
             
             ' now write those params to the toolSettings.ini
             sPutINISetting "Software\PzStopWatch", "formLowDpiXPosTwips", gblFormLowDpiXPosTwips, gblSettingsFile
@@ -2414,7 +2420,7 @@ Public Sub writePrefsPosition()
 
 writePrefsPosition_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure writePrefsPosition of Form panzerPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure writePrefsPosition of Form widgetPrefs"
 End Sub
 
 
@@ -2485,16 +2491,16 @@ Public Sub lockWidget()
     
     If gblPreventDragging = "1" Then
         menuForm.mnuLockWidget.Checked = False
-        panzerPrefs.chkPreventDragging.Value = 0
+        widgetPrefs.chkPreventDragging.Value = 0
         gblPreventDragging = "0"
         overlayWidget.Locked = False
-        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.Alpha = Val(gblOpacity) / 100
+        fAlpha.gaugeForm.Widgets("housing/lockbutton").widget.Alpha = Val(gblOpacity) / 100
     Else
         menuForm.mnuLockWidget.Checked = True
-        panzerPrefs.chkPreventDragging.Value = 1
+        widgetPrefs.chkPreventDragging.Value = 1
         overlayWidget.Locked = True
         gblPreventDragging = "1"
-        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.Alpha = 0
+        fAlpha.gaugeForm.Widgets("housing/lockbutton").widget.Alpha = 0
     End If
     
     fAlpha.gaugeForm.Refresh
@@ -2628,7 +2634,7 @@ Public Sub hardRestart()
     
     If fFExists(thisCommand) Then
         ' run the selected program
-        Call ShellExecute(panzerPrefs.hwnd, "open", thisCommand, "Panzer Stopwatch Widget.exe", "prefs", 1)
+        Call ShellExecute(widgetPrefs.hwnd, "open", thisCommand, "Panzer Stopwatch Widget.exe", "prefs", 1)
     Else
         'answer = MsgBox(thisCommand & " is missing", vbOKOnly + vbExclamation)
         answerMsg = thisCommand & " is missing"
@@ -2775,7 +2781,7 @@ Public Function determineIconWidth(ByRef thisForm As Form, ByVal thisDynamicSizi
 
 determineIconWidth_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure determineIconWidth of Form panzerPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure determineIconWidth of Form widgetPrefs"
 
 End Function
 

@@ -100,7 +100,7 @@ Public Sub InitFromPSD(ByRef PSD_FileNameOrByteArray As Variant)
                         collPSDNonUIElements(.LayerPath(I)) = Array(.LayerX(I), .LayerY(I), Val(gblOpacity) / 100)  'here we update the so far empty slots with the PSD-offsets
                 
                     Else 'everything not in the exclude-list will get its own Widget-instance
-                        Set W = gaugeForm.Widgets.Add(New cwAlphaImg, LCase$(.LayerPath(I)), .LayerX(I), .LayerY(I), .LayerWidth(I), .LayerHeight(I)).Widget
+                        Set W = gaugeForm.Widgets.Add(New cwAlphaImg, LCase$(.LayerPath(I)), .LayerX(I), .LayerY(I), .LayerWidth(I), .LayerHeight(I)).widget
                         'Set W = gaugeForm.Widgets.Add(New_W("cwAlphaImg"), LCase$(.LayerPath(I)), .LayerX(I), .LayerY(I), .LayerWidth(I), .LayerHeight(I)).Widget
                             W.ImageKey = W.Key 'W.Key equals ImageList-Key, set above - and LayerPath(i) at this point ... set it also as the ImageKey of our new created Widget
                         If gblOpacity < 1 Then
@@ -151,7 +151,7 @@ Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As S
     If gblIgnoreMouse = "1" Then Exit Sub
     
     If EventName = "W_MouseMove" Then
-        Select Case LCase$(Sender.Widget.Key)
+        Select Case LCase$(Sender.widget.Key)
             Case "housing/lockbutton"
                 If gblEnableBalloonTooltips = "1" Then CreateToolTip gaugeForm.hwnd, "Click me to lock the widget in place. This lock can be released by clicking again on the lock button, or in the preferences. A locking sound will denote the button's operation.", _
                      TTIconInfo, widgetName & " Lock Button Help", , , , True
@@ -179,7 +179,7 @@ Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As S
     End If
     
     If EventName = "W_MouseDown" Then
-        Select Case LCase$(Sender.Widget.Key)
+        Select Case LCase$(Sender.widget.Key)
             Case "housing/lockbutton"
                 Call lockbutton_mouseDown(Sender)
             Case "housing/prefsbutton"
@@ -191,12 +191,12 @@ Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As S
             Case "housing/stopbutton"
                 Call stopbutton_mouseDown(Sender)
             Case Else
-                Debug.Print Sender.Widget.Key
+                Debug.Print Sender.widget.Key
         End Select
     End If
     
     If EventName = "W_MouseUp" Then
-        Select Case LCase$(Sender.Widget.Key)
+        Select Case LCase$(Sender.widget.Key)
             Case "housing/prefsbutton"
                 Call prefsbutton_mouseUp(Sender)
             Case "housing/switchfacesbutton"
@@ -204,18 +204,18 @@ Private Sub gaugeForm_BubblingEvent(ByRef Sender As Object, ByRef EventName As S
             Case "housing/stopbutton"
                 Call stopbutton_mouseUp(Sender)
             Case Else
-                Debug.Print Sender.Widget.Key
+                Debug.Print Sender.widget.Key
         End Select
     End If
     
     If EventName = "W_Click" Then
-        Select Case LCase$(Sender.Widget.Key)
+        Select Case LCase$(Sender.widget.Key)
             Case "housing/helpbutton"
                  Call helpbutton_click
             Case "housing/startbutton"
                  Call startbutton_click
             Case Else
-                Debug.Print Sender.Widget.Key
+                Debug.Print Sender.widget.Key
         End Select
     End If
    
@@ -480,8 +480,8 @@ Private Sub stopbutton_mouseUp(ByRef Sender As Object)
     
     On Error GoTo stopbutton_mouseUp_Error
 
-    Sender.Widget.Alpha = Val(gblOpacity) / 100
-    Sender.Widget.Refresh
+    Sender.widget.Alpha = Val(gblOpacity) / 100
+    Sender.widget.Refresh
         
     If gblEnableSounds = "1" Then
         If gblStopWatchState = 0 Then
@@ -557,8 +557,8 @@ Private Sub stopbutton_mouseDown(ByRef Sender As Object)
    
     On Error GoTo stopbutton_mouseDown_Error
 
-    Sender.Widget.Alpha = 0
-    Sender.Widget.Refresh
+    Sender.widget.Alpha = 0
+    Sender.widget.Refresh
            
    On Error GoTo 0
    Exit Sub
@@ -578,21 +578,21 @@ End Sub
 Private Sub switchfacesbutton_mouseDown(ByRef Sender As Object)
     On Error GoTo switchfacesbutton_mouseDown_Error
 
-    Sender.Widget.Alpha = 0
-    Sender.Widget.Refresh
+    Sender.widget.Alpha = 0
+    Sender.widget.Refresh
     
     If gblClockFaceSwitchPref = "1" Then
         gblClockFaceSwitchPref = "0"
         overlayWidget.FaceMode = "0"
-        gaugeForm.Widgets("clockface").Widget.Alpha = 0
-        gaugeForm.Widgets("stopwatchface").Widget.Alpha = Val(gblOpacity) / 100
-        gaugeForm.Widgets("stopwatchface").Widget.Refresh
+        gaugeForm.Widgets("clockface").widget.Alpha = 0
+        gaugeForm.Widgets("stopwatchface").widget.Alpha = Val(gblOpacity) / 100
+        gaugeForm.Widgets("stopwatchface").widget.Refresh
     Else
         gblClockFaceSwitchPref = "1"
         overlayWidget.FaceMode = "1"
-        gaugeForm.Widgets("stopwatchface").Widget.Alpha = 0
-        gaugeForm.Widgets("clockface").Widget.Alpha = Val(gblOpacity) / 100
-        gaugeForm.Widgets("clockface").Widget.Refresh
+        gaugeForm.Widgets("stopwatchface").widget.Alpha = 0
+        gaugeForm.Widgets("clockface").widget.Alpha = Val(gblOpacity) / 100
+        gaugeForm.Widgets("clockface").widget.Refresh
         gblStopWatchState = 0
     End If
     
@@ -617,8 +617,8 @@ End Sub
 Private Sub prefsbutton_mouseUp(ByRef Sender As Object)
     On Error GoTo prefsbutton_mouseUp_Error
 
-    Sender.Widget.Alpha = Val(gblOpacity) / 100
-    Sender.Widget.Refresh
+    Sender.widget.Alpha = Val(gblOpacity) / 100
+    Sender.widget.Refresh
 
     On Error GoTo 0
     Exit Sub
@@ -639,8 +639,8 @@ Private Sub switchfacesbutton_mouseUp(ByRef Sender As Object)
     Dim fileToPlay As String: fileToPlay = vbNullString
     On Error GoTo switchfacesbutton_mouseUp_Error
 
-    Sender.Widget.Alpha = Val(gblOpacity) / 100
-    Sender.Widget.Refresh
+    Sender.widget.Alpha = Val(gblOpacity) / 100
+    Sender.widget.Refresh
         
     fileToPlay = "till.wav"
     If gblEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
@@ -665,11 +665,11 @@ Private Sub lockbutton_mouseDown(ByRef Sender As Object)
    On Error GoTo lockbutton_mouseDown_Error
     
     If overlayWidget.Locked = False Then
-        Sender.Widget.Alpha = 0
+        Sender.widget.Alpha = 0
     Else
-        Sender.Widget.Alpha = Val(gblOpacity) / 100
+        Sender.widget.Alpha = Val(gblOpacity) / 100
     End If
-    Sender.Widget.Refresh ' this removes the delay in the lockButton depressing
+    Sender.widget.Refresh ' this removes the delay in the lockButton depressing
     Call lockWidget
     
    On Error GoTo 0
@@ -692,9 +692,9 @@ Private Sub prefsbutton_mouseDown(ByRef Sender As Object)
    
     On Error GoTo prefsbutton_mouseDown_Error
 
-    Sender.Widget.Alpha = 0
+    Sender.widget.Alpha = 0
     'Sender.Widget.Visible = False
-    Sender.Widget.Refresh ' this removes the delay in the Button depressing
+    Sender.widget.Refresh ' this removes the delay in the Button depressing
     fileToPlay = "winding.wav"
     If gblEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
         PlaySound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
@@ -724,15 +724,15 @@ Private Sub tickbutton_mouseDown(ByRef Sender As Object)
         
     If overlayWidget.SmoothSecondHand = True Then
         overlayWidget.SmoothSecondHand = False
-        Sender.Widget.Alpha = Val(gblOpacity) / 100
+        Sender.widget.Alpha = Val(gblOpacity) / 100
         gblSmoothSecondHand = "0"
     Else
         overlayWidget.SmoothSecondHand = True
-        Sender.Widget.Alpha = 0 ' sender is the referring control
+        Sender.widget.Alpha = 0 ' sender is the referring control
         gblSmoothSecondHand = "1"
         
     End If
-    Sender.Widget.Refresh ' this removes the delay in the Button depressing
+    Sender.widget.Refresh ' this removes the delay in the Button depressing
     
     fileToPlay = "lock.wav"
     If gblEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
@@ -950,7 +950,7 @@ Public Sub AdjustZoom(ByVal NewZoom As Single)
 
   ' when resized from the gauge scroll up/down it needs to write it back so the size is correct when prefs opened.
   gblGaugeSize = LTrim$(Str$(NewZoom * 100))
-  If panzerPrefs.IsVisible = True Then panzerPrefs.sliGaugeSize = Val(gblGaugeSize)
+  If widgetPrefs.IsVisible = True Then widgetPrefs.sliGaugeSize = Val(gblGaugeSize)
 
     
    On Error GoTo 0

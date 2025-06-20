@@ -50,7 +50,7 @@ Private Type tagMONITORINFO
 End Type
 
 Private Declare Function EnumDisplayMonitors Lib "user32" (ByVal hdc As Long, lprcClip As Any, ByVal lpfnEnum As Long, dwData As Long) As Long
-'Private Declare Function GetSystemMetrics Lib "user32" (ByVal nIndex As Long) As Long
+Private Declare Function GetSystemMetrics Lib "user32" (ByVal nIndex As Long) As Long
 Public Declare Function GetDC Lib "user32" (ByVal hwnd As Long) As Long
 Public Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, ByVal hdc As Long) As Long
 Public Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
@@ -69,8 +69,8 @@ Private rcVS         As RECT 'coordinates for Virtual Screen
 Public Const HORZRES As Integer = 8
 Public Const VERTRES As Integer = 10
 
-Public screenTwipsPerPixelX As Long ' .07 DAEB 26/04/2021 common.bas changed to use pixels alone, removed all unnecessary twip conversion
-Public screenTwipsPerPixelY As Long ' .07 DAEB 26/04/2021 common.bas changed to use pixels alone, removed all unnecessary twip conversion
+Public gblScreenTwipsPerPixelX As Long ' .07 DAEB 26/04/2021 common.bas changed to use pixels alone, removed all unnecessary twip conversion
+Public gblScreenTwipsPerPixelY As Long ' .07 DAEB 26/04/2021 common.bas changed to use pixels alone, removed all unnecessary twip conversion
 'Public screenWidthTwips As Long
 'Public screenHeightTwips As Long
 
@@ -99,30 +99,77 @@ Public screenTwipsPerPixelY As Long ' .07 DAEB 26/04/2021 common.bas changed to 
 'End Function
 
 
-'Public Function fVirtualScreenWidth()
-'    ' This works even on Tablet PC.  The problem is: when the tablet screen is rotated, the "Screen" object of VB doesn't pick it up.
-'    Dim Pixels As Long: Pixels = 0
-'    Const SM_CXVIRTUALSCREEN = 78
-'    '
-'    Pixels = GetSystemMetrics(SM_CXVIRTUALSCREEN)
-'    fVirtualScreenWidth = Pixels * fTwipsPerPixelX
-'End Function
+'---------------------------------------------------------------------------------------
+' Procedure : fVirtualScreenWidth
+' Author    : beededea
+' Date      : 17/08/2024
+' Purpose   : Determines the whole screen width including any virtual 'extra' caused by multiple monitor positioning.
+'             Called on startup and via tmrScreenResolution_Timer to test whether the width of the current monitor
+'             where the form currently sits, has changed.
+'---------------------------------------------------------------------------------------
+'
+Public Function fVirtualScreenWidth(ByRef inPixels As Boolean) As Long
+    ' This works even on Tablet PC.  The problem is: when the tablet screen is rotated, the "Screen" object of VB doesn't pick it up.
+    Dim Pixels As Long: Pixels = 0
+    Const SM_CXVIRTUALSCREEN = 78
+    '
+   On Error GoTo fVirtualScreenWidth_Error
 
-'Public Function fVirtualScreenHeight(Optional bSubtractTaskbar As Boolean = False)
-'    ' This works even on Tablet PC.  The problem is: when the tablet screen is rotated, the "Screen" object of VB doesn't pick it up.
-'    Dim Pixels As Long: Pixels = 0
-'    Const CYVIRTUALSCREEN = 79
-'    '
-'    Pixels = GetSystemMetrics(CYVIRTUALSCREEN)
-'    If bSubtractTaskbar Then
-'        ' The taskbar is typically 30 pixels or 450 twips, or, at least, this is the assumption made here.
-'        ' It can actually be multiples of this, or possibly moved to the side or top.
-'        ' This procedure does not account for these possibilities.
-'        fVirtualScreenHeight = (Pixels - 30) * fTwipsPerPixelY
-'    Else
-'        fVirtualScreenHeight = Pixels * fTwipsPerPixelY
-'    End If
-'End Function
+    Pixels = GetSystemMetrics(SM_CXVIRTUALSCREEN)
+    If inPixels = True Then
+        fVirtualScreenWidth = Pixels
+    Else
+        fVirtualScreenWidth = Pixels * gblScreenTwipsPerPixelX
+    End If
+
+   On Error GoTo 0
+   Exit Function
+
+fVirtualScreenWidth_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fVirtualScreenWidth of Module monitorModule"
+End Function
+
+'---------------------------------------------------------------------------------------
+' Procedure : fVirtualScreenHeight
+' Author    : beededea
+' Date      : 14/02/2025
+' Purpose   : Determines the whole screen height including any virtual 'extra' caused by multiple monitor positioning.
+'             Called on startup and via tmrScreenResolution_Timer to test whether the height of the current monitor
+'             where the form currently sits, has changed.
+'---------------------------------------------------------------------------------------
+'
+Public Function fVirtualScreenHeight(ByRef inPixels As Boolean, Optional ByRef bSubtractTaskbar As Boolean = False) As Long
+    ' This works even on Tablet PC.  The problem is: when the tablet screen is rotated, the "Screen" object of VB doesn't pick it up.
+    Dim Pixels As Long: Pixels = 0
+    Const CYVIRTUALSCREEN = 79
+    '
+   On Error GoTo fVirtualScreenHeight_Error
+
+    Pixels = GetSystemMetrics(CYVIRTUALSCREEN)
+    If bSubtractTaskbar Then
+        ' The taskbar is typically 30 pixels or 450 twips, or, at least, this is the assumption made here.
+        ' It can actually be multiples of this, or possibly moved to the side or top.
+        ' This procedure does not account for these possibilities.
+        fVirtualScreenHeight = (Pixels - 30)
+    Else
+        fVirtualScreenHeight = Pixels
+    End If
+    
+    If inPixels = True Then
+        fVirtualScreenHeight = fVirtualScreenHeight
+    Else
+        fVirtualScreenHeight = fVirtualScreenHeight * gblScreenTwipsPerPixelY
+    End If
+
+   On Error GoTo 0
+   Exit Function
+
+fVirtualScreenHeight_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure fVirtualScreenHeight of Module monitorModule"
+    
+End Function
 
 ' Author    : Elroy from Vbforums
 'Public Function fCurrentScreenWidth()
@@ -362,21 +409,21 @@ Public Function monitorProperties(ByVal frm As cWidgetForm) As UDTMonitor
     With monitorProperties
         .handle = hMonitor
         'convert all dimensions from pixels to twips
-        .Left = MONITORINFO.rcMonitor.Left * screenTwipsPerPixelX
-        .Right = MONITORINFO.rcMonitor.Right * screenTwipsPerPixelX
-        .Top = MONITORINFO.rcMonitor.Top * screenTwipsPerPixelY
-        .Bottom = MONITORINFO.rcMonitor.Bottom * screenTwipsPerPixelY
+        .Left = MONITORINFO.rcMonitor.Left * gblScreenTwipsPerPixelX
+        .Right = MONITORINFO.rcMonitor.Right * gblScreenTwipsPerPixelX
+        .Top = MONITORINFO.rcMonitor.Top * gblScreenTwipsPerPixelY
+        .Bottom = MONITORINFO.rcMonitor.Bottom * gblScreenTwipsPerPixelY
 
-        .WorkLeft = MONITORINFO.rcWork.Left * screenTwipsPerPixelX
-        .WorkRight = MONITORINFO.rcWork.Right * screenTwipsPerPixelX
-        .WorkTop = MONITORINFO.rcWork.Top * screenTwipsPerPixelY
-        .Workbottom = MONITORINFO.rcWork.Bottom * screenTwipsPerPixelY
+        .WorkLeft = MONITORINFO.rcWork.Left * gblScreenTwipsPerPixelX
+        .WorkRight = MONITORINFO.rcWork.Right * gblScreenTwipsPerPixelX
+        .WorkTop = MONITORINFO.rcWork.Top * gblScreenTwipsPerPixelY
+        .Workbottom = MONITORINFO.rcWork.Bottom * gblScreenTwipsPerPixelY
 
-        .Height = (MONITORINFO.rcMonitor.Bottom - MONITORINFO.rcMonitor.Top) * screenTwipsPerPixelY
-        .Width = (MONITORINFO.rcMonitor.Right - MONITORINFO.rcMonitor.Left) * screenTwipsPerPixelX
+        .Height = (MONITORINFO.rcMonitor.Bottom - MONITORINFO.rcMonitor.Top) * gblScreenTwipsPerPixelY
+        .Width = (MONITORINFO.rcMonitor.Right - MONITORINFO.rcMonitor.Left) * gblScreenTwipsPerPixelX
 
-        .WorkHeight = (MONITORINFO.rcWork.Bottom - MONITORINFO.rcWork.Top) * screenTwipsPerPixelY
-        .WorkWidth = (MONITORINFO.rcWork.Right - MONITORINFO.rcWork.Left) * screenTwipsPerPixelX
+        .WorkHeight = (MONITORINFO.rcWork.Bottom - MONITORINFO.rcWork.Top) * gblScreenTwipsPerPixelY
+        .WorkWidth = (MONITORINFO.rcWork.Right - MONITORINFO.rcWork.Left) * gblScreenTwipsPerPixelX
 
         .IsPrimary = MONITORINFO.dwFlags And MONITORINFOF_PRIMARY
     End With

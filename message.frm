@@ -206,7 +206,7 @@ Private Sub Form_Resize()
         Call setMessageIconImagesLight(600)
     End If
 
-''    If panzerPrefs.mnuDark.Checked = True Then
+''    If widgetPrefs.mnuDark.Checked = True Then
 ''        Call setMessageIconImagesDark(determineIconWidth(Me, msgBoxADynamicSizingFlg))
 ''    Else
 '        Call setMessageIconImagesLight(1920)
@@ -646,7 +646,7 @@ Private Sub loadHigherResMessageImages()
 
     If Me.WindowState = vbMinimized Then Exit Sub
 
-'    If panzerPrefs.mnuDark.Checked = True Then
+'    If widgetPrefs.mnuDark.Checked = True Then
 '        Call setMessageIconImagesDark(determineIconWidth(Me, msgBoxADynamicSizingFlg))
 '    Else
         Call setMessageIconImagesLight(1920)
@@ -657,7 +657,7 @@ Private Sub loadHigherResMessageImages()
 
 loadHigherResMessageImages_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure loadHigherResMessageImages of Form panzerPrefs"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure loadHigherResMessageImages of Form widgetPrefs"
 End Sub
 
 
@@ -721,7 +721,7 @@ IsVisible_Error:
 
     With Err
          If .Number <> 0 Then
-            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure IsVisible of Form panzerPrefs"
+            MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure IsVisible of Form widgetPrefs"
             Resume Next
           End If
     End With

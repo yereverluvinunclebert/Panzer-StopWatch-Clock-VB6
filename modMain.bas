@@ -155,7 +155,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     End If
     
     'load the preferences form but don't yet show it, speeds up access to the prefs via the menu
-    Load panzerPrefs
+    Load widgetPrefs
     
     'load the message form but don't yet show it, speeds up access to the message form when needed.
     Load frmMessage
@@ -302,8 +302,8 @@ Private Sub initialiseGlobalVars()
     windowsVer = vbNullString
     
     ' vars to obtain correct screen width (to correct VB6 bug) STARTS
-    screenTwipsPerPixelX = 0
-    screenTwipsPerPixelY = 0
+    gblScreenTwipsPerPixelX = 0
+    gblScreenTwipsPerPixelY = 0
     screenWidthTwips = 0
     screenHeightTwips = 0
     screenHeightPixels = 0
@@ -423,12 +423,12 @@ Public Sub adjustMainControls()
     gblStopWatchState = 0
     If gblClockFaceSwitchPref = "0" Then
         overlayWidget.FaceMode = "0"
-        fAlpha.gaugeForm.Widgets("stopwatchface").Widget.Alpha = Val(gblOpacity) / 100
-        fAlpha.gaugeForm.Widgets("clockface").Widget.Alpha = 0
+        fAlpha.gaugeForm.Widgets("stopwatchface").widget.Alpha = Val(gblOpacity) / 100
+        fAlpha.gaugeForm.Widgets("clockface").widget.Alpha = 0
     Else
         overlayWidget.FaceMode = "1"
-        fAlpha.gaugeForm.Widgets("clockface").Widget.Alpha = Val(gblOpacity) / 100
-        fAlpha.gaugeForm.Widgets("stopwatchface").Widget.Alpha = 0
+        fAlpha.gaugeForm.Widgets("clockface").widget.Alpha = Val(gblOpacity) / 100
+        fAlpha.gaugeForm.Widgets("stopwatchface").widget.Alpha = 0
     End If
     
     If gblGaugeFunctions = "1" Then
@@ -457,49 +457,49 @@ Public Sub adjustMainControls()
     
     ' set the characteristics of the interactive areas
     ' Note: set the Hover colour close to the original layer to avoid too much intrusion, 0 being grey
-    With fAlpha.gaugeForm.Widgets("housing/helpbutton").Widget
+    With fAlpha.gaugeForm.Widgets("housing/helpbutton").widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
         .Alpha = Val(gblOpacity) / 100
     End With
      
-    With fAlpha.gaugeForm.Widgets("housing/startbutton").Widget
+    With fAlpha.gaugeForm.Widgets("housing/startbutton").widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
         .Alpha = Val(gblOpacity) / 100
         .Tag = 0.25
     End With
       
-    With fAlpha.gaugeForm.Widgets("housing/stopbutton").Widget
+    With fAlpha.gaugeForm.Widgets("housing/stopbutton").widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
         .Alpha = Val(gblOpacity) / 100
         .Tag = 0.25
     End With
       
-    With fAlpha.gaugeForm.Widgets("housing/switchfacesbutton").Widget
+    With fAlpha.gaugeForm.Widgets("housing/switchfacesbutton").widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
         .Alpha = Val(gblOpacity) / 100
     End With
           
-    With fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget
+    With fAlpha.gaugeForm.Widgets("housing/lockbutton").widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
     End With
           
-    With fAlpha.gaugeForm.Widgets("housing/prefsbutton").Widget
+    With fAlpha.gaugeForm.Widgets("housing/prefsbutton").widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
         .Alpha = Val(gblOpacity) / 100
     End With
           
-    With fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget
+    With fAlpha.gaugeForm.Widgets("housing/tickbutton").widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_HAND
     End With
     
-    With fAlpha.gaugeForm.Widgets("housing/surround").Widget
+    With fAlpha.gaugeForm.Widgets("housing/surround").widget
         .HoverColor = 0 ' set the hover colour to grey - this may change later with new RC6
         .MousePointer = IDC_SIZEALL
         .Alpha = Val(gblOpacity) / 100
@@ -508,32 +508,32 @@ Public Sub adjustMainControls()
     
     If gblSmoothSecondHand = "0" Then
         overlayWidget.SmoothSecondHand = False
-        fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget.Alpha = Val(gblOpacity) / 100
+        fAlpha.gaugeForm.Widgets("housing/tickbutton").widget.Alpha = Val(gblOpacity) / 100
     Else
         overlayWidget.SmoothSecondHand = True
-        fAlpha.gaugeForm.Widgets("housing/tickbutton").Widget.Alpha = 0
+        fAlpha.gaugeForm.Widgets("housing/tickbutton").widget.Alpha = 0
     End If
         
     If gblPreventDragging = "0" Then
         menuForm.mnuLockWidget.Checked = False
         overlayWidget.Locked = False
-        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.Alpha = Val(gblOpacity) / 100
+        fAlpha.gaugeForm.Widgets("housing/lockbutton").widget.Alpha = Val(gblOpacity) / 100
     Else
         menuForm.mnuLockWidget.Checked = True
         overlayWidget.Locked = True ' this is just here for continuity's sake, it is also set at the time the control is selected
-        fAlpha.gaugeForm.Widgets("housing/lockbutton").Widget.Alpha = 0
+        fAlpha.gaugeForm.Widgets("housing/lockbutton").widget.Alpha = 0
     End If
 
     ' determine the time bias
     If gblMainDaylightSaving <> "0" Then
         tzDelta = fObtainDaylightSavings("Main")
-        panzerPrefs.txtMainBias = tzDelta
+        widgetPrefs.txtMainBias = tzDelta
     End If
     
     ' determine the time bias, secondary gauge
     If gblSecondaryDaylightSaving <> "0" Then
         tzDelta1 = fObtainDaylightSavings("Secondary")
-        panzerPrefs.txtSecondaryBias = tzDelta1
+        widgetPrefs.txtSecondaryBias = tzDelta1
     End If
    
     ' set the z-ordering of the window
