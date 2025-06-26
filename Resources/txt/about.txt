@@ -22,23 +22,41 @@ CREDITS:
 
 I have really tried to maintain the credits as the project has progressed. If I have made a mistake and left someone out then do forgive me. I will make amends if anyone points out my mistake in leaving someone out.
 
-MicroSoft in the 90s - MS built good, lean and useful tools in the late 90s/early 2000s. Thanks for VB6.
+MicroSoft in the 90s - MS built good, lean and useful tools in the late 90s/early 2000s. Thanks MicroSoft for VB6.
 
-Olaf Schmidt    - This tool was built using the RichClient RC5 Cairo wrapper for VB6. Specifically the components using transparency. Thanks for the massive effort Olaf in creating Cairo counterparts for all VB6 native controls and giving us access to advanced features on controls such as transparency.
+Olaf Schmidt    - This tool was built using the RichClient RC6 Cairo wrapper for VB6. Specifically, the components using transparency. Thanks for the massive effort Olaf in creating Cairo counterparts for all VB6 native controls and giving us access to advanced features on controls such as transparency.
 
 Shuja Ali @ codeguru for his settings.ini code.
 
 ALLAPI.COM        For the registry reading code.
 
-Rxbagain on codeguru for his Open File common dialog code without a dependent OCX
-http://forums.codeguru.com/member.php?92278-rxbagain
+Rxbagain on codeguru for his Open File common dialog code without a dependent OCX http://forums.codeguru.com/member.php?92278-rxbagain
 
 si_the_geek       for his special folder code
 
-Elroy on VB forums for the balloon tooltips
+Elroy on VB forums for the balloon tooltips and his subclassing code
+
+grigri@shinyhappypixels.com - playing sound files asynchronously
+
+Rod Stephens @ vb-helper.com for the resizing form code
+
+RobDog888 https://www.vbforums.com/member.php?17511-RobDog888  for the OpenFile method of testing file existence.
+
+zeezee https://www.vbforums.com/member.php?90054-zeezee  for the PathFileExists method of testing folder existence.
+
+Zach_VB6  https://www.vbforums.com/member.php?95578-Zach_VB6 for loading a file to a textbox
+
+Chris001 for his subclassing for centre-ing dialog forms
+
+All the good crowd at VBForums for the instant help and quality feedback - Join the crowd!
+
+Wayne Phillips, the creator of TwinBasic, the plug-in replacement for VB6.
+
+-oOo-
 
 Harry Whitfield for his quality testing, brain stimulation and being an unwitting source of inspiration.
 
+If I have forgotten to creidt any FOSS contributor then please forgive me. I am hard at work coding and sometimes the author of a component will be forgotten. Let me know if you feel I have forgotten your work and I will add a credit.
 
 LICENCE AGREEMENTS:
 

@@ -9,13 +9,13 @@ Attribute VB_Name = "modTooltips"
 
 Option Explicit
 '
-Private Declare Function SendMessageA Lib "user32" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByRef lParam As Any) As Long
-Private Declare Function SendMessageLongA Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Private Declare Function SendMessageA Lib "user32" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByRef lParam As Any) As Long
+Private Declare Function SendMessageLongA Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 '
 Private Type TOOLINFO
     lSize       As Long
     lFlags      As Long
-    hwnd        As Long
+    hWnd        As Long
     lId         As Long
     '
     'lpRect      As RECT
@@ -30,8 +30,8 @@ Private Type TOOLINFO
 End Type
 '
 Private Declare Sub InitCommonControls Lib "comctl32" ()
-Private Declare Function CreateWindowExW Lib "user32" (ByVal dwExStyle As Long, ByVal lpClassName As Long, ByVal lpWindowName As Long, ByVal dwStyle As Long, ByVal x As Long, ByVal Y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hWndParent As Long, ByVal hMenu As Long, ByVal hInstance As Long, lpParam As Any) As Long
-Public Declare Function DestroyWindow Lib "user32" (ByVal hwnd As Long) As Long
+Private Declare Function CreateWindowExW Lib "user32" (ByVal dwExStyle As Long, ByVal lpClassName As Long, ByVal lpWindowName As Long, ByVal dwStyle As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hWndParent As Long, ByVal hMenu As Long, ByVal hInstance As Long, lpParam As Any) As Long
+Public Declare Function DestroyWindow Lib "user32" (ByVal hWnd As Long) As Long
 '
 Private Const WM_USER               As Long = &H400&
 Private Const CW_USEDEFAULT         As Long = &H80000000
@@ -126,7 +126,7 @@ Public Sub CreateToolTip(ByVal ParentHwnd As Long, _
     '
     ' Initial style settings.
     lWinStyle = TTS_ALWAYSTIP Or TTS_NOPREFIX
-    If bBalloon Then lWinStyle = lWinStyle Or TTS_BALLOON ' Create baloon style if desired.
+    If bBalloon Then lWinStyle = lWinStyle Or TTS_BALLOON ' Create balloon style if desired.
     ' Set the style.
     hwndTT = CreateWindowExW(WS_EX_TOOLWINDOW Or WS_EX_TOPMOST, StrPtr(TOOLTIPS_CLASS), 0&, lWinStyle, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, 0&, 0&, App.hInstance, 0&)
     '
@@ -134,11 +134,12 @@ Public Sub CreateToolTip(ByVal ParentHwnd As Long, _
     ti.lFlags = TTF_SUBCLASS Or TTF_IDISHWND
     If bCentered Then ti.lFlags = ti.lFlags Or TTF_CENTERTIP
     ' Set the hwnd prop to our parent control's hwnd.
-    ti.hwnd = ParentHwnd
+    ti.hWnd = ParentHwnd
     ti.lId = ParentHwnd
     ti.hInstance = App.hInstance
     ti.lpStr = TipText
     ti.lSize = LenB(ti)
+    
     ' Set the tooltip structure
     SendMessageLongA hwndTT, TTM_ADDTOOLW, 0&, VarPtr(ti)
     SendMessageLongA hwndTT, TTM_UPDATETIPTEXTW, 0&, VarPtr(ti)
@@ -163,7 +164,7 @@ End Sub
 
 '---------------------------------------------------------------------------------------
 ' Procedure : DestroyToolTip
-' Author    : beededea
+' Author    : Elroy
 ' Date      : 14/05/2023
 ' Purpose   :
 '---------------------------------------------------------------------------------------

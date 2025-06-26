@@ -16,44 +16,67 @@ Attribute VB_Exposed = False
 ' Class Module      : cwLicence
 ' Author            : beededea
 ' Date              : 17/05/2023
-' Purpose           :
+' Purpose           : puts a licence widget on the form
 '---------------------------------------------------------------------------------------
 
 Option Explicit
  
 Private WithEvents W As cWidgetBase '<- this is required in each cwImplementation...
 Attribute W.VB_VarHelpID = -1
+
+' RC timers
+
 Private WithEvents tmrLicenceFadeIn As cTimer
 Attribute tmrLicenceFadeIn.VB_VarHelpID = -1
 Private WithEvents tmrLicenceFadeOut As cTimer
 Attribute tmrLicenceFadeOut.VB_VarHelpID = -1
 
-Private licencexo As Integer
-Private licenceyo As Integer
+' private members for property assignment
 
 Private mMyOpacity As Double
 Private mShowMe As Boolean
-'Private opacityflag As Integer ' needs this var as it appears there is a bug in RC that causes the widget to lose opacity
 Private mZoom As Double
 
+'local general vars used only within this class
+
+Private licencexo As Integer
+Private licenceyo As Integer
 
 
-'property MyOpacity is a property that populates mMyOpacity used by RenderSurfaceContent
-'property ShowMe is a property that populates mShowMe that triggers a fade in timer
+'---------------------------------------------------------------------------------------
+' Procedure : initialisePrivateVars
+' Author    : beededea
+' Date      : 12/02/2025
+' Purpose   : initialise vars
+'---------------------------------------------------------------------------------------
+'
+Private Sub initialisePrivateVars()
 
+   On Error GoTo initialisePrivateVars_Error
+
+    licencexo = 0
+    licenceyo = 0
+
+   On Error GoTo 0
+   Exit Sub
+
+initialisePrivateVars_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure initialisePrivateVars of Class Module cwLicence"
+End Sub
 '---------------------------------------------------------------------------------------
 ' Procedure : Class_Initialize
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : Constructor (Initialise)
 '---------------------------------------------------------------------------------------
 '
 Private Sub Class_Initialize()
 
    On Error GoTo Class_Initialize_Error
+   
+    Call initialisePrivateVars
 
-    licencexo = 0
-    licenceyo = 0
     MyOpacity = 0
     ShowMe = False
     
@@ -74,7 +97,7 @@ End Sub
 ' Procedure : Widget
 ' Author    : olaf schmidt
 ' Date      : 21/09/2023
-' Purpose   :
+' Purpose   : An RC default property
 '---------------------------------------------------------------------------------------
 '
 Public Property Get Widget() As cWidgetBase
@@ -93,7 +116,7 @@ End Property
 ' Procedure : Widgets
 ' Author    : olaf schmidt
 ' Date      : 21/09/2023
-' Purpose   :
+' Purpose   : An RC default property
 '---------------------------------------------------------------------------------------
 '
 Public Property Get Widgets() As cWidgets
@@ -112,7 +135,7 @@ End Property
 ' Procedure : Zoom
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : property to determine (by value) the zoom value, it being selected by a mousewheel scroll or the slider in the prefs
 '---------------------------------------------------------------------------------------
 '
 Public Property Get Zoom() As Double
@@ -131,7 +154,7 @@ End Property
 ' Procedure : Zoom
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : property to determine (by value) the zoom value, it being selected by a mousewheel scroll or the slider in the prefs
 '---------------------------------------------------------------------------------------
 '
 Public Property Let Zoom(ByVal newValue As Double)
@@ -149,30 +172,30 @@ ZoomLet_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Zoom of Class Module cwhelp"
 End Property
 
-''---------------------------------------------------------------------------------------
-'' Procedure : W_MouseMove
-'' Author    : beededea
-'' Date      : 17/05/2023
-'' Purpose   :
-''---------------------------------------------------------------------------------------
-''
-'Private Sub W_MouseDown(Button As Integer, Shift As Integer, ByVal x As Single, ByVal Y As Single)
-'   On Error GoTo W_MouseDown_Error
+'---------------------------------------------------------------------------------------
+' Procedure : W_MouseMove
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   : Handle the mouse move event for the widget
+'---------------------------------------------------------------------------------------
 '
-'    tmrLicenceFadeOut.Enabled = True
-'
-'   On Error GoTo 0
-'   Exit Sub
-'
-'W_MouseDown_Error:
-'
-'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure W_MouseDown of Class Module cwAbout"
-'End Sub
+Private Sub W_MouseDown(Button As Integer, Shift As Integer, ByVal x As Single, ByVal y As Single)
+   On Error GoTo W_MouseDown_Error
+
+    tmrLicenceFadeOut.Enabled = True
+
+   On Error GoTo 0
+   Exit Sub
+
+W_MouseDown_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure W_MouseDown of Class Module cwAbout"
+End Sub
 '---------------------------------------------------------------------------------------
 ' Procedure : MyOpacity
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : property to determine (by value) the opacity value used by RenderSurfaceContent
 '---------------------------------------------------------------------------------------
 '
 Public Property Let MyOpacity(ByVal newValue As Double)
@@ -191,7 +214,7 @@ End Property
 ' Procedure : MyOpacity
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : property to determine (by value) the opacity value used by RenderSurfaceContent
 '---------------------------------------------------------------------------------------
 '
 Public Property Get MyOpacity() As Double
@@ -211,7 +234,7 @@ End Property
 ' Procedure : ShowMe
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : property to determine (by value) that triggers a fade in timer
 '---------------------------------------------------------------------------------------
 '
 Public Property Let ShowMe(ByVal newValue As Boolean)
@@ -232,7 +255,7 @@ End Property
 ' Procedure : ShowMe
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : property to determine (by value) that triggers a fade in timer
 '---------------------------------------------------------------------------------------
 '
 Public Property Get ShowMe() As Boolean
@@ -310,7 +333,7 @@ End Sub
 ' Procedure : W_Paint
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : Default RC paint routine
 '---------------------------------------------------------------------------------------
 '
 Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As Single, ByVal dx_Aligned As Single, ByVal dy_Aligned As Single, UserObj As Object)
@@ -330,13 +353,13 @@ End Sub
 ' Procedure : Draw
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : Draw routine called by W_PAINT
 '---------------------------------------------------------------------------------------
 '
 Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Single)
     
     On Error GoTo Draw_Error
-    
+
     'set some Font- and ForeColor-Properties and draw some Text on the Widget
     W.FontItalic = False
     W.FontName = "Arial"
@@ -344,13 +367,13 @@ Private Sub Draw(ByRef CC As cCairoContext, ByVal dx As Single, ByVal dy As Sing
     W.FontSize = 10
     W.SelectFontSettingsInto CC
    
-    CC.DrawText 48, -235, dx, dy, "Licence Agreement " & widgetName, , , 2, True, , 1
+    CC.DrawText 48, -235, dx, dy, "Licence Agreement " & gblWidgetName, , , 2, True, , 1
 
     CC.ScaleDrawings mZoom, mZoom
 
     ' extra code not needed when using RC5 but now required in RC6 - starts
     CC.Operator = CAIRO_OPERATOR_CLEAR
-    CC.Paint 'clear the whole background of this Widgets underlying Surface via Clear-Operator
+     CC.Paint 'clear the whole background of this Widgets underlying Surface via Clear-Operator
     CC.Operator = CAIRO_OPERATOR_OVER 'switch back to the default-Operator
     ' extra code not needed when using RC5 but now required in RC6 - ends
     
@@ -367,3 +390,9 @@ Draw_Error:
 
 End Sub
 
+' the following global variables are used in this class, I should replace each with a property and use that locally
+' but I don't think I can be bothered, there are too many of them. This is my code and the gauge class is not going
+' to have multiple instances running so it does not really matter. If you want to convert each of these to property GET/LETs
+' then please feel free to work your way through this list.
+
+' gblWidgetName

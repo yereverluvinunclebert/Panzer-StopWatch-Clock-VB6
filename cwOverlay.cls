@@ -17,12 +17,12 @@ Attribute VB_Exposed = False
 ' Author    : beededea
 ' Date      : 31/07/2023
 ' Purpose   : create a fully click-through Widget, which allows for all kind of
-'             things to render on top of the PSD-generated Widgets created in cfAlpha
+'             things to render on top of the PSD-generated Widgets created in cfGauge
 '---------------------------------------------------------------------------------------
 
 Option Explicit
 
-'these Public Properties are set in the Parent (here, cfAlpha)
+'these Public Properties are set in the Parent (here, cfGauge)
 Public cCollOverlayImages As cCollection
 Public cxPerc As Single
 Public cyPerc As Single
@@ -84,6 +84,9 @@ Private mHidden As Boolean ' property Hidden
 Private mFaceMode As String ' property FaceMode
 Private storeTxtDayNumber As String
 
+Private mMyOpacity As Single
+
+
 Private mstartSWRotation As Boolean
 Private mstartSWDegrees As Long
 Private mSWRotationDegrees As Long
@@ -93,15 +96,40 @@ Private rotationTimerCount As Integer ' rotationTimerCount = 0
 
 
 '---------------------------------------------------------------------------------------
-' Procedure : Class_Initialize
+' Procedure : initialisePrivateVars
+' Author    : beededea
+' Date      : 12/02/2025
+' Purpose   : initialise vars
+'---------------------------------------------------------------------------------------
+'
+Private Sub initialisePrivateVars()
+
+   On Error GoTo initialisePrivateVars_Error
+
+
+   ' pvtCurrentDateToDisplay = vbNullString
+
+   On Error GoTo 0
+   Exit Sub
+
+initialisePrivateVars_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure initialisePrivateVars of Class Module cwOverlay"
+End Sub
+
+'---------------------------------------------------------------------------------------
+' Procedure : Class_Initialize for cwOverlay
 ' Author    : olaf schmidt
 ' Date      : 31/07/2023
-' Purpose   :
+' Purpose   : Constructor (Initialise) set the inital values of private vars, set up the timers
 '---------------------------------------------------------------------------------------
 '
 Private Sub Class_Initialize()
     Dim intervalValue As Integer: intervalValue = 0
+    
     On Error GoTo Class_Initialize_Error
+    
+    Call initialisePrivateVars
 
     Set W = Cairo.WidgetBase
         W.BackColor = -1  'we don't use any BackColor here, transparent
@@ -125,14 +153,15 @@ Private Sub Class_Initialize()
 
     Set tmrHandsRotation = Nothing
     Set tmrHandsRotation = New_c.Timer(20, False)
-
-   On Error GoTo 0
+    
+    On Error GoTo 0
    Exit Sub
 
 Class_Initialize_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure Class_Initialize of Class Module cwOverlay"
 End Sub
+
 
 '---------------------------------------------------------------------------------------
 ' Procedure : Widget
@@ -501,11 +530,13 @@ SmoothSecondHandLet_Error:
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property SmoothSecondHand of Class Module cwOverlay"
 End Property ' the earth SmoothSecondHand flag
 
+
+
 '---------------------------------------------------------------------------------------
-' Property : Locked
+' Property  : Locked
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : property used to store/set the lock state to lock the widget in place, the actual locking is done elsewhere
 '---------------------------------------------------------------------------------------
 '
 Public Property Get Locked() As Boolean
@@ -518,13 +549,13 @@ Public Property Get Locked() As Boolean
 
 LockedGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwoverlay"
 End Property
 '---------------------------------------------------------------------------------------
 ' Property  : Locked
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : property used to store/set the lock state to lock the widget in place, the actual locking is done elsewhere
 '---------------------------------------------------------------------------------------
 '
 Public Property Let Locked(ByVal newValue As Boolean)
@@ -537,13 +568,59 @@ Public Property Let Locked(ByVal newValue As Boolean)
 
 LockedLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Locked of Class Module cwoverlay"
 End Property
+
+
+
+
+'---------------------------------------------------------------------------------------
+' Procedure : MyOpacity
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   : property (by value) used to determine the opacity of elements in the overlay
+'---------------------------------------------------------------------------------------
+'
+Public Property Let MyOpacity(ByVal newValue As Double)
+   On Error GoTo MyOpacityLet_Error
+
+   If mMyOpacity <> newValue Then mMyOpacity = newValue Else Exit Property
+
+   On Error GoTo 0
+   Exit Property
+
+MyOpacityLet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure MyOpacity of Class Module cwAbout"
+End Property
+
+'---------------------------------------------------------------------------------------
+' Procedure : MyOpacity
+' Author    : beededea
+' Date      : 17/05/2023
+' Purpose   : property (by value) used to determine the opacity of elements in the overlay
+'---------------------------------------------------------------------------------------
+'
+Public Property Get MyOpacity() As Double
+   On Error GoTo MyOpacityGet_Error
+
+   MyOpacity = mMyOpacity
+
+   On Error GoTo 0
+   Exit Property
+
+MyOpacityGet_Error:
+
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure MyOpacity of Class Module cwAbout"
+End Property
+
+
+
 '---------------------------------------------------------------------------------------
 ' Property  : Hidden
 ' Author    : beededea
 ' Date      : 17/05/2023
-' Purpose   :
+' Purpose   : property to determine (by value)  the set the hidden value of the whole widget
 '---------------------------------------------------------------------------------------
 '
 Public Property Get Hidden() As Boolean
@@ -556,13 +633,17 @@ Public Property Get Hidden() As Boolean
 
 HiddenGet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwoverlay"
 End Property
+
+    
+
+
 '---------------------------------------------------------------------------------------
 ' Property  : Hidden
 ' Author    : beededea
 ' Date      : 10/05/2023
-' Purpose   :
+' Purpose   : property to determine (by value)  the set the hidden value of the whole widget
 '---------------------------------------------------------------------------------------
 '
 Public Property Let Hidden(ByVal newValue As Boolean)
@@ -584,8 +665,9 @@ Public Property Let Hidden(ByVal newValue As Boolean)
 
 HiddenLet_Error:
 
-    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwOverlay"
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property Hidden of Class Module cwoverlay"
 End Property
+
 '---------------------------------------------------------------------------------------
 ' Property  : FaceMode
 ' Author    : beededea
@@ -624,6 +706,9 @@ FaceModeLet_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property FaceMode of Class Module cwOverlay"
 End Property
+ 
+
+
 '
 '---------------------------------------------------------------------------------------------
 ' Procedure : W_HitTest
@@ -684,7 +769,7 @@ Private Sub W_Paint(CC As RC6.cCairoContext, ByVal xAbs As Single, ByVal yAbs As
     
     txtMonthNumber = Month(DateAdd("m", tzDelta, Now))
 
-    For I = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfAlpha by duplicating collPSDNonUIElements.
+    For I = 0 To cCollOverlayImages.Count - 1 ' this is the ExcludedPaths collection populated in cfGauge by duplicating collPSDNonUIElements.
       Arr = cCollOverlayImages.ItemByIndex(I)
       Key = cCollOverlayImages.KeyByIndex(I)
       
@@ -803,10 +888,9 @@ W_Paint_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure W_Paint of Class Module cwOverlay"
 End Sub
- 
- 
 
-    
+
+
 '---------------------------------------------------------------------------------------
 ' Procedure : tmrClock_Timer
 ' Author    : olaf schmidt
@@ -1010,5 +1094,90 @@ tmrHandsRotation_Timer_Error:
 
     MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure tmrHandsRotation_Timer of Class Module cwOverlay"
 End Sub
+
+
+
+''---------------------------------------------------------------------------------------
+'' Property  : TmrGaugeTicking
+'' Author    : beededea
+'' Date      : 17/05/2023
+'' Purpose   : property to determine (by value) externally the state of a private timer
+''---------------------------------------------------------------------------------------
+''
+'Public Property Get TmrGaugeTicking() As Boolean
+'   On Error GoTo TmrGaugeTickingGet_Error
+'
+'   TmrGaugeTicking = mTmrGaugeTicking
+'
+'   On Error GoTo 0
+'   Exit Property
+'
+'TmrGaugeTickingGet_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property TmrGaugeTicking of Class Module cfGauge"
+'End Property
+''---------------------------------------------------------------------------------------
+'' Property  : TmrGaugeTicking
+'' Author    : beededea
+'' Date      : 17/05/2023
+'' Purpose   : property to determine (by value) externally the state of a private timer
+''---------------------------------------------------------------------------------------
+''
+'Public Property Let TmrGaugeTicking(ByVal newValue As Boolean)
+'   On Error GoTo TmrGaugeTickingLet_Error
+'
+'   tmrGauge.Enabled = newValue
+'
+'   If mTmrGaugeTicking <> newValue Then mTmrGaugeTicking = newValue Else Exit Property
+'
+'   On Error GoTo 0
+'   Exit Property
+'
+'TmrGaugeTickingLet_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property TmrGaugeTicking of Class Module cfGauge"
+'End Property
+'
+''---------------------------------------------------------------------------------------
+'' Property  : TmrGaugeInterval
+'' Author    : beededea
+'' Date      : 17/05/2023
+'' Purpose   : property to determine (by value) externally the interval of a private timer
+''---------------------------------------------------------------------------------------
+''
+'Public Property Get TmrGaugeInterval() As Long
+'   On Error GoTo TmrGaugeIntervalGet_Error
+'
+'   TmrGaugeInterval = mTmrGaugeInterval
+'
+'   On Error GoTo 0
+'   Exit Property
+'
+'TmrGaugeIntervalGet_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property TmrGaugeInterval of Class Module cfGauge"
+'End Property
+''---------------------------------------------------------------------------------------
+'' Property  : TmrGaugeInterval
+'' Author    : beededea
+'' Date      : 17/05/2023
+'' Purpose   : property to determine (by value) externally the interval of a private timer
+''---------------------------------------------------------------------------------------
+''
+'Public Property Let TmrGaugeInterval(ByVal newValue As Long)
+'   On Error GoTo TmrGaugeIntervalLet_Error
+'
+'   If mTmrGaugeInterval <> newValue Then mTmrGaugeInterval = newValue Else Exit Property
+'
+'   tmrGauge.Interval = newValue
+'
+'   On Error GoTo 0
+'   Exit Property
+'
+'TmrGaugeIntervalLet_Error:
+'
+'    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in Property TmrGaugeInterval of Class Module cfGauge"
+'End Property
+'
 
 

@@ -27,13 +27,25 @@
 ' the stopwatch second hand rotates smoothly from paused location to actual elapsed time - done
 ' When the timer is reset using the lower b, the timer will stop rotating the hands and a secondary timer will rotate them backward and reset the start point - done
 
--oOo-
 
-NOTE: When editing using the VB6 IDE started from the widget right click menu itself, it may not compile and run correctly. 
+
+
+' -oOo-
+
+NOTE:
+
+When the RC6.DLL and RC6widgets.dll are registered elsewhere within another widget, then this widget will compile but not run.
+In this case, the two DLLs in the local BIN folder need to be registered using the two Olaf-supplied scripts.
+
+NOTE: When editing using the VB6 IDE started from the widget right click menu itself, it may not compile and run correctly.
 - it may well run in the IDE but not as an .EXE run via the IDE 'run' button.
 FIX: Initiate the IDE from the VBP file in the folder itself, opened using explorer
      Compile and then run from explorer. 
      Do not know why it only affects this widget alone.
+     
+
+Tasks to do:
+============     
 
 ' adapt a completely new help HTML from the Pz Just Clock with new information pertaining to the stopwatch functionality.
 ' CHM build
@@ -53,14 +65,33 @@ FIX: Initiate the IDE from the VBP file in the folder itself, opened using explo
 
 ' https://www.vbforums.com/showthread.php?900892-VB6-Simple-way-to-make-your-VB6-application-quot-Per-Monitor-DPI-Aware-quot
 
-' adjustFormPositionToCorrectMonitor, make it work and observe the result as per FCW - wip
 
+
+update XML documentation
+
+' create diagram of the program flow.
+
+' investigate the accumulating shadow when moving across the transparent surface of the screen
+
+' rubberduck the code
+
+' Create a XP /ReactOS version using old APIs and RC5 - no DPI awareness, as XP does not have the API nor the capability.
+         no simplePSD layer extraction
+         https://www.vbforums.com/showthread.php?896944-VB6-QUESTION-Check-if-API-exists
+
+' obtain a XP test system - wip
+
+' sync. E6410 win 7 and test - wip
+' sync. Fast Dell laptop
+
+' test on Dell win 11 high DPI with slicence =
+
+' Form.CenterOn New_c.Displays(1) - test whether this required on a first time install.
+
+' adjustFormPositionToCorrectMonitor, make it work and observe the result as per FCW - wip
 ' adjustFormPositionToCorrectMonitor - licence form
 ' adjustFormPositionToCorrectMonitor - about form
 ' adjustFormPositionToCorrectMonitor - help form
-
-' setup2go create setup.exe
-
 
 
 ' -oOo-
@@ -74,14 +105,12 @@ FIX: Initiate the IDE from the VBP file in the folder itself, opened using explo
 ' 32x32 (32 bit)
 ' 16x16 (32 bit)
 
-' patch a 256 bit icon into the VB6 binary
+' patch a 256 bit icon into the VB6 binary        VBAdvance?
 ' https://www.vbforums.com/showthread.php?858347-RESOLVED-How-to-create-and-connect-quality-icon-group-to-your-VB6-app
 
-' RC BUGS & LIMITATIONS
-' =====================
+ or this:
 
-' tooltips also resize when the whole thing is resized, code received from Olaf tested - resizing results in missing text and blank tooltips, using non-standard font centurion light
-' RC6 needs a static tooltip option.
+ file:///E:/vb6/vbAccelerator%20-%20Providing%20a%20proper%20VB%20Application%20Icon,%20Including%20Large%20Icons%20and%2032-Bit%20Alpha%20Images.html
 
-
-
+Static Linking in TB only.
+         In TwinBasic static library linking is possible allowing incorporation of DLLs into the misc section and compiling into the finished binary
