@@ -2221,7 +2221,7 @@ Private Sub optGaugeTooltips_Click(Index As Integer)
         optGaugeTooltips(1).Tag = CStr(Index)
         optGaugeTooltips(2).Tag = CStr(Index)
         
-        sPutINISetting "Software\UBoatStopWatch", "gaugeTooltips", gblGaugeTooltips, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "gaugeTooltips", gblGaugeTooltips, gblSettingsFile
 
         answer = vbYes
         answerMsg = "You must soft reload this widget, in order to change the tooltip setting, do you want me to reload this widget? I can do it now for you."
@@ -2414,7 +2414,7 @@ Private Sub optPrefsTooltips_Click(Index As Integer)
         optPrefsTooltips(1).Tag = CStr(Index)
         optPrefsTooltips(2).Tag = CStr(Index)
         
-        sPutINISetting "Software\UBoatStopWatch", "prefsTooltips", gblPrefsTooltips, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "prefsTooltips", gblPrefsTooltips, gblSettingsFile
         
         ' set the tooltips on the prefs screen
         Call setPrefsTooltips
@@ -2489,16 +2489,16 @@ Private Sub cmbMultiMonitorResize_Click()
     If cmbMultiMonitorResize.ListIndex = 2 Then
         If prefsMonitorStruct.IsPrimary = True Then
             gblGaugePrimaryHeightRatio = fGauge.gaugeForm.WidgetRoot.Zoom
-            sPutINISetting "Software\UBoatStopWatch", "gaugePrimaryHeightRatio", gblGaugePrimaryHeightRatio, gblSettingsFile
+            sPutINISetting "Software\PanzerStopWatch", "gaugePrimaryHeightRatio", gblGaugePrimaryHeightRatio, gblSettingsFile
             
             'gblPrefsPrimaryHeightTwips = Trim$(cstr(widgetPrefs.Height))
-            sPutINISetting "Software\UBoatStopWatch", "prefsPrimaryHeightTwips", gblPrefsPrimaryHeightTwips, gblSettingsFile
+            sPutINISetting "Software\PanzerStopWatch", "prefsPrimaryHeightTwips", gblPrefsPrimaryHeightTwips, gblSettingsFile
         Else
             gblGaugeSecondaryHeightRatio = fGauge.gaugeForm.WidgetRoot.Zoom
-            sPutINISetting "Software\UBoatStopWatch", "gaugeSecondaryHeightRatio", gblGaugeSecondaryHeightRatio, gblSettingsFile
+            sPutINISetting "Software\PanzerStopWatch", "gaugeSecondaryHeightRatio", gblGaugeSecondaryHeightRatio, gblSettingsFile
             
             'gblPrefsSecondaryHeightTwips = Trim$(cstr(widgetPrefs.Height))
-            sPutINISetting "Software\UBoatStopWatch", "prefsSecondaryHeightTwips", gblPrefsSecondaryHeightTwips, gblSettingsFile
+            sPutINISetting "Software\PanzerStopWatch", "prefsSecondaryHeightTwips", gblPrefsSecondaryHeightTwips, gblSettingsFile
         End If
     End If
 
@@ -2617,7 +2617,7 @@ Private Sub Form_Load()
     
     Me.Visible = False
     btnSave.Enabled = False ' disable the save button
-    Me.mnuAbout.Caption = "About UBoat StopWatch Cairo " & gblCodingEnvironment & " widget"
+    Me.mnuAbout.Caption = "About Panzer StopWatch Cairo " & gblCodingEnvironment & " widget"
 
     pvtPrefsStartupFlg = True ' this is used to prevent some control initialisations from running code at startup
     'pvtPrefsDynamicSizingFlg = False
@@ -3073,14 +3073,14 @@ Public Sub positionPrefsMonitor()
 
         If prefsMonitorStruct.IsPrimary = True Then
             gblPrefsFormResizedInCode = True
-            gblPrefsPrimaryHeightTwips = fGetINISetting("Software\UBoatStopWatch", "prefsPrimaryHeightTwips", gblSettingsFile)
+            gblPrefsPrimaryHeightTwips = fGetINISetting("Software\PanzerStopWatch", "prefsPrimaryHeightTwips", gblSettingsFile)
             If Val(gblPrefsPrimaryHeightTwips) <= 0 Then
                 widgetPrefs.Height = gblPrefsStartHeight
             Else
                 widgetPrefs.Height = CLng(gblPrefsPrimaryHeightTwips)
             End If
         Else
-            gblPrefsSecondaryHeightTwips = fGetINISetting("Software\UBoatStopWatch", "prefsSecondaryHeightTwips", gblSettingsFile)
+            gblPrefsSecondaryHeightTwips = fGetINISetting("Software\PanzerStopWatch", "prefsSecondaryHeightTwips", gblSettingsFile)
             gblPrefsFormResizedInCode = True
             If Val(gblPrefsSecondaryHeightTwips) <= 0 Then
                 widgetPrefs.Height = gblPrefsStartHeight
@@ -3129,7 +3129,7 @@ Private Sub chkDpiAwareness_Click()
             gblDpiAwareness = "1"
         End If
 
-        sPutINISetting "Software\UBoatStopWatch", "dpiAwareness", gblDpiAwareness, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "dpiAwareness", gblDpiAwareness, gblSettingsFile
         
         If answer = vbNo Then
             answer = vbYes
@@ -3139,7 +3139,7 @@ Private Sub chkDpiAwareness_Click()
             Exit Sub
         Else
 
-            sPutINISetting "Software\UBoatStopWatch", "dpiAwareness", gblDpiAwareness, gblSettingsFile
+            sPutINISetting "Software\PanzerStopWatch", "dpiAwareness", gblDpiAwareness, gblSettingsFile
             'Call reloadProgram ' this is insufficient, image controls still fail to resize and autoscale correctly
             Call hardRestart
         End If
@@ -3535,7 +3535,7 @@ Private Sub chkWidgetHidden_Click()
         gblWidgetHidden = "1"
     End If
     
-    sPutINISetting "Software\UBoatStopWatch", "widgetHidden", gblWidgetHidden, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "widgetHidden", gblWidgetHidden, gblSettingsFile
     
     btnSave.Enabled = True ' enable the save button
 
@@ -3592,7 +3592,7 @@ Private Sub cmbDebug_Click()
 
     btnSave.Enabled = True ' enable the save button
     If cmbDebug.ListIndex = 0 Then
-        txtDefaultEditor.Text = "eg. E:\vb6\UBoat-StopWatch-VB6MkII\UBoat-StopWatch-VB6.vbp"
+        txtDefaultEditor.Text = "eg. E:\vb6\Panzer-StopWatch-VB6MkII\Panzer-StopWatch-VB6.vbp"
         txtDefaultEditor.Enabled = False
         lblDebug(7).Enabled = False
         btnDefaultEditor.Enabled = False
@@ -4173,86 +4173,86 @@ Private Sub btnSave_Click()
      
             
     If gblStartup = "1" Then
-        Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "UBoatStopWatch", """" & App.path & "\" & "UBoat-StopWatch-VB6.exe""")
+        Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "PanzerStopWatch", """" & App.path & "\" & "Panzer-StopWatch-VB6.exe""")
     Else
-        Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "UBoatStopWatch", vbNullString)
+        Call writeRegistry(HKEY_CURRENT_USER, "SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "PanzerStopWatch", vbNullString)
     End If
 
     ' save the values from the general tab
     If fFExists(gblSettingsFile) Then
-        sPutINISetting "Software\UBoatStopWatch", "gaugeTooltips", gblGaugeTooltips, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "prefsTooltips", gblPrefsTooltips, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "gaugeTooltips", gblGaugeTooltips, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "prefsTooltips", gblPrefsTooltips, gblSettingsFile
 
-        sPutINISetting "Software\UBoatStopWatch", "showTaskbar", gblShowTaskbar, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "showHelp", gblShowHelp, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "showTaskbar", gblShowTaskbar, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "showHelp", gblShowHelp, gblSettingsFile
         
-        sPutINISetting "Software\UBoatStopWatch", "dpiAwareness", gblDpiAwareness, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "dpiAwareness", gblDpiAwareness, gblSettingsFile
         
         
-        sPutINISetting "Software\UBoatStopWatch", "gaugeSize", gblGaugeSize, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "scrollWheelDirection", gblScrollWheelDirection, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "gaugeSize", gblGaugeSize, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "scrollWheelDirection", gblScrollWheelDirection, gblSettingsFile
                 
-        sPutINISetting "Software\UBoatStopWatch", "widgetFunctions", gblGaugeFunctions, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "widgetFunctions", gblGaugeFunctions, gblSettingsFile
         
-        sPutINISetting "Software\UBoatStopWatch", "smoothSecondHand", gblSmoothSecondHand, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "smoothSecondHand", gblSmoothSecondHand, gblSettingsFile
         
-        sPutINISetting "Software\UBoatStopWatch", "clockFaceSwitchPref", gblClockFaceSwitchPref, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "mainGaugeTimeZone", gblMainGaugeTimeZone, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "mainDaylightSaving", gblMainDaylightSaving, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "secondaryGaugeTimeZone", gblSecondaryGaugeTimeZone, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "secondaryDaylightSaving", gblSecondaryDaylightSaving, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "clockFaceSwitchPref", gblClockFaceSwitchPref, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "mainGaugeTimeZone", gblMainGaugeTimeZone, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "mainDaylightSaving", gblMainDaylightSaving, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "secondaryGaugeTimeZone", gblSecondaryGaugeTimeZone, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "secondaryDaylightSaving", gblSecondaryDaylightSaving, gblSettingsFile
         
               
-        sPutINISetting "Software\UBoatStopWatch", "aspectHidden", gblAspectHidden, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "widgetPosition", gblWidgetPosition, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "widgetLandscape", gblWidgetLandscape, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "widgetPortrait", gblWidgetPortrait, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "aspectHidden", gblAspectHidden, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "widgetPosition", gblWidgetPosition, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "widgetLandscape", gblWidgetLandscape, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "widgetPortrait", gblWidgetPortrait, gblSettingsFile
 
-        sPutINISetting "Software\UBoatStopWatch", "prefsFont", gblPrefsFont, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "gaugeFont", gblGaugeFont, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "prefsFont", gblPrefsFont, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "gaugeFont", gblGaugeFont, gblSettingsFile
         
-        sPutINISetting "Software\UBoatStopWatch", "prefsFontSizeHighDPI", gblPrefsFontSizeHighDPI, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "prefsFontSizeLowDPI", gblPrefsFontSizeLowDPI, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "prefsFontItalics", gblPrefsFontItalics, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "prefsFontColour", gblPrefsFontColour, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "prefsFontSizeHighDPI", gblPrefsFontSizeHighDPI, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "prefsFontSizeLowDPI", gblPrefsFontSizeLowDPI, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "prefsFontItalics", gblPrefsFontItalics, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "prefsFontColour", gblPrefsFontColour, gblSettingsFile
         
-        sPutINISetting "Software\UBoatStopWatch", "displayScreenFont", gblDisplayScreenFont, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "displayScreenFontSize", gblDisplayScreenFontSize, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "displayScreenFontItalics", gblDisplayScreenFontItalics, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "displayScreenFontColour", gblDisplayScreenFontColour, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "displayScreenFont", gblDisplayScreenFont, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "displayScreenFontSize", gblDisplayScreenFontSize, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "displayScreenFontItalics", gblDisplayScreenFontItalics, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "displayScreenFontColour", gblDisplayScreenFontColour, gblSettingsFile
 
         'save the values from the Windows Config Items
-        sPutINISetting "Software\UBoatStopWatch", "windowLevel", gblWindowLevel, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "preventDragging", gblPreventDragging, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "windowLevel", gblWindowLevel, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "preventDragging", gblPreventDragging, gblSettingsFile
         
-        sPutINISetting "Software\UBoatStopWatch", "opacity", gblOpacity, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "widgetHidden", gblWidgetHidden, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "hidingTime", gblHidingTime, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "ignoreMouse", gblIgnoreMouse, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "multiMonitorResize", gblMultiMonitorResize, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "opacity", gblOpacity, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "widgetHidden", gblWidgetHidden, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "hidingTime", gblHidingTime, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "ignoreMouse", gblIgnoreMouse, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "multiMonitorResize", gblMultiMonitorResize, gblSettingsFile
         
         
-        sPutINISetting "Software\UBoatStopWatch", "startup", gblStartup, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "startup", gblStartup, gblSettingsFile
 
-        sPutINISetting "Software\UBoatStopWatch", "enableSounds", gblEnableSounds, gblSettingsFile
-'        sPutINISetting "Software\UBoatStopWatch", "enableTicks", gblEnableTicks, gblSettingsFile
-'        sPutINISetting "Software\UBoatStopWatch", "enableChimes", gblEnableChimes, gblSettingsFile
-'        sPutINISetting "Software\UBoatStopWatch", "enableAlarms", gblEnableAlarms, gblSettingsFile
-'        sPutINISetting "Software\UBoatStopWatch", "volumeBoost", gblVolumeBoost, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "enableSounds", gblEnableSounds, gblSettingsFile
+'        sPutINISetting "Software\PanzerStopWatch", "enableTicks", gblEnableTicks, gblSettingsFile
+'        sPutINISetting "Software\PanzerStopWatch", "enableChimes", gblEnableChimes, gblSettingsFile
+'        sPutINISetting "Software\PanzerStopWatch", "enableAlarms", gblEnableAlarms, gblSettingsFile
+'        sPutINISetting "Software\PanzerStopWatch", "volumeBoost", gblVolumeBoost, gblSettingsFile
         
-        sPutINISetting "Software\UBoatStopWatch", "lastSelectedTab", gblLastSelectedTab, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "lastSelectedTab", gblLastSelectedTab, gblSettingsFile
         
-        sPutINISetting "Software\UBoatStopWatch", "debug", gblDebug, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "dblClickCommand", gblDblClickCommand, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "openFile", gblOpenFile, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "defaultVB6Editor", gblDefaultVB6Editor, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "defaultTBEditor", gblDefaultTBEditor, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "debug", gblDebug, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "dblClickCommand", gblDblClickCommand, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "openFile", gblOpenFile, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "defaultVB6Editor", gblDefaultVB6Editor, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "defaultTBEditor", gblDefaultTBEditor, gblSettingsFile
         
-        sPutINISetting "Software\UBoatStopWatch", "gaugeHighDpiXPos", gblGaugeHighDpiXPos, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "gaugeHighDpiYPos", gblGaugeHighDpiYPos, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "gaugeHighDpiXPos", gblGaugeHighDpiXPos, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "gaugeHighDpiYPos", gblGaugeHighDpiYPos, gblSettingsFile
         
-        sPutINISetting "Software\UBoatStopWatch", "gaugeLowDpiXPos", gblGaugeLowDpiXPos, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "gaugeLowDpiYPos", gblGaugeLowDpiYPos, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "gaugeLowDpiXPos", gblGaugeLowDpiXPos, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "gaugeLowDpiYPos", gblGaugeLowDpiYPos, gblSettingsFile
                        
     End If
     
@@ -4378,12 +4378,12 @@ Private Sub btnPrefsFont_Click()
     Call PrefsForm_Resize_Event
 
     If fFExists(gblSettingsFile) Then ' does the tool's own settings.ini exist?
-        sPutINISetting "Software\UBoatStopWatch", "prefsFont", gblPrefsFont, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "gaugeFont", gblGaugeFont, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "prefsFontSizeHighDPI", gblPrefsFontSizeHighDPI, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "prefsFontSizeLowDPI", gblPrefsFontSizeLowDPI, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "prefsFontItalics", gblPrefsFontItalics, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "PrefsFontColour", gblPrefsFontColour, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "prefsFont", gblPrefsFont, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "gaugeFont", gblGaugeFont, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "prefsFontSizeHighDPI", gblPrefsFontSizeHighDPI, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "prefsFontSizeLowDPI", gblPrefsFontSizeLowDPI, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "prefsFontItalics", gblPrefsFontItalics, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "PrefsFontColour", gblPrefsFontColour, gblSettingsFile
     End If
     
     If fntFont = vbNullString Then fntFont = "arial"
@@ -4449,10 +4449,10 @@ Private Sub btnDisplayScreenFont_Click()
     End If
 
     If fFExists(gblSettingsFile) Then ' does the tool's own settings.ini exist?
-        sPutINISetting "Software\UBoatStopWatch", "displayScreenFont", gblDisplayScreenFont, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "displayScreenFontSize", gblDisplayScreenFontSize, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "displayScreenFontItalics", gblDisplayScreenFontItalics, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "displayScreenFontColour", gblDisplayScreenFontColour, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "displayScreenFont", gblDisplayScreenFont, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "displayScreenFontSize", gblDisplayScreenFontSize, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "displayScreenFontItalics", gblDisplayScreenFontItalics, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "displayScreenFontColour", gblDisplayScreenFontColour, gblSettingsFile
     End If
     
     If fntFont = vbNullString Then fntFont = "courier new"
@@ -4562,7 +4562,7 @@ Private Sub adjustPrefsControls(Optional ByVal restartState As Boolean)
         txtDefaultEditor.Text = gblDefaultVB6Editor
     #End If
     
-    lblGitHub.Caption = "You can find the code for the UBoat StopWatch on github, visit by double-clicking this link https://github.com/yereverluvinunclebert/ UBoat-StopWatch"
+    lblGitHub.Caption = "You can find the code for the Panzer StopWatch on github, visit by double-clicking this link https://github.com/yereverluvinunclebert/ Panzer-StopWatch"
      
      
      If Not restartState = True Then
@@ -5884,7 +5884,7 @@ Private Sub lblGitHub_dblClick()
     answerMsg = "This option opens a browser window and take you straight to Github. Proceed?"
     answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Proceed to Github? ", True, "lblGitHubDblClick")
     If answer = vbYes Then
-        Call ShellExecute(Me.hWnd, "Open", "https://github.com/yereverluvinunclebert/UBoat-StopWatch-" & gblCodingEnvironment, vbNullString, App.path, 1)
+        Call ShellExecute(Me.hWnd, "Open", "https://github.com/yereverluvinunclebert/Panzer-StopWatch-" & gblCodingEnvironment, vbNullString, App.path, 1)
     End If
 
    On Error GoTo 0
@@ -6152,7 +6152,7 @@ Private Sub sliOpacity_Click()
     If pvtPrefsStartupFlg = False Then
         gblOpacity = CStr(sliOpacity.Value)
     
-        sPutINISetting "Software\UBoatStopWatch", "opacity", gblOpacity, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "opacity", gblOpacity, gblSettingsFile
         
         'Call setOpacity(sliOpacity.Value) ' this works but reveals the background form itself
         
@@ -6676,7 +6676,7 @@ Private Sub picButtonMouseUpEvent(ByVal thisTabName As String, ByRef thisPicName
     Call clearBorderStyle
 
     gblLastSelectedTab = thisTabName
-    sPutINISetting "Software\UBoatStopWatch", "lastSelectedTab", gblLastSelectedTab, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "lastSelectedTab", gblLastSelectedTab, gblSettingsFile
 
     thisFraName.Visible = True
     
@@ -7010,7 +7010,7 @@ Private Sub setThemeShade(ByVal redC As Integer, ByVal greenC As Integer, ByVal 
     sliOpacity.BackColor = RGB(redC, greenC, blueC)
     txtAboutText.BackColor = RGB(redC, greenC, blueC)
     
-    sPutINISetting "Software\UBoatStopWatch", "skinTheme", gblSkinTheme, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "skinTheme", gblSkinTheme, gblSettingsFile
 
     On Error GoTo 0
     Exit Sub
@@ -7605,10 +7605,10 @@ Private Sub tmrPrefsMonitorSaveHeight_Timer()
  
     If prefsMonitorStruct.IsPrimary = True Then
         gblPrefsPrimaryHeightTwips = Trim$(CStr(widgetPrefs.Height))
-        sPutINISetting "Software\UBoatStopWatch", "prefsPrimaryHeightTwips", gblPrefsPrimaryHeightTwips, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "prefsPrimaryHeightTwips", gblPrefsPrimaryHeightTwips, gblSettingsFile
     Else
         gblPrefsSecondaryHeightTwips = Trim$(CStr(widgetPrefs.Height))
-        sPutINISetting "Software\UBoatStopWatch", "prefsSecondaryHeightTwips", gblPrefsSecondaryHeightTwips, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "prefsSecondaryHeightTwips", gblPrefsSecondaryHeightTwips, gblSettingsFile
     End If
 
    On Error GoTo 0

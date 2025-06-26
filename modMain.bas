@@ -91,8 +91,8 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     
     ' = "none"
     gblStartupFlg = True
-    gblWidgetName = "UBoat StopWatch"
-    thisPSDFullPath = App.path & "\Res\UBoat-StopWatch-VB6.psd"
+    gblWidgetName = "Panzer StopWatch"
+    thisPSDFullPath = App.path & "\Res\Panzer-StopWatch-VB6.psd"
     
     extractCommand = Command$ ' capture any parameter passed, remove if a soft reload
     If restart = True Then extractCommand = vbNullString
@@ -103,7 +103,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
         gblCodingEnvironment = "VB6"
     #End If
         
-    menuForm.mnuAbout.Caption = "About UBoat StopWatch Cairo " & gblCodingEnvironment & " widget"
+    menuForm.mnuAbout.Caption = "About Panzer StopWatch Cairo " & gblCodingEnvironment & " widget"
        
     ' Load the sounds into numbered buffers ready for playing
     Call loadAsynchSoundFiles
@@ -124,7 +124,7 @@ Public Sub mainRoutine(ByVal restart As Boolean)
     Call getToolSettingsFile
     
     ' read the gauge settings from the new configuration file
-    Call readSettingsFile("Software\UBoatStopWatch", gblSettingsFile)
+    Call readSettingsFile("Software\PanzerStopWatch", gblSettingsFile)
     
     ' validate the inputs of any data from the input settings file
     Call validateInputs
@@ -298,7 +298,7 @@ Private Sub checkFirstTime()
     If gblFirstTimeRun = "true" Then
         Call makeProgramPreferencesAvailable
         gblFirstTimeRun = "false"
-        sPutINISetting "Software\UBoatStopWatch", "firstTimeRun", gblFirstTimeRun, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "firstTimeRun", gblFirstTimeRun, gblSettingsFile
     End If
 
    On Error GoTo 0
@@ -857,10 +857,10 @@ Public Sub readSettingsFile(ByVal Location As String, ByVal gblSettingsFile As S
         gblDefaultTBEditor = fGetINISetting(Location, "defaultTBEditor", gblSettingsFile)
         
         ' other
-        gblGaugeHighDpiXPos = fGetINISetting("Software\UBoatStopWatch", "gaugeHighDpiXPos", gblSettingsFile)
-        gblGaugeHighDpiYPos = fGetINISetting("Software\UBoatStopWatch", "gaugeHighDpiYPos", gblSettingsFile)
-        gblGaugeLowDpiXPos = fGetINISetting("Software\UBoatStopWatch", "gaugeLowDpiXPos", gblSettingsFile)
-        gblGaugeLowDpiYPos = fGetINISetting("Software\UBoatStopWatch", "gaugeLowDpiYPos", gblSettingsFile)
+        gblGaugeHighDpiXPos = fGetINISetting("Software\PanzerStopWatch", "gaugeHighDpiXPos", gblSettingsFile)
+        gblGaugeHighDpiYPos = fGetINISetting("Software\PanzerStopWatch", "gaugeHighDpiYPos", gblSettingsFile)
+        gblGaugeLowDpiXPos = fGetINISetting("Software\PanzerStopWatch", "gaugeLowDpiXPos", gblSettingsFile)
+        gblGaugeLowDpiYPos = fGetINISetting("Software\PanzerStopWatch", "gaugeLowDpiYPos", gblSettingsFile)
         gblLastSelectedTab = fGetINISetting(Location, "lastSelectedTab", gblSettingsFile)
         gblSkinTheme = fGetINISetting(Location, "skinTheme", gblSettingsFile)
         
@@ -1090,7 +1090,7 @@ Private Sub getToolSettingsFile()
     
     Dim iFileNo As Integer: iFileNo = 0
     
-    gblSettingsDir = fSpecialFolder(feUserAppData) & "\UBoatStopWatch" ' just for this user alone
+    gblSettingsDir = fSpecialFolder(feUserAppData) & "\PanzerStopWatch" ' just for this user alone
     gblSettingsFile = gblSettingsDir & "\settings.ini"
         
     'if the folder does not exist then create the folder
@@ -1232,7 +1232,7 @@ Private Sub handleUnhideMode(ByVal thisUnhideMode As String)
 
     If thisUnhideMode = "unhide" Then     'parse the command line
         gblUnhide = "true"
-        sPutINISetting "Software\UBoatStopWatch", "unhide", gblUnhide, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "unhide", gblUnhide, gblSettingsFile
         Call thisForm_Unload
         End
     End If

@@ -111,7 +111,7 @@ Private Sub revealWidgetTimer_Timer()
         fGauge.gaugeForm.Visible = True
         revealWidgetTimer.Enabled = False
         gblWidgetHidden = "0"
-        sPutINISetting "Software\UBoatStopWatch", "widgetHidden", gblWidgetHidden, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "widgetHidden", gblWidgetHidden, gblSettingsFile
     End If
 
     On Error GoTo 0
@@ -191,11 +191,11 @@ Private Sub unhideTimer_Timer()
     
     On Error GoTo unhideTimer_Timer_Error
 
-    gblUnhide = fGetINISetting("Software\UBoatStopWatch", "unhide", gblSettingsFile)
+    gblUnhide = fGetINISetting("Software\PanzerStopWatch", "unhide", gblSettingsFile)
 
     If gblUnhide = "true" Then
         fGauge.gaugeForm.Visible = True
-        sPutINISetting "Software\UBoatStopWatch", "unhide", vbNullString, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "unhide", vbNullString, gblSettingsFile
     End If
 
     On Error GoTo 0

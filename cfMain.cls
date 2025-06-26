@@ -327,7 +327,7 @@ Private Sub btnAccept_Click()
     answer = msgBoxA("User accepted licence, thankyou.", vbOKOnly + vbExclamation, "Licence Acceptance", True, "btnAcceptClick")
     
     slicence = "1"
-    sPutINISetting "Software\UBoatStopWatch", "licence", slicence, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "licence", slicence, gblSettingsFile
     
     licenceWidget.ShowMe = False
     licenceWidget.MyOpacity = 0
@@ -360,7 +360,7 @@ Private Sub btnDecline_Click()
     'answer = MsgBox("Licence declined, please destroy your copy of this widget and its documentation.", vbYes)
     answer = msgBoxA("Licence declined, please destroy your copy of this widget and its documentation. This widget will now unload.", vbOKOnly + vbExclamation, "Licence Declined", False)
     slicence = "0"
-    sPutINISetting "Software\UBoatStopWatch", "licence", slicence, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "licence", slicence, gblSettingsFile
 
     Call thisForm_Unload
 

@@ -559,7 +559,7 @@ Public Function fLicenceState() As Integer
     fLicenceState = 0
     ' read the tool's own settings file
     If fFExists(gblSettingsFile) Then ' does the tool's own settings.ini exist?
-        slicence = fGetINISetting("Software\UBoatStopWatch", "licence", gblSettingsFile)
+        slicence = fGetINISetting("Software\PanzerStopWatch", "licence", gblSettingsFile)
         ' if the licence state is not already accepted then display the licence form
         If slicence = "1" Then fLicenceState = 1
     End If
@@ -1605,7 +1605,7 @@ Public Sub mnuSupport_ClickEvent()
     answer = msgBoxA(answerMsg, vbExclamation + vbYesNo, "Request to Contact Support", True, "mnuSupportClickEvent")
 
     If answer = vbYes Then
-        Call ShellExecute(menuForm.hWnd, "Open", "https://github.com/yereverluvinunclebert/UBoat-StopWatch-" & gblCodingEnvironment & "/issues", vbNullString, App.path, 1)
+        Call ShellExecute(menuForm.hWnd, "Open", "https://github.com/yereverluvinunclebert/Panzer-StopWatch-" & gblCodingEnvironment & "/issues", vbNullString, App.path, 1)
     End If
 
    On Error GoTo 0
@@ -2096,20 +2096,20 @@ Public Sub saveMainRCFormPosition()
     If gblDpiAwareness = "1" Then
         gblGaugeHighDpiXPos = CStr(fGauge.gaugeForm.Left) ' saving in pixels
         gblGaugeHighDpiYPos = CStr(fGauge.gaugeForm.Top)
-        sPutINISetting "Software\UBoatStopWatch", "gaugeHighDpiXPos", gblGaugeHighDpiXPos, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "gaugeHighDpiYPos", gblGaugeHighDpiYPos, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "gaugeHighDpiXPos", gblGaugeHighDpiXPos, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "gaugeHighDpiYPos", gblGaugeHighDpiYPos, gblSettingsFile
 
     Else
         gblGaugeLowDpiXPos = CStr(fGauge.gaugeForm.Left) ' saving in pixels
         gblGaugeLowDpiYPos = CStr(fGauge.gaugeForm.Top)
-        sPutINISetting "Software\UBoatStopWatch", "gaugeLowDpiXPos", gblGaugeLowDpiXPos, gblSettingsFile
-        sPutINISetting "Software\UBoatStopWatch", "gaugeLowDpiYPos", gblGaugeLowDpiYPos, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "gaugeLowDpiXPos", gblGaugeLowDpiXPos, gblSettingsFile
+        sPutINISetting "Software\PanzerStopWatch", "gaugeLowDpiYPos", gblGaugeLowDpiYPos, gblSettingsFile
     End If
     
-    sPutINISetting "Software\UBoatStopWatch", "gaugePrimaryHeightRatio", gblGaugePrimaryHeightRatio, gblSettingsFile
-    sPutINISetting "Software\UBoatStopWatch", "gaugeSecondaryHeightRatio", gblGaugeSecondaryHeightRatio, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "gaugePrimaryHeightRatio", gblGaugePrimaryHeightRatio, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "gaugeSecondaryHeightRatio", gblGaugeSecondaryHeightRatio, gblSettingsFile
     gblGaugeSize = CStr(fGauge.gaugeForm.WidgetRoot.Zoom * 100)
-    sPutINISetting "Software\UBoatStopWatch", "gaugeSize", gblGaugeSize, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "gaugeSize", gblGaugeSize, gblSettingsFile
 
    On Error GoTo 0
    Exit Sub
@@ -2131,10 +2131,10 @@ Public Sub saveMainRCFormSize()
 
    On Error GoTo saveMainRCFormSize_Error
 
-    sPutINISetting "Software\UBoatStopWatch", "gaugePrimaryHeightRatio", gblGaugePrimaryHeightRatio, gblSettingsFile
-    sPutINISetting "Software\UBoatStopWatch", "gaugeSecondaryHeightRatio", gblGaugeSecondaryHeightRatio, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "gaugePrimaryHeightRatio", gblGaugePrimaryHeightRatio, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "gaugeSecondaryHeightRatio", gblGaugeSecondaryHeightRatio, gblSettingsFile
     gblGaugeSize = CStr(fGauge.gaugeForm.WidgetRoot.Zoom * 100)
-    sPutINISetting "Software\UBoatStopWatch", "gaugeSize", gblGaugeSize, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "gaugeSize", gblGaugeSize, gblSettingsFile
 
    On Error GoTo 0
    Exit Sub
@@ -2205,8 +2205,8 @@ Public Sub readPrefsPosition()
     On Error GoTo readPrefsPosition_Error
 
     If gblDpiAwareness = "1" Then
-        gblPrefsHighDpiXPosTwips = fGetINISetting("Software\UBoatStopWatch", "formHighDpiXPosTwips", gblSettingsFile)
-        gblPrefsHighDpiYPosTwips = fGetINISetting("Software\UBoatStopWatch", "formHighDpiYPosTwips", gblSettingsFile)
+        gblPrefsHighDpiXPosTwips = fGetINISetting("Software\PanzerStopWatch", "formHighDpiXPosTwips", gblSettingsFile)
+        gblPrefsHighDpiYPosTwips = fGetINISetting("Software\PanzerStopWatch", "formHighDpiYPosTwips", gblSettingsFile)
         
         ' if a current location not stored then position to the middle of the screen
         If gblPrefsHighDpiXPosTwips <> "" Then
@@ -2226,8 +2226,8 @@ Public Sub readPrefsPosition()
         gblPrefsHighDpiYPosTwips = widgetPrefs.Top
         
     Else
-        gblPrefsLowDpiXPosTwips = fGetINISetting("Software\UBoatStopWatch", "formLowDpiXPosTwips", gblSettingsFile)
-        gblPrefsLowDpiYPosTwips = fGetINISetting("Software\UBoatStopWatch", "formLowDpiYPosTwips", gblSettingsFile)
+        gblPrefsLowDpiXPosTwips = fGetINISetting("Software\PanzerStopWatch", "formLowDpiXPosTwips", gblSettingsFile)
+        gblPrefsLowDpiYPosTwips = fGetINISetting("Software\PanzerStopWatch", "formLowDpiYPosTwips", gblSettingsFile)
               
         ' if a current location not stored then position to the middle of the screen
         If gblPrefsLowDpiXPosTwips <> "" Then
@@ -2247,8 +2247,8 @@ Public Sub readPrefsPosition()
         gblPrefsLowDpiYPosTwips = widgetPrefs.Top
     End If
         
-    gblPrefsPrimaryHeightTwips = fGetINISetting("Software\UBoatStopWatch", "prefsPrimaryHeightTwips", gblSettingsFile)
-    gblPrefsSecondaryHeightTwips = fGetINISetting("Software\UBoatStopWatch", "prefsSecondaryHeightTwips", gblSettingsFile)
+    gblPrefsPrimaryHeightTwips = fGetINISetting("Software\PanzerStopWatch", "prefsPrimaryHeightTwips", gblSettingsFile)
+    gblPrefsSecondaryHeightTwips = fGetINISetting("Software\PanzerStopWatch", "prefsSecondaryHeightTwips", gblSettingsFile)
         
    ' on very first install this will be zero, then size of the prefs as a proportion of the screen size
     If gblPrefsPrimaryHeightTwips = "" Then gblPrefsPrimaryHeightTwips = CStr(1000 * gblScreenTwipsPerPixelY)
@@ -2281,24 +2281,24 @@ Public Sub writePrefsPositionAndSize()
             gblPrefsHighDpiYPosTwips = CStr(widgetPrefs.Top)
             
             ' now write those params to the toolSettings.ini
-            sPutINISetting "Software\UBoatStopWatch", "formHighDpiXPosTwips", gblPrefsHighDpiXPosTwips, gblSettingsFile
-            sPutINISetting "Software\UBoatStopWatch", "formHighDpiYPosTwips", gblPrefsHighDpiYPosTwips, gblSettingsFile
+            sPutINISetting "Software\PanzerStopWatch", "formHighDpiXPosTwips", gblPrefsHighDpiXPosTwips, gblSettingsFile
+            sPutINISetting "Software\PanzerStopWatch", "formHighDpiYPosTwips", gblPrefsHighDpiYPosTwips, gblSettingsFile
         Else
             gblPrefsLowDpiXPosTwips = CStr(widgetPrefs.Left)
             gblPrefsLowDpiYPosTwips = CStr(widgetPrefs.Top)
             
             ' now write those params to the toolSettings.ini
-            sPutINISetting "Software\UBoatStopWatch", "formLowDpiXPosTwips", gblPrefsLowDpiXPosTwips, gblSettingsFile
-            sPutINISetting "Software\UBoatStopWatch", "formLowDpiYPosTwips", gblPrefsLowDpiYPosTwips, gblSettingsFile
+            sPutINISetting "Software\PanzerStopWatch", "formLowDpiXPosTwips", gblPrefsLowDpiXPosTwips, gblSettingsFile
+            sPutINISetting "Software\PanzerStopWatch", "formLowDpiYPosTwips", gblPrefsLowDpiYPosTwips, gblSettingsFile
             
         End If
 
         If prefsMonitorStruct.IsPrimary = True Then
             gblPrefsPrimaryHeightTwips = Trim$(CStr(widgetPrefs.Height))
-            sPutINISetting "Software\UBoatStopWatch", "prefsPrimaryHeightTwips", gblPrefsPrimaryHeightTwips, gblSettingsFile
+            sPutINISetting "Software\PanzerStopWatch", "prefsPrimaryHeightTwips", gblPrefsPrimaryHeightTwips, gblSettingsFile
         Else
             gblPrefsSecondaryHeightTwips = Trim$(CStr(widgetPrefs.Height))
-            sPutINISetting "Software\UBoatStopWatch", "prefsSecondaryHeightTwips", gblPrefsSecondaryHeightTwips, gblSettingsFile
+            sPutINISetting "Software\PanzerStopWatch", "prefsSecondaryHeightTwips", gblPrefsSecondaryHeightTwips, gblSettingsFile
         End If
     End If
     
@@ -2392,7 +2392,7 @@ Public Sub toggleWidgetLock()
     
     fGauge.gaugeForm.Refresh
     
-    sPutINISetting "Software\UBoatStopWatch", "preventDragging", gblPreventDragging, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "preventDragging", gblPreventDragging, gblSettingsFile
    
     If gblEnableSounds = "1" And fFExists(App.path & "\resources\sounds\" & fileToPlay) Then
         playSound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
@@ -2426,7 +2426,7 @@ Public Sub SwitchOff()
     menuForm.mnuTurnFunctionsOn.Checked = False
     
     gblGaugeFunctions = "0"
-    sPutINISetting "Software\UBoatStopWatch", "widgetFunctions", gblGaugeFunctions, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "widgetFunctions", gblGaugeFunctions, gblSettingsFile
 
    On Error GoTo 0
    Exit Sub
@@ -2463,7 +2463,7 @@ Public Sub TurnFunctionsOn()
     menuForm.mnuTurnFunctionsOn.Checked = True
     
     gblGaugeFunctions = "1"
-    sPutINISetting "Software\UBoatStopWatch", "widgetFunctions", gblGaugeFunctions, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "widgetFunctions", gblGaugeFunctions, gblSettingsFile
 
    On Error GoTo 0
    Exit Sub
@@ -2493,7 +2493,7 @@ Public Sub hardRestart()
     If fFExists(thisCommand) Then
         
         ' run the selected program
-        Call ShellExecute(widgetPrefs.hWnd, "open", thisCommand, "UBoat-StopWatch-VB6.exe prefs", "", 1)
+        Call ShellExecute(widgetPrefs.hWnd, "open", thisCommand, "Panzer-StopWatch-VB6.exe prefs", "", 1)
     Else
         'answer = MsgBox(thisCommand & " is missing", vbOKOnly + vbExclamation)
         answerMsg = thisCommand & " is missing"

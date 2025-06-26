@@ -140,8 +140,8 @@ Private Sub Form_Activate()
 
    On Error GoTo Form_Activate_Error
 
-    gblMessageAHeightTwips = fGetINISetting("Software\UBoatStopWatch", "messageAHeightTwips", gblSettingsFile)
-    gblMessageAWidthTwips = fGetINISetting("Software\UBoatStopWatch", "messageAWidthTwips ", gblSettingsFile)
+    gblMessageAHeightTwips = fGetINISetting("Software\PanzerStopWatch", "messageAHeightTwips", gblSettingsFile)
+    gblMessageAWidthTwips = fGetINISetting("Software\PanzerStopWatch", "messageAWidthTwips ", gblSettingsFile)
     
     frmMessage.Height = Val(gblMessageAHeightTwips)
     frmMessage.Width = Val(gblMessageAWidthTwips)
@@ -229,8 +229,8 @@ Private Sub Form_Resize()
     
     gblMessageAHeightTwips = Trim$(CStr(frmMessage.Height))
     gblMessageAWidthTwips = Trim$(CStr(frmMessage.Width))
-    sPutINISetting "Software\UBoatStopWatch", "messageAHeightTwips", gblMessageAHeightTwips, gblSettingsFile
-    sPutINISetting "Software\UBoatStopWatch", "messageAWidthTwips", gblMessageAWidthTwips, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "messageAHeightTwips", gblMessageAHeightTwips, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "messageAWidthTwips", gblMessageAWidthTwips, gblSettingsFile
     
    On Error GoTo 0
    Exit Sub
@@ -390,7 +390,7 @@ Public Property Let propTitle(ByVal newValue As String)
     If mPropTitle <> newValue Then mPropTitle = newValue Else Exit Property
 
     If mPropTitle = "" Then
-        Me.Caption = "UBoat-StopWatch-" & gblCodingEnvironment & " Message."
+        Me.Caption = "Panzer-StopWatch-" & gblCodingEnvironment & " Message."
     Else
         Me.Caption = mPropTitle
     End If

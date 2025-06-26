@@ -675,7 +675,7 @@ Private Sub switchfacesbutton_mouseDown(ByRef Sender As Object)
         gblStopWatchState = 0
     End If
     
-    sPutINISetting "Software\UBoatStopWatch", "clockFaceSwitchPref", gblClockFaceSwitchPref, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "clockFaceSwitchPref", gblClockFaceSwitchPref, gblSettingsFile
     
    On Error GoTo 0
    Exit Sub
@@ -818,7 +818,7 @@ Private Sub tickbutton_mouseDown(ByRef Sender As Object)
         playSound App.path & "\resources\sounds\" & fileToPlay, ByVal 0&, SND_FILENAME Or SND_ASYNC
     End If
     
-    sPutINISetting "Software\UBoatStopWatch", "smoothSecondHand", gblSmoothSecondHand, gblSettingsFile
+    sPutINISetting "Software\PanzerStopWatch", "smoothSecondHand", gblSmoothSecondHand, gblSettingsFile
     
    On Error GoTo 0
    Exit Sub
