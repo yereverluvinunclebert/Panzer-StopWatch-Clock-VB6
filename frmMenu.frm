@@ -17,7 +17,7 @@ Begin VB.Form menuForm
    Begin VB.Menu mnuMainMenu 
       Caption         =   "mainmenu"
       Begin VB.Menu mnuAbout 
-         Caption         =   "About Steampunk Clock Calendar Cairo widget ..."
+         Caption         =   "About Panzer StopWatch Gauge Cairo widget ..."
       End
       Begin VB.Menu mnuBlank5 
          Caption         =   "-"
@@ -36,7 +36,7 @@ Begin VB.Form menuForm
          Caption         =   ""
       End
       Begin VB.Menu mnuHelpSplash 
-         Caption         =   "Steampunk Clock Calendar Help ..."
+         Caption         =   "Panzer StopWatch Gauge Help ..."
       End
       Begin VB.Menu mnuOnline 
          Caption         =   "Online Help and other options ..."
