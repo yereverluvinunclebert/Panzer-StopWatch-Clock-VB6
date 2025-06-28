@@ -1,8 +1,8 @@
 # Panzer-StopWatch-Clock-VB6
 
- A FOSS Stopwatch VB6 Widget for Windows Vista, 7, 8 and 10/11+. There will also be a version for Reactos and XP, watch this space for the link. Also tested and running well on Linux and Mac os/X using Wine.
+ A FOSS Stopwatch VB6 Widget for Windows Vista, 7, 8 and 10/11+. There will also be a version later for Reactos and XP, watch this space for the link. Also tested and running well on Linux and Mac os/X using Wine.
 
-My current VB6/RC6 PSD program being worked upon now, in progress, you can download but the stopwatch code has not yet been implemented. New version always coming. I am working on pointer animation. This VB6 widget is based upon the Yahoo/Konfabulator widget of the same design.
+One of my VB6/RC6 PSD WoW 64 designs, a work largely complete but as with all software some tasks to complete and unfound bugs to repair. However, it works, there is an installer and it does the job. i. New version always coming.  This VB6 widget is based upon the Yahoo/Konfabulator and Xwidgets of the same design. Those older widget platforms are now obsolete so I have migrated the code to a new development environment. Each exists now as a Windows binary. Look in the releases folder for an installer.
  
 This Panzer widget is an attractive dieselpunk Yahoo widget for your desktop. 
 It will be a simple multi-timezone stopwatch and clock. Functional and gorgeous at 
@@ -11,21 +11,20 @@ around the desktop as you require.
 
 ![panzer-photo-1440x900X](https://github.com/yereverluvinunclebert/Panzer-StopWatch-Clock-VB6/assets/2788342/c4b6515a-8425-4f0b-8393-d092306c7624)
 
-This widgets functionality is limited as it is just a template for widgets yet
-to come, however, it can be increased in size, animation speed can be changed, 
+This widgets can be increased in size, animation speed can be changed, 
 opacity/transparency may be set as to the users discretion. The widget can 
 also be made to hide for a pre-determined period.
 
 ![tank-clock-mk1](https://github.com/yereverluvinunclebert/Panzer-StopWatch-Clock-VB6/assets/2788342/45805383-244f-4370-ba3e-3259b9fd3805)
 
 Right-click on the widget to display the function menu, mouse hover over the 
-widget and press CTRL+mousewheel up/down to resize. It works well on Windows XP 
-to Windows 11.
+widget and press CTRL+mousewheel up/down to resize. It works well on Windows Vista/7 
+to Windows 11+
 
 ![panzer-clock-web-help](https://github.com/yereverluvinunclebert/Panzer-StopWatch-Clock-VB6/assets/2788342/62704796-76ee-4053-a163-c0767d2cd42b)
 
-The Panzer Stopwatch VB6 gauge is Beta-grade software, under development, not yet 
-ready to use on a production system - use at your own risk.
+The Panzer Stopwatch VB6 gauge is still Beta-grade software, under development, not yet 
+ready to use on a production system - so please use at your own risk.
 
 This version was developed on Windows 7 using 32 bit VisualBasic 6 as a FOSS 
 project creating a WoW64 widget for the desktop. 
@@ -68,7 +67,6 @@ Links:
 
 Tested on :
 
-	ReactOS 0.4.14 32bit on virtualBox    
 	Windows 7 Professional 32bit on Intel    
 	Windows 7 Ultimate 64bit on Intel    
 	Windows 7 Professional 64bit on Intel    
@@ -102,6 +100,22 @@ OCX - http://forums.codeguru.com/member.php?92278-rxbagain
 si_the_geek       for his special folder code
 
 Elroy on VB forums for the balloon tooltips
+
+grigri@shinyhappypixels.com - playing sound files asynchronously
+
+Rod Stephens @ vb-helper.com for the resizing form code
+
+RobDog888 https://www.vbforums.com/member.php?17511-RobDog888  for the OpenFile method of testing file existence.
+
+zeezee https://www.vbforums.com/member.php?90054-zeezee  for the PathFileExists method of testing folder existence.
+
+Zach_VB6  https://www.vbforums.com/member.php?95578-Zach_VB6 for loading a file to a textbox
+
+Chris001 for his subclassing for centre-ing dialog forms
+
+All the good crowd at VBForums for the instant help and quality feedback - Join the crowd!
+
+Wayne Phillips, the creator of TwinBasic, the plug-in replacement for VB6.
 
 Harry Whitfield for his quality testing, brain stimulation and being an 
 unwitting source of inspiration. 
