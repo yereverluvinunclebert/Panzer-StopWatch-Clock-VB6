@@ -4035,6 +4035,9 @@ End Sub
 Private Sub btnClose_Click()
    On Error GoTo btnClose_Click_Error
 
+     ' the sampler is stopped during the prefs
+    If overlayWidget.Ticking = False Then overlayWidget.Ticking = True
+    
     btnSave.Enabled = False ' disable the save button
     Me.Hide
     Me.themeTimer.Enabled = False
@@ -5236,7 +5239,8 @@ End Sub
 Private Sub Form_Unload(Cancel As Integer)
    On Error GoTo Form_Unload_Error
 
-    'gblPrefsLoadedFlg = False
+    ' the sampler is stopped during the prefs running so we restart
+    If overlayWidget.Ticking = False Then overlayWidget.Ticking = True
     
     ' Release the subclass hook for dialog forms
     If Not InIDE Then ReleaseHook

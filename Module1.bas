@@ -2154,17 +2154,11 @@ End Sub
 '
 Public Sub makeProgramPreferencesAvailable()
     On Error GoTo makeProgramPreferencesAvailable_Error
-'    Dim gblDebugFlg As Integer: gblDebugFlg = 1
     
-'    If gblDebugFlg = 1 Then
-'
-'        MsgBox "widgetPrefs.Visible " & widgetPrefs.Visible
-'        MsgBox "widgetPrefs.WindowState " & widgetPrefs.WindowState
-'
-'    End If
+    ' the sampler is stopped during the prefs
+    'If overlayWidget.Ticking = True Then overlayWidget.Ticking = False
     
     If widgetPrefs.IsVisible = False Then
-        ' set the current position of the utility according to previously stored positions
     
         widgetPrefs.Visible = True
         widgetPrefs.Show  ' show it again
@@ -2173,6 +2167,8 @@ Public Sub makeProgramPreferencesAvailable()
         If widgetPrefs.WindowState = vbMinimized Then
             widgetPrefs.WindowState = vbNormal
         End If
+        
+        ' set the current position of the utility according to previously stored positions
         
         Call readPrefsPosition
         Call widgetPrefs.positionPrefsMonitor
