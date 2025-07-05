@@ -390,7 +390,7 @@ Public Property Let propTitle(ByVal newValue As String)
     If mPropTitle <> newValue Then mPropTitle = newValue Else Exit Property
 
     If mPropTitle = "" Then
-        Me.Caption = "Panzer-StopWatch-" & gblCodingEnvironment & " Message."
+        Me.Caption = "Panzer-StopWatch-Clock-" & gblCodingEnvironment & " Message."
     Else
         Me.Caption = mPropTitle
     End If
